@@ -8,6 +8,14 @@
 
 **`scoring_engine.py` is COMPLETE. `county_scores.csv` has 2,820 counties scored.**
 
+### Coverage Decision (intentional — do not change)
+- **2,820 of 3,144 counties are scored.** The 324 excluded counties all have population < 5,000.
+- The threshold is `pop >= 5,000` in `scoring_engine.py` — this is a deliberate data quality decision.
+- Counties under 5,000 have no Zillow data, suppressed QCEW employment figures, and often no FHFA HPI history. Their scores would be entirely median imputation — meaningless.
+- Largest excluded county: Oneida County, ID (pop 4,953). Smallest: Loving County, TX (pop 43).
+- On the front page, display: **"2,820 counties scored"** — not "all 3,143". Don't claim coverage you don't have.
+- If a user searches for an unscored county, show: "This county has fewer than 5,000 residents. Civica requires sufficient housing market data to produce a reliable score."
+
 ### Scoring Engine Results (for reference)
 - Runtime: ~4 minutes; output: `county_scores.csv` (711 KB, 36 columns)
 - Distribution: mean=50.0, std=7.67, range 22.85–73.09
