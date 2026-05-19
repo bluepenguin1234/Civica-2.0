@@ -267,7 +267,7 @@ Every county gets exactly one label based on its 6-dimension score profile.
 | **FRONTIER** | Pop + Econ signals early-positive, Affd + QoP weak | Everything early. High risk, high upside if fundamentals materialize. |
 | **AVOID** | Multiple dimensions weak with no positive momentum | Nothing working in any direction. |
 
-**Label trigger thresholds are conceptually defined but exact numeric cutoffs are PENDING.** See "Scoring Algorithm — Pending" below.
+**Label trigger thresholds (total score cutoffs):** ACCELERATING ≥78, PEAKING ≥68, ESTABLISHED ≥58, EMERGING ≥48, FRONTIER ≥38, TURNING ≥28, SPECULATIVE ≥18, AVOID ≥0.
 
 ---
 
@@ -323,7 +323,7 @@ Every county report shows a complete all-in monthly ownership cost — not just 
 |---|---|---|---|
 | FHFA covers ~2,900 of 3,143 counties | FHFA HPI | ~240 rural counties missing price data | Use state HPI as proxy; flag lower confidence |
 | CBP has 18-month publication lag | Census CBP | Business data is always ~2 years behind | Use QCEW as primary signal; CBP as confirmation |
-| Small county distortion | All | 1 employer can swing all metrics | Apply minimum pop threshold of 50k for full scoring; flag below |
+| Small county distortion | All | 1 employer can swing all metrics | Pop threshold is 5,000. 324 counties under 5,000 are excluded entirely — no imputed scores. |
 | FBI NIBRS coverage varies by state | FBI NIBRS | Some agencies don't report | Use state/RUCC-tier average for missing counties |
 | NFIP only captures flood; not all hazards | FEMA NFIP | Wildfire/tornado counties underweighted | NOAA Storm Events + USFS Wildfire fills the gap |
 
@@ -338,20 +338,12 @@ Every county report shows a complete all-in monthly ownership cost — not just 
 - 8 market labels with qualitative trigger conditions
 - Monthly cost calculation methodology
 
-### What Is PENDING (next task)
-The following need to be defined before a real scoring engine can be built:
+### What Is Resolved (scoring engine COMPLETE)
 
-1. **Normalization method** — how does a raw value (e.g., P/R ratio of 22.2x) become a score from 0–100?
-   - Option A: Percentile rank within national distribution (P/R 22.2x = 34th percentile nationally = 34 pts)
-   - Option B: Absolute breakpoints (P/R ≤12x = 100pts, 12-15x = 80pts, 15-20x = 60pts, 20-25x = 40pts, >25x = 20pts)
-   - Option C: Z-score capped at ±2 standard deviations, rescaled to 0-100
-   - **Recommendation: percentile normalization (Option A)** — self-corrects as national distribution changes, no arbitrary thresholds to maintain
-
-2. **Exact label trigger thresholds** — precise score cutoffs that put a county in ACCELERATING vs. PEAKING (currently conceptual, need numbers)
-
-3. **National baseline values** — running the full pipeline on all 3,143 counties to establish the actual distribution for percentile normalization
-
-4. **Edge cases** — counties with missing data (FHFA HPI only covers ~2,900 counties, NIBRS coverage varies)
+1. **Normalization method** — percentile rank: `pct(s) = s.rank(pct=True) * 100`, inverted where lower=better (`pct_inv`)
+2. **Label trigger thresholds** — ACCELERATING ≥78, PEAKING ≥68, ESTABLISHED ≥58, EMERGING ≥48, FRONTIER ≥38, TURNING ≥28, SPECULATIVE ≥18, AVOID ≥0
+3. **National distribution** — established from 2,820 scored counties; mean=50.0, std=7.67 (well-calibrated)
+4. **Edge cases** — missing data filled via left join from population base; counties with no FHFA or QCEW data receive NaN for those dimensions, which reduces their total score proportionally
 
 ---
 
@@ -360,15 +352,16 @@ The following need to be defined before a real scoring engine can be built:
 ```
 Civica Harvard Model/
 ├── CLAUDE.md                          ← This file — project bible
+├── LAUNCH_TODO.md                     ← Full launch checklist (security, SEO, features)
+├── README.md                          ← GitHub readme
+├── LICENSE                            ← MIT
+├── .gitignore                         ← Excludes civica_data/ and county_scores.csv
 ├── harvard_county_profile.html        ← County report template (THE design)
 ├── harvard_model.html                 ← Methodology page (THE design)
-├── civica_data_downloader_v4.py       ← Downloaded the 5 Harvard-specific datasets
-├── docs/
-│   ├── Civica_Master_Overview.md      ← Full concept doc
-│   ├── Momentum_Model.md
-│   ├── Revealed_Preference_Model.md
-│   └── True_Monthly_Cost_Model.md
-├── civica_data/                       ← All 18 datasets on disk
+├── civica_data_downloader_v4.py       ← Downloads all datasets to civica_data/
+├── scoring_engine.py                  ← COMPLETE — scores all 2,820 counties
+├── county_scores.csv                  ← COMPLETE — 2,820 rows × 36 cols (on disk, not in git)
+├── civica_data/                       ← All datasets on disk (~7 GB, not in git)
 │   ├── bea_income/
 │   ├── bls_qcew/
 │   ├── census_bps/
@@ -388,9 +381,8 @@ Civica Harvard Model/
 │   ├── usfs_wildfire/
 │   └── zillow/
 └── [next to build]
-    ├── scoring_engine.py              ← Normalization + scoring for all 3,143 counties
-    ├── data_processor.py              ← Raw files → clean county-level tables
-    └── county_generator.py            ← Produces HTML for every county
+    ├── county_generator.py            ← Produces one HTML per county from template
+    └── index.html                     ← Front page (search, filter, browse)
 ```
 
 **Versioning rule:** Never overwrite existing HTML files. New versions get incremental names (county_profile_v2.html, etc.).
