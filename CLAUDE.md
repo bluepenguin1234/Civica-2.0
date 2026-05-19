@@ -8,6 +8,11 @@
 
 **`scoring_engine.py` is COMPLETE. `county_scores.csv` has 2,820 counties scored.**
 
+**v2 dependency:** county_generator.py should read `county_scores_v2.csv` (not v1)
+and surface the `data_confidence` and `dim*_confidence` columns on every county
+report page. Counties with confidence below 75% on any dimension should display a
+"Limited Data" badge next to that dimension's score.
+
 ### Coverage Decision (intentional — do not change)
 - **2,820 of 3,144 counties are scored.** The 324 excluded counties all have population < 5,000.
 - The threshold is `pop >= 5,000` in `scoring_engine.py` — this is a deliberate data quality decision.
@@ -326,6 +331,33 @@ Every county report shows a complete all-in monthly ownership cost — not just 
 | Small county distortion | All | 1 employer can swing all metrics | Pop threshold is 5,000. 324 counties under 5,000 are excluded entirely — no imputed scores. |
 | FBI NIBRS coverage varies by state | FBI NIBRS | Some agencies don't report | Use state/RUCC-tier average for missing counties |
 | NFIP only captures flood; not all hazards | FEMA NFIP | Wildfire/tornado counties underweighted | NOAA Storm Events + USFS Wildfire fills the gap |
+
+---
+
+## v2 Engine Status — What's Implemented, What's Pending
+
+As of the v2.0 rewrite, the scoring engine matches the spec on weights and dimensions
+but uses proxies for the following inputs until more data is downloaded. These are
+disclosed on every county page via the `data_confidence` column.
+
+| Spec metric | v2 status | Proxy used | To resolve |
+| --- | --- | --- | --- |
+| Real Wage Growth (Dim 2) | Proxy | BEA per-capita income 4-yr growth − CPI | Download BLS QCEW 2018, 2020, 2022 annual files; compute true wage CAGR |
+| Business Formation Rate (Dim 2) | Proxy | Establishments per 1k population (level only) | Download Census CBP 2019-2021; compute establishment CAGR |
+| Supply Elasticity (Dim 3) | Proxy | Permits per 1k population (level only) | Download Census BPS 2018-2021 for permit trend |
+| Rent Trend (Dim 3) | Proxy | HPI 3-yr avg (correlated) | Download HUD FY24 + FY25 FMR; compute YoY change |
+| School Adequacy (Dim 4) | Not yet wired | 40% weight redistributed across Crime + Service Efficiency + RUCC | Download NCES F-33 (per-pupil spending) + EDFacts (proficiency) |
+| Crime Rate (Dim 4) | State-level proxy | NIBRS record count per state, applied to all counties in state | Build proper county-level NIBRS segment parser using FBI codebook |
+| Fiscal Capacity / Service Efficiency (Dim 2 & 4) | State-level | State revenue/expenditure per state pop | Acceptable approximation — STC is collected at state level |
+| Utility Burden (Dim 1) | State-level | EIA Form 861 + EIA NG, state rates applied to counties | Acceptable approximation — utility territories don't align to counties anyway |
+
+**Confidence threshold:** A dimension is scored only when ≥75% of its inputs are present.
+Counties below that threshold on a given dimension receive NaN for that dimension; the
+total score is computed from the available dimensions and scaled proportionally.
+
+**Imputation policy (v2):** No blanket median imputation. Per-dimension confidence
+preserves data integrity — a county that lacks input X gets a partial score with a
+visible confidence flag, not a fake score from a national median.
 
 ---
 
