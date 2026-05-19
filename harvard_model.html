@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Civica Research Model — Methodology</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue:#1a7ff0; --navy:#1a3a5c; --green:#16a34a; --yellow:#d97706; --red:#dc2626; --purple:#7c3aed;
+  --bg:#f0f2f5; --card:#fff; --border:#e5e7eb; --muted:#9ca3af; --text:#1f2937; --subtext:#6b7280;
+}
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); }
+
+.nav { background:#fff; border-bottom:1px solid var(--border); height:52px; padding:0 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:200; }
+.logo { display:flex; align-items:center; gap:7px; text-decoration:none; }
+.logo-text { font-size:17px; font-weight:800; color:var(--navy); }
+.logo-text em { font-style:normal; color:var(--blue); }
+.nav-right { display:flex; align-items:center; gap:14px; }
+.nav-tag  { font-size:11px; font-weight:700; background:#f1f5f9; color:var(--subtext); padding:4px 10px; border-radius:100px; }
+.nav-back { font-size:13px; color:var(--blue); text-decoration:none; }
+
+.hero { background:var(--navy); color:#fff; padding:36px 24px 0; }
+.hero-eyebrow { font-size:11px; font-weight:700; letter-spacing:.1em; color:rgba(255,255,255,.4); text-transform:uppercase; margin-bottom:10px; }
+.hero h1 { font-size:30px; font-weight:900; line-height:1.15; max-width:600px; }
+.hero-sub { font-size:14px; color:rgba(255,255,255,.55); margin-top:8px; max-width:560px; line-height:1.65; }
+.hero-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; padding-bottom:20px; }
+.hero-pill { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); border-radius:8px; padding:8px 14px; display:flex; flex-direction:column; gap:2px; }
+.hp-lbl { font-size:10px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.06em; font-weight:600; }
+.hp-val { font-size:13px; font-weight:700; color:#fff; }
+
+.score-tabs { background:rgba(0,0,0,.25); display:flex; overflow-x:auto; scrollbar-width:none; }
+.score-tabs::-webkit-scrollbar { display:none; }
+.score-tab { flex-shrink:0; padding:12px 20px; font-size:13px; font-weight:600; color:rgba(255,255,255,.5); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; transition:all .15s; }
+.score-tab.active { color:#fff; border-bottom-color:var(--blue); }
+
+.page { max-width:960px; margin:0 auto; padding:24px 16px; display:flex; flex-direction:column; gap:20px; }
+.panel { display:none; flex-direction:column; gap:20px; }
+.panel.active { display:flex; }
+
+.card { background:var(--card); border-radius:14px; padding:22px; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+.card-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:18px; display:flex; align-items:center; gap:7px; }
+.ct-icon { font-size:16px; }
+.card-intro { font-size:14px; color:var(--subtext); line-height:1.65; margin-bottom:18px; }
+
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+.g4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:16px; }
+@media(max-width:640px) { .g2,.g3,.g4 { grid-template-columns:1fr 1fr; } }
+
+.sb { background:#f8fafc; border-radius:10px; padding:14px; }
+.sb-val { font-size:22px; font-weight:800; color:var(--navy); line-height:1; }
+.sb-lbl { font-size:11px; color:var(--muted); margin-top:4px; font-weight:500; line-height:1.3; }
+.sb-delta { font-size:12px; font-weight:600; margin-top:5px; }
+.up   { color:var(--green); }
+.down { color:var(--red); }
+.flat { color:var(--yellow); }
+
+.signal { border-radius:10px; padding:14px 16px; display:flex; gap:12px; align-items:flex-start; }
+.sig-green  { background:#f0fdf4; border:1px solid #bbf7d0; }
+.sig-yellow { background:#fffbeb; border:1px solid #fde68a; }
+.sig-red    { background:#fef2f2; border:1px solid #fecaca; }
+.sig-blue   { background:#eff6ff; border:1px solid #bfdbfe; }
+.sig-purple { background:#f5f3ff; border:1px solid #ddd6fe; }
+.signal .icon { font-size:20px; flex-shrink:0; margin-top:1px; }
+.signal .body { font-size:13px; line-height:1.55; }
+.sig-green  .body { color:#14532d; }
+.sig-yellow .body { color:#78350f; }
+.sig-red    .body { color:#7f1d1d; }
+.sig-blue   .body { color:#1e3a5f; }
+.sig-purple .body { color:#4c1d95; }
+
+.score-banner { background:linear-gradient(135deg,#1a3a5c 0%,#0f2340 100%); border-radius:14px; padding:24px; color:#fff; display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap; }
+.score-banner h3 { font-size:17px; font-weight:800; margin-bottom:8px; }
+.score-banner p  { font-size:13px; color:rgba(255,255,255,.65); line-height:1.65; }
+
+/* DIMENSION CARDS */
+.dim-card { border:1px solid var(--border); border-radius:12px; padding:18px; }
+.dim-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:10px; }
+.dim-name { font-size:15px; font-weight:800; color:var(--navy); }
+.dim-wt   { font-size:13px; font-weight:700; color:var(--blue); }
+.dim-desc { font-size:13px; color:var(--subtext); line-height:1.55; margin-bottom:12px; }
+.dim-track { background:#e5e7eb; border-radius:4px; height:5px; margin-bottom:14px; }
+.dim-fill  { height:100%; border-radius:4px; background:var(--blue); }
+.dim-metrics { display:flex; flex-direction:column; gap:7px; }
+.dm-row { display:flex; justify-content:space-between; align-items:flex-start; font-size:12px; gap:8px; }
+.dm-left { flex:1; }
+.dm-name { color:var(--subtext); line-height:1.4; }
+.dm-src  { font-size:10px; color:var(--muted); margin-top:1px; }
+.dm-pts  { font-size:11px; font-weight:700; color:var(--blue); flex-shrink:0; background:#eff6ff; padding:2px 7px; border-radius:4px; }
+
+/* VERSUS TABLE */
+.vs-table { width:100%; border-collapse:collapse; font-size:13px; }
+.vs-table th { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); padding:0 12px 10px; border-bottom:1px solid var(--border); text-align:left; }
+.vs-table td { padding:10px 12px; border-top:1px solid #f3f4f6; vertical-align:top; line-height:1.5; }
+.vs-table td:first-child { font-weight:600; color:var(--navy); }
+.vs-table tr:hover td { background:#f8fafc; }
+.tag { font-size:10px; font-weight:700; padding:2px 8px; border-radius:100px; }
+.tag-g { background:#dcfce7; color:#15803d; }
+.tag-r { background:#fee2e2; color:#b91c1c; }
+
+/* SOURCE TABLE */
+.src-table { width:100%; border-collapse:collapse; font-size:13px; }
+.src-table th { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); padding:0 10px 10px; border-bottom:1px solid var(--border); text-align:left; }
+.src-table td { padding:9px 10px; border-top:1px solid #f3f4f6; vertical-align:top; }
+.src-name { font-weight:700; color:var(--navy); font-size:13px; }
+.src-agency { font-size:11px; color:var(--muted); margin-top:1px; }
+.tag-admin { background:#dbeafe; color:#1d4ed8; font-size:10px; font-weight:700; padding:2px 7px; border-radius:100px; }
+.tag-new   { background:#f5f3ff; color:#6d28d9; font-size:10px; font-weight:700; padding:2px 7px; border-radius:100px; }
+
+/* FAQ */
+.faq-item { border-bottom:1px solid #f3f4f6; padding:16px 0; }
+.faq-item:last-child { border-bottom:none; }
+.faq-q { font-size:14px; font-weight:700; color:var(--navy); margin-bottom:6px; }
+.faq-a { font-size:13px; color:var(--subtext); line-height:1.65; }
+
+.cta-strip { display:flex; gap:12px; flex-wrap:wrap; }
+.cta { flex:1; min-width:150px; border:none; border-radius:10px; padding:13px; font-size:14px; font-weight:700; cursor:pointer; text-align:center; }
+.cta-p { background:var(--blue); color:#fff; }
+.cta-p:hover { background:#1568cc; }
+.cta-s { background:var(--card); color:var(--navy); border:1.5px solid var(--border); }
+.cta-s:hover { background:#f8fafc; }
+
+.footer { text-align:center; font-size:11px; color:var(--muted); padding:24px 0 48px; line-height:1.8; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="logo" href="#">
+    <svg width="22" height="22" viewBox="0 0 30 30" fill="none">
+      <rect width="30" height="30" rx="6" fill="#1a7ff0"/>
+      <path d="M9 21L15 9L21 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="11" y1="17" x2="19" y2="17" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">civi<em>ca</em></span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-tag">Research Methodology</span>
+    <a class="nav-back" href="harvard_county_profile.html">← View county report</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Civica Research Model · v2.0</div>
+  <h1>A Housing Market Model Built Like an Institutional Investor Would Build It</h1>
+  <div class="hero-sub">Six dimensions. Derived metrics that most real estate platforms never compute. No survey data. Every input traceable to a federal source.</div>
+  <div class="hero-pills">
+    <div class="hero-pill"><span class="hp-lbl">Model Dimensions</span><span class="hp-val">6</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Federal Data Sources</span><span class="hp-val">14</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Derived Metrics</span><span class="hp-val">8 new</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Survey Data</span><span class="hp-val">None</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Counties Scored</span><span class="hp-val">3,143</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Advertiser Influence</span><span class="hp-val">None</span></div>
+  </div>
+  <div class="score-tabs">
+    <div class="score-tab active" onclick="showTab('overview')">Overview</div>
+    <div class="score-tab" onclick="showTab('dimensions')">6 Dimensions</div>
+    <div class="score-tab" onclick="showTab('derived')">New Metrics</div>
+    <div class="score-tab" onclick="showTab('vs')">vs. Other Sites</div>
+    <div class="score-tab" onclick="showTab('sources')">Data Sources</div>
+    <div class="score-tab" onclick="showTab('faq')">FAQ</div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ══════════ OVERVIEW ══════════ -->
+<div class="panel active" id="panel-overview">
+
+  <div class="score-banner">
+    <div style="flex:1;min-width:280px;">
+      <h3>What separates this model from every real estate website you've used</h3>
+      <p>Zillow tells you what's for sale. Realtor.com tells you what just sold. Neither tells you whether the county is a sound financial decision. Civica's research model answers that question using the same analytical frameworks a housing economist would apply: price-to-rent ratios, real vs. nominal appreciation, supply elasticity, permit gaps, breakeven horizons, and probability-weighted 5-year scenarios.</p>
+      <p style="margin-top:10px;">The model was designed around a simple question: <em style="color:rgba(255,255,255,.85);">what would a Harvard housing economist want to know before advising someone to buy here?</em></p>
+    </div>
+  </div>
+
+  <!-- 6 DIMENSIONS SUMMARY -->
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">📊</span> Six Scoring Dimensions</div>
+    <div class="card-intro">Each dimension is scored 0–100 independently. The weighted composite is the Civica Score. No dimension can rescue a failing one — a county with great schools but negative real appreciation and out-migration cannot score above 65.</div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+
+      <div style="display:flex;align-items:center;gap:16px;padding:14px;background:#f8fafc;border-radius:10px;">
+        <div style="font-size:24px;width:36px;text-align:center;flex-shrink:0;">💰</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--navy);">Affordability &amp; Value <span style="font-size:12px;color:var(--blue);font-weight:700;">25% weight</span></div>
+          <div style="font-size:12px;color:var(--subtext);margin-top:3px;line-height:1.5;">Price-to-rent ratio, price-to-income ratio, buy-vs-rent breakeven horizon, utility cost burden. The single most important dimension for new buyers.</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:20px;font-weight:900;color:var(--blue);">25</div>
+          <div style="font-size:10px;color:var(--muted);">max pts</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;padding:14px;background:#f8fafc;border-radius:10px;">
+        <div style="font-size:24px;width:36px;text-align:center;flex-shrink:0;">📈</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--navy);">Economic Vitality <span style="font-size:12px;color:var(--blue);font-weight:700;">22% weight</span></div>
+          <div style="font-size:12px;color:var(--subtext);margin-top:3px;line-height:1.5;">Real (inflation-adjusted) wage growth, employment concentration risk, net business formation, government fiscal capacity. Income growth predicts future price appreciation — this is the leading indicator.</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:20px;font-weight:900;color:var(--blue);">22</div>
+          <div style="font-size:10px;color:var(--muted);">max pts</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;padding:14px;background:#f8fafc;border-radius:10px;">
+        <div style="font-size:24px;width:36px;text-align:center;flex-shrink:0;">🏗️</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--navy);">Housing Market Dynamics <span style="font-size:12px;color:var(--blue);font-weight:700;">20% weight</span></div>
+          <div style="font-size:12px;color:var(--subtext);margin-top:3px;line-height:1.5;">Real vs. nominal appreciation, supply elasticity proxy, permit gap ratio (permits vs. household formation), rent trend as leading price indicator. This is what determines whether appreciation is durable.</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:20px;font-weight:900;color:var(--blue);">20</div>
+          <div style="font-size:10px;color:var(--muted);">max pts</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;padding:14px;background:#f8fafc;border-radius:10px;">
+        <div style="font-size:24px;width:36px;text-align:center;flex-shrink:0;">🏡</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--navy);">Quality of Place <span style="font-size:12px;color:var(--blue);font-weight:700;">15% weight</span></div>
+          <div style="font-size:12px;color:var(--subtext);margin-top:3px;line-height:1.5;">School finance adequacy and proficiency outcomes, crime rate within RUCC urbanization tier, service delivery efficiency. Drives household retention — the best predictor of long-term stability.</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:20px;font-weight:900;color:var(--blue);">15</div>
+          <div style="font-size:10px;color:var(--muted);">max pts</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;padding:14px;background:#f8fafc;border-radius:10px;">
+        <div style="font-size:24px;width:36px;text-align:center;flex-shrink:0;">🌍</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--navy);">Physical Risk <span style="font-size:12px;color:var(--blue);font-weight:700;">12% weight</span></div>
+          <div style="font-size:12px;color:var(--subtext);margin-top:3px;line-height:1.5;">FEMA Expected Annual Loss per capita, social vulnerability adjustment, climate trajectory penalty for worsening hazard trends. Risk is scored by impact on carrying costs — not just probability.</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:20px;font-weight:900;color:var(--blue);">12</div>
+          <div style="font-size:10px;color:var(--muted);">max pts</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;padding:14px;background:#f8fafc;border-radius:10px;">
+        <div style="font-size:24px;width:36px;text-align:center;flex-shrink:0;">🧭</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--navy);">Population Momentum <span style="font-size:12px;color:var(--blue);font-weight:700;">6% weight</span></div>
+          <div style="font-size:12px;color:var(--subtext);margin-top:3px;line-height:1.5;">Net migration rate (3yr average), income quality of in-movers vs. out-movers. Weighted lowest because it can be cyclical — but it's the sharpest leading indicator when it's strong.</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:20px;font-weight:900;color:var(--blue);">6</div>
+          <div style="font-size:10px;color:var(--muted);">max pts</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /overview -->
+
+
+<!-- ══════════ DIMENSIONS ══════════ -->
+<div class="panel" id="panel-dimensions">
+
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">📐</span> Full Metric Breakdown by Dimension</div>
+    <div class="card-intro">Each metric is scored on a fixed national distribution scale. Thresholds are set once and applied identically across all 3,143 counties — they do not shift with market conditions.</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+
+      <div class="dim-card">
+        <div class="dim-header">
+          <div><div class="dim-name">💰 Affordability &amp; Value</div></div>
+          <div class="dim-wt">25% of score</div>
+        </div>
+        <div class="dim-desc">The core financial question: is this county worth buying into at current prices, given local incomes and rents? A county can have strong momentum but still be overpriced — this dimension catches it.</div>
+        <div class="dim-track"><div class="dim-fill" style="width:100%;"></div></div>
+        <div class="dim-metrics">
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Monthly cost / local median income ratio</div><div class="dm-src">FHFA + Census STC + EIA 861 + EIA NG + BEA</div></div><div class="dm-pts">0–10 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Price-to-Rent ratio vs. 15x historical norm</div><div class="dm-src">FHFA HPI ÷ HUD Fair Market Rents (annualized)</div></div><div class="dm-pts">0–8 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Buy vs. Rent breakeven horizon</div><div class="dm-src">FHFA + HUD FMR + transaction cost estimate</div></div><div class="dm-pts">0–4 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Utility cost burden (% of median income)</div><div class="dm-src">EIA Form 861 + EIA Natural Gas ÷ BEA income</div></div><div class="dm-pts">0–3 pts</div></div>
+        </div>
+      </div>
+
+      <div class="dim-card">
+        <div class="dim-header">
+          <div><div class="dim-name">📈 Economic Vitality</div></div>
+          <div class="dim-wt">22% of score</div>
+        </div>
+        <div class="dim-desc">The engine behind long-term price appreciation. Income growth precedes home price growth by 12–18 months in most markets. A county whose wages are declining relative to national is a lagging indicator of future price weakness.</div>
+        <div class="dim-track"><div class="dim-fill" style="width:88%;"></div></div>
+        <div class="dim-metrics">
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Real wage growth — inflation-adjusted 3yr CAGR</div><div class="dm-src">BLS QCEW average weekly wages, CPI-deflated</div></div><div class="dm-pts">0–8 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Employment concentration risk (Herfindahl index)</div><div class="dm-src">BLS QCEW employment by 4-digit NAICS sector</div></div><div class="dm-pts">0–6 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Net business formation rate (establishments YoY)</div><div class="dm-src">BLS QCEW employer establishment count change</div></div><div class="dm-pts">0–5 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Govt fiscal capacity (own-source revenue, debt ratio)</div><div class="dm-src">Census STC — revenue per capita, debt-to-revenue</div></div><div class="dm-pts">0–3 pts</div></div>
+        </div>
+      </div>
+
+      <div class="dim-card">
+        <div class="dim-header">
+          <div><div class="dim-name">🏗️ Housing Market Dynamics</div></div>
+          <div class="dim-wt">20% of score</div>
+        </div>
+        <div class="dim-desc">The supply-demand balance that determines whether appreciation is durable. Markets with constrained supply and growing demand see appreciation that sticks. Markets with excess supply see appreciation that reverses.</div>
+        <div class="dim-track"><div class="dim-fill" style="width:80%;"></div></div>
+        <div class="dim-metrics">
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Real (inflation-adjusted) appreciation rate — 5yr CAGR</div><div class="dm-src">FHFA HPI 5yr CAGR minus CPI</div></div><div class="dm-pts">0–7 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Permit gap ratio (permits ÷ household formation rate)</div><div class="dm-src">Census Building Permits ÷ Census Population Estimates</div></div><div class="dm-pts">0–6 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Supply elasticity proxy (HPI volatility — std dev)</div><div class="dm-src">FHFA HPI quarterly standard deviation (low vol = constrained)</div></div><div class="dm-pts">0–4 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Rent trend as leading price indicator</div><div class="dm-src">HUD FMR 3yr change rate vs. FHFA HPI rate</div></div><div class="dm-pts">0–3 pts</div></div>
+        </div>
+      </div>
+
+      <div class="dim-card">
+        <div class="dim-header">
+          <div><div class="dim-name">🏡 Quality of Place</div></div>
+          <div class="dim-wt">15% of score</div>
+        </div>
+        <div class="dim-desc">Drives household retention — families with school-age children anchor demand. Counties with weak schools and high crime see sustained out-migration among the highest-earning households, which is a leading indicator of price decline.</div>
+        <div class="dim-track"><div class="dim-fill" style="width:60%;"></div></div>
+        <div class="dim-metrics">
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">School finance adequacy vs. state median + proficiency gap</div><div class="dm-src">Census School Finance + NCES EDFacts</div></div><div class="dm-pts">0–7 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Property crime rate within RUCC urbanization tier</div><div class="dm-src">FBI NIBRS (scored vs. peer-tier counties, not all US)</div></div><div class="dm-pts">0–5 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Service delivery efficiency (public safety + roads per capita)</div><div class="dm-src">Census STC expenditure by function ÷ population</div></div><div class="dm-pts">0–3 pts</div></div>
+        </div>
+      </div>
+
+      <div class="dim-card">
+        <div class="dim-header">
+          <div><div class="dim-name">🌍 Physical Risk</div></div>
+          <div class="dim-wt">12% of score</div>
+        </div>
+        <div class="dim-desc">Scored by financial impact on carrying costs, not just probability. A moderate-probability wildfire risk that could increase insurance by $400/mo scores worse than a high-probability lightning risk with minimal insurance impact.</div>
+        <div class="dim-track"><div class="dim-fill" style="width:48%;"></div></div>
+        <div class="dim-metrics">
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">FEMA Expected Annual Loss per capita</div><div class="dm-src">FEMA NRI — composite across all hazard types</div></div><div class="dm-pts">0–7 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Social vulnerability adjustment (amplifies risk for at-risk populations)</div><div class="dm-src">FEMA NRI Social Vulnerability Index</div></div><div class="dm-pts">0–3 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Climate trajectory penalty (worsening risk trends)</div><div class="dm-src">FEMA NRI component trend analysis</div></div><div class="dm-pts">0–2 pts</div></div>
+        </div>
+      </div>
+
+      <div class="dim-card">
+        <div class="dim-header">
+          <div><div class="dim-name">🧭 Population Momentum</div></div>
+          <div class="dim-wt">6% of score</div>
+        </div>
+        <div class="dim-desc">The sharpest leading indicator in the model when it's strong — but weighted lowest because it can be cyclical. A migration surge driven by a single employer or remote work trend may not persist. Income quality of movers is weighted more than raw count.</div>
+        <div class="dim-track"><div class="dim-fill" style="width:24%;"></div></div>
+        <div class="dim-metrics">
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Net migration rate — 3yr rolling average</div><div class="dm-src">IRS SOI net filers in/out ÷ base county population</div></div><div class="dm-pts">0–4 pts</div></div>
+          <div class="dm-row"><div class="dm-left"><div class="dm-name">Income quality of in-movers vs. out-movers</div><div class="dm-src">IRS SOI average AGI differential</div></div><div class="dm-pts">0–2 pts</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /dimensions -->
+
+
+<!-- ══════════ DERIVED METRICS ══════════ -->
+<div class="panel" id="panel-derived">
+
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">🔬</span> 8 Derived Metrics — What Civica Computes That Others Don't</div>
+    <div class="card-intro">These metrics are not in any federal dataset — they are derived by combining two or more sources. They are the metrics that matter most to a sophisticated buyer or investor.</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+
+      <div style="background:#f8fafc;border-radius:12px;padding:18px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-size:15px;font-weight:800;color:var(--navy);">1. Price-to-Rent Ratio</div>
+          <span style="font-size:10px;font-weight:700;background:#f5f3ff;color:#6d28d9;padding:3px 8px;border-radius:100px;">NEW METRIC</span>
+        </div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;margin-bottom:8px;"><strong style="color:var(--text);">Formula:</strong> FHFA county HPI index value ÷ (HUD Fair Market Rent × 12)</div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;"><strong style="color:var(--text);">Why it matters:</strong> The most fundamental valuation ratio in real estate. Below 15x = cheap (buy). 15–20x = fair value. Above 20x = expensive, renting may be better. Above 25x = market is pricing in significant future appreciation — high risk if that doesn't materialize. National historical norm: ~15x.</div>
+      </div>
+
+      <div style="background:#f8fafc;border-radius:12px;padding:18px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-size:15px;font-weight:800;color:var(--navy);">2. Buy vs. Rent Breakeven Horizon</div>
+          <span style="font-size:10px;font-weight:700;background:#f5f3ff;color:#6d28d9;padding:3px 8px;border-radius:100px;">NEW METRIC</span>
+        </div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;margin-bottom:8px;"><strong style="color:var(--text);">Formula:</strong> Transaction costs (11%) ÷ (Annual appreciation − Annual ownership premium over rent)</div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;"><strong style="color:var(--text);">Why it matters:</strong> The single most useful number for someone deciding whether to buy now or wait. Under 3 years = strong buy signal. 3–5 years = fair. Over 5 years = renting is likely the better financial choice at current prices.</div>
+      </div>
+
+      <div style="background:#f8fafc;border-radius:12px;padding:18px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-size:15px;font-weight:800;color:var(--navy);">3. Real (Inflation-Adjusted) Appreciation</div>
+          <span style="font-size:10px;font-weight:700;background:#f5f3ff;color:#6d28d9;padding:3px 8px;border-radius:100px;">NEW METRIC</span>
+        </div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;margin-bottom:8px;"><strong style="color:var(--text);">Formula:</strong> FHFA HPI 5yr CAGR − CPI 5yr average</div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;"><strong style="color:var(--text);">Why it matters:</strong> Nominal appreciation of 5% during a 4% inflation environment is only 1% real return. Many counties showing "strong" appreciation are actually losing purchasing power in inflation-adjusted terms. Real appreciation is the honest measure of wealth creation.</div>
+      </div>
+
+      <div style="background:#f8fafc;border-radius:12px;padding:18px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-size:15px;font-weight:800;color:var(--navy);">4. Permit Gap Ratio</div>
+          <span style="font-size:10px;font-weight:700;background:#f5f3ff;color:#6d28d9;padding:3px 8px;border-radius:100px;">NEW METRIC</span>
+        </div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;margin-bottom:8px;"><strong style="color:var(--text);">Formula:</strong> Census Building Permits (annual) ÷ Net new households (Census estimates)</div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;"><strong style="color:var(--text);">Why it matters:</strong> Below 1.0 = supply is not keeping up with demand → prices supported. Above 2.0 = oversupply risk → prices may soften. This is the best predictor of whether current appreciation will persist or reverse within 3–5 years.</div>
+      </div>
+
+      <div style="background:#f8fafc;border-radius:12px;padding:18px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-size:15px;font-weight:800;color:var(--navy);">5. Real Wage Growth</div>
+          <span style="font-size:10px;font-weight:700;background:#f5f3ff;color:#6d28d9;padding:3px 8px;border-radius:100px;">NEW METRIC</span>
+        </div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;margin-bottom:8px;"><strong style="color:var(--text);">Formula:</strong> BLS QCEW average weekly wage 3yr CAGR − CPI 3yr average</div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;"><strong style="color:var(--text);">Why it matters:</strong> Nominal wage growth of 3% during 5% inflation is a declining real wage — the county's residents are getting poorer. Real wage growth is what drives sustainable demand for housing. A county with positive real wage growth is building buyer purchasing power for the future.</div>
+      </div>
+
+      <div style="background:#f8fafc;border-radius:12px;padding:18px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-size:15px;font-weight:800;color:var(--navy);">6. Employment Concentration Risk</div>
+          <span style="font-size:10px;font-weight:700;background:#f5f3ff;color:#6d28d9;padding:3px 8px;border-radius:100px;">NEW METRIC</span>
+        </div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;margin-bottom:8px;"><strong style="color:var(--text);">Formula:</strong> Herfindahl-Hirschman Index across BLS QCEW 4-digit NAICS employment</div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;"><strong style="color:var(--text);">Why it matters:</strong> A county where 60% of employment is in one sector (oil, auto, government) is fragile. When that sector contracts, home values follow. Diversified employment is a structural buffer against single-industry shocks — the housing market equivalent of portfolio diversification.</div>
+      </div>
+
+      <div style="background:#f8fafc;border-radius:12px;padding:18px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-size:15px;font-weight:800;color:var(--navy);">7. In-Mover Income Quality Score</div>
+          <span style="font-size:10px;font-weight:700;background:#f5f3ff;color:#6d28d9;padding:3px 8px;border-radius:100px;">NEW METRIC</span>
+        </div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;margin-bottom:8px;"><strong style="color:var(--text);">Formula:</strong> (IRS SOI avg AGI of in-movers − avg AGI of out-movers) ÷ county median AGI</div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;"><strong style="color:var(--text);">Why it matters:</strong> Raw migration counts can be misleading — a county gaining low-income households while losing high-income ones is deteriorating. This metric captures the quality of demand, not just the quantity. Positive = county is becoming more affluent. Negative = displacement or decline.</div>
+      </div>
+
+      <div style="background:#f8fafc;border-radius:12px;padding:18px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-size:15px;font-weight:800;color:var(--navy);">8. FEMA Expected Annual Loss per Capita</div>
+          <span style="font-size:10px;font-weight:700;background:#f5f3ff;color:#6d28d9;padding:3px 8px;border-radius:100px;">NEW METRIC</span>
+        </div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;margin-bottom:8px;"><strong style="color:var(--text);">Formula:</strong> FEMA NRI Expected Annual Loss ÷ Census population (per capita normalization)</div>
+        <div style="font-size:13px;color:var(--subtext);line-height:1.6;"><strong style="color:var(--text);">Why it matters:</strong> Raw FEMA EAL numbers favor large counties because more people = more expected loss in dollar terms. Per-capita normalization makes risk comparable across counties of all sizes. Combined with the Social Vulnerability Index, it captures both physical exposure and community resilience.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /derived -->
+
+
+<!-- ══════════ VS ══════════ -->
+<div class="panel" id="panel-vs">
+
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">⚖️</span> Civica Research Model vs. Other Approaches</div>
+    <div style="overflow-x:auto;">
+      <table class="vs-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Zillow / Redfin</th>
+            <th>Most "Best Places" Sites</th>
+            <th>Civica Research</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Price-to-Rent Ratio</td><td>❌ Not shown</td><td>❌ Not shown</td><td>✅ Computed from FHFA + HUD</td></tr>
+          <tr><td>Buy vs. Rent Breakeven</td><td>❌ Not shown</td><td>❌ Not shown</td><td>✅ Shown in years</td></tr>
+          <tr><td>Real vs. Nominal Appreciation</td><td>❌ Nominal only</td><td>❌ Nominal only</td><td>✅ Inflation-adjusted CAGR</td></tr>
+          <tr><td>Supply Constraint (Permit Gap)</td><td>❌ Not shown</td><td>❌ Not shown</td><td>✅ Permits ÷ Household formation</td></tr>
+          <tr><td>5-Year Scenario Analysis</td><td>❌ Not shown</td><td>❌ Not shown</td><td>✅ Bull / Base / Bear with probabilities</td></tr>
+          <tr><td>Migration Income Quality</td><td>❌ Not shown</td><td>❌ Not shown</td><td>✅ IRS AGI differential</td></tr>
+          <tr><td>Employment Concentration Risk</td><td>❌ Not shown</td><td>❌ Not shown</td><td>✅ HHI index from BLS QCEW</td></tr>
+          <tr><td>Real Wage Growth</td><td>❌ Not shown</td><td>❌ Not shown</td><td>✅ BLS inflation-adjusted</td></tr>
+          <tr><td>Survey Data Used</td><td>✅ Uses ACS estimates</td><td>✅ Heavy ACS reliance</td><td>✅ None — admin data only</td></tr>
+          <tr><td>Data Source</td><td>Proprietary + MLS</td><td>ACS + editorial</td><td>14 federal datasets, all free</td></tr>
+          <tr><td>Advertiser Influence</td><td>High (agent model)</td><td>Moderate (lead gen)</td><td>None</td></tr>
+          <tr><td>AVOID counties labeled</td><td>❌ Every market is featured</td><td>❌ Every market is featured</td><td>✅ Explicitly flagged</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /vs -->
+
+
+<!-- ══════════ SOURCES ══════════ -->
+<div class="panel" id="panel-sources">
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">🗂️</span> All Data Sources + What's New in the Research Model</div>
+    <div style="overflow-x:auto;">
+      <table class="src-table">
+        <thead><tr><th>Dataset</th><th>Agency</th><th>Used For</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><div class="src-name">County Migration + Income of Movers</div><div class="src-agency">IRS Statistics of Income</div></td><td>IRS</td><td>Net migration, income quality score, origin county of in-movers</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">House Price Index — County (Annual)</div><div class="src-agency">FHFA</div></td><td>FHFA</td><td>Nominal appreciation, real appreciation, price-to-rent ratio, equity projections</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">Quarterly Census of Employment &amp; Wages</div><div class="src-agency">Bureau of Labor Statistics</div></td><td>BLS</td><td>Real wage growth, employment concentration (HHI), net business formation</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">Local Area Personal Income</div><div class="src-agency">Bureau of Economic Analysis</div></td><td>BEA</td><td>Per capita income, income growth, price-to-income ratio</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">NIBRS Crime Data</div><div class="src-agency">FBI</div></td><td>FBI</td><td>Crime rates scored within RUCC urbanization tier (peer comparison)</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">National Risk Index</div><div class="src-agency">FEMA</div></td><td>FEMA</td><td>Expected Annual Loss per capita, social vulnerability, hazard breakdown</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">Form 861 — Electric Utilities</div><div class="src-agency">EIA</div></td><td>EIA</td><td>Actual monthly electric bill, utility cost burden calculation</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">Natural Gas Prices &amp; Consumption</div><div class="src-agency">EIA</div></td><td>EIA</td><td>Actual monthly gas bill, utility cost burden calculation</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">State &amp; Local Finance (STC)</div><div class="src-agency">Census Bureau</div></td><td>Census</td><td>Property tax rate, fiscal capacity score, debt-to-revenue ratio</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">School Finance Survey</div><div class="src-agency">Census Bureau</div></td><td>Census</td><td>Per-pupil spending, school finance adequacy score</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">EDFacts Achievement Data</div><div class="src-agency">NCES / Dept. of Education</div></td><td>NCES</td><td>Math + reading proficiency rates, statewide rank</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">Population Estimates</div><div class="src-agency">Census Bureau</div></td><td>Census</td><td>Household formation rate for permit gap ratio denominator</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">Rural-Urban Continuum Codes</div><div class="src-agency">USDA ERS</div></td><td>USDA</td><td>Peer-tier crime comparison, supply elasticity proxy</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">Fair Market Rents</div><div class="src-agency">HUD</div></td><td>HUD</td><td>Price-to-rent ratio, buy vs. rent breakeven calculation</td><td><span class="tag-admin">Admin</span></td></tr>
+          <tr><td><div class="src-name">Building Permits Survey</div><div class="src-agency">Census Bureau</div></td><td>Census</td><td>Permit gap ratio numerator — new in Research Model</td><td><span class="tag-new">Research+</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div><!-- /sources -->
+
+
+<!-- ══════════ FAQ ══════════ -->
+<div class="panel" id="panel-faq">
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">❓</span> Frequently Asked Questions</div>
+
+    <div class="faq-item">
+      <div class="faq-q">Why is price-to-rent ratio weighted so heavily?</div>
+      <div class="faq-a">It's the cleanest single-number measure of whether a market is over or undervalued. Unlike price-to-income (which tells you about affordability), price-to-rent tells you whether the asset is priced correctly relative to its income-generating potential. A P/R of 9x like Wayne County, MI looks like a bargain — but paired with negative real appreciation and out-migration, it signals structural decline, not undervaluation. The Research Model surfaces both pieces together.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Why is the breakeven horizon sometimes short even when P/R is high?</div>
+      <div class="faq-a">Because breakeven is driven by the spread between appreciation and the ownership premium over renting — not by P/R alone. A high-P/R county with very strong appreciation can still have a short breakeven horizon if prices are rising fast enough to offset the extra cost of owning vs. renting. Jefferson County (P/R 22.2x, breakeven 2.1 years) is an example. The risk is that if appreciation slows, the breakeven extends rapidly.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What's the permit gap ratio and why does it matter more than vacancy rates?</div>
+      <div class="faq-a">Vacancy rates tell you the current supply-demand balance. Permit gap tells you the trajectory — whether the imbalance is getting worse or better. A county with tight vacancy but a high permit ratio (lots of new construction coming) may see prices soften in 2–3 years. A county with a low permit ratio has structural undersupply that tends to persist for years because supply response (permitting, approvals, construction) is inherently slow. The permit gap is a leading indicator where vacancy is a lagging one.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How are the scenario probabilities determined?</div>
+      <div class="faq-a">Scenarios are based on qualitative assessment of the county's macro exposure, not statistical forecasting models. Bull probability increases with low P/R, high supply constraint, strong migration quality, and diversified economy. Bear probability increases with high P/R, rate sensitivity (high payment-to-income), single-employer concentration, and elevated physical risk. Probabilities are illustrative — not the output of a calibrated quantitative model.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Why does the Research Model weight Population Momentum at only 6%?</div>
+      <div class="faq-a">Migration is the sharpest signal when it's strong — but it's also the most volatile. The 2020–2022 remote work migration to Sun Belt and Mountain West counties was real, but some of it is reversing. Weighting migration too heavily would cause the model to over-score counties whose demand surge was driven by a transient factor. The Research Model lets Economic Vitality (wages, jobs, income growth) and Housing Market Dynamics (supply constraint) carry more weight because they are more structurally durable.</div>
+    </div>
+  </div>
+</div><!-- /faq -->
+
+<div class="cta-strip">
+  <button class="cta cta-p" onclick="window.location='harvard_county_profile.html'">View County Report →</button>
+  <button class="cta cta-s">Explore All Counties</button>
+</div>
+
+<div class="footer">
+  Civica Research Model v2.0 · All data from US federal sources · 0 advertiser relationships · 0 editorial compromises<br>
+  <strong>civi<em style="font-style:normal;color:#1a7ff0;">ca</em></strong> — research-grade county intelligence for homebuyers
+</div>
+
+</div>
+<script>
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.score-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: document.querySelector('.hero').offsetHeight - 52, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

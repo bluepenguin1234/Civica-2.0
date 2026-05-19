@@ -1,0 +1,27 @@
+# ── Raw federal datasets (7 GB total — obtain via civica_data_downloader_v4.py) ──
+civica_data/
+
+# ── Generated output ──
+county_scores.csv
+output/
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# ── OS / editor ──
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.idea/
+.vscode/
+*.code-workspace
