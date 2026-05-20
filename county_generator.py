@@ -373,6 +373,7 @@ def build_head(county_name: str, state: str, score: float, signal: str, fips: st
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://civica.app/og_image.png">
 <link rel="canonical" href="{url}">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
 <script type="application/ld+json">
 {ld}
 </script>
@@ -392,10 +393,11 @@ def build_nav(state_abbr: str = '', state_name_full: str = '') -> str:
     ) if state_abbr and state_name_full else ''
     return f'''<nav class="nav">
   <a class="logo" href="../../index.html">
-    <svg width="22" height="22" viewBox="0 0 30 30" fill="none">
-      <rect width="30" height="30" rx="6" fill="#1a7ff0"/>
-      <path d="M9 21L15 9L21 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <line x1="11" y1="17" x2="19" y2="17" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+      <rect width="30" height="30" rx="7" fill="#0d2d52"/>
+      <rect x="6" y="16" width="4" height="9" rx="1.5" fill="white" opacity="0.65"/>
+      <rect x="13" y="8" width="4" height="17" rx="1.5" fill="white"/>
+      <rect x="20" y="12" width="4" height="13" rx="1.5" fill="white" opacity="0.8"/>
     </svg>
     <span class="logo-text">civi<em>ca</em></span>
   </a>
@@ -1132,12 +1134,12 @@ def build_state_page(state: str, counties: list, template_style: str) -> str:
         sc_bg  = '#16a34a' if sc >= 58 else ('#d97706' if sc >= 38 else '#dc2626')
         hpi_c  = '#16a34a' if hpi >= 3 else '#dc2626'
         rows_html += f'''<tr onclick="window.location='../counties/{fips}.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#d1d5db;">{i+1}</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#1a3a5c;">{name}</div>
-              <div style="font-size:11px;color:#9ca3af;">#{nat_rk} nationally</div></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">{i+1}</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">{name}</div>
+              <div style="font-size:11px;color:#98989d;">#{nat_rk} nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:{sc_bg};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">{sc:.0f}</div>
-              <span style="font-size:14px;font-weight:800;color:#1a3a5c;">{sc:.1f}</span></div></td>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">{sc:.1f}</span></div></td>
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="{lb_cls}">{sig}</span></td>
           <td style="text-align:right;font-weight:600;">{money(home)}</td>
           <td style="text-align:right;font-weight:600;color:{hpi_c};">{hpi:+.1f}%</td>
@@ -1175,30 +1177,32 @@ def build_state_page(state: str, counties: list, template_style: str) -> str:
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://civica.app/og_image.png">
 <link rel="canonical" href="{url}">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
 <script type="application/ld+json">
 {ld}
 </script>
 {template_style}
 <style>
 .sp-table {{ width:100%;border-collapse:collapse;font-size:13px; }}
-.sp-table th {{ text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9ca3af;padding:0 14px 12px;border-bottom:2px solid #e5e7eb;white-space:nowrap; }}
+.sp-table th {{ text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#98989d;padding:0 14px 12px;border-bottom:2px solid rgba(0,0,0,.08);white-space:nowrap; }}
 .sp-table th.r {{ text-align:right; }}
-.sp-table td {{ padding:12px 14px;border-bottom:1px solid #f3f4f6;vertical-align:middle; }}
-.sp-table tbody tr:hover td {{ background:#fafbfc; }}
-.lb-sbuy  {{ background:#dcfce7;color:#15803d; }}
-.lb-buy   {{ background:#dbeafe;color:#1d4ed8; }}
-.lb-watch {{ background:#fef3c7;color:#92400e; }}
-.lb-caut  {{ background:#ffedd5;color:#9a3412; }}
-.lb-avoid {{ background:#fee2e2;color:#b91c1c; }}
+.sp-table td {{ padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.06);vertical-align:middle; }}
+.sp-table tbody tr:hover td {{ background:#f5f5f7; }}
+.lb-sbuy  {{ background:#16a34a;color:#fff; }}
+.lb-buy   {{ background:#1a7ff0;color:#fff; }}
+.lb-watch {{ background:#f59e0b;color:#fff; }}
+.lb-caut  {{ background:#f97316;color:#fff; }}
+.lb-avoid {{ background:#dc2626;color:#fff; }}
 </style>
 </head>
 <body>
 <nav class="nav">
   <a class="logo" href="../../index.html">
-    <svg width="22" height="22" viewBox="0 0 30 30" fill="none">
-      <rect width="30" height="30" rx="6" fill="#1a7ff0"/>
-      <path d="M9 21L15 9L21 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <line x1="11" y1="17" x2="19" y2="17" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+      <rect width="30" height="30" rx="7" fill="#0d2d52"/>
+      <rect x="6" y="16" width="4" height="9" rx="1.5" fill="white" opacity="0.65"/>
+      <rect x="13" y="8" width="4" height="17" rx="1.5" fill="white"/>
+      <rect x="20" y="12" width="4" height="13" rx="1.5" fill="white" opacity="0.8"/>
     </svg>
     <span class="logo-text">civi<em>ca</em></span>
   </a>

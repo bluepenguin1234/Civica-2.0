@@ -3,7 +3,7 @@ civica_data/
 
 # ── Generated output ──
 county_scores.csv
-output/
+# output/ is tracked — needed for GitHub Pages
 
 # ── Python ──
 __pycache__/
