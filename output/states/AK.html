@@ -352,6 +352,26 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .lb-watch { background:#f59e0b;color:#fff; }
 .lb-caut  { background:#f97316;color:#fff; }
 .lb-avoid { background:#dc2626;color:#fff; }
+@media(max-width:640px) {
+  .nav { padding:0 14px; }
+  .nav-tag { display:none; }
+  .nav-back { font-size:12px; }
+  .hero { padding:28px 16px 40px !important; }
+  .hero h1,h1 { font-size:28px !important; margin:8px 0 12px !important; }
+  .hero-eyebrow { font-size:10px; }
+  .sp-stat-row { gap:16px !important; }
+  .sp-stat-val { font-size:20px !important; }
+  .sp-stat-top { font-size:13px !important; max-width:100% !important; }
+  .page { padding:12px 12px 40px; }
+  .card { padding:14px; }
+  .card-title { font-size:10px; }
+  .sp-table { font-size:11px; }
+  .sp-table th { padding:0 8px 8px; font-size:9px; letter-spacing:.03em; }
+  .sp-table td { padding:9px 8px; }
+  .sp-table .col-wage { display:none; }
+  .lb-sbuy,.lb-buy,.lb-watch,.lb-caut,.lb-avoid { white-space:nowrap; font-size:9px; padding:2px 7px; }
+  .footer { font-size:10px; padding:16px 0 36px; }
+}
 </style>
 </head>
 <body>
@@ -371,17 +391,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
   </div>
 </nav>
 
-<div class="hero" style="padding:56px 28px 64px;">
+<div class="hero" style="padding:44px 28px 52px;">
   <div style="max-width:960px;margin:0 auto;">
     <div class="hero-eyebrow">State Housing Report · 2026</div>
-    <h1 style="font-size:44px;font-weight:900;color:#fff;margin:10px 0 16px;line-height:1.05;">Alaska</h1>
-    <div style="display:flex;gap:36px;flex-wrap:wrap;margin-bottom:22px;">
-      <div><div style="font-size:28px;font-weight:900;color:#fff;">18</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Counties Scored</div></div>
-      <div><div style="font-size:28px;font-weight:900;color:#1a7ff0;">47.1</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Median Score</div></div>
-      <div><div style="font-size:28px;font-weight:900;color:#4ade80;">62.2</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Top County Score</div></div>
-      <div><div style="font-size:16px;font-weight:800;color:#fff;max-width:180px;">Anchorage Municipality</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Top Ranked County</div></div>
+    <h1 style="font-size:36px;font-weight:900;color:#fff;margin:10px 0 16px;line-height:1.05;">Alaska</h1>
+    <div class="sp-stat-row" style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:18px;">
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#fff;">18</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Counties Scored</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#1a7ff0;">47.1</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Median Score</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#4ade80;">62.2</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top County Score</div></div>
+      <div><div class="sp-stat-top" style="font-size:15px;font-weight:800;color:#fff;max-width:160px;">Anchorage Municipality</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top Ranked County</div></div>
     </div>
-    <div style="font-size:13px;color:rgba(255,255,255,.45);"><strong>6</strong> Watch &nbsp;·&nbsp; <strong>4</strong> Caution &nbsp;·&nbsp; <strong>1</strong> Buy &nbsp;·&nbsp; <strong>7</strong> Avoid</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.7;"><strong>6</strong> Watch &nbsp;·&nbsp; <strong>4</strong> Caution &nbsp;·&nbsp; <strong>1</strong> Buy &nbsp;·&nbsp; <strong>7</strong> Avoid</div>
   </div>
 </div>
 
@@ -398,7 +418,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
             <th>Label</th>
             <th class="r">Median Price</th>
             <th class="r">HPI 3yr</th>
-            <th class="r">Avg Wage</th>
+            <th class="r col-wage">Avg Wage</th>
           </tr>
         </thead>
         <tbody><tr onclick="window.location='../counties/02020.html'" style="cursor:pointer;">
@@ -411,7 +431,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$426,479</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.0%</td>
-          <td style="text-align:right;">$69,385</td>
+          <td style="text-align:right;" class="col-wage">$69,385</td>
         </tr><tr onclick="window.location='../counties/02122.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">2</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Kenai Peninsula Borough</div>
@@ -422,7 +442,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$339,500</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.7%</td>
-          <td style="text-align:right;">$56,674</td>
+          <td style="text-align:right;" class="col-wage">$56,674</td>
         </tr><tr onclick="window.location='../counties/02220.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">3</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Sitka City and Borough</div>
@@ -433,7 +453,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$478,739</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.3%</td>
-          <td style="text-align:right;">$61,197</td>
+          <td style="text-align:right;" class="col-wage">$61,197</td>
         </tr><tr onclick="window.location='../counties/02090.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">4</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Fairbanks North Star Borough</div>
@@ -444,7 +464,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$305,490</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+4.7%</td>
-          <td style="text-align:right;">$63,551</td>
+          <td style="text-align:right;" class="col-wage">$63,551</td>
         </tr><tr onclick="window.location='../counties/02170.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">5</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Matanuska-Susitna Borough</div>
@@ -455,7 +475,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$402,782</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.2%</td>
-          <td style="text-align:right;">$53,506</td>
+          <td style="text-align:right;" class="col-wage">$53,506</td>
         </tr><tr onclick="window.location='../counties/02110.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">6</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Juneau City and Borough</div>
@@ -466,7 +486,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$471,906</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+4.2%</td>
-          <td style="text-align:right;">$61,297</td>
+          <td style="text-align:right;" class="col-wage">$61,297</td>
         </tr><tr onclick="window.location='../counties/02063.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">7</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Chugach Census Area</div>
@@ -477,7 +497,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$235,884</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$75,698</td>
+          <td style="text-align:right;" class="col-wage">$75,698</td>
         </tr><tr onclick="window.location='../counties/02130.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">8</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Ketchikan Gateway Borough</div>
@@ -488,7 +508,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$398,188</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+3.5%</td>
-          <td style="text-align:right;">$56,265</td>
+          <td style="text-align:right;" class="col-wage">$56,265</td>
         </tr><tr onclick="window.location='../counties/02016.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">9</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Aleutians West Census Area</div>
@@ -499,7 +519,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$235,884</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$86,102</td>
+          <td style="text-align:right;" class="col-wage">$86,102</td>
         </tr><tr onclick="window.location='../counties/02240.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">10</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Southeast Fairbanks Census Area</div>
@@ -510,7 +530,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$289,625</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$90,339</td>
+          <td style="text-align:right;" class="col-wage">$90,339</td>
         </tr><tr onclick="window.location='../counties/02198.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">11</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Prince of Wales-Hyder Census Area</div>
@@ -521,7 +541,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$235,884</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$50,795</td>
+          <td style="text-align:right;" class="col-wage">$50,795</td>
         </tr><tr onclick="window.location='../counties/02185.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">12</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">North Slope Borough</div>
@@ -532,7 +552,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
           <td style="text-align:right;font-weight:600;">$309,757</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$137,954</td>
+          <td style="text-align:right;" class="col-wage">$137,954</td>
         </tr><tr onclick="window.location='../counties/02290.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">13</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Yukon-Koyukuk Census Area</div>
@@ -543,7 +563,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
           <td style="text-align:right;font-weight:600;">$235,884</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$59,521</td>
+          <td style="text-align:right;" class="col-wage">$59,521</td>
         </tr><tr onclick="window.location='../counties/02188.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">14</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Northwest Arctic Borough</div>
@@ -554,7 +574,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
           <td style="text-align:right;font-weight:600;">$235,884</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$97,190</td>
+          <td style="text-align:right;" class="col-wage">$97,190</td>
         </tr><tr onclick="window.location='../counties/02180.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">15</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Nome Census Area</div>
@@ -565,7 +585,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
           <td style="text-align:right;font-weight:600;">$235,884</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$78,106</td>
+          <td style="text-align:right;" class="col-wage">$78,106</td>
         </tr><tr onclick="window.location='../counties/02050.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">16</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Bethel Census Area</div>
@@ -576,7 +596,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
           <td style="text-align:right;font-weight:600;">$235,884</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$58,988</td>
+          <td style="text-align:right;" class="col-wage">$58,988</td>
         </tr><tr onclick="window.location='../counties/02150.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">17</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Kodiak Island Borough</div>
@@ -587,7 +607,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
           <td style="text-align:right;font-weight:600;">$401,636</td>
           <td style="text-align:right;font-weight:600;color:#dc2626;">+1.4%</td>
-          <td style="text-align:right;">$61,852</td>
+          <td style="text-align:right;" class="col-wage">$61,852</td>
         </tr><tr onclick="window.location='../counties/02158.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">18</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Kusilvak Census Area</div>
@@ -598,7 +618,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
           <td style="text-align:right;font-weight:600;">$235,884</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$42,395</td>
+          <td style="text-align:right;" class="col-wage">$42,395</td>
         </tr></tbody>
       </table>
     </div>

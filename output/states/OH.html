@@ -352,6 +352,26 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .lb-watch { background:#f59e0b;color:#fff; }
 .lb-caut  { background:#f97316;color:#fff; }
 .lb-avoid { background:#dc2626;color:#fff; }
+@media(max-width:640px) {
+  .nav { padding:0 14px; }
+  .nav-tag { display:none; }
+  .nav-back { font-size:12px; }
+  .hero { padding:28px 16px 40px !important; }
+  .hero h1,h1 { font-size:28px !important; margin:8px 0 12px !important; }
+  .hero-eyebrow { font-size:10px; }
+  .sp-stat-row { gap:16px !important; }
+  .sp-stat-val { font-size:20px !important; }
+  .sp-stat-top { font-size:13px !important; max-width:100% !important; }
+  .page { padding:12px 12px 40px; }
+  .card { padding:14px; }
+  .card-title { font-size:10px; }
+  .sp-table { font-size:11px; }
+  .sp-table th { padding:0 8px 8px; font-size:9px; letter-spacing:.03em; }
+  .sp-table td { padding:9px 8px; }
+  .sp-table .col-wage { display:none; }
+  .lb-sbuy,.lb-buy,.lb-watch,.lb-caut,.lb-avoid { white-space:nowrap; font-size:9px; padding:2px 7px; }
+  .footer { font-size:10px; padding:16px 0 36px; }
+}
 </style>
 </head>
 <body>
@@ -371,17 +391,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
   </div>
 </nav>
 
-<div class="hero" style="padding:56px 28px 64px;">
+<div class="hero" style="padding:44px 28px 52px;">
   <div style="max-width:960px;margin:0 auto;">
     <div class="hero-eyebrow">State Housing Report · 2026</div>
-    <h1 style="font-size:44px;font-weight:900;color:#fff;margin:10px 0 16px;line-height:1.05;">Ohio</h1>
-    <div style="display:flex;gap:36px;flex-wrap:wrap;margin-bottom:22px;">
-      <div><div style="font-size:28px;font-weight:900;color:#fff;">88</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Counties Scored</div></div>
-      <div><div style="font-size:28px;font-weight:900;color:#1a7ff0;">54.8</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Median Score</div></div>
-      <div><div style="font-size:28px;font-weight:900;color:#4ade80;">67.8</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Top County Score</div></div>
-      <div><div style="font-size:16px;font-weight:800;color:#fff;max-width:180px;">Delaware County</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Top Ranked County</div></div>
+    <h1 style="font-size:36px;font-weight:900;color:#fff;margin:10px 0 16px;line-height:1.05;">Ohio</h1>
+    <div class="sp-stat-row" style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:18px;">
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#fff;">88</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Counties Scored</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#1a7ff0;">54.8</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Median Score</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#4ade80;">67.8</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top County Score</div></div>
+      <div><div class="sp-stat-top" style="font-size:15px;font-weight:800;color:#fff;max-width:160px;">Delaware County</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top Ranked County</div></div>
     </div>
-    <div style="font-size:13px;color:rgba(255,255,255,.45);"><strong>4</strong> Strong Buy &nbsp;·&nbsp; <strong>27</strong> Buy &nbsp;·&nbsp; <strong>42</strong> Watch &nbsp;·&nbsp; <strong>14</strong> Caution &nbsp;·&nbsp; <strong>1</strong> Avoid</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.7;"><strong>4</strong> Strong Buy &nbsp;·&nbsp; <strong>27</strong> Buy &nbsp;·&nbsp; <strong>42</strong> Watch &nbsp;·&nbsp; <strong>14</strong> Caution &nbsp;·&nbsp; <strong>1</strong> Avoid</div>
   </div>
 </div>
 
@@ -398,7 +418,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
             <th>Label</th>
             <th class="r">Median Price</th>
             <th class="r">HPI 3yr</th>
-            <th class="r">Avg Wage</th>
+            <th class="r col-wage">Avg Wage</th>
           </tr>
         </thead>
         <tbody><tr onclick="window.location='../counties/39041.html'" style="cursor:pointer;">
@@ -411,7 +431,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-sbuy">STRONG BUY</span></td>
           <td style="text-align:right;font-weight:600;">$517,945</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.7%</td>
-          <td style="text-align:right;">$69,361</td>
+          <td style="text-align:right;" class="col-wage">$69,361</td>
         </tr><tr onclick="window.location='../counties/39085.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">2</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lake County</div>
@@ -422,7 +442,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$245,929</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.7%</td>
-          <td style="text-align:right;">$56,706</td>
+          <td style="text-align:right;" class="col-wage">$56,706</td>
         </tr><tr onclick="window.location='../counties/39165.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">3</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Warren County</div>
@@ -433,7 +453,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$408,087</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.1%</td>
-          <td style="text-align:right;">$65,445</td>
+          <td style="text-align:right;" class="col-wage">$65,445</td>
         </tr><tr onclick="window.location='../counties/39061.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">4</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Hamilton County</div>
@@ -444,7 +464,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$272,436</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.6%</td>
-          <td style="text-align:right;">$74,181</td>
+          <td style="text-align:right;" class="col-wage">$74,181</td>
         </tr><tr onclick="window.location='../counties/39055.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">5</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Geauga County</div>
@@ -455,7 +475,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$374,793</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.4%</td>
-          <td style="text-align:right;">$54,756</td>
+          <td style="text-align:right;" class="col-wage">$54,756</td>
         </tr><tr onclick="window.location='../counties/39035.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">6</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Cuyahoga County</div>
@@ -466,7 +486,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$218,688</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.8%</td>
-          <td style="text-align:right;">$71,450</td>
+          <td style="text-align:right;" class="col-wage">$71,450</td>
         </tr><tr onclick="window.location='../counties/39173.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">7</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Wood County</div>
@@ -477,7 +497,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$238,663</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.4%</td>
-          <td style="text-align:right;">$53,866</td>
+          <td style="text-align:right;" class="col-wage">$53,866</td>
         </tr><tr onclick="window.location='../counties/39051.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">8</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Fulton County</div>
@@ -488,7 +508,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$224,885</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.7%</td>
-          <td style="text-align:right;">$55,639</td>
+          <td style="text-align:right;" class="col-wage">$55,639</td>
         </tr><tr onclick="window.location='../counties/39133.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">9</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Portage County</div>
@@ -499,7 +519,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$276,222</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.0%</td>
-          <td style="text-align:right;">$54,168</td>
+          <td style="text-align:right;" class="col-wage">$54,168</td>
         </tr><tr onclick="window.location='../counties/39049.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">10</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Franklin County</div>
@@ -510,7 +530,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$297,840</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.4%</td>
-          <td style="text-align:right;">$68,058</td>
+          <td style="text-align:right;" class="col-wage">$68,058</td>
         </tr><tr onclick="window.location='../counties/39153.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">11</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Summit County</div>
@@ -521,7 +541,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$225,920</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.4%</td>
-          <td style="text-align:right;">$60,455</td>
+          <td style="text-align:right;" class="col-wage">$60,455</td>
         </tr><tr onclick="window.location='../counties/39103.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">12</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Medina County</div>
@@ -532,7 +552,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-sbuy">STRONG BUY</span></td>
           <td style="text-align:right;font-weight:600;">$345,540</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.3%</td>
-          <td style="text-align:right;">$56,021</td>
+          <td style="text-align:right;" class="col-wage">$56,021</td>
         </tr><tr onclick="window.location='../counties/39063.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">13</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Hancock County</div>
@@ -543,7 +563,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$235,931</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.6%</td>
-          <td style="text-align:right;">$63,202</td>
+          <td style="text-align:right;" class="col-wage">$63,202</td>
         </tr><tr onclick="window.location='../counties/39027.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">14</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Clinton County</div>
@@ -554,7 +574,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-sbuy">STRONG BUY</span></td>
           <td style="text-align:right;font-weight:600;">$253,237</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.0%</td>
-          <td style="text-align:right;">$62,575</td>
+          <td style="text-align:right;" class="col-wage">$62,575</td>
         </tr><tr onclick="window.location='../counties/39159.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">15</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Union County</div>
@@ -565,7 +585,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$411,442</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.2%</td>
-          <td style="text-align:right;">$66,691</td>
+          <td style="text-align:right;" class="col-wage">$66,691</td>
         </tr><tr onclick="window.location='../counties/39025.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">16</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Clermont County</div>
@@ -576,7 +596,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$328,715</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.7%</td>
-          <td style="text-align:right;">$55,644</td>
+          <td style="text-align:right;" class="col-wage">$55,644</td>
         </tr><tr onclick="window.location='../counties/39017.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">17</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Butler County</div>
@@ -587,7 +607,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$311,718</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.0%</td>
-          <td style="text-align:right;">$60,499</td>
+          <td style="text-align:right;" class="col-wage">$60,499</td>
         </tr><tr onclick="window.location='../counties/39125.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">18</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Paulding County</div>
@@ -598,7 +618,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$160,135</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.2%</td>
-          <td style="text-align:right;">$52,959</td>
+          <td style="text-align:right;" class="col-wage">$52,959</td>
         </tr><tr onclick="window.location='../counties/39167.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">19</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Washington County</div>
@@ -609,7 +629,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$183,274</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.6%</td>
-          <td style="text-align:right;">$58,045</td>
+          <td style="text-align:right;" class="col-wage">$58,045</td>
         </tr><tr onclick="window.location='../counties/39169.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">20</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Wayne County</div>
@@ -620,7 +640,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$259,476</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.6%</td>
-          <td style="text-align:right;">$56,788</td>
+          <td style="text-align:right;" class="col-wage">$56,788</td>
         </tr><tr onclick="window.location='../counties/39137.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">21</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Putnam County</div>
@@ -631,7 +651,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$250,826</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.0%</td>
-          <td style="text-align:right;">$49,885</td>
+          <td style="text-align:right;" class="col-wage">$49,885</td>
         </tr><tr onclick="window.location='../counties/39143.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">22</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Sandusky County</div>
@@ -642,7 +662,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$184,347</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.1%</td>
-          <td style="text-align:right;">$51,859</td>
+          <td style="text-align:right;" class="col-wage">$51,859</td>
         </tr><tr onclick="window.location='../counties/39097.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">23</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Madison County</div>
@@ -653,7 +673,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-sbuy">STRONG BUY</span></td>
           <td style="text-align:right;font-weight:600;">$314,535</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.5%</td>
-          <td style="text-align:right;">$47,790</td>
+          <td style="text-align:right;" class="col-wage">$47,790</td>
         </tr><tr onclick="window.location='../counties/39011.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">24</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Auglaize County</div>
@@ -664,7 +684,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$236,126</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.7%</td>
-          <td style="text-align:right;">$55,563</td>
+          <td style="text-align:right;" class="col-wage">$55,563</td>
         </tr><tr onclick="window.location='../counties/39157.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">25</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Tuscarawas County</div>
@@ -675,7 +695,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$212,876</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.2%</td>
-          <td style="text-align:right;">$48,970</td>
+          <td style="text-align:right;" class="col-wage">$48,970</td>
         </tr><tr onclick="window.location='../counties/39089.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">26</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Licking County</div>
@@ -686,7 +706,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$338,595</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.0%</td>
-          <td style="text-align:right;">$53,526</td>
+          <td style="text-align:right;" class="col-wage">$53,526</td>
         </tr><tr onclick="window.location='../counties/39039.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">27</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Defiance County</div>
@@ -697,7 +717,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$183,418</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.9%</td>
-          <td style="text-align:right;">$50,735</td>
+          <td style="text-align:right;" class="col-wage">$50,735</td>
         </tr><tr onclick="window.location='../counties/39093.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">28</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lorain County</div>
@@ -708,7 +728,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$258,615</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.4%</td>
-          <td style="text-align:right;">$51,834</td>
+          <td style="text-align:right;" class="col-wage">$51,834</td>
         </tr><tr onclick="window.location='../counties/39057.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">29</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Greene County</div>
@@ -719,7 +739,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$301,466</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.2%</td>
-          <td style="text-align:right;">$59,927</td>
+          <td style="text-align:right;" class="col-wage">$59,927</td>
         </tr><tr onclick="window.location='../counties/39127.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">30</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Perry County</div>
@@ -730,7 +750,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$217,399</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.2%</td>
-          <td style="text-align:right;">$49,706</td>
+          <td style="text-align:right;" class="col-wage">$49,706</td>
         </tr><tr onclick="window.location='../counties/39037.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">31</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Darke County</div>
@@ -741,7 +761,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$213,845</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.2%</td>
-          <td style="text-align:right;">$48,603</td>
+          <td style="text-align:right;" class="col-wage">$48,603</td>
         </tr><tr onclick="window.location='../counties/39005.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">32</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Ashland County</div>
@@ -752,7 +772,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$240,242</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.7%</td>
-          <td style="text-align:right;">$46,775</td>
+          <td style="text-align:right;" class="col-wage">$46,775</td>
         </tr><tr onclick="window.location='../counties/39149.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">33</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Shelby County</div>
@@ -763,7 +783,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$241,935</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.7%</td>
-          <td style="text-align:right;">$59,496</td>
+          <td style="text-align:right;" class="col-wage">$59,496</td>
         </tr><tr onclick="window.location='../counties/39091.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">34</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Logan County</div>
@@ -774,7 +794,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$250,916</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.0%</td>
-          <td style="text-align:right;">$52,941</td>
+          <td style="text-align:right;" class="col-wage">$52,941</td>
         </tr><tr onclick="window.location='../counties/39107.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">35</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Mercer County</div>
@@ -785,7 +805,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$271,809</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+4.7%</td>
-          <td style="text-align:right;">$50,415</td>
+          <td style="text-align:right;" class="col-wage">$50,415</td>
         </tr><tr onclick="window.location='../counties/39151.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">36</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Stark County</div>
@@ -796,7 +816,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$215,270</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.7%</td>
-          <td style="text-align:right;">$52,442</td>
+          <td style="text-align:right;" class="col-wage">$52,442</td>
         </tr><tr onclick="window.location='../counties/39077.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">37</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Huron County</div>
@@ -807,7 +827,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$192,875</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.5%</td>
-          <td style="text-align:right;">$52,298</td>
+          <td style="text-align:right;" class="col-wage">$52,298</td>
         </tr><tr onclick="window.location='../counties/39095.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">38</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lucas County</div>
@@ -818,7 +838,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$173,659</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.8%</td>
-          <td style="text-align:right;">$59,100</td>
+          <td style="text-align:right;" class="col-wage">$59,100</td>
         </tr><tr onclick="window.location='../counties/39113.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">39</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Montgomery County</div>
@@ -829,7 +849,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$202,671</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.8%</td>
-          <td style="text-align:right;">$58,780</td>
+          <td style="text-align:right;" class="col-wage">$58,780</td>
         </tr><tr onclick="window.location='../counties/39001.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">40</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Adams County</div>
@@ -840,7 +860,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$184,237</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+11.9%</td>
-          <td style="text-align:right;">$49,940</td>
+          <td style="text-align:right;" class="col-wage">$49,940</td>
         </tr><tr onclick="window.location='../counties/39083.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">41</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Knox County</div>
@@ -851,7 +871,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$285,763</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.8%</td>
-          <td style="text-align:right;">$55,609</td>
+          <td style="text-align:right;" class="col-wage">$55,609</td>
         </tr><tr onclick="window.location='../counties/39033.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">42</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Crawford County</div>
@@ -862,7 +882,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$159,017</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+9.3%</td>
-          <td style="text-align:right;">$48,086</td>
+          <td style="text-align:right;" class="col-wage">$48,086</td>
         </tr><tr onclick="window.location='../counties/39161.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">43</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Van Wert County</div>
@@ -873,7 +893,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$184,739</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.7%</td>
-          <td style="text-align:right;">$49,733</td>
+          <td style="text-align:right;" class="col-wage">$49,733</td>
         </tr><tr onclick="window.location='../counties/39067.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">44</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Harrison County</div>
@@ -884,7 +904,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$137,760</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+10.8%</td>
-          <td style="text-align:right;">$60,266</td>
+          <td style="text-align:right;" class="col-wage">$60,266</td>
         </tr><tr onclick="window.location='../counties/39099.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">45</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Mahoning County</div>
@@ -895,7 +915,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$173,350</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.8%</td>
-          <td style="text-align:right;">$48,750</td>
+          <td style="text-align:right;" class="col-wage">$48,750</td>
         </tr><tr onclick="window.location='../counties/39109.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">46</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Miami County</div>
@@ -906,7 +926,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$267,317</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.4%</td>
-          <td style="text-align:right;">$53,667</td>
+          <td style="text-align:right;" class="col-wage">$53,667</td>
         </tr><tr onclick="window.location='../counties/39003.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">47</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Allen County</div>
@@ -917,7 +937,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$189,404</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.4%</td>
-          <td style="text-align:right;">$55,734</td>
+          <td style="text-align:right;" class="col-wage">$55,734</td>
         </tr><tr onclick="window.location='../counties/39059.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">48</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Guernsey County</div>
@@ -928,7 +948,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$161,969</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.3%</td>
-          <td style="text-align:right;">$49,462</td>
+          <td style="text-align:right;" class="col-wage">$49,462</td>
         </tr><tr onclick="window.location='../counties/39155.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">49</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Trumbull County</div>
@@ -939,7 +959,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$167,330</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.8%</td>
-          <td style="text-align:right;">$48,400</td>
+          <td style="text-align:right;" class="col-wage">$48,400</td>
         </tr><tr onclick="window.location='../counties/39021.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">50</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Champaign County</div>
@@ -950,7 +970,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$247,703</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$51,341</td>
+          <td style="text-align:right;" class="col-wage">$51,341</td>
         </tr><tr onclick="window.location='../counties/39147.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">51</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Seneca County</div>
@@ -961,7 +981,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$174,008</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.6%</td>
-          <td style="text-align:right;">$46,538</td>
+          <td style="text-align:right;" class="col-wage">$46,538</td>
         </tr><tr onclick="window.location='../counties/39171.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">52</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Williams County</div>
@@ -972,7 +992,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$180,815</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.4%</td>
-          <td style="text-align:right;">$50,512</td>
+          <td style="text-align:right;" class="col-wage">$50,512</td>
         </tr><tr onclick="window.location='../counties/39115.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">53</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Morgan County</div>
@@ -983,7 +1003,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$156,627</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+20.3%</td>
-          <td style="text-align:right;">$46,561</td>
+          <td style="text-align:right;" class="col-wage">$46,561</td>
         </tr><tr onclick="window.location='../counties/39175.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">54</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Wyandot County</div>
@@ -994,7 +1014,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$189,734</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.2%</td>
-          <td style="text-align:right;">$54,083</td>
+          <td style="text-align:right;" class="col-wage">$54,083</td>
         </tr><tr onclick="window.location='../counties/39007.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">55</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Ashtabula County</div>
@@ -1005,7 +1025,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$177,160</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.5%</td>
-          <td style="text-align:right;">$45,400</td>
+          <td style="text-align:right;" class="col-wage">$45,400</td>
         </tr><tr onclick="window.location='../counties/39123.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">56</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Ottawa County</div>
@@ -1016,7 +1036,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$267,154</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.9%</td>
-          <td style="text-align:right;">$50,291</td>
+          <td style="text-align:right;" class="col-wage">$50,291</td>
         </tr><tr onclick="window.location='../counties/39135.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">57</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Preble County</div>
@@ -1027,7 +1047,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$230,929</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.9%</td>
-          <td style="text-align:right;">$52,829</td>
+          <td style="text-align:right;" class="col-wage">$52,829</td>
         </tr><tr onclick="window.location='../counties/39069.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">58</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Henry County</div>
@@ -1038,7 +1058,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$208,514</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.1%</td>
-          <td style="text-align:right;">$51,912</td>
+          <td style="text-align:right;" class="col-wage">$51,912</td>
         </tr><tr onclick="window.location='../counties/39013.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">59</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Belmont County</div>
@@ -1049,7 +1069,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$132,760</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.4%</td>
-          <td style="text-align:right;">$46,729</td>
+          <td style="text-align:right;" class="col-wage">$46,729</td>
         </tr><tr onclick="window.location='../counties/39117.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">60</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Morrow County</div>
@@ -1060,7 +1080,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$274,299</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.5%</td>
-          <td style="text-align:right;">$42,988</td>
+          <td style="text-align:right;" class="col-wage">$42,988</td>
         </tr><tr onclick="window.location='../counties/39111.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">61</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Monroe County</div>
@@ -1071,7 +1091,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$152,240</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;">$44,265</td>
+          <td style="text-align:right;" class="col-wage">$44,265</td>
         </tr><tr onclick="window.location='../counties/39043.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">62</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Erie County</div>
@@ -1082,7 +1102,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$234,614</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.8%</td>
-          <td style="text-align:right;">$45,962</td>
+          <td style="text-align:right;" class="col-wage">$45,962</td>
         </tr><tr onclick="window.location='../counties/39029.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">63</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Columbiana County</div>
@@ -1093,7 +1113,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$158,338</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.9%</td>
-          <td style="text-align:right;">$46,475</td>
+          <td style="text-align:right;" class="col-wage">$46,475</td>
         </tr><tr onclick="window.location='../counties/39075.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">64</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Holmes County</div>
@@ -1104,7 +1124,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$355,512</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.4%</td>
-          <td style="text-align:right;">$52,405</td>
+          <td style="text-align:right;" class="col-wage">$52,405</td>
         </tr><tr onclick="window.location='../counties/39023.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">65</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Clark County</div>
@@ -1115,7 +1135,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$201,503</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.3%</td>
-          <td style="text-align:right;">$49,786</td>
+          <td style="text-align:right;" class="col-wage">$49,786</td>
         </tr><tr onclick="window.location='../counties/39139.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">66</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Richland County</div>
@@ -1126,7 +1146,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$194,427</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.4%</td>
-          <td style="text-align:right;">$48,580</td>
+          <td style="text-align:right;" class="col-wage">$48,580</td>
         </tr><tr onclick="window.location='../counties/39065.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">67</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Hardin County</div>
@@ -1137,7 +1157,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$184,697</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.6%</td>
-          <td style="text-align:right;">$49,199</td>
+          <td style="text-align:right;" class="col-wage">$49,199</td>
         </tr><tr onclick="window.location='../counties/39019.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">68</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Carroll County</div>
@@ -1148,7 +1168,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$200,654</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.0%</td>
-          <td style="text-align:right;">$46,398</td>
+          <td style="text-align:right;" class="col-wage">$46,398</td>
         </tr><tr onclick="window.location='../counties/39009.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">69</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Athens County</div>
@@ -1159,7 +1179,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$184,082</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.2%</td>
-          <td style="text-align:right;">$41,632</td>
+          <td style="text-align:right;" class="col-wage">$41,632</td>
         </tr><tr onclick="window.location='../counties/39053.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">70</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Gallia County</div>
@@ -1170,7 +1190,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$163,992</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+9.2%</td>
-          <td style="text-align:right;">$47,391</td>
+          <td style="text-align:right;" class="col-wage">$47,391</td>
         </tr><tr onclick="window.location='../counties/39101.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">71</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Marion County</div>
@@ -1181,7 +1201,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$181,563</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.8%</td>
-          <td style="text-align:right;">$51,241</td>
+          <td style="text-align:right;" class="col-wage">$51,241</td>
         </tr><tr onclick="window.location='../counties/39119.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">72</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Muskingum County</div>
@@ -1192,7 +1212,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$207,300</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.8%</td>
-          <td style="text-align:right;">$51,710</td>
+          <td style="text-align:right;" class="col-wage">$51,710</td>
         </tr><tr onclick="window.location='../counties/39045.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">73</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Fairfield County</div>
@@ -1203,7 +1223,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$363,778</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.5%</td>
-          <td style="text-align:right;">$47,808</td>
+          <td style="text-align:right;" class="col-wage">$47,808</td>
         </tr><tr onclick="window.location='../counties/39081.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">74</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jefferson County</div>
@@ -1214,7 +1234,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$125,041</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.4%</td>
-          <td style="text-align:right;">$50,436</td>
+          <td style="text-align:right;" class="col-wage">$50,436</td>
         </tr><tr onclick="window.location='../counties/39087.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">75</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lawrence County</div>
@@ -1225,7 +1245,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$142,956</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+4.3%</td>
-          <td style="text-align:right;">$45,883</td>
+          <td style="text-align:right;" class="col-wage">$45,883</td>
         </tr><tr onclick="window.location='../counties/39031.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">76</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Coshocton County</div>
@@ -1236,7 +1256,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$184,129</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.8%</td>
-          <td style="text-align:right;">$47,323</td>
+          <td style="text-align:right;" class="col-wage">$47,323</td>
         </tr><tr onclick="window.location='../counties/39141.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">77</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Ross County</div>
@@ -1247,7 +1267,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$199,736</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.0%</td>
-          <td style="text-align:right;">$53,260</td>
+          <td style="text-align:right;" class="col-wage">$53,260</td>
         </tr><tr onclick="window.location='../counties/39129.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">78</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Pickaway County</div>
@@ -1258,7 +1278,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$327,295</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.4%</td>
-          <td style="text-align:right;">$55,135</td>
+          <td style="text-align:right;" class="col-wage">$55,135</td>
         </tr><tr onclick="window.location='../counties/39145.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">79</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Scioto County</div>
@@ -1269,7 +1289,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$141,484</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.2%</td>
-          <td style="text-align:right;">$46,228</td>
+          <td style="text-align:right;" class="col-wage">$46,228</td>
         </tr><tr onclick="window.location='../counties/39121.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">80</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Noble County</div>
@@ -1280,7 +1300,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$189,603</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+4.7%</td>
-          <td style="text-align:right;">$47,400</td>
+          <td style="text-align:right;" class="col-wage">$47,400</td>
         </tr><tr onclick="window.location='../counties/39015.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">81</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Brown County</div>
@@ -1291,7 +1311,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$260,718</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.3%</td>
-          <td style="text-align:right;">$39,886</td>
+          <td style="text-align:right;" class="col-wage">$39,886</td>
         </tr><tr onclick="window.location='../counties/39131.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">82</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Pike County</div>
@@ -1302,7 +1322,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$167,604</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.9%</td>
-          <td style="text-align:right;">$60,659</td>
+          <td style="text-align:right;" class="col-wage">$60,659</td>
         </tr><tr onclick="window.location='../counties/39047.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">83</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Fayette County</div>
@@ -1313,7 +1333,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
           <td style="text-align:right;font-weight:600;">$239,023</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+9.2%</td>
-          <td style="text-align:right;">$46,424</td>
+          <td style="text-align:right;" class="col-wage">$46,424</td>
         </tr><tr onclick="window.location='../counties/39071.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">84</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Highland County</div>
@@ -1324,7 +1344,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
           <td style="text-align:right;font-weight:600;">$198,787</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.6%</td>
-          <td style="text-align:right;">$40,684</td>
+          <td style="text-align:right;" class="col-wage">$40,684</td>
         </tr><tr onclick="window.location='../counties/39105.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">85</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Meigs County</div>
@@ -1335,7 +1355,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$108,143</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.7%</td>
-          <td style="text-align:right;">$37,744</td>
+          <td style="text-align:right;" class="col-wage">$37,744</td>
         </tr><tr onclick="window.location='../counties/39079.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">86</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jackson County</div>
@@ -1346,7 +1366,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$143,765</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.8%</td>
-          <td style="text-align:right;">$43,054</td>
+          <td style="text-align:right;" class="col-wage">$43,054</td>
         </tr><tr onclick="window.location='../counties/39163.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">87</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Vinton County</div>
@@ -1357,7 +1377,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
           <td style="text-align:right;font-weight:600;">$175,041</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+9.7%</td>
-          <td style="text-align:right;">$41,686</td>
+          <td style="text-align:right;" class="col-wage">$41,686</td>
         </tr><tr onclick="window.location='../counties/39073.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">88</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Hocking County</div>
@@ -1368,7 +1388,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
           <td style="text-align:right;font-weight:600;">$276,861</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.3%</td>
-          <td style="text-align:right;">$33,189</td>
+          <td style="text-align:right;" class="col-wage">$33,189</td>
         </tr></tbody>
       </table>
     </div>

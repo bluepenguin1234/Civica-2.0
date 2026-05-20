@@ -107,7 +107,41 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
 
 .footer { text-align:center; font-size:11px; color:var(--muted); padding:24px 0 48px; line-height:1.8; }
 
-@media(max-width:640px) { .label-grid { grid-template-columns:1fr 1fr; } }
+@media(max-width:640px) {
+  .nav { padding:0 14px; }
+  .nav-tag { display:none; }
+  .nav-back { font-size:12px; }
+  .hero { padding:24px 16px 0; }
+  .hero h1 { font-size:22px; line-height:1.25; }
+  .hero-sub { font-size:13px; margin-top:8px; }
+  .hero-pills { gap:6px; margin-top:14px; }
+  .hero-pill { padding:7px 11px; }
+  .hp-lbl { font-size:9px; }
+  .hp-val { font-size:12px; }
+  .score-tab { padding:10px 14px; font-size:12px; }
+  .page { padding:14px 12px 40px; gap:14px; }
+  .card { padding:14px; }
+  .card-title { font-size:10px; margin-bottom:12px; }
+  .card-intro { font-size:13px; margin-bottom:14px; }
+  .dim-row { flex-wrap:wrap; gap:8px; padding:11px; }
+  .dim-pts { display:none; }
+  .dim-name { font-size:13px; }
+  .dim-desc { font-size:11px; }
+  .label-grid { grid-template-columns:1fr 1fr; gap:8px; }
+  .label-card { padding:12px; }
+  .label-name { font-size:13px; }
+  .label-desc { font-size:11px; }
+  .metric-block { padding:14px; }
+  .metric-name { font-size:14px; }
+  .metric-formula, .metric-why { font-size:12px; }
+  .src-table { font-size:11px; }
+  .src-table th, .src-table td { padding:7px 6px; }
+  .vs-table { font-size:11px; }
+  .vs-table th, .vs-table td { padding:7px 8px; }
+  .cta-strip { flex-direction:column; }
+  .cta { min-width:unset; }
+  .footer { padding:20px 0 40px; font-size:10px; }
+}
 @media(max-width:400px) { .label-grid { grid-template-columns:1fr; } }
 </style>
 </head>

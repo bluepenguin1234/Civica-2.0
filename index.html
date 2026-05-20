@@ -107,7 +107,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
   margin-bottom: 16px;
   letter-spacing: -.5px;
 }
-.hero-h1 .accent { color: var(--blue); }
+.hero-h1 .accent { color: #1a7ff0; }
 
 .hero-sub {
   font-size: 17px;
@@ -383,21 +383,48 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
 /* ── RESPONSIVE ─────────────────────────────────── */
 @media (max-width: 860px) {
-  .hero-inner { flex-direction: column; gap: 40px; }
+  .hero-inner { flex-direction: column; gap: 32px; }
   .score-card { width: 100%; max-width: 340px; }
   .nav-links { display: none; }
   .hamburger { display: flex; }
 }
 @media (max-width: 660px) {
-  .hero-h1 { font-size: 42px; }
+  .hero-h1 { font-size: 38px; }
   .hero-sub { font-size: 15px; }
   .prob-grid, .steps-grid, .feat-grid { grid-template-columns: 1fr; }
   .steps-grid::before { display: none; }
   .sec-h { font-size: 30px; }
   .sec { padding: 64px 20px; }
 }
-@media (max-width: 460px) {
-  .hero-h1 { font-size: 34px; }
+@media (max-width: 640px) {
+  .hero { padding: 24px 16px 40px; }
+  .hero-inner { gap: 24px; }
+  .hero-h1 { font-size: 34px; letter-spacing: -.3px; }
+  .hero-sub { font-size: 14px; margin-bottom: 20px; }
+  .live-pill { font-size: 11px; padding: 5px 12px; margin-bottom: 14px; }
+  .score-card { display: none; }
+  .search-input { font-size: 14px; }
+  .hero-link { font-size: 13px; padding: 9px 18px; }
+  .sec { padding: 52px 16px; }
+  .sec-h { font-size: 26px; line-height: 1.1; }
+  .sec-sub { font-size: 14px; margin-bottom: 32px; }
+  .prob-card, .feat-card { padding: 18px; }
+  .prob-icon { font-size: 22px; margin-bottom: 10px; }
+  .prob-title, .feat-title { font-size: 14px; }
+  .feat-grid { grid-template-columns: 1fr; }
+  .step-title { font-size: 14px; }
+  .step-body { font-size: 12px; }
+  .step-num { width: 36px; height: 36px; font-size: 16px; margin-bottom: 12px; }
+  .email-form { flex-direction: column; gap: 8px; }
+  .email-in { width: 100%; min-width: unset; }
+  .email-btn-sub { width: 100%; }
+  .footer { padding: 36px 16px 32px; }
+  .footer-nav { gap: 16px; }
+  .saves-pill { bottom: 16px; right: 16px; padding: 8px 16px; font-size: 12px; }
+}
+@media (max-width: 400px) {
+  .hero-h1 { font-size: 28px; }
+  .sec-h { font-size: 22px; }
 }
 </style>
 </head>

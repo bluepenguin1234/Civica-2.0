@@ -1172,7 +1172,7 @@ def build_state_page(state: str, counties: list, template_style: str) -> str:
           <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="{lb_cls}">{sig}</span></td>
           <td style="text-align:right;font-weight:600;">{money(home)}</td>
           <td style="text-align:right;font-weight:600;color:{hpi_c};">{hpi:+.1f}%</td>
-          <td style="text-align:right;">{money(wage)}</td>
+          <td style="text-align:right;" class="col-wage">{money(wage)}</td>
         </tr>'''
 
     url  = f'{STATE_URL_BASE}/{state}.html'
@@ -1222,6 +1222,26 @@ def build_state_page(state: str, counties: list, template_style: str) -> str:
 .lb-watch {{ background:#f59e0b;color:#fff; }}
 .lb-caut  {{ background:#f97316;color:#fff; }}
 .lb-avoid {{ background:#dc2626;color:#fff; }}
+@media(max-width:640px) {{
+  .nav {{ padding:0 14px; }}
+  .nav-tag {{ display:none; }}
+  .nav-back {{ font-size:12px; }}
+  .hero {{ padding:28px 16px 40px !important; }}
+  .hero h1,h1 {{ font-size:28px !important; margin:8px 0 12px !important; }}
+  .hero-eyebrow {{ font-size:10px; }}
+  .sp-stat-row {{ gap:16px !important; }}
+  .sp-stat-val {{ font-size:20px !important; }}
+  .sp-stat-top {{ font-size:13px !important; max-width:100% !important; }}
+  .page {{ padding:12px 12px 40px; }}
+  .card {{ padding:14px; }}
+  .card-title {{ font-size:10px; }}
+  .sp-table {{ font-size:11px; }}
+  .sp-table th {{ padding:0 8px 8px; font-size:9px; letter-spacing:.03em; }}
+  .sp-table td {{ padding:9px 8px; }}
+  .sp-table .col-wage {{ display:none; }}
+  .lb-sbuy,.lb-buy,.lb-watch,.lb-caut,.lb-avoid {{ white-space:nowrap; font-size:9px; padding:2px 7px; }}
+  .footer {{ font-size:10px; padding:16px 0 36px; }}
+}}
 </style>
 </head>
 <body>
@@ -1241,17 +1261,17 @@ def build_state_page(state: str, counties: list, template_style: str) -> str:
   </div>
 </nav>
 
-<div class="hero" style="padding:56px 28px 64px;">
+<div class="hero" style="padding:44px 28px 52px;">
   <div style="max-width:960px;margin:0 auto;">
     <div class="hero-eyebrow">State Housing Report · 2026</div>
-    <h1 style="font-size:44px;font-weight:900;color:#fff;margin:10px 0 16px;line-height:1.05;">{state_name}</h1>
-    <div style="display:flex;gap:36px;flex-wrap:wrap;margin-bottom:22px;">
-      <div><div style="font-size:28px;font-weight:900;color:#fff;">{count}</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Counties Scored</div></div>
-      <div><div style="font-size:28px;font-weight:900;color:#1a7ff0;">{median_score:.1f}</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Median Score</div></div>
-      <div><div style="font-size:28px;font-weight:900;color:#4ade80;">{top_score:.1f}</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Top County Score</div></div>
-      <div><div style="font-size:16px;font-weight:800;color:#fff;max-width:180px;">{top_name}</div><div style="font-size:12px;color:rgba(255,255,255,.5);">Top Ranked County</div></div>
+    <h1 style="font-size:36px;font-weight:900;color:#fff;margin:10px 0 16px;line-height:1.05;">{state_name}</h1>
+    <div class="sp-stat-row" style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:18px;">
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#fff;">{count}</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Counties Scored</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#1a7ff0;">{median_score:.1f}</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Median Score</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#4ade80;">{top_score:.1f}</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top County Score</div></div>
+      <div><div class="sp-stat-top" style="font-size:15px;font-weight:800;color:#fff;max-width:160px;">{top_name}</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top Ranked County</div></div>
     </div>
-    <div style="font-size:13px;color:rgba(255,255,255,.45);">{dist_html}</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.7;">{dist_html}</div>
   </div>
 </div>
 
@@ -1268,7 +1288,7 @@ def build_state_page(state: str, counties: list, template_style: str) -> str:
             <th>Label</th>
             <th class="r">Median Price</th>
             <th class="r">HPI 3yr</th>
-            <th class="r">Avg Wage</th>
+            <th class="r col-wage">Avg Wage</th>
           </tr>
         </thead>
         <tbody>{rows_html}</tbody>
