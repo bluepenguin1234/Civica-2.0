@@ -416,7 +416,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
   </a>
   <div class="nav-links">
     <a href="#how">How It Works</a>
-    <a href="#map">County Map</a>
+    <a href="map.html">County Map</a>
     <a href="leaderboard.html">Leaderboard</a>
     <a href="harvard_model.html">Methodology</a>
     <a href="#" class="nav-cta" onclick="event.preventDefault();document.getElementById('searchInput').focus();document.querySelector('.hero').scrollIntoView({behavior:'smooth'});">Search Counties</a>
@@ -460,7 +460,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         <div class="search-dropdown" id="searchDrop"></div>
       </div>
 
-      <a href="#map" class="hero-link">Browse all counties →</a>
+      <a href="map.html" class="hero-link">Browse all counties →</a>
     </div>
 
     <!-- RIGHT: Floating Score Card -->
@@ -661,26 +661,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 </section>
 
 
-<!-- ══════════ COUNTY MAP ══════════ -->
-<section class="sec sec-white" id="map">
-  <div class="sec-inner">
-    <div class="eyebrow">County Map</div>
-    <h2 class="sec-h">Every county, scored</h2>
-    <p class="sec-sub" style="margin-bottom:28px;">2,820 counties colored by Civica signal. Click any county to view its full report.</p>
-    <div id="mapLoading" style="text-align:center;padding:48px 0;color:#9ca3af;font-size:14px;">Loading map…</div>
-    <svg id="countyMap" style="width:100%;height:auto;display:none;"></svg>
-    <div class="map-legend" id="mapLegend" style="display:none;">
-      <div class="map-legend-item"><span class="map-dot" style="background:#16a34a;"></span>Strong Buy</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#1a7ff0;"></span>Buy</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#f59e0b;"></span>Watch</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#f97316;"></span>Caution</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#dc2626;"></span>Avoid</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#e5e7eb;"></span>No data</div>
-    </div>
-  </div>
-</section>
-
-
 <!-- ══════════ VS ZILLOW ══════════ -->
 <section class="sec sec-gray">
   <div class="sec-inner">
@@ -742,7 +722,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     </a>
     <div class="footer-nav">
       <a href="harvard_model.html">Methodology</a>
-      <a href="#map">County Map</a>
+      <a href="map.html">County Map</a>
       <a href="leaderboard.html">Leaderboard</a>
       <a href="compare.html">Compare</a>
       <a href="privacy.html">Privacy Policy</a>
@@ -774,7 +754,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
   </div>
   <a href="#how" onclick="closeMobileNav()">How It Works</a>
-  <a href="#map" onclick="closeMobileNav()">County Map</a>
+  <a href="map.html">County Map</a>
   <a href="leaderboard.html">Leaderboard</a>
   <a href="harvard_model.html">Methodology</a>
   <a href="compare.html">Compare</a>
@@ -786,9 +766,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
   <span id="savesCount">📌 0 saved</span>
   <button class="saves-pill-clr" onclick="clearSaved()">Clear all ✕</button>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/topojson@3/dist/topojson.min.js"></script>
 
 <!-- Cookie consent banner -->
 <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#111827;color:rgba(255,255,255,.7);font-size:12px;padding:14px 28px;z-index:500;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
@@ -824,15 +801,6 @@ const SIGNAL_CLASS = {
   'STRONG BUY':'lb-sbuy', 'BUY':'lb-buy', 'WATCH':'lb-watch',
   'CAUTION':'lb-caut', 'AVOID':'lb-avoid',
 };
-const SCORE_BG = {
-  'STRONG BUY':'#16a34a', 'BUY':'#1a7ff0', 'WATCH':'#f59e0b',
-  'CAUTION':'#f97316', 'AVOID':'#dc2626',
-};
-const MAP_COLOR = {
-  'STRONG BUY':'#16a34a', 'BUY':'#1a7ff0', 'WATCH':'#f59e0b',
-  'CAUTION':'#f97316', 'AVOID':'#dc2626',
-};
-
 // Load real data
 if (location.protocol === 'file:') {
   document.getElementById('mapLoading').innerHTML =
@@ -845,77 +813,11 @@ if (location.protocol === 'file:') {
     .then(r => r.json())
     .then(data => {
       COUNTIES = data;
-      initMap(COUNTIES);
       renderSavesPill();
     })
     .catch(() => {
       document.getElementById('mapLoading').innerHTML =
         '<span style="color:#dc2626;font-weight:600;">⚠️ Could not load <code>output/index.json</code>. Run <code>python county_generator.py</code> to generate it.</span>';
-    });
-}
-
-let mapRendered = false;
-function initMap(counties) {
-  if (mapRendered || typeof d3 === 'undefined' || typeof topojson === 'undefined') return;
-  mapRendered = true;
-  const lookup = new Map(counties.map(c => [String(c.fips).padStart(5, '0'), c]));
-  const svg = d3.select('#countyMap');
-  const w = 960, h = 600;
-  svg.attr('viewBox', `0 0 ${w} ${h}`);
-  const proj = d3.geoAlbersUsa().scale(1280).translate([w / 2, h / 2]);
-  const path = d3.geoPath().projection(proj);
-  const tip = document.createElement('div');
-  tip.id = 'mapTip';
-  tip.style.cssText = 'display:none;position:fixed;background:#1a3a5c;color:#fff;border-radius:10px;padding:12px 16px;font-size:13px;pointer-events:none;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,.3);max-width:220px;line-height:1.5;';
-  document.body.appendChild(tip);
-  d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json')
-    .then(us => {
-      document.getElementById('mapLoading').style.display = 'none';
-      svg.style('display', 'block');
-      document.getElementById('mapLegend').style.display = 'flex';
-      svg.append('g')
-        .selectAll('path')
-        .data(topojson.feature(us, us.objects.counties).features)
-        .join('path')
-        .attr('d', path)
-        .attr('fill', d => {
-          const fips = String(d.id).padStart(5, '0');
-          const c = lookup.get(fips);
-          return c ? (MAP_COLOR[c.signal] || '#e5e7eb') : '#e5e7eb';
-        })
-        .attr('stroke', '#fff')
-        .attr('stroke-width', 0.3)
-        .style('cursor', d => lookup.has(String(d.id).padStart(5, '0')) ? 'pointer' : 'default')
-        .on('mousemove', (event, d) => {
-          const c = lookup.get(String(d.id).padStart(5, '0'));
-          if (!c) { tip.style.display = 'none'; return; }
-          tip.style.display = 'block';
-          tip.style.left = (event.clientX + 14) + 'px';
-          tip.style.top  = (event.clientY - 40) + 'px';
-          const sigColor = MAP_COLOR[c.signal] || '#9ca3af';
-          tip.innerHTML =
-            '<div style="font-weight:700;font-size:14px;margin-bottom:4px;">' + c.name + ', ' + c.state + '</div>' +
-            '<div style="display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:100px;background:' + sigColor + ';color:#fff;margin-bottom:8px;">' + (c.signal || '') + '</div>' +
-            '<div style="display:flex;gap:16px;font-size:12px;margin-bottom:4px;">' +
-            '<span><b style="color:#4ade80;">' + c.score.toFixed(1) + '</b> Score</span>' +
-            '<span><b>$' + Math.round(c.median_home_value / 1000) + 'k</b> Median</span></div>' +
-            '<div style="font-size:11px;color:rgba(255,255,255,.5);">Rank #' + c.rank + ' of 2,820</div>';
-        })
-        .on('mouseleave', () => { tip.style.display = 'none'; })
-        .on('click', (event, d) => {
-          const c = lookup.get(String(d.id).padStart(5, '0'));
-          if (c) window.location = 'output/counties/' + c.fips + '.html';
-        });
-      svg.append('path')
-        .datum(topojson.mesh(us, us.objects.states, (a, b) => a !== b))
-        .attr('fill', 'none')
-        .attr('stroke', '#fff')
-        .attr('stroke-width', 0.8)
-        .attr('d', path);
-    })
-    .catch(() => {
-      document.getElementById('mapLoading').innerHTML =
-        '<span style="color:#dc2626;">⚠️ Map tiles could not load. Check your internet connection.</span>';
     });
 }
 
