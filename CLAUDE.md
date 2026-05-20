@@ -9,19 +9,19 @@
 **`scoring_engine.py` is COMPLETE. `county_scores.csv` has 2,820 counties scored.**
 
 ### Coverage Decision (intentional — do not change)
-- **2,820 of 3,144 counties are scored.** The 324 excluded counties all have population < 5,000.
+- **2,816 of 3,144 counties are scored.** The 328 excluded counties all have population < 5,000.
 - The threshold is `pop >= 5,000` in `scoring_engine.py` — this is a deliberate data quality decision.
 - Counties under 5,000 have no Zillow data, suppressed QCEW employment figures, and often no FHFA HPI history. Their scores would be entirely median imputation — meaningless.
 - Largest excluded county: Oneida County, ID (pop 4,953). Smallest: Loving County, TX (pop 43).
-- On the front page, display: **"2,820 counties scored"** — not "all 3,143". Don't claim coverage you don't have.
+- On the front page, display: **"2,816 counties scored"** — not "all 3,143". Don't claim coverage you don't have.
 - If a user searches for an unscored county, show: "This county has fewer than 5,000 residents. Civica requires sufficient housing market data to produce a reliable score."
 
 ### Scoring Engine Results (v1.2 — current, includes FBI NIBRS Dim4)
-- Runtime: ~4 minutes; output: `county_scores.csv` (2,820 rows × 35 columns)
-- Distribution: mean=50.0, std=6.24, range 26.85–69.48
-- Top: Hamilton County IN (69.48 ACCELERATING)
-- Labels: ACCELERATING (2), PEAKING (57), ESTABLISHED (563), EMERGING (1,463), FRONTIER (634), TURNING (97), SPECULATIVE (4), AVOID (0)
-- Note: AVOID has 0 counties — FBI NIBRS crime data raised the score floor to 26.85, above the AVOID threshold of 26. The 4 SPECULATIVE counties are the genuinely worst-performing counties.
+- Runtime: ~4 minutes; output: `county_scores.csv` (2,816 rows × 35 columns)
+- Distribution: mean=50.0, std=7.68, range 21.11–73.54
+- Top: Lake County IL (73.54 ACCELERATING)
+- Labels: ACCELERATING (18), PEAKING (163), ESTABLISHED (549), EMERGING (1,219), FRONTIER (690), TURNING (163), SPECULATIVE (11), AVOID (3)
+- Data vintage: Census Pop 2025, CBP 2023, BPS 2025, NOAA 2020–2024, BLS QCEW 2023 (2024 pending manual download)
 
 ### Next Step: `county_generator.py`
 
@@ -543,7 +543,7 @@ Table: score, county, state, label badge, median home value, HPI 3yr, avg wage �
 |---|---|---|---|
 | Crime Rate | 35% | FBI NIBRS 2024 | Violent offenses per 100k residents (lower = better); counties without NIBRS coverage receive their RUCC-tier median |
 | Urban Access | 40% | USDA RUCC 2023 | Percentile rank of continuum: 1 (large metro) → 9 (most rural) |
-| Amenity Density | 25% | Census CBP 2022 | Private establishments per 1,000 residents |
+| Amenity Density | 25% | Census CBP 2023 | Private establishments per 1,000 residents |
 
 **Note:** Original spec also called for School Adequacy (NCES — not downloaded) and Service Efficiency (Census STC — state-level only, no county FIPS). FBI NIBRS 2024 National Master File (5.8 GB fixed-width) was successfully parsed by empirically decoding the record layout: BH (agency header) segments contain state alpha at positions 4–6 (chars 3-4 of ORI) and county 3-digit FIPS at positions 269–272; 02 (offense) segments carry the NIBRS offense code at positions 33–36. This covers 21,068 agencies across 49 states and 2,869 counties. Counties not covered by participating agencies (predominantly rural) are imputed with their RUCC-tier median violent crime rate so non-reporting isn't mistaken for low crime.
 
@@ -577,7 +577,7 @@ National median homeowners insurance ≈ $159/mo. Apply county risk multiplier:
 
 | Metric | Weight | Source | Formula |
 |---|---|---|---|
-| Net Migration Rate | 60% | Census Population Estimates 2023 | RNETMIG2023: net migration per 1,000 residents |
+| Net Migration Rate | 60% | Census Population Estimates 2025 | RNETMIG2025 (aliased to RNETMIG2023 internally): net migration per 1,000 residents |
 | Income Quality of In-Movers | 40% | IRS SOI Migration 2022-2023 | in-mover avg AGI ÷ out-mover avg AGI; ratio > 1.0 = higher-income arrivals |
 
 **Note on framing:** Migration is a *corroborating* signal, not a leading indicator. The 6% weight is correct — migration confirms conclusions established by Dim1–Dim3, it does not independently predict them. Do not describe it as "the strongest leading indicator" anywhere in copy or documentation.
@@ -644,18 +644,18 @@ The scoring engine computes `monthly_piti` for each county — the ownership cos
 |---|---|---|---|---|
 | 1 | IRS SOI Migration | irs_migration/ | ✓ Active | Dim6: in-mover income quality ratio |
 | 2 | FHFA HPI County | fhfa_hpi/hpi_at_county.xlsx | ✓ Active | Dim1: appreciation quality; Dim3: 3-yr trend + current momentum |
-| 3 | BLS QCEW | bls_qcew/2023.annual.singlefile.csv | ✓ Active | Dim2: wages, sector quality, HHI |
+| 3 | BLS QCEW | bls_qcew/2023.annual.singlefile.csv (2024 pending) | ✓ Active | Dim2: wages, sector quality, HHI |
 | 4 | BEA Local Area (CAINC1) | bea_income/CAINC1__ALL_AREAS_1969_2024.csv | ✓ Active | Dim1: price-to-income; Dim2: income growth |
 | 5 | FBI NIBRS | fbi_crime/2024_NIBRS_NATIONAL_MASTER_FILE.txt | ✓ Active | Dim4: violent offenses per 100k (21,068 agencies, 49 states, 2,869 counties) |
 | 6 | FEMA NFIP Claims | fema_nfip/fema_nfip_claims.csv | ✓ Active | Dim5: flood loss per capita (10-yr window) |
-| 7 | NOAA Storm Events | noaa_storm_events/ (5 CSVs) | ✓ Active | Dim5: storm damage per capita (5-yr window) |
+| 7 | NOAA Storm Events | noaa_storm_events/ (5 CSVs, 2020–2024) | ✓ Active | Dim5: storm damage per capita (5-yr window) |
 | 8 | USFS Wildfire Risk | usfs_wildfire/wrc_download_20260415.xlsx | ✓ Active | Dim5: wildfire national risk rank |
 | 9 | EIA Form 861 | eia_electricity/ (3 files) | ✗ Not used | Maps to utility service territories, not county FIPS; spatial join required |
 | 10 | EIA Natural Gas | eia_gas/NG_PRI_SUM_DCU_NUS_A.xls | ✗ Not used | State-level prices only; no county-level decomposition in file |
 | 11 | Census STC | census_stc/STC-Historical-DB.xlsx | ✗ Not used | State-level data only — no county FIPS in file |
-| 12 | Census Population Estimates | census_population/co-est2023-alldata.csv | ✓ Active | Base county universe; migration rates; per-capita denominators |
-| 13 | Census BPS | census_bps/co2022a.txt | ✓ Active | Dim3: new housing supply pipeline |
-| 14 | Census CBP | census_cbp/cbp22co.txt | ✓ Active | Dim4: amenity density (establishments per 1,000 residents) |
+| 12 | Census Population Estimates | census_population/co-est2025-alldata.csv | ✓ Active | Base county universe; migration rates; per-capita denominators |
+| 13 | Census BPS | census_bps/co2025a.txt | ✓ Active | Dim3: new housing supply pipeline |
+| 14 | Census CBP | census_cbp/cbp23co.txt | ✓ Active | Dim4: amenity density (establishments per 1,000 residents) |
 | 15 | USDA RUCC | usda_rucc/ruralurbancodes2023.xlsx | ✓ Active | Dim4: urban access continuum (1=large metro, 9=most rural) |
 | 16 | HUD Fair Market Rents | hud_fmr/FY26_FMRs_revised.xlsx | ✓ Active | Dim1: rent baseline, P/R ratio, breakeven |
 | 17 | NOAA Climate Normals | noaa_climate_normals/ | ✗ Not used | Station-level temperature; no county FIPS; spatial join required |

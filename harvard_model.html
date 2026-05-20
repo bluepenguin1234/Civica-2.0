@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How Civica Works — Methodology</title>
-<meta name="description" content="How Civica scores 2,820 US counties for homebuyers. Six dimensions, 13 federal datasets plus Zillow ZHVI, zero advertiser influence.">
+<meta name="description" content="How Civica scores 2,816 US counties for homebuyers. Six dimensions, 13 federal datasets plus Zillow ZHVI, zero advertiser influence.">
 <meta property="og:title" content="Civica Methodology — How the Score Works">
 <meta property="og:image" content="https://civica.app/og_image.png">
 <link rel="canonical" href="https://civica.app/harvard_model.html">
@@ -180,7 +180,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
   <div class="hero-pills">
     <div class="hero-pill"><span class="hp-lbl">Dimensions</span><span class="hp-val">6</span></div>
     <div class="hero-pill"><span class="hp-lbl">Data Sources</span><span class="hp-val">14</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Counties Scored</span><span class="hp-val">2,820</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Counties Scored</span><span class="hp-val">2,816</span></div>
     <div class="hero-pill"><span class="hp-lbl">Survey Data</span><span class="hp-val">None</span></div>
     <div class="hero-pill"><span class="hp-lbl">Advertiser Influence</span><span class="hp-val">None</span></div>
   </div>
@@ -199,7 +199,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
 
   <div class="card">
     <div class="card-title">📊 What the Score Measures</div>
-    <div class="card-intro">The Civica Score is a single number (0–100) that answers one question: <strong>is this county a sound place to buy a home right now?</strong> It's built from six weighted dimensions — each scored independently against all 2,820 counties in the dataset.</div>
+    <div class="card-intro">The Civica Score is a single number (0–100) that answers one question: <strong>is this county a sound place to buy a home right now?</strong> It's built from six weighted dimensions — each scored independently against all 2,816 counties in the dataset.</div>
 
     <div style="display:flex;flex-direction:column;gap:10px;">
       <div class="dim-row">
@@ -359,7 +359,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
   </div>
   <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
-  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">Each metric inside a dimension is scored as a national percentile, so a county is always compared to all 2,820 others — not to an absolute benchmark. Below is what's actually in the model and where the data comes from.</div>
+  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">Each metric inside a dimension is scored as a national percentile, so a county is always compared to all 2,816 others — not to an absolute benchmark. Below is what's actually in the model and where the data comes from.</div>
 
   <div style="display:flex;flex-direction:column;gap:14px;">
 
@@ -529,11 +529,11 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
         <tr><td><div class="src-name">BEA Local Area Personal Income (CAINC1)</div><div class="src-sub">1969–2024</div></td><td>BEA</td><td>Per-capita income; 4-yr income growth; price-to-income ratio (Dim 1 &amp; 2)</td><td><span class="tag-admin">Federal</span></td></tr>
         <tr><td><div class="src-name">FBI NIBRS 2024 National Master File</div><div class="src-sub">21,068 agencies, 49 states</div></td><td>FBI</td><td>Violent offenses per 100k; non-reporting counties imputed at RUCC-tier median (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
         <tr><td><div class="src-name">FEMA NFIP Paid Claims</div><div class="src-sub">10-year window</div></td><td>FEMA</td><td>Insured flood loss per capita (Dim 5)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">NOAA Storm Events Database</div><div class="src-sub">2019–2023, 5-year window</div></td><td>NOAA</td><td>Storm property damage per capita across all hazard types (Dim 5)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">NOAA Storm Events Database</div><div class="src-sub">2020–2024, 5-year window</div></td><td>NOAA</td><td>Storm property damage per capita across all hazard types (Dim 5)</td><td><span class="tag-admin">Federal</span></td></tr>
         <tr><td><div class="src-name">USFS Wildfire Risk to Communities</div><div class="src-sub">2024 release</div></td><td>USFS</td><td>County-level wildfire exposure index (Dim 5)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">Census Population Estimates</div><div class="src-sub">2023 vintage</div></td><td>Census</td><td>Base county universe; population denominators; migration rates (all dimensions)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">Census Building Permits Survey (BPS)</div><div class="src-sub">2022 annual</div></td><td>Census</td><td>New housing units permitted — supply pipeline signal (Dim 3)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">Census County Business Patterns (CBP)</div><div class="src-sub">2022</div></td><td>Census</td><td>Private establishments per 1,000 residents — amenity density (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">Census Population Estimates</div><div class="src-sub">2025 vintage</div></td><td>Census</td><td>Base county universe; population denominators; migration rates (all dimensions)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">Census Building Permits Survey (BPS)</div><div class="src-sub">2025 annual</div></td><td>Census</td><td>New housing units permitted — supply pipeline signal (Dim 3)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">Census County Business Patterns (CBP)</div><div class="src-sub">2023</div></td><td>Census</td><td>Private establishments per 1,000 residents — amenity density (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
         <tr><td><div class="src-name">USDA Rural-Urban Continuum Codes 2023</div><div class="src-sub">RUCC 1–9</div></td><td>USDA</td><td>Urban access score; crime rate peer-tier comparisons (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
         <tr><td><div class="src-name">HUD Fair Market Rents FY2026</div><div class="src-sub">2-bedroom FMR</div></td><td>HUD</td><td>Price-to-rent ratio; buy-vs-rent breakeven (Dim 1)</td><td><span class="tag-admin">Federal</span></td></tr>
         <tr><td><div class="src-name">Zillow ZHVI — County</div><div class="src-sub">Through Q1 2026</div></td><td>Zillow</td><td>Median home value; active inventory count (Dim 1 &amp; 3) — only non-federal source</td><td><span class="tag-prop">Private</span></td></tr>
@@ -558,7 +558,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
   <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="faq-item">
-    <div class="faq-q">Why are only 2,820 counties scored, not all 3,143?</div>
+    <div class="faq-q">Why are only 2,816 counties scored, not all 3,143?</div>
     <div class="faq-a">The 324 excluded counties all have population under 5,000. Counties that small have no Zillow data, suppressed QCEW employment figures, and often no FHFA HPI history. Their scores would be entirely imputed medians — not real signal. If you search a county under 5,000 residents, Civica will tell you why it's excluded rather than show a misleading score.</div>
   </div>
 

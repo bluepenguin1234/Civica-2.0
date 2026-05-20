@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 county_generator.py — Civica Harvard Model
-Reads county_scores.csv + RUCC xlsx → 2,820 county HTML pages + index.json + sitemap.xml
+Reads county_scores.csv + RUCC xlsx → 2,816 county HTML pages + index.json + sitemap.xml
 
 Output layout:
   output/counties/{fips}.html   — one page per county
@@ -487,7 +487,7 @@ def build_thesis_panel(row, county_name: str) -> str:
 
     thesis_h3 = THESIS.get(signal, '')
     thesis_p  = (
-        f'{county_name} ranks #{rank:,} of 2,820 scored US counties (top {top_pct}%). '
+        f'{county_name} ranks #{rank:,} of 2,816 scored US counties (top {top_pct}%). '
         f'Strongest dimension{'s' if sum(1 for v in sub.values() if v >= 60) > 1 else ""}: '
         + ', '.join(f'{k} ({v:.0f}/100)' for k, v in sorted(sub.items(), key=lambda x: -x[1])[:2])
         + f'. Weakest: '
@@ -708,7 +708,7 @@ def build_supply_panel(row, county_name: str) -> str:
     <div class="card-title"><span class="ct-icon">🏗️</span> Supply-Demand Balance</div>
     <div class="g3" style="margin-bottom:20px;">
       <div class="sb"><div class="sb-val">{net_hh:+,}</div><div class="sb-lbl">Net households (IRS, 2022-23)</div><div class="sb-delta {'up' if net_hh > 0 else 'down'}">{'In-migration positive' if net_hh > 0 else 'Net out-migration'}</div></div>
-      <div class="sb"><div class="sb-val">{permits:,}</div><div class="sb-lbl">Units permitted (Census BPS 2022)</div><div class="sb-delta flat">New supply pipeline</div></div>
+      <div class="sb"><div class="sb-val">{permits:,}</div><div class="sb-lbl">Units permitted (Census BPS 2025)</div><div class="sb-delta flat">New supply pipeline</div></div>
       <div class="sb"><div class="sb-val">{inv:,}</div><div class="sb-lbl">Active listings (Zillow, latest)</div><div class="sb-delta flat">Current for-sale inventory</div></div>
     </div>
     <div class="signal {supply_sig}">
@@ -847,7 +847,7 @@ def build_fundamentals_panel(row, county_name: str) -> str:
       <div class="card-title"><span class="ct-icon">🛡️</span> Safety · FBI NIBRS 2024</div>
       <div class="g2" style="gap:10px;margin-bottom:12px;">
         <div class="sb"><div class="sb-val">{crime:.0f}</div><div class="sb-lbl">Violent Crime / 100k residents</div><div class="sb-delta {crime_col}">{crime_vs}</div></div>
-        <div class="sb"><div class="sb-val">{row["est_per_1k"]:.1f}</div><div class="sb-lbl">Establishments / 1,000 residents</div><div class="sb-delta flat">Census CBP 2022 · Amenity density</div></div>
+        <div class="sb"><div class="sb-val">{row["est_per_1k"]:.1f}</div><div class="sb-lbl">Establishments / 1,000 residents</div><div class="sb-delta flat">Census CBP 2023 · Amenity density</div></div>
       </div>
       <div class="signal {'sig-green' if crime < NAT_MEDIAN_CRIME * 0.75 else ('sig-yellow' if crime < NAT_MEDIAN_CRIME else 'sig-red')}">
         <div class="icon">{'✅' if crime < NAT_MEDIAN_CRIME else '⚠️'}</div>
@@ -891,7 +891,7 @@ def build_risk_panel(row) -> str:
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">⚠️</span> Physical Risk Matrix · FEMA NFIP + NOAA + USFS</div>
-    <div class="card-intro">Risk is scored relative to all 2,820 counties. Physical Risk dimension score: {dim5:.0f}/100 (higher = safer).</div>
+    <div class="card-intro">Risk is scored relative to all 2,816 counties. Physical Risk dimension score: {dim5:.0f}/100 (higher = safer).</div>
 
     <div class="risk-matrix">
       <div class="rm-card">
@@ -1305,7 +1305,7 @@ def build_state_page(state: str, counties: list, template_style: str) -> str:
   </div>
 
   <div style="margin-top:12px;text-align:center;">
-    <a href="../../index.html" style="display:inline-block;padding:12px 28px;background:#1a7ff0;color:#fff;border-radius:10px;font-weight:700;text-decoration:none;font-size:14px;">← Browse All 2,820 Counties</a>
+    <a href="../../index.html" style="display:inline-block;padding:12px 28px;background:#1a7ff0;color:#fff;border-radius:10px;font-weight:700;text-decoration:none;font-size:14px;">← Browse All 2,816 Counties</a>
   </div>
 
   <div class="footer">

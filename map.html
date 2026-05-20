@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>County Map — Civica Research</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
-<meta name="description" content="Interactive map of Civica scores for all 2,820 US counties. Click any county to view its full housing research report.">
+<meta name="description" content="Interactive map of Civica scores for all 2,816 US counties. Click any county to view its full housing research report.">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -248,7 +248,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 <!-- ══════════ HERO ══════════ -->
 <section class="hero">
   <div class="hero-eyebrow">County Map</div>
-  <h1 class="hero-h1">2,820 counties, scored</h1>
+  <h1 class="hero-h1">2,816 counties, scored</h1>
   <p class="hero-sub">Every US county with sufficient housing data, colored by Civica signal. Click any county to open its full research report.</p>
 </section>
 
@@ -439,7 +439,7 @@ function initMap(counties) {
             '<div style="display:flex;gap:16px;font-size:12px;margin-bottom:4px;">' +
             '<span><b style="color:#4ade80;">' + c.score.toFixed(1) + '</b> Score</span>' +
             '<span><b>$' + Math.round(c.median_home_value / 1000) + 'k</b> Median</span></div>' +
-            '<div style="font-size:11px;color:rgba(255,255,255,.5);">Rank #' + c.rank + ' of 2,820</div>';
+            '<div style="font-size:11px;color:rgba(255,255,255,.5);">Rank #' + c.rank + ' of 2,816</div>';
         })
         .on('mouseleave', () => { tip.style.display = 'none'; })
         .on('click', (event, d) => {
