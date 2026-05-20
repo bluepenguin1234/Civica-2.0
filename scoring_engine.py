@@ -1,13 +1,7 @@
 #!/usr/bin/env python3
 """
-Civica Scoring Engine v1.3
+Civica Scoring Engine v1.0
 Harvard-style 6-dimension housing market analysis for all US counties.
-
-v1.3 changes vs v1.2:
-  - Dim1 home values: Zillow ZHVI → ACS 5-year B25077 (federal source)
-  - Dim3 Supply Tightness (Zillow inventory) removed; weights redistributed:
-      3yr trend 50%, current momentum 20%, permit pipeline 30%
-  - home_value_imputed flag added to output
 
 Dimensions:
   1. Affordability & Value       25 pts
@@ -105,41 +99,31 @@ def load_bea():
     return df[['fips', 'per_capita_income', 'income_4yr_growth']].dropna(subset=['fips'])
 
 
-def load_home_values():
-    """ACS 5-year (2023) median home value (B25077) by county.
-    Downloads from Census API on first run and caches to civica_data/census_acs/.
-    Missing values flagged via home_value_imputed; imputed with RUCC-tier median in main().
-    """
-    import json, urllib.request
+def load_zillow():
+    """Zillow ZHVI median home values + active inventory (latest month)."""
+    zhvi = pd.read_csv(
+        f'{DATA}/zillow/County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'
+    )
+    zhvi['fips'] = (zhvi['StateCodeFIPS'].astype(str).str.zfill(2) +
+                    zhvi['MunicipalCodeFIPS'].astype(str).str.zfill(3))
+    date_cols = sorted([c for c in zhvi.columns if c[:4].isdigit()])
+    latest    = date_cols[-1]
+    yr3_back  = [c for c in date_cols if c.startswith(str(int(latest[:4]) - 3))]
+    zhvi['median_home_value']       = pd.to_numeric(zhvi[latest], errors='coerce')
+    zhvi['home_value_3yr_ago']      = pd.to_numeric(zhvi[yr3_back[0] if yr3_back else latest], errors='coerce')
+    zhvi['home_appreciation_3yr']   = (zhvi['median_home_value'] / zhvi['home_value_3yr_ago'] - 1) * 100
 
-    acs_dir  = f'{DATA}/census_acs'
-    acs_path = f'{acs_dir}/acs5_home_values_2023.csv'
+    inv = pd.read_csv(
+        f'{DATA}/zillow/County_invt_fs_uc_sfrcondo_sm_month.csv'
+    )
+    inv['fips'] = (inv['StateCodeFIPS'].astype(str).str.zfill(2) +
+                   inv['MunicipalCodeFIPS'].astype(str).str.zfill(3))
+    inv_dates    = sorted([c for c in inv.columns if c[:4].isdigit()])
+    inv['inventory'] = pd.to_numeric(inv[inv_dates[-1]], errors='coerce')
 
-    if not os.path.exists(acs_path):
-        api_key = os.environ.get('CENSUS_API_KEY', '')
-        if not api_key:
-            raise RuntimeError(
-                '\n\nCensus API key required to download ACS home values.\n'
-                'Get a free key (takes ~2 min) at:\n'
-                '  https://api.census.gov/data/key_signup.html\n\n'
-                'Then set it before running:\n'
-                '  Windows:  set CENSUS_API_KEY=your_key_here\n'
-                '  Mac/Linux: export CENSUS_API_KEY=your_key_here\n'
-            )
-        print('    Fetching ACS 5-yr home values from Census API...')
-        url = (f'https://api.census.gov/data/2023/acs/acs5'
-               f'?get=GEO_ID,B25077_001E&for=county:*&in=state:*&key={api_key}')
-        with urllib.request.urlopen(url, timeout=60) as resp:
-            raw = json.loads(resp.read())
-        os.makedirs(acs_dir, exist_ok=True)
-        pd.DataFrame(raw[1:], columns=raw[0]).to_csv(acs_path, index=False)
-
-    df = pd.read_csv(acs_path, dtype=str)
-    df['fips'] = df['GEO_ID'].str[-5:]
-    df['median_home_value'] = pd.to_numeric(df['B25077_001E'], errors='coerce')
-    df.loc[df['median_home_value'] < 0, 'median_home_value'] = np.nan  # Census null sentinel (-666666666)
-    df['home_value_imputed'] = False
-    return df[['fips', 'median_home_value', 'home_value_imputed']].dropna(subset=['fips'])
+    return zhvi[['fips', 'median_home_value', 'home_appreciation_3yr']].merge(
+        inv[['fips', 'inventory']], on='fips', how='left'
+    )
 
 
 def load_fmr():
@@ -480,19 +464,19 @@ def score_dim2(df):
 
 
 def score_dim3(df):
-    """Housing Market Dynamics — 20 pts (v1.3 — all-federal).
-    3yr Appreciation Trend 50% | Current Momentum 20% | Permit Pipeline 30%
-
-    Supply Tightness (Zillow inventory) removed in v1.3. The 30% redistributed:
-    +15% to 3yr trend (dominant price signal), +10% to permits (supply counter-signal),
-    +5% to current momentum (cross-validation). Result: 50 / 20 / 30 split.
+    """Housing Market Dynamics — 20 pts.
+    3yr Appreciation Trend 35% | Current Momentum 15% | Supply Tightness 30% | Permit Pipeline 20%
     """
     d = df.copy()
-    s1 = pct(d['hpi_3yr_avg'])   # 50%: FHFA 3-yr avg annual appreciation (sustained trend)
-    s2 = pct(d['hpi_latest'])    # 20%: FHFA latest annual HPI change (current momentum)
-    s3 = pct(d['total_permits']) # 30%: Census BPS new units permitted (supply response)
+    s1 = pct(d['hpi_3yr_avg'])   # 35%: FHFA 3-yr avg annual appreciation (sustained trend)
+    s2 = pct(d['hpi_latest'])    # 15%: FHFA latest annual HPI change (current momentum)
+    s3 = pct_inv(d['inventory']) # 30%: Zillow active inventory — lower = tighter supply = demand pressure
+    # KNOWN LIMITATION: higher permits = better is a demand-response proxy.
+    # Correct metric is permits ÷ projected household formation (permit-gap ratio), but that
+    # requires ACS projections, which violates the no-survey-data policy. See METHODOLOGY.md §14.1.
+    s4 = pct(d['total_permits']) # 20%: Census BPS new units permitted (supply pipeline)
 
-    d['dim3'] = (s1*0.50 + s2*0.20 + s3*0.30) / 100 * 20
+    d['dim3'] = (s1*0.35 + s2*0.15 + s3*0.30 + s4*0.20) / 100 * 20
     return d
 
 
@@ -602,7 +586,7 @@ def classify(score):
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main():
-    print("Civica Harvard Scoring Engine v1.3")
+    print("Civica Harvard Scoring Engine v1.0")
     print("=" * 60)
 
     print("\n[1/13]  Census Population...")
@@ -611,8 +595,8 @@ def main():
     print("[2/13]  BEA Income...")
     bea  = load_bea();         print(f"          {len(bea):,} counties")
 
-    print("[3/13]  ACS 5-yr Home Values (B25077)...")
-    home_vals = load_home_values(); print(f"          {len(home_vals):,} counties")
+    print("[3/13]  Zillow Home Values + Inventory...")
+    zil  = load_zillow();      print(f"          {len(zil):,} counties")
 
     print("[4/13]  HUD Fair Market Rents...")
     fmr  = load_fmr();         print(f"          {len(fmr):,} FMR areas")
@@ -650,7 +634,7 @@ def main():
     # ── Merge ────────────────────────────────────────────────────────────────
     print("\nMerging all datasets on FIPS...")
     df = pop.copy()
-    for ds in [bea, home_vals, fmr, hpi, qcew, cbp, bps, irs, nfip, noaa, usfs, rucc, nibrs]:
+    for ds in [bea, zil, fmr, hpi, qcew, cbp, bps, irs, nfip, noaa, usfs, rucc, nibrs]:
         df = df.merge(ds, on='fips', how='left')
     print(f"  Merged: {len(df):,} rows × {len(df.columns)} columns")
 
@@ -658,18 +642,7 @@ def main():
     df = df[df['POPESTIMATE2023'] >= 5_000].copy()
     print(f"  After pop ≥ 5,000 filter: {len(df):,} counties")
 
-    # RUCC-tier imputation for missing ACS home values (must run before general fillna)
-    missing_hv = df['median_home_value'].isna()
-    if missing_hv.any():
-        rucc_hv = (
-            df[df['median_home_value'].notna()]
-            .groupby('rucc')['median_home_value'].median()
-        )
-        df.loc[missing_hv, 'median_home_value'] = df.loc[missing_hv, 'rucc'].map(rucc_hv)
-        df.loc[missing_hv, 'home_value_imputed'] = True
-        print(f"  ACS home value imputed (RUCC-tier median): {missing_hv.sum():,} counties")
-
-    # Fill remaining missing values with national medians so every county gets a score
+    # Fill missing values with national medians so every county gets a score
     num_cols = df.select_dtypes(include=[np.number]).columns
     medians  = df[num_cols].median()
     df[num_cols] = df[num_cols].fillna(medians)
@@ -694,11 +667,11 @@ def main():
         'total_score', 'market_label', 'national_rank',
         'dim1', 'dim2', 'dim3', 'dim4', 'dim5', 'dim6',
         # Raw metrics for county report cards
-        'median_home_value', 'home_value_imputed', 'fmr_2br', 'pr_ratio', 'price_income',
+        'median_home_value', 'fmr_2br', 'pr_ratio', 'price_income',
         'breakeven_yrs', 'hpi_3yr_avg', 'hpi_latest',
         'per_capita_income', 'income_4yr_growth',
         'private_employment', 'avg_annual_wage', 'sector_quality', 'hhi',
-        'total_permits', 'inmover_income_ratio',
+        'inventory', 'total_permits', 'inmover_income_ratio',
         'nfip_per_cap', 'storm_per_cap', 'wildfire_rank',
         'RNETMIG2023', 'RDOMESTICMIG2023', 'rucc',
         'est_per_1k', 'in_hh', 'out_hh',

@@ -26,7 +26,7 @@
 
 ## 1. Model Overview
 
-Civica scores every US county with a population ≥ 5,000 on a 100-point composite scale. The model is structured around six research dimensions drawn from housing economics literature, each measuring a distinct aspect of county-level market quality. As of v1.3, all inputs are free federal government data. Median home values use ACS 5-year (B25077) — the only federal source for county-level home values. ACS is otherwise excluded from the model where administrative equivalents exist.
+Civica scores every US county with a population ≥ 5,000 on a 100-point composite scale. The model is structured around six research dimensions drawn from housing economics literature, each measuring a distinct aspect of county-level market quality. All inputs are free federal government data or Zillow ZHVI (the sole non-federal source, used only because no federal dataset provides county-level median home values at monthly granularity).
 
 **Core design principles:**
 
@@ -131,9 +131,9 @@ def pct_inv(s):
 
 | Metric | Intra-weight | Direction | Source |
 |---|---|---|---|
-| Price-to-Rent Ratio | 30% | Lower = better | ACS 5-yr home value ÷ (HUD FMR 2BR × 12) |
-| Price-to-Income Ratio | 30% | Lower = better | ACS 5-yr home value ÷ BEA per capita income |
-| Buy vs. Rent Breakeven | 25% | Shorter = better | Computed from ACS home value + HUD FMR (see §12) |
+| Price-to-Rent Ratio | 30% | Lower = better | Zillow ZHVI ÷ (HUD FMR 2BR × 12) |
+| Price-to-Income Ratio | 30% | Lower = better | Zillow ZHVI ÷ BEA per capita income |
+| Buy vs. Rent Breakeven | 25% | Shorter = better | Computed from ZHVI + HUD FMR (see §12) |
 | Appreciation Quality | 15% | Closer to 5% = better | \|FHFA 3-yr avg annual HPI − 5%\| |
 
 ### Price-to-Rent Ratio
@@ -229,25 +229,32 @@ BEA per capita personal income growth over 4 years (latest available year vs. 4 
 
 | Metric | Intra-weight | Direction | Source |
 |---|---|---|---|
-| 3-Year Appreciation Trend | 50% | Higher = better | FHFA HPI 3-yr avg annual change |
-| Current Momentum | 20% | Higher = better | FHFA HPI latest annual change |
-| Permit Pipeline | 30% | Higher = better | Census BPS total units permitted 2022 |
-
-**v1.3 change:** Supply Tightness (Zillow active inventory, 30%) was removed. The 30% was redistributed: +15% to the 3yr trend (→ 50%), +5% to current momentum (→ 20%), +10% to permits (→ 30%). This makes Dim3 fully federal and eliminates the raw-count-vs-months-of-supply limitation.
+| 3-Year Appreciation Trend | 35% | Higher = better | FHFA HPI 3-yr avg annual change |
+| Current Momentum | 15% | Higher = better | FHFA HPI latest annual change |
+| Supply Tightness | 30% | Lower = better | Zillow active inventory, latest month |
+| Permit Pipeline | 20% | Higher = better | Census BPS total units permitted 2022 |
 
 ### 3-Year Appreciation Trend and Current Momentum
 
-Both metrics come from FHFA HPI — the 3-yr trend is the mean of the three most recent annual percentage changes; current momentum is the latest annual change. They are correlated by construction (a county with strong sustained appreciation almost always shows positive current momentum), with a typical inter-metric correlation of ~0.7–0.9. They are not two independent signals — they are two time-horizon views of the same underlying FHFA trend. The combined 70% weight in Dim3 (50% + 20%) should be understood as a single FHFA appreciation signal with strong emphasis on the sustained trend.
+Both metrics come from FHFA HPI — the 3-yr trend is the mean of the three most recent annual percentage changes; current momentum is the latest annual change. They are correlated by construction (a county with strong sustained appreciation almost always shows positive current momentum), with a typical inter-metric correlation of ~0.7–0.9. They are not two independent signals — they are two time-horizon views of the same underlying FHFA trend. The combined 50% weight in Dim3 (35% + 15%) should be understood as a single FHFA appreciation signal with extra emphasis on longer-term trend.
 
 The two-horizon structure is still useful: a county with a strong 3-yr average but decelerating current momentum is a different risk profile from one accelerating on both. But do not describe them as "independent cross-validation" — that overstates their independence.
 
-**Note on interaction with Dim1:** There is a deliberate tension between Dim1's Appreciation Quality metric (which penalizes deviation from 5% in either direction) and Dim3's Appreciation Trend (which rewards raw appreciation magnitude). A market at 10% annual appreciation will score well on Dim3 and be penalized on Dim1. The model does not resolve this tension — it captures both signals and lets them compete with different weights (Dim3 trend 50%×20% = 10% of total vs. Dim1 quality 15%×25% = 3.75% of total). The net result is that the model *slightly favors momentum over stability*, but with a ceiling imposed by the affordability penalty. This is by design: a hot market should score higher on market dynamics; a buyer should see the full picture of both the momentum and the stretched affordability.
+**Note on interaction with Dim1:** There is a deliberate tension between Dim1's Appreciation Quality metric (which penalizes deviation from 5% in either direction) and Dim3's Appreciation Trend (which rewards raw appreciation magnitude). A market at 10% annual appreciation will score well on Dim3 and be penalized on Dim1. The model does not resolve this tension — it captures both signals and lets them compete with different weights (Dim3 trend 35%×20% = 7% of total vs. Dim1 quality 15%×25% = 3.75% of total). The net result is that the model *slightly favors momentum over stability*, but with a ceiling imposed by the affordability penalty. This is by design: a hot market should score higher on market dynamics; a buyer should see the full picture of both the momentum and the stretched affordability.
+
+### Supply Tightness
+
+Zillow active for-sale inventory, latest available month. `pct_inv()` applied: fewer homes available relative to other counties = more seller-side demand pressure = better market dynamics score.
+
+**Known limitation — raw count vs. months of supply:** The downloaded Zillow inventory file provides raw listing counts, not months of supply (listings ÷ monthly sales rate). A large county with 5,000 listings and 4,000 sales/month (strong seller's market) looks worse than a small county with 200 listings and 20 sales/month (buyer's market). Percentile normalization partially compensates — large counties mostly compete against other large counties for rank — but the correction is imperfect. The proper metric is months of supply, which requires a Zillow county-level sales-count file that was not downloaded. This is a documented data gap for v1.3.
 
 ### Permit Pipeline
 
-Census BPS total housing units authorized 2022. The supply-side counter-signal: measures whether new construction is responding to demand. At 30% of Dim3, it provides a genuine counterweight to the 70% FHFA appreciation signals.
+Census BPS total housing units authorized 2022. Scored higher = better.
 
-**Known limitation:** Higher permits = better is a demand-response proxy, not a supply-adequacy measure. It can inflate scores for Sun Belt build-heavy counties (Phoenix, Houston suburbs, Boise) if volume exceeds genuine household absorption. The theoretically correct metric is a permit-gap ratio (permitted units ÷ projected household formation), which requires ACS household formation projections — a candidate improvement for v1.4.
+**Known limitation:** This is the most contested metric in the model. Higher permits is described as "supply responding to demand" — a positive signal. The valid critique: this interpretation double-counts demand signals already captured in the appreciation trend and inventory tightness metrics, and systematically favors Sun Belt build-heavy counties (Phoenix, Houston suburbs, Boise) regardless of whether that construction volume reflects genuine absorption or speculative overbuilding. The theoretically correct metric is a permit-gap ratio (permitted units ÷ projected household formation), which would penalize both under-building and over-building. That ratio requires ACS household formation projections, which conflict with Civica's no-survey-data policy.
+
+The current implementation is a pragmatic choice given the data available: permits as a raw count is a demand-signal proxy, not a supply-adequacy measure. Users in Sun Belt markets should apply judgment — a county with 10,000 permitted units and 8,000 net new households is fine; one with 10,000 permitted units and 2,000 net new households is absorbing excess supply that will eventually weigh on prices. The county report page can surface this context directly.
 
 ---
 
@@ -394,7 +401,7 @@ monthly_PITI = (
 
 | # | Dataset | Vintage | Used For |
 |---|---|---|---|
-| 1 | ACS 5-year (B25077, median home value) | 2019–2023 | Dim1: P/R, P/I, breakeven — sole home-value source; no federal administrative equivalent exists |
+| 1 | Zillow ZHVI (county median home value) | Monthly through 2025 | Dim1: P/R, P/I, breakeven; Dim3: inventory |
 | 2 | FHFA HPI (county-level) | Annual through 2024 | Dim1: appreciation quality; Dim3: trend + momentum |
 | 3 | HUD Fair Market Rents | FY2026 | Dim1: rent baseline, P/R, breakeven |
 | 4 | BEA CAINC1 (per capita income) | 2024 estimate | Dim1: P/I; Dim2: income growth |
@@ -409,7 +416,7 @@ monthly_PITI = (
 | 13 | Census Population Estimates | 2023 | Base universe; migration rates; denominators |
 | 14 | IRS SOI Migration | 2022–2023 | Dim6: in-mover income quality |
 
-**v1.3 note:** As of v1.3, Civica uses no proprietary data sources. ACS 5-year (B25077) provides median home values — the only metric for which no federal administrative equivalent exists at county level. ACS is otherwise excluded from the model where administrative equivalents exist (BEA for income, QCEW for employment). All appreciation signals use FHFA HPI only. Inventory (Zillow) was removed from Dim3 in v1.3.
+**Note on Zillow:** Zillow ZHVI is the sole non-federal source. It is used only for county-level median home value (no federal equivalent at monthly county granularity) and active inventory count. All appreciation signals use FHFA HPI only.
 
 **FHFA coverage:** FHFA HPI covers approximately 2,800 of 3,143 counties. The remaining ~340 rural counties receive national median imputation for all FHFA-derived metrics.
 
@@ -501,14 +508,17 @@ The in-mover income quality metric (Dim6) uses average IRS AGI for households fi
 
 The correct fix is to use wage-and-salary income only from the IRS SOI migration file (the data does include this breakout). However, this would exclude the legitimate economic value of retirees with genuinely high investment income. The current implementation is a known upward bias for warm-climate retirement destinations and should be noted when interpreting Dim6 scores for FL, AZ, NV, and SC counties.
 
-### 14.12 v1.3: Removal of Zillow Data (Source Concentration Resolved)
+### 14.12 Zillow Drives 27% of the Total Score (Single-Source Concentration)
 
-In v1.2, Zillow ZHVI was the only non-federal source and drove approximately 27% of every county's score. v1.3 removes it entirely.
+Zillow ZHVI is the only non-federal data source in the model. It influences four distinct metrics:
 
-- **Home values** → ACS 5-year B25077: the only federal county-level home value source. Stable 5-year rolling average; slower to reflect recent price movements than Zillow's monthly index, but eliminates proprietary data dependency.
-- **Active inventory** (Zillow, Dim3 30%) → removed. Redistributed: 3yr FHFA trend +15% (→ 50%), current momentum +5% (→ 20%), permit pipeline +10% (→ 30%).
+| Metric | Dimension | Total weight |
+|---|---|---|
+| Median home value (numerator of P/R and P/I) | Dim1 | ~15% of Dim1 |
+| Breakeven numerator (down payment = ZHVI × 0.20) | Dim1 | ~6% of Dim1 |
+| Active inventory count | Dim3 | 30% of Dim3 |
 
-Remaining concentration: ACS B25077 now drives ~21% of total score via Dim1. For counties where ACS is missing, RUCC-tier median imputation applies; flagged via `home_value_imputed = True`.
+Combined, Zillow data directly drives approximately 27% of every county's total score — more than any individual federal source. This creates a data concentration risk: if Zillow changes its methodology, access policy, or file format, a disproportionate share of the model breaks. There is no federal equivalent for county-level median home values at monthly granularity, so this dependency cannot be fully eliminated. It should be disclosed in the methodology and monitored for file availability on each scoring run.
 
 ---
 
@@ -523,7 +533,7 @@ Remaining concentration: ACS B25077 now drives ~21% of total score via Dim1. For
 | IRS SOI Migration | 2022–23 | Q4 2026 | Medium — Dim6 in-mover quality |
 | FEMA NFIP Claims | 10-yr avg | Annually | Medium — Dim5 flood proxy |
 | NOAA Storm Events | 2019–2023 | Annually | Medium — Dim5 storm proxy |
-| ACS 5-yr (B25077) | 2019–2023 | ~Dec 2025 (2020–2024 release) | High — home values drive Dim1 ratios |
+| Zillow ZHVI | Monthly | Continuous | High on next major run |
 | HUD FMR | FY2026 | FY2027 (Oct 2026) | High — affects all Dim1 ratios |
 | Census Population Estimates | 2023 | Q3 2026 | Medium — denominators |
 | Census BPS | 2022 | 2023 data in 2025 | Low — permits lag ~18 months |

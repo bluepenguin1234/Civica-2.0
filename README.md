@@ -12,7 +12,7 @@ Civica scores every US county on a 100-point scale using a Harvard-style 6-dimen
 |---|---|---|
 | Affordability & Value | 25 pts | Price-to-rent ratio, price-to-income, buy-rent breakeven, appreciation quality |
 | Economic Vitality | 22 pts | Wage level, sector quality, HHI diversity, income growth |
-| Housing Market Dynamics | 20 pts | FHFA 3-yr appreciation trend (50%), FHFA current momentum (20%), permit pipeline (30%) |
+| Housing Market Dynamics | 20 pts | FHFA 3-yr appreciation trend, FHFA current momentum, inventory tightness, permit pipeline |
 | Quality of Place | 15 pts | Violent crime rate (FBI NIBRS), urban access (USDA RUCC), amenity density (Census CBP) |
 | Physical Risk | 12 pts | Flood claims per capita, storm damage per capita, wildfire exposure rank |
 | Population Momentum | 6 pts | Net migration rate, income quality of in-movers |
@@ -27,7 +27,7 @@ All data is free and publicly available from US federal agencies.
 
 | Dataset | Source | Used For |
 |---|---|---|
-| Median home value | ACS 5-year (B25077) | Dim1: median home value, P/R ratio, breakeven |
+| Home values & inventory | Zillow ZHVI | Dim1: median home value, P/R ratio; Dim3: active inventory |
 | Home price appreciation | FHFA HPI (county) | Dim1: appreciation quality; Dim3: 3-yr trend + current momentum |
 | Fair market rents | HUD FMR FY2026 | Dim1: rent baseline, P/R ratio, breakeven |
 | Per capita income | BEA CAINC1 | Dim1: price-to-income; Dim2: income growth |

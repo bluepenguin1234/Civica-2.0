@@ -11,12 +11,12 @@
 ### Coverage Decision (intentional — do not change)
 - **2,820 of 3,144 counties are scored.** The 324 excluded counties all have population < 5,000.
 - The threshold is `pop >= 5,000` in `scoring_engine.py` — this is a deliberate data quality decision.
-- Counties under 5,000 have suppressed QCEW employment figures and often no FHFA HPI history. Their scores would be entirely median imputation — meaningless.
+- Counties under 5,000 have no Zillow data, suppressed QCEW employment figures, and often no FHFA HPI history. Their scores would be entirely median imputation — meaningless.
 - Largest excluded county: Oneida County, ID (pop 4,953). Smallest: Loving County, TX (pop 43).
 - On the front page, display: **"2,820 counties scored"** — not "all 3,143". Don't claim coverage you don't have.
 - If a user searches for an unscored county, show: "This county has fewer than 5,000 residents. Civica requires sufficient housing market data to produce a reliable score."
 
-### Scoring Engine Results (v1.3 — current, all-federal, ACS home values)
+### Scoring Engine Results (v1.2 — current, includes FBI NIBRS Dim4)
 - Runtime: ~4 minutes; output: `county_scores.csv` (2,820 rows × 35 columns)
 - Distribution: mean=50.0, std=6.24, range 26.85–69.48
 - Top: Hamilton County IN (69.48 ACCELERATING)
@@ -460,7 +460,7 @@ Table: score, county, state, label badge, median home value, HPI 3yr, avg wage �
 
 - Background: #111827 (near-black, darker than navy)
 - 11px, color rgba(255,255,255,.4), line-height 1.8
-- Data sources listed: IRS SOI · FHFA HPI · BLS QCEW · BEA · FBI NIBRS · FEMA NFIP · NOAA · USFS · USDA RUCC · HUD FMR · Census · ACS 5-yr
+- Data sources listed: IRS SOI · FHFA HPI · BLS QCEW · BEA · FBI NIBRS · FEMA NFIP · NOAA · USFS · USDA RUCC · HUD FMR · Census · Zillow ZHVI
 - Disclaimer: "Scores are for informational purposes only. Not financial or investment advice."
 - "civica" logotype in white + blue "ca"
 
@@ -483,8 +483,8 @@ Table: score, county, state, label badge, median home value, HPI 3yr, avg wage �
 
 | Metric | Weight | Source | Formula |
 |---|---|---|---|
-| Price-to-Rent Ratio | 30% | ACS 5-yr median home value ÷ HUD FMR×12 | National norm: 15–18x |
-| Price-to-Income Ratio | 30% | ACS 5-yr median home value ÷ BEA per capita income | Per-capita norm: ~2.5–3x (NOT the 4.2x household-income norm) |
+| Price-to-Rent Ratio | 30% | Zillow ZHVI ÷ HUD FMR×12 | National norm: 15–18x |
+| Price-to-Income Ratio | 30% | Zillow ZHVI ÷ BEA per capita income | Per-capita norm: ~2.5–3x (NOT the 4.2x household-income norm) |
 | Buy vs. Rent Breakeven | 25% | Down payment (20%) ÷ (monthly PITI − HUD FMR) × 12 | Shorter = stronger buy case |
 | Appreciation Quality | 15% | FHFA 3-yr avg annual HPI change | Penalizes deviation from 3–7% healthy range |
 
@@ -521,15 +521,18 @@ Table: score, county, state, label badge, median home value, HPI 3yr, avg wage �
 
 | Metric | Weight | Source | Formula |
 |---|---|---|---|
-| 3-Year Appreciation Trend | 50% | FHFA HPI 3-yr avg annual change | Dominant signal — sustained appreciation = strong underlying demand |
-| Current Momentum | 20% | FHFA HPI latest annual change | Cross-validates the trend; detects deceleration or acceleration |
-| Permit Pipeline | 30% | Census BPS new housing units permitted | Supply-side counter-signal — is construction responding to demand? |
+| 3-Year Appreciation Trend | 35% | FHFA HPI 3-yr avg annual change | Sustained appreciation = strong underlying demand |
+| Current Momentum | 15% | FHFA HPI latest annual change | Same FHFA source — two time horizons, not independent signals |
+| Supply Tightness | 30% | Zillow active inventory (latest month) | Raw listing count — NOT months of supply (see limitation below) |
+| Permit Pipeline | 20% | Census BPS new housing units permitted | Higher = supply responding to demand |
 
-**v1.3 note:** Supply Tightness (Zillow active inventory, 30%) was removed in v1.3. The 30% was redistributed: +15% to the 3yr trend (making it 50%), +5% to current momentum (20%), +10% to permits (30%). This makes Dim3 entirely federal and removes the raw-count-vs-months-of-supply limitation.
+**Note:** Original spec called for Permit Gap Ratio (permits ÷ net new households), Supply Elasticity (permit trend vs. price trend), and Rent Trend (HUD FMR YoY change). HUD FMR is a single vintage file (FY2026) with no prior-year comparison in the download. The four metrics above use all available downloaded data and two independent FHFA price signals (trend + momentum) to cross-validate appreciation.
 
-**Permit Pipeline limitation:** Higher permits = better is a known approximation. It can inflate scores for Sun Belt build-heavy markets (Phoenix, Houston suburbs) if volume exceeds genuine absorption. The correct metric is permits ÷ projected household formation (a permit-gap ratio), but that requires ACS household formation projections. See METHODOLOGY.md §14.1 for full discussion.
+**Permit Pipeline limitation:** Higher permits = better is a known approximation. It double-counts demand signals already captured in the appreciation trend and inventory metrics, and inflates scores for Sun Belt build-heavy markets (Phoenix, Houston suburbs) regardless of whether that volume represents genuine absorption or overbuilding. The correct metric is permits ÷ projected household formation (a permit-gap ratio), but that requires ACS projections, which violates the no-survey-data policy. See METHODOLOGY.md §14.1 for full discussion.
 
 **FHFA signal correlation:** hpi_3yr_avg and hpi_latest are correlated (~0.7–0.9) by construction — they are two time-horizon views of the same FHFA trend, not independent signals. Do not describe them as "two independent FHFA signals" in any copy or documentation.
+
+**Inventory limitation:** The downloaded Zillow file is raw listing count, not months of supply. Large counties are penalized for having more listings even when turnover rate is identical to smaller counties. Fix requires a Zillow county sales-count file (not downloaded). See METHODOLOGY.md §7 and §14.
 
 **Appreciation tension:** Dim1 penalizes deviation from 5% annual appreciation; Dim3 rewards raw appreciation magnitude. A market at 10% appreciation is penalized by Dim1 and rewarded by Dim3. The model slightly favors momentum over stability by design. See METHODOLOGY.md §14.2.
 
@@ -587,10 +590,10 @@ These are Civica's proprietary analytical layer — computed from raw federal da
 
 | Metric | Formula | National Norm | Source Data |
 |---|---|---|---|
-| **Price-to-Rent Ratio** | ACS 5-yr home value ÷ (HUD FMR × 12) | 15–18x | ACS B25077 + HUD |
-| **Buy vs. Rent Breakeven** | Down payment (20%) ÷ ((monthly PITI − HUD 2BR FMR) × 12) | 3–7 years | ACS B25077 + HUD; assumes 7% 30yr, 1.2% tax, 0.5% insurance; cap 30yr |
+| **Price-to-Rent Ratio** | Zillow ZHVI ÷ (HUD FMR × 12) | 15–18x | Zillow + HUD |
+| **Buy vs. Rent Breakeven** | Down payment (20%) ÷ ((monthly PITI − HUD 2BR FMR) × 12) | 3–7 years | Zillow + HUD; assumes 7% 30yr, 1.2% tax, 0.5% insurance; cap 30yr |
 | **Appreciation Quality** | \|FHFA 3-yr avg annual HPI − 5%\| (deviation from healthy midpoint) | 0 deviation = ideal | FHFA HPI county |
-| **Permit Pipeline** | Census BPS new units permitted (percentile-ranked nationally) | Higher = more supply response | Census BPS |
+| **Supply Tightness** | Zillow active inventory, latest month (percentile-inverted nationally) | Lower = tighter | Zillow |
 | **Sector Quality Score** | Σ(employment share × NAICS quality weight) across private supersectors | 1.00 = neutral mix | BLS QCEW |
 | **Employment Concentration (HHI)** | Σ(industry employment share²) × 10,000 across NAICS codes | <1,500 = diversified | BLS QCEW |
 | **In-Mover Income Quality** | IRS in-mover avg AGI ÷ IRS out-mover avg AGI | 1.0 = neutral | IRS SOI Migration |
@@ -625,7 +628,7 @@ The scoring engine computes `monthly_piti` for each county — the ownership cos
 
 | Component | Source | Method |
 |---|---|---|
-| Mortgage (P&I) | ACS 5-yr median home value (B25077) | 30-yr fixed at 7% (2024 national rate), 20% down |
+| Mortgage (P&I) | Zillow ZHVI median home value | 30-yr fixed at 7% (2024 national rate), 20% down |
 | Property Tax | Hardcoded 1.2% annual rate | National median effective rate; NOT county-specific |
 | Homeowner Insurance | Hardcoded 0.5% annual rate | National median; not risk-adjusted per county |
 
@@ -656,13 +659,13 @@ The scoring engine computes `monthly_piti` for each county — the ownership cos
 | 15 | USDA RUCC | usda_rucc/ruralurbancodes2023.xlsx | ✓ Active | Dim4: urban access continuum (1=large metro, 9=most rural) |
 | 16 | HUD Fair Market Rents | hud_fmr/FY26_FMRs_revised.xlsx | ✓ Active | Dim1: rent baseline, P/R ratio, breakeven |
 | 17 | NOAA Climate Normals | noaa_climate_normals/ | ✗ Not used | Station-level temperature; no county FIPS; spatial join required |
-| 18 | ACS 5-year B25077 | census_acs/ (downloaded via Census API) | ✓ Active | Dim1: median home value — sole home-value source; ACS is used here because no federal administrative equivalent exists at county level |
+| 18 | Zillow ZHVI | zillow/ | ✓ Active | Dim1: median home value; Dim3: active inventory |
 
 **FEMA NRI was not downloadable. Physical Risk uses datasets 6, 7, 8 — the same underlying hazard data FEMA uses to build its NRI.**
 
-**Active datasets: 11 of 18 (datasets 1–4, 5, 6–8, 12–16, 18). Total data cost: $0.**
+**Active datasets: 11 of 18 (datasets 1–4, 5, 6–8, 12–16, 18). Total data cost: $0. No ACS survey data.**
 
-**Note on ACS:** ACS is generally excluded from Civica where federal administrative equivalents exist (BEA replaces ACS income; QCEW replaces ACS employment). The sole exception is median home value: ACS B25077 is the only federal source for county-level home values. Administrative equivalents do not exist for this metric. A free Census API key is required to download the data on first run.
+**Note on Zillow:** Zillow ZHVI is not federal data. It is the only non-federal source in the model, used because no federal dataset provides county-level median home values at monthly granularity. FHFA HPI is used for all appreciation signals; Zillow is used only for the price level and inventory count.
 
 ---
 
@@ -673,15 +676,15 @@ The scoring engine computes `monthly_piti` for each county — the ownership cos
 | FHFA covers ~2,800 of 3,143 counties | FHFA HPI | ~340 rural counties missing appreciation data | National median imputed; reduces score slightly for FHFA-absent counties |
 | CBP has 18-month publication lag | Census CBP | Establishment data ~2 years behind | Accepted; no alternative county-level source available |
 | Small county distortion | All | 1 employer can swing all metrics | 324 counties under 5,000 pop excluded entirely — no imputed scores |
-| ACS 5-yr home value lag | ACS B25077 | ACS 5-year is a rolling average — values lag spot prices in fast-moving markets. Home values in recently-hot metros will appear lower than current transaction prices. | Accepted; ACS is more stable than Zillow's smoothed monthly index and avoids proprietary data dependency. |
+| Zillow coverage gaps → ratio bias | Zillow ZHVI | Imputing national median home value (~$350k) into a rural county with $600 FMR rents creates P/R of 48.6x — far above the actual ratio if real home values are $120–150k | Known limitation; flagged in output; correct fix is to impute P/R directly from similar-RUCC counties, not the numerator alone |
 | NIBRS coverage gaps | FBI NIBRS | ~251 counties lack a participating agency (rural) | RUCC-tier median violent crime rate imputed; non-reporters not penalized |
 | NFIP only captures insured flood losses | FEMA NFIP | Uninsured flood damage not counted | NOAA Storm Events covers all storm types; combined with NFIP |
 | Property tax hardcoded at 1.2% | Monthly cost model | Actual effective rates: 0.28% (HI) to 2.23% (NJ/IL); error up to $340/mo at $400k home value | Accepted simplification; displayed breakeven should carry a high-tax-state disclaimer |
 | Appreciation target not inflation-adjusted | FHFA HPI (Dim1) | 5% nominal = −3% real at 8% inflation (2022); penalizes counties near healthy real target during high-inflation periods | Documented limitation; CPI adjustment is a candidate for v1.3 |
-| Permit pipeline is not a permit-gap ratio | Census BPS | High-permit counties score well even if volume exceeds household formation; correct metric requires ACS formation projections | Documented limitation; candidate fix for v1.4 |
+| Inventory is raw count not months of supply | Zillow inventory | Large counties penalized for having more listings even when market tightness is identical to smaller counties | Data gap — fix requires Zillow county sales-count file (not downloaded); document on county pages |
 | P/I uses per capita income; norm uses household income | BEA + all Dim1 display | Displayed P/I ratios appear 1.5–1.8× higher than industry standard; confuses users comparing to "4.2× norm" | Add footnote on county report pages; scoring unaffected; per-capita norm ≈ 2.5–3.0× |
 | IRS AGI includes capital gains; retirement bias | IRS SOI Migration | FL/AZ/NV/SC retirement counties show inflated in-mover income quality due to one-time capital gains realizations at retirement | Documented limitation; wage-only income is available in SOI and is a candidate fix for v1.3 |
-| ACS home values lag recent price movements | ACS B25077 | 5-year rolling average dampens recent appreciation spikes; hot markets may be slightly undervalued relative to current transaction prices | Accepted tradeoff — stability over recency; ACS is the only federal county-level home value source |
+| Zillow drives ~27% of total score | Zillow ZHVI + inventory | Single non-federal source has highest data concentration in model; methodology risk if Zillow changes access or format | Monitor file availability each run; no federal alternative at monthly county granularity |
 | EIA and Census STC not county-level | EIA, STC | Utility burden and fiscal capacity not scored | Documented as not implemented; appreciation quality and income growth used instead |
 
 ---
@@ -702,7 +705,7 @@ The scoring engine computes `monthly_piti` for each county — the ownership cos
 3. **National distribution** — mean≈50.0, std≈7.7 by construction of percentile normalization; empirical range 23–73
 4. **Edge cases** — missing data filled via left join from population base; counties with no FHFA or QCEW data receive NaN for those dimensions, which reduces their total score proportionally
 5. **Sector weights** — only NAICS codes specified in the model (54, 52, 62, 61, 23, 44-45, 31-33); all other sectors neutral (1.00×)
-6. **Dim3** — uses two FHFA HPI signals (3yr trend 50% + latest 20%) plus Census permits (30%); `inmover_income_ratio` moved exclusively to Dim6 where it belongs
+6. **Dim3** — uses two independent FHFA HPI signals (3yr trend + latest) plus Zillow inventory and Census permits; `inmover_income_ratio` moved exclusively to Dim6 where it belongs
 7. **Dim6** — net migration rate 60% + in-mover income quality 40%, matching spec intent exactly
 
 ---
@@ -777,7 +780,7 @@ Civica Harvard Model/
 - No survey data (ACS excluded — administrative equivalents exist for everything)
 - No proprietary data sources — every metric must be replicable from free federal data
 - No overwriting existing versioned HTML files
-- No Redfin, MLS, Zillow, or agent-affiliated listing/index data — all metrics must trace to free federal sources. Home values use ACS B25077 (the only federal county-level home value source; see Data Sources note)
+- No Redfin, MLS, or agent-affiliated listing data — these introduce conflict of interest; Zillow ZHVI (home value index, not listings) is the sole exception and is used only where no federal equivalent exists at county level
 - No hardcoded county-specific values in the template files (data must be injected)
 
 ---
@@ -786,7 +789,7 @@ Civica Harvard Model/
 
 | Feature | Civica | Zillow | Redfin | Niche |
 |---|---|---|---|---|
-| 100% federal data (v1.3: ACS B25077 for home values; no proprietary sources) | Yes | No | No | Partial |
+| Federal-data-first (one non-federal source: Zillow ZHVI for price levels only) | Yes | No | No | Partial |
 | No agent advertising | Yes | No | No | No |
 | Price-to-rent ratio | Yes | No | No | No |
 | Buy vs. rent breakeven | Yes | No | No | No |
