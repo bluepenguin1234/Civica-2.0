@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Washington County, KS Housing Market Score — Civica Research</title>
-<meta name="description" content="Washington County, KS scores 54/100 on Civica's 6-dimension housing model. Signal: WATCH. Median home value $163,601. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
+<meta name="description" content="Washington County, KS scores 53/100 on Civica's 6-dimension housing model. Signal: EMERGING. Median home value $163,601. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
 <meta property="og:title" content="Washington County, KS Housing Market — Civica">
-<meta property="og:description" content="Washington County, KS scores 54/100 on Civica's 6-dimension housing model. Signal: WATCH. Median home value $163,601. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
+<meta property="og:description" content="Washington County, KS scores 53/100 on Civica's 6-dimension housing model. Signal: EMERGING. Median home value $163,601. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
 <meta property="og:url" content="https://civica.app/output/counties/20201.html">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://civica.app/og_image.png">
@@ -17,7 +17,7 @@
 <link rel="canonical" href="https://civica.app/output/counties/20201.html">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Dataset","name":"Washington County, KS Housing Market Analysis","description":"Washington County, KS scores 54/100 on Civica's 6-dimension housing model. Signal: WATCH. Median home value $163,601. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.","url":"https://civica.app/output/counties/20201.html"}
+{"@context":"https://schema.org","@type":"Dataset","name":"Washington County, KS Housing Market Analysis","description":"Washington County, KS scores 53/100 on Civica's 6-dimension housing model. Signal: EMERGING. Median home value $163,601. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.","url":"https://civica.app/output/counties/20201.html"}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://civica.app/"},{"@type":"ListItem","position":2,"name":"KS Counties","item":"https://civica.app/output/states/KS.html"},{"@type":"ListItem","position":3,"name":"Washington County","item":"https://civica.app/output/counties/20201.html"}]}
@@ -70,11 +70,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .verdict-badge { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
 .vb-label { font-size:10px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.08em; }
 .vb-pill { font-size:13px; font-weight:800; padding:8px 18px; border-radius:100px; }
-.vb-strongbuy { background:#16a34a; color:#fff; }
-.vb-buy       { background:#1a7ff0; color:#fff; }
-.vb-watch     { background:#f59e0b; color:#fff; }
-.vb-caution   { background:#f97316; color:#fff; }
-.vb-avoid     { background:#dc2626; color:#fff; }
+.vb-accelerating { background:#16a34a; color:#fff; }
+.vb-peaking      { background:#22c55e; color:#fff; }
+.vb-established  { background:#1a7ff0; color:#fff; }
+.vb-emerging     { background:#8b5cf6; color:#fff; }
+.vb-frontier     { background:#f59e0b; color:#fff; }
+.vb-turning      { background:#f97316; color:#fff; }
+.vb-speculative  { background:#ef4444; color:#fff; }
+.vb-avoid        { background:#dc2626; color:#fff; }
 .vb-score { font-size:11px; color:rgba(255,255,255,.5); text-align:right; margin-top:2px; }
 
 /* SCORE RING */
@@ -425,17 +428,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <svg viewBox="0 0 110 110">
             <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="9"/>
             <circle cx="55" cy="55" r="46" fill="none" stroke="#1a7ff0" stroke-width="9"
-              stroke-dasharray="289.02" stroke-dashoffset="133.05" stroke-linecap="round"/>
+              stroke-dasharray="289.02" stroke-dashoffset="135.53" stroke-linecap="round"/>
           </svg>
-          <div class="sh-num">54</div>
+          <div class="sh-num">53</div>
           <div class="sh-denom">/100</div>
         </div>
-        <div class="sh-grade">Top 27% Nationally</div>
+        <div class="sh-grade">Top 35% Nationally</div>
       </div>
       <div class="verdict-badge" style="padding-top:4px;">
         <div class="vb-label">Civica Signal</div>
-        <div class="vb-pill vb-watch">WATCH</div>
-        <div class="vb-score">Score 54.0 · Mixed signals — monitor before committing</div>
+        <div class="vb-pill vb-emerging">EMERGING</div>
+        <div class="vb-score">Score 53.1 · Building momentum — early-mover window</div>
       </div>
       <button class="cmp-btn" id="compareBtn" onclick="toggleCompare()">+ Compare</button>
     </div>
@@ -463,18 +466,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       <svg width="88" height="88" viewBox="0 0 110 110">
         <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="10"/>
         <circle cx="55" cy="55" r="46" fill="none" stroke="#1a7ff0" stroke-width="10"
-          stroke-dasharray="289.02" stroke-dashoffset="133.05" stroke-linecap="round" transform="rotate(-90 55 55)"/>
-        <text x="55" y="50" text-anchor="middle" font-size="22" font-weight="900" fill="white" dy=".3em">54</text>
+          stroke-dasharray="289.02" stroke-dashoffset="135.53" stroke-linecap="round" transform="rotate(-90 55 55)"/>
+        <text x="55" y="50" text-anchor="middle" font-size="22" font-weight="900" fill="white" dy=".3em">53</text>
         <text x="55" y="68" text-anchor="middle" font-size="11" fill="rgba(255,255,255,.4)">/100</text>
       </svg>
     </div>
     <div>
-      <h3>Mixed or shifting signals. Conditions worth monitoring before committing.</h3>
-      <p>Washington County ranks #764 of 2,820 scored US counties (top 27%). Strongest dimensions: Physical Risk (79/100), Affordability (64/100). Weakest: Economic Vitality (28/100).</p>
+      <h3>Improving fundamentals with early-mover upside. Demand is building ahead of prices.</h3>
+      <p>Washington County ranks #989 of 2,820 scored US counties (top 35%). Strongest dimensions: Physical Risk (79/100), Affordability (61/100). Weakest: Economic Vitality (28/100).</p>
       <div class="sbb-items">
         <div class="sbb-item">
           <div class="sbb-name">Affordability</div>
-          <div class="sbb-val">64<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">61<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">25% wt</div>
         </div>
         <div class="sbb-item">
@@ -484,7 +487,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         </div>
         <div class="sbb-item">
           <div class="sbb-name">Market Dynamics</div>
-          <div class="sbb-val">57<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">56<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">20% wt</div>
         </div>
         <div class="sbb-item">
@@ -526,7 +529,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
   <div class="signal sig-yellow">
     <div class="icon">👀</div>
-    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> Washington County is a <strong>watch</strong>. Conditions are mixed or shifting. Do not rush — monitor for 1–2 quarters before committing capital. Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
+    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> Washington County is a <strong>emerging</strong>. Early-mover opportunity. Fundamentals are building — monitor closely before committing. Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
   </div>
 
   </div></div></div>
@@ -750,12 +753,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="card">
       <div class="card-title"><span class="ct-icon">🛡️</span> Safety · FBI NIBRS 2024</div>
       <div class="g2" style="gap:10px;margin-bottom:12px;">
-        <div class="sb"><div class="sb-val">600</div><div class="sb-lbl">Violent Crime / 100k residents</div><div class="sb-delta down">vs ~380 national est.</div></div>
+        <div class="sb"><div class="sb-val">145</div><div class="sb-lbl">Violent Crime / 100k residents</div><div class="sb-delta up">vs ~380 national est.</div></div>
         <div class="sb"><div class="sb-val">35.6</div><div class="sb-lbl">Establishments / 1,000 residents</div><div class="sb-delta flat">Census CBP 2022 · Amenity density</div></div>
       </div>
-      <div class="signal sig-red">
-        <div class="icon">⚠️</div>
-        <div class="body">Violent crime rate of 600 per 100k is above the national estimate of ~380. Source: FBI NIBRS 2024 National Master File (33 reported offenses).</div>
+      <div class="signal sig-green">
+        <div class="icon">✅</div>
+        <div class="body">Violent crime rate of 145 per 100k is well below the national estimate of ~380. Source: FBI NIBRS 2024 National Master File (8 reported offenses).</div>
       </div>
     </div>
   </div>
@@ -854,48 +857,48 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         <tbody>
           <tr class="hl">
             <td class="cn">Washington County, KS ★</td>
-            <td><strong>54</strong></td>
+            <td><strong>53</strong></td>
             <td class="up">15.5x</td>
             <td class="down">12.1 yrs</td>
             <td class="up">+6.0%</td>
             <td class="down">-51</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
           <tr>
-            <td class="cn">Maricopa County, AZ</td>
-            <td><strong>54</strong></td>
-            <td class="flat">21.0x</td>
-            <td class="flat">6.0 yrs</td>
-            <td class="flat">+2.0%</td>
-            <td class="up">+4,543</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td class="cn">Union County, PA</td>
+            <td><strong>53</strong></td>
+            <td class="down">24.1x</td>
+            <td class="flat">5.1 yrs</td>
+            <td class="up">+6.3%</td>
+            <td class="down">-199</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
 <tr>
-            <td class="cn">Fulton County, NY</td>
-            <td><strong>54</strong></td>
-            <td class="up">16.5x</td>
-            <td class="down">9.9 yrs</td>
-            <td class="up">+7.3%</td>
-            <td class="down">-39</td>
-            <td><span class="tag tag-g">BUY</span></td>
+            <td class="cn">Fairfield County, OH</td>
+            <td><strong>53</strong></td>
+            <td class="flat">21.2x</td>
+            <td class="flat">5.9 yrs</td>
+            <td class="up">+6.5%</td>
+            <td class="up">+515</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
 <tr>
-            <td class="cn">DeKalb County, MO</td>
-            <td><strong>54</strong></td>
-            <td class="flat">18.1x</td>
-            <td class="down">7.8 yrs</td>
-            <td class="flat">+8.1%</td>
-            <td class="down">-64</td>
-            <td><span class="tag tag-y">CAUTION</span></td>
+            <td class="cn">Martin County, MN</td>
+            <td><strong>53</strong></td>
+            <td class="flat">18.9x</td>
+            <td class="down">7.2 yrs</td>
+            <td class="up">+4.8%</td>
+            <td class="down">-156</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
 <tr>
-            <td class="cn">Franklin County, KY</td>
-            <td><strong>54</strong></td>
-            <td class="flat">18.6x</td>
-            <td class="down">7.4 yrs</td>
-            <td class="up">+6.7%</td>
-            <td class="up">+100</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td class="cn">Monroe County, GA</td>
+            <td><strong>53</strong></td>
+            <td class="flat">23.5x</td>
+            <td class="flat">5.2 yrs</td>
+            <td class="up">+5.1%</td>
+            <td class="up">+360</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
         </tbody>
       </table>

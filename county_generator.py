@@ -42,34 +42,46 @@ RUCC_LABEL = {
 }
 
 THESIS = {
-    'STRONG BUY': 'Top-tier fundamentals with positive momentum across all key dimensions.',
-    'BUY':        'Solid market with good fundamentals. The data supports a purchase decision.',
-    'WATCH':      'Mixed or shifting signals. Conditions worth monitoring before committing.',
-    'CAUTION':    'Weakening fundamentals or softening momentum. Higher near-term risk.',
-    'AVOID':      'Multiple dimensions are underperforming with no meaningful positive trend.',
+    'ACCELERATING': 'Top-tier fundamentals with positive momentum across all key dimensions.',
+    'PEAKING':      'Strong momentum market near its affordability ceiling. Best for buyers with short-to-medium hold horizons.',
+    'ESTABLISHED':  'Solid, balanced market with sustainable fundamentals and moderate appreciation.',
+    'EMERGING':     'Improving fundamentals with early-mover upside. Demand is building ahead of prices.',
+    'FRONTIER':     'Thin market data. Fundamentals are mixed — conduct additional local due diligence.',
+    'TURNING':      'Softening demand signals. Monitor for continued weakness before committing.',
+    'SPECULATIVE':  'Poor fundamentals. Current prices appear disconnected from underlying economics.',
+    'AVOID':        'Multiple dimensions are underperforming with no meaningful positive trend.',
 }
 
 VERDICT_SIGNAL = {
-    'STRONG BUY': ('sig-green', '✅', 'strong buy', 'Top-tier fundamentals with positive momentum. All key signals are aligned. The window for best-value entry is open.'),
-    'BUY':        ('sig-green', '✅', 'buy', 'Solid fundamentals support a purchase decision. The data and the direction are broadly aligned.'),
-    'WATCH':      ('sig-yellow','👀', 'watch', 'Conditions are mixed or shifting. Do not rush — monitor for 1–2 quarters before committing capital.'),
-    'CAUTION':    ('sig-yellow','⚠️', 'approach with caution', 'Fundamentals are softening or below average. Higher risk of value erosion in the near term.'),
-    'AVOID':      ('sig-red',   '⚠️', 'avoid', 'Multiple dimensions are underperforming. Capital is better deployed in markets with clearer upside.'),
+    'ACCELERATING': ('sig-green',  '✅', 'accelerating', 'All key signals are positive and aligned. The window for best-value entry is open.'),
+    'PEAKING':      ('sig-green',  '✅', 'peaking',       'Strong fundamentals support a purchase decision, though affordability is tightening.'),
+    'ESTABLISHED':  ('sig-green',  '✅', 'established',   'Solid fundamentals support a purchase decision. The data and the direction are broadly aligned.'),
+    'EMERGING':     ('sig-yellow', '👀', 'emerging',      'Early-mover opportunity. Fundamentals are building — monitor closely before committing.'),
+    'FRONTIER':     ('sig-yellow', '👀', 'frontier',      'Thin data environment. Conduct additional local due diligence before committing capital.'),
+    'TURNING':      ('sig-yellow', '👀', 'turning',       'Conditions are mixed or shifting. Do not rush — monitor for 1–2 quarters before committing capital.'),
+    'SPECULATIVE':  ('sig-yellow', '⚠️', 'speculative',   'Current prices appear disconnected from underlying fundamentals. Higher risk of value erosion.'),
+    'AVOID':        ('sig-red',    '⚠️', 'avoid',         'Multiple dimensions are underperforming. Capital is better deployed in markets with clearer upside.'),
 }
 
 SIGNAL_VB_CLASS = {
-    'STRONG BUY': 'vb-strongbuy',
-    'BUY':        'vb-buy',
-    'WATCH':      'vb-watch',
-    'CAUTION':    'vb-caution',
-    'AVOID':      'vb-avoid',
+    'ACCELERATING': 'vb-accelerating',
+    'PEAKING':      'vb-peaking',
+    'ESTABLISHED':  'vb-established',
+    'EMERGING':     'vb-emerging',
+    'FRONTIER':     'vb-frontier',
+    'TURNING':      'vb-turning',
+    'SPECULATIVE':  'vb-speculative',
+    'AVOID':        'vb-avoid',
 }
 SIGNAL_SUB = {
-    'STRONG BUY': 'Strong fundamentals, improving',
-    'BUY':        'Good fundamentals',
-    'WATCH':      'Mixed signals — monitor before committing',
-    'CAUTION':    'Weakening — approach with care',
-    'AVOID':      'Poor fundamentals across multiple dimensions',
+    'ACCELERATING': 'All signals positive — strong long-term hold',
+    'PEAKING':      'Strong fundamentals, approaching affordability ceiling',
+    'ESTABLISHED':  'Good fundamentals — buy for stability',
+    'EMERGING':     'Building momentum — early-mover window',
+    'FRONTIER':     'Mixed signals — conduct local due diligence',
+    'TURNING':      'Mixed signals — monitor before committing',
+    'SPECULATIVE':  'Prices disconnected from fundamentals',
+    'AVOID':        'Poor fundamentals across multiple dimensions',
 }
 
 NAT_MEDIAN_CRIME = 380  # approx violent offenses per 100k — used as comparison baseline
@@ -105,18 +117,12 @@ def compute_trend(row) -> str:
     return 'STABLE'
 
 
-def compute_signal(score: float, trend: str) -> str:
-    if score >= 57:
-        return 'STRONG BUY' if trend == 'RISING' else ('BUY' if trend == 'STABLE' else 'WATCH')
-    elif score >= 45:
-        return 'BUY' if trend == 'RISING' else ('WATCH' if trend == 'STABLE' else 'CAUTION')
-    elif score >= 37:
-        return 'WATCH' if trend == 'RISING' else ('CAUTION' if trend == 'STABLE' else 'AVOID')
-    return 'AVOID'
-
-
 def tag_for_signal(signal: str) -> str:
-    return {'STRONG BUY': 'tag-g', 'BUY': 'tag-g', 'WATCH': 'tag-y', 'CAUTION': 'tag-y', 'AVOID': 'tag-r'}.get(signal, 'tag-y')
+    return {
+        'ACCELERATING': 'tag-g', 'PEAKING': 'tag-g', 'ESTABLISHED': 'tag-g',
+        'EMERGING': 'tag-y', 'FRONTIER': 'tag-y', 'TURNING': 'tag-y',
+        'SPECULATIVE': 'tag-r', 'AVOID': 'tag-r',
+    }.get(signal, 'tag-y')
 
 
 def safe(v, fmt='.1f', prefix='', suffix='', signed=False, fallback='N/A'):
@@ -414,10 +420,9 @@ def build_hero(row, county_name: str, state: str, rucc_label: str) -> str:
     rucc     = int(row['rucc']) if not pd.isna(row['rucc']) else 5
     top_pct  = max(1, round(row['national_rank'] / 2820 * 100))
     offset   = ring_offset(score)
-    trend    = compute_trend(row)
-    signal   = compute_signal(score, trend)
-    sig_cls  = SIGNAL_VB_CLASS[signal]
-    sig_sub  = SIGNAL_SUB[signal]
+    signal   = row['market_label']
+    sig_cls  = SIGNAL_VB_CLASS.get(signal, 'vb-frontier')
+    sig_sub  = SIGNAL_SUB.get(signal, '')
 
     pr    = row['pr_ratio']
     be    = row['breakeven_yrs']
@@ -478,7 +483,7 @@ def build_thesis_panel(row, county_name: str) -> str:
     top_pct = max(1, round(rank / 2820 * 100))
     offset = ring_offset(score)
     sub    = dim_pct(row)
-    signal = compute_signal(score, compute_trend(row))
+    signal = row['market_label']
 
     thesis_h3 = THESIS.get(signal, '')
     thesis_p  = (
@@ -510,7 +515,7 @@ def build_thesis_panel(row, county_name: str) -> str:
         for i, b in enumerate(bears)
     )
 
-    sig_class, sig_icon, verdict_short, verdict_body = VERDICT_SIGNAL.get(signal, VERDICT_SIGNAL['WATCH'])
+    sig_class, sig_icon, verdict_short, verdict_body = VERDICT_SIGNAL.get(signal, VERDICT_SIGNAL['TURNING'])
 
     return f'''<div class="acc-section open" id="acc-thesis">
   <div class="acc-header" onclick="toggleAcc(this)">
@@ -939,8 +944,8 @@ def build_risk_panel(row) -> str:
 
 def build_compare_panel(row, comp_rows, comp_names, comp_states) -> str:
     def comp_row_html(crow, cname, cstate, highlight=False):
-        cs = crow['total_score']
-        c_signal  = compute_signal(cs, compute_trend(crow))
+        cs        = crow['total_score']
+        c_signal  = crow['market_label']
         tag_class = tag_for_signal(c_signal)
         net_mig = int(crow['in_hh'] - crow['out_hh'])
         pr_col  = vcolor(crow['pr_ratio'],   good_below=18, warn_below=24)
@@ -1094,7 +1099,7 @@ def generate_page(row, county_name, state, template_style, all_df, name_map, sta
     ])
 
     state_full = STATE_NAMES.get(state, state)
-    _sig = compute_signal(score, compute_trend(row))
+    _sig = row['market_label']
     return f'''{build_head(county_name, state, score, _sig, fips, row["median_home_value"], template_style)}
 <body>
 {build_nav(state, state_full)}
@@ -1124,11 +1129,14 @@ STATE_NAMES = {
 }
 
 LB_CLASS = {
-    'STRONG BUY': 'lb-sbuy',
-    'BUY':        'lb-buy',
-    'WATCH':      'lb-watch',
-    'CAUTION':    'lb-caut',
-    'AVOID':      'lb-avoid',
+    'ACCELERATING': 'lb-sbuy',
+    'PEAKING':      'lb-buy',
+    'ESTABLISHED':  'lb-buy',
+    'EMERGING':     'lb-watch',
+    'FRONTIER':     'lb-caut',
+    'TURNING':      'lb-watch',
+    'SPECULATIVE':  'lb-caut',
+    'AVOID':        'lb-avoid',
 }
 
 
@@ -1142,7 +1150,7 @@ def build_state_page(state: str, counties: list, template_style: str) -> str:
 
     label_counts = {}
     for r, _ in counties:
-        sig = compute_signal(r['total_score'], compute_trend(r))
+        sig = r['market_label']
         label_counts[sig] = label_counts.get(sig, 0) + 1
 
     dist_html = ' &nbsp;·&nbsp; '.join(
@@ -1154,7 +1162,7 @@ def build_state_page(state: str, counties: list, template_style: str) -> str:
     for i, (r, name) in enumerate(counties):
         fips   = r['fips']
         sc     = r['total_score']
-        sig    = compute_signal(sc, compute_trend(r))
+        sig    = r['market_label']
         lb_cls = LB_CLASS.get(sig, 'lb-watch')
         home   = r['median_home_value']
         hpi    = r['hpi_3yr_avg']
@@ -1330,9 +1338,9 @@ def main():
 
     # Reclassify labels using updated thresholds (no need to re-run scoring_engine.py)
     _LABELS = [
-        (61, 'ACCELERATING'), (57, 'PEAKING'), (51, 'ESTABLISHED'),
-        (45, 'EMERGING'), (37, 'FRONTIER'), (29, 'TURNING'),
-        (24, 'SPECULATIVE'), (0, 'AVOID'),
+        (68, 'ACCELERATING'), (62, 'PEAKING'), (55, 'ESTABLISHED'),
+        (46, 'EMERGING'), (38, 'FRONTIER'), (30, 'TURNING'),
+        (26, 'SPECULATIVE'), (0, 'AVOID'),
     ]
     def _classify(s):
         for t, l in _LABELS:
@@ -1386,8 +1394,7 @@ def main():
             continue
 
         # Index entry
-        _trend  = compute_trend(row)
-        _signal = compute_signal(float(row['total_score']), _trend)
+        _signal = row['market_label']
         index_records.append({
             'fips':              fips,
             'name':              county_name,

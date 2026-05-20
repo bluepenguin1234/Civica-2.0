@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Racine County, WI Housing Market Score — Civica Research</title>
-<meta name="description" content="Racine County, WI scores 61/100 on Civica's 6-dimension housing model. Signal: STRONG BUY. Median home value $308,967. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
+<meta name="description" content="Racine County, WI scores 63/100 on Civica's 6-dimension housing model. Signal: PEAKING. Median home value $308,967. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
 <meta property="og:title" content="Racine County, WI Housing Market — Civica">
-<meta property="og:description" content="Racine County, WI scores 61/100 on Civica's 6-dimension housing model. Signal: STRONG BUY. Median home value $308,967. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
+<meta property="og:description" content="Racine County, WI scores 63/100 on Civica's 6-dimension housing model. Signal: PEAKING. Median home value $308,967. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
 <meta property="og:url" content="https://civica.app/output/counties/55101.html">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://civica.app/og_image.png">
@@ -17,7 +17,7 @@
 <link rel="canonical" href="https://civica.app/output/counties/55101.html">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Dataset","name":"Racine County, WI Housing Market Analysis","description":"Racine County, WI scores 61/100 on Civica's 6-dimension housing model. Signal: STRONG BUY. Median home value $308,967. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.","url":"https://civica.app/output/counties/55101.html"}
+{"@context":"https://schema.org","@type":"Dataset","name":"Racine County, WI Housing Market Analysis","description":"Racine County, WI scores 63/100 on Civica's 6-dimension housing model. Signal: PEAKING. Median home value $308,967. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.","url":"https://civica.app/output/counties/55101.html"}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://civica.app/"},{"@type":"ListItem","position":2,"name":"WI Counties","item":"https://civica.app/output/states/WI.html"},{"@type":"ListItem","position":3,"name":"Racine County","item":"https://civica.app/output/counties/55101.html"}]}
@@ -70,11 +70,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .verdict-badge { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
 .vb-label { font-size:10px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.08em; }
 .vb-pill { font-size:13px; font-weight:800; padding:8px 18px; border-radius:100px; }
-.vb-strongbuy { background:#16a34a; color:#fff; }
-.vb-buy       { background:#1a7ff0; color:#fff; }
-.vb-watch     { background:#f59e0b; color:#fff; }
-.vb-caution   { background:#f97316; color:#fff; }
-.vb-avoid     { background:#dc2626; color:#fff; }
+.vb-accelerating { background:#16a34a; color:#fff; }
+.vb-peaking      { background:#22c55e; color:#fff; }
+.vb-established  { background:#1a7ff0; color:#fff; }
+.vb-emerging     { background:#8b5cf6; color:#fff; }
+.vb-frontier     { background:#f59e0b; color:#fff; }
+.vb-turning      { background:#f97316; color:#fff; }
+.vb-speculative  { background:#ef4444; color:#fff; }
+.vb-avoid        { background:#dc2626; color:#fff; }
 .vb-score { font-size:11px; color:rgba(255,255,255,.5); text-align:right; margin-top:2px; }
 
 /* SCORE RING */
@@ -425,17 +428,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <svg viewBox="0 0 110 110">
             <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="9"/>
             <circle cx="55" cy="55" r="46" fill="none" stroke="#1a7ff0" stroke-width="9"
-              stroke-dasharray="289.02" stroke-dashoffset="113.67" stroke-linecap="round"/>
+              stroke-dasharray="289.02" stroke-dashoffset="107.44" stroke-linecap="round"/>
           </svg>
-          <div class="sh-num">61</div>
+          <div class="sh-num">63</div>
           <div class="sh-denom">/100</div>
         </div>
         <div class="sh-grade">Top 4% Nationally</div>
       </div>
       <div class="verdict-badge" style="padding-top:4px;">
         <div class="vb-label">Civica Signal</div>
-        <div class="vb-pill vb-strongbuy">STRONG BUY</div>
-        <div class="vb-score">Score 60.7 · Strong fundamentals, improving</div>
+        <div class="vb-pill vb-peaking">PEAKING</div>
+        <div class="vb-score">Score 62.8 · Strong fundamentals, approaching affordability ceiling</div>
       </div>
       <button class="cmp-btn" id="compareBtn" onclick="toggleCompare()">+ Compare</button>
     </div>
@@ -463,18 +466,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       <svg width="88" height="88" viewBox="0 0 110 110">
         <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="10"/>
         <circle cx="55" cy="55" r="46" fill="none" stroke="#1a7ff0" stroke-width="10"
-          stroke-dasharray="289.02" stroke-dashoffset="113.67" stroke-linecap="round" transform="rotate(-90 55 55)"/>
-        <text x="55" y="50" text-anchor="middle" font-size="22" font-weight="900" fill="white" dy=".3em">61</text>
+          stroke-dasharray="289.02" stroke-dashoffset="107.44" stroke-linecap="round" transform="rotate(-90 55 55)"/>
+        <text x="55" y="50" text-anchor="middle" font-size="22" font-weight="900" fill="white" dy=".3em">63</text>
         <text x="55" y="68" text-anchor="middle" font-size="11" fill="rgba(255,255,255,.4)">/100</text>
       </svg>
     </div>
     <div>
-      <h3>Top-tier fundamentals with positive momentum across all key dimensions.</h3>
-      <p>Racine County ranks #107 of 2,820 scored US counties (top 4%). Strongest dimensions: Physical Risk (84/100), Economic Vitality (73/100). Weakest: Affordability (42/100).</p>
+      <h3>Strong momentum market near its affordability ceiling. Best for buyers with short-to-medium hold horizons.</h3>
+      <p>Racine County ranks #124 of 2,820 scored US counties (top 4%). Strongest dimensions: Physical Risk (84/100), Market Dynamics (82/100). Weakest: Affordability (39/100).</p>
       <div class="sbb-items">
         <div class="sbb-item">
           <div class="sbb-name">Affordability</div>
-          <div class="sbb-val">42<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">39<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">25% wt</div>
         </div>
         <div class="sbb-item">
@@ -484,12 +487,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         </div>
         <div class="sbb-item">
           <div class="sbb-name">Market Dynamics</div>
-          <div class="sbb-val">61<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">82<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">20% wt</div>
         </div>
         <div class="sbb-item">
           <div class="sbb-name">Quality of Place</div>
-          <div class="sbb-val">59<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">52<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">15% wt</div>
         </div>
         <div class="sbb-item">
@@ -510,9 +513,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       <div class="card-title"><span class="ct-icon">✅</span> Bull Case — Why This Works</div>
       <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.55;color:var(--subtext);">
         <div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">1.</span><div><strong>Low natural hazard exposure.</strong> Flood, storm, and wildfire risk all below national median — insurance costs are likely at or below national average.</div></div>
-<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">2.</span><div><strong>Strong labor market fundamentals.</strong> Average wage of $58,538/yr with 25.2% per capita income growth over 4 years.</div></div>
-<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">3.</span><div><strong>Housing market has sustained momentum.</strong> FHFA 3-year average appreciation of +8.1%/yr with 163 units permitted — demand signal is consistent.</div></div>
-<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">4.</span><div><strong>Quality of place is above average.</strong> Favorable urban access, amenity density, and crime rate versus peer counties.</div></div>
+<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">2.</span><div><strong>Housing market has sustained momentum.</strong> FHFA 3-year average appreciation of +8.1%/yr with 163 units permitted — demand signal is consistent.</div></div>
+<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">3.</span><div><strong>Strong labor market fundamentals.</strong> Average wage of $58,538/yr with 25.2% per capita income growth over 4 years.</div></div>
       </div>
     </div>
     <div class="card">
@@ -526,7 +528,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
   <div class="signal sig-green">
     <div class="icon">✅</div>
-    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> Racine County is a <strong>strong buy</strong>. Top-tier fundamentals with positive momentum. All key signals are aligned. The window for best-value entry is open. Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
+    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> Racine County is a <strong>peaking</strong>. Strong fundamentals support a purchase decision, though affordability is tightening. Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
   </div>
 
   </div></div></div>
@@ -750,12 +752,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="card">
       <div class="card-title"><span class="ct-icon">🛡️</span> Safety · FBI NIBRS 2024</div>
       <div class="g2" style="gap:10px;margin-bottom:12px;">
-        <div class="sb"><div class="sb-val">645</div><div class="sb-lbl">Violent Crime / 100k residents</div><div class="sb-delta down">vs ~380 national est.</div></div>
+        <div class="sb"><div class="sb-val">211</div><div class="sb-lbl">Violent Crime / 100k residents</div><div class="sb-delta up">vs ~380 national est.</div></div>
         <div class="sb"><div class="sb-val">21.0</div><div class="sb-lbl">Establishments / 1,000 residents</div><div class="sb-delta flat">Census CBP 2022 · Amenity density</div></div>
       </div>
-      <div class="signal sig-red">
-        <div class="icon">⚠️</div>
-        <div class="body">Violent crime rate of 645 per 100k is above the national estimate of ~380. Source: FBI NIBRS 2024 National Master File (1,268 reported offenses).</div>
+      <div class="signal sig-green">
+        <div class="icon">✅</div>
+        <div class="body">Violent crime rate of 211 per 100k is well below the national estimate of ~380. Source: FBI NIBRS 2024 National Master File (414 reported offenses).</div>
       </div>
     </div>
   </div>
@@ -854,48 +856,48 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         <tbody>
           <tr class="hl">
             <td class="cn">Racine County, WI ★</td>
-            <td><strong>61</strong></td>
+            <td><strong>63</strong></td>
             <td class="flat">20.8x</td>
             <td class="flat">6.1 yrs</td>
             <td class="flat">+8.1%</td>
             <td class="down">-136</td>
-            <td><span class="tag tag-g">STRONG BUY</span></td>
+            <td><span class="tag tag-g">PEAKING</span></td>
           </tr>
           <tr>
-            <td class="cn">Tioga County, NY</td>
-            <td><strong>61</strong></td>
-            <td class="up">14.8x</td>
-            <td class="down">15.1 yrs</td>
-            <td class="flat">+8.8%</td>
-            <td class="down">-103</td>
-            <td><span class="tag tag-g">STRONG BUY</span></td>
+            <td class="cn">Winnebago County, WI</td>
+            <td><strong>63</strong></td>
+            <td class="flat">21.8x</td>
+            <td class="flat">5.7 yrs</td>
+            <td class="flat">+8.5%</td>
+            <td class="up">+215</td>
+            <td><span class="tag tag-g">PEAKING</span></td>
           </tr>
 <tr>
-            <td class="cn">Brookings County, SD</td>
-            <td><strong>61</strong></td>
-            <td class="down">27.6x</td>
-            <td class="flat">4.5 yrs</td>
-            <td class="up">+6.0%</td>
-            <td class="down">-50</td>
-            <td><span class="tag tag-g">BUY</span></td>
+            <td class="cn">Forsyth County, GA</td>
+            <td><strong>63</strong></td>
+            <td class="down">28.3x</td>
+            <td class="flat">4.4 yrs</td>
+            <td class="up">+5.5%</td>
+            <td class="up">+622</td>
+            <td><span class="tag tag-g">PEAKING</span></td>
           </tr>
 <tr>
-            <td class="cn">Greater Bridgeport Planning Region, CT</td>
-            <td><strong>61</strong></td>
-            <td class="up">7.8x</td>
-            <td class="down">30.0 yrs</td>
-            <td class="up">+7.8%</td>
-            <td class="down">-1,844</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td class="cn">Suffolk County, NY</td>
+            <td><strong>63</strong></td>
+            <td class="flat">21.3x</td>
+            <td class="flat">5.9 yrs</td>
+            <td class="up">+7.2%</td>
+            <td class="down">-6,806</td>
+            <td><span class="tag tag-g">PEAKING</span></td>
           </tr>
 <tr>
-            <td class="cn">Richland County, MT</td>
-            <td><strong>61</strong></td>
-            <td class="up">17.6x</td>
-            <td class="down">8.3 yrs</td>
-            <td class="up">+4.7%</td>
-            <td class="down">-140</td>
-            <td><span class="tag tag-g">BUY</span></td>
+            <td class="cn">Camden County, NJ</td>
+            <td><strong>63</strong></td>
+            <td class="up">16.2x</td>
+            <td class="down">10.3 yrs</td>
+            <td class="flat">+9.2%</td>
+            <td class="down">-693</td>
+            <td><span class="tag tag-g">PEAKING</span></td>
           </tr>
         </tbody>
       </table>

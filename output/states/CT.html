@@ -66,11 +66,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .verdict-badge { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
 .vb-label { font-size:10px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.08em; }
 .vb-pill { font-size:13px; font-weight:800; padding:8px 18px; border-radius:100px; }
-.vb-strongbuy { background:#16a34a; color:#fff; }
-.vb-buy       { background:#1a7ff0; color:#fff; }
-.vb-watch     { background:#f59e0b; color:#fff; }
-.vb-caution   { background:#f97316; color:#fff; }
-.vb-avoid     { background:#dc2626; color:#fff; }
+.vb-accelerating { background:#16a34a; color:#fff; }
+.vb-peaking      { background:#22c55e; color:#fff; }
+.vb-established  { background:#1a7ff0; color:#fff; }
+.vb-emerging     { background:#8b5cf6; color:#fff; }
+.vb-frontier     { background:#f59e0b; color:#fff; }
+.vb-turning      { background:#f97316; color:#fff; }
+.vb-speculative  { background:#ef4444; color:#fff; }
+.vb-avoid        { background:#dc2626; color:#fff; }
 .vb-score { font-size:11px; color:rgba(255,255,255,.5); text-align:right; margin-top:2px; }
 
 /* SCORE RING */
@@ -397,11 +400,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <h1 style="font-size:36px;font-weight:900;color:#fff;margin:10px 0 16px;line-height:1.05;">Connecticut</h1>
     <div class="sp-stat-row" style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:18px;">
       <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#fff;">9</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Counties Scored</div></div>
-      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#1a7ff0;">60.0</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Median Score</div></div>
-      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#4ade80;">64.7</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top County Score</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#1a7ff0;">57.9</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Median Score</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#4ade80;">65.9</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top County Score</div></div>
       <div><div class="sp-stat-top" style="font-size:15px;font-weight:800;color:#fff;max-width:160px;">Western Connecticut Planning Region</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top Ranked County</div></div>
     </div>
-    <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.7;"><strong>3</strong> Watch &nbsp;·&nbsp; <strong>6</strong> Buy</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.7;"><strong>1</strong> Peaking &nbsp;·&nbsp; <strong>6</strong> Established &nbsp;·&nbsp; <strong>2</strong> Emerging</div>
   </div>
 </div>
 
@@ -424,100 +427,100 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         <tbody><tr onclick="window.location='../counties/09190.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">1</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Western Connecticut Planning Region</div>
-              <div style="font-size:11px;color:#98989d;">#15 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#39 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">65</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">64.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">66</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">65.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">PEAKING</span></td>
+          <td style="text-align:right;font-weight:600;">$410,836</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+7.4%</td>
           <td style="text-align:right;" class="col-wage">$49,607</td>
-        </tr><tr onclick="window.location='../counties/09130.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">2</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lower Connecticut River Valley Planning Region</div>
-              <div style="font-size:11px;color:#98989d;">#40 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">63</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">63.2</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.0%</td>
-          <td style="text-align:right;" class="col-wage">$49,607</td>
         </tr><tr onclick="window.location='../counties/09110.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">3</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">2</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Capitol Planning Region</div>
-              <div style="font-size:11px;color:#98989d;">#54 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#237 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">62</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">62.4</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">60</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">60.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
+          <td style="text-align:right;font-weight:600;">$410,836</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.8%</td>
+          <td style="text-align:right;" class="col-wage">$49,607</td>
+        </tr><tr onclick="window.location='../counties/09130.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">3</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lower Connecticut River Valley Planning Region</div>
+              <div style="font-size:11px;color:#98989d;">#275 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">60</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">59.7</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
+          <td style="text-align:right;font-weight:600;">$410,836</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.0%</td>
           <td style="text-align:right;" class="col-wage">$49,607</td>
         </tr><tr onclick="window.location='../counties/09120.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">4</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Greater Bridgeport Planning Region</div>
-              <div style="font-size:11px;color:#98989d;">#105 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">61</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">60.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+7.8%</td>
-          <td style="text-align:right;" class="col-wage">$49,607</td>
-        </tr><tr onclick="window.location='../counties/09160.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">5</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Northwest Hills Planning Region</div>
-              <div style="font-size:11px;color:#98989d;">#132 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">60</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">60.0</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.2%</td>
-          <td style="text-align:right;" class="col-wage">$49,607</td>
-        </tr><tr onclick="window.location='../counties/09140.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">6</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Naugatuck Valley Planning Region</div>
-              <div style="font-size:11px;color:#98989d;">#167 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#308 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">59</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">59.3</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">59.2</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
+          <td style="text-align:right;font-weight:600;">$410,836</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+7.8%</td>
+          <td style="text-align:right;" class="col-wage">$49,607</td>
+        </tr><tr onclick="window.location='../counties/09140.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">5</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Naugatuck Valley Planning Region</div>
+              <div style="font-size:11px;color:#98989d;">#411 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">58</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">57.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
+          <td style="text-align:right;font-weight:600;">$410,836</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.5%</td>
           <td style="text-align:right;" class="col-wage">$49,607</td>
         </tr><tr onclick="window.location='../counties/09180.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">7</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">6</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Southeastern Connecticut Planning Region</div>
-              <div style="font-size:11px;color:#98989d;">#187 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#498 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">59</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">59.0</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">57</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">57.0</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
+          <td style="text-align:right;font-weight:600;">$410,836</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+9.0%</td>
           <td style="text-align:right;" class="col-wage">$49,607</td>
         </tr><tr onclick="window.location='../counties/09170.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">8</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">7</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">South Central Connecticut Planning Region</div>
-              <div style="font-size:11px;color:#98989d;">#226 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#588 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">58</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">58.3</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">56</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">56.2</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
+          <td style="text-align:right;font-weight:600;">$410,836</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.0%</td>
+          <td style="text-align:right;" class="col-wage">$49,607</td>
+        </tr><tr onclick="window.location='../counties/09160.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">8</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Northwest Hills Planning Region</div>
+              <div style="font-size:11px;color:#98989d;">#732 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">55</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">54.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$410,836</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.2%</td>
           <td style="text-align:right;" class="col-wage">$49,607</td>
         </tr><tr onclick="window.location='../counties/09150.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">9</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Northeastern Connecticut Planning Region</div>
-              <div style="font-size:11px;color:#98989d;">#235 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#1199 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">58</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">58.2</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">52</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">51.7</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$410,836</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+8.6%</td>
           <td style="text-align:right;" class="col-wage">$49,607</td>
         </tr></tbody>

@@ -266,10 +266,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
     <!-- Legend -->
     <div class="map-legend" id="mapLegend" style="display:none;">
-      <div class="map-legend-item"><span class="map-dot" style="background:#16a34a;"></span>Strong Buy</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#1a7ff0;"></span>Buy</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#f59e0b;"></span>Watch</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#f97316;"></span>Caution</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#16a34a;"></span>Accelerating</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#22c55e;"></span>Peaking</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#1a7ff0;"></span>Established</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#8b5cf6;"></span>Emerging</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#f59e0b;"></span>Frontier</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#f97316;"></span>Turning</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#ef4444;"></span>Speculative</div>
       <div class="map-legend-item"><span class="map-dot" style="background:#dc2626;"></span>Avoid</div>
       <div class="map-legend-item"><span class="map-dot" style="background:#e5e7eb;"></span>No data</div>
     </div>
@@ -361,12 +364,16 @@ function closeMobileNav() {
 let COUNTIES = [];
 
 const SIGNAL_CLASS = {
-  'STRONG BUY':'lb-sbuy', 'BUY':'lb-buy', 'WATCH':'lb-watch',
-  'CAUTION':'lb-caut', 'AVOID':'lb-avoid',
+  'ACCELERATING':'lb-sbuy', 'PEAKING':'lb-sbuy',
+  'ESTABLISHED':'lb-buy',   'EMERGING':'lb-buy',
+  'FRONTIER':'lb-watch',    'TURNING':'lb-caut',
+  'SPECULATIVE':'lb-avoid', 'AVOID':'lb-avoid',
 };
 const MAP_COLOR = {
-  'STRONG BUY':'#16a34a', 'BUY':'#1a7ff0', 'WATCH':'#f59e0b',
-  'CAUTION':'#f97316', 'AVOID':'#dc2626',
+  'ACCELERATING':'#16a34a', 'PEAKING':'#22c55e',
+  'ESTABLISHED':'#1a7ff0',  'EMERGING':'#8b5cf6',
+  'FRONTIER':'#f59e0b',     'TURNING':'#f97316',
+  'SPECULATIVE':'#ef4444',  'AVOID':'#dc2626',
 };
 
 if (location.protocol === 'file:') {

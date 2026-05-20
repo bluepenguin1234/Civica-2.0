@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Providence County, RI Housing Market Score — Civica Research</title>
-<meta name="description" content="Providence County, RI scores 58/100 on Civica's 6-dimension housing model. Signal: BUY. Median home value $450,771. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
+<meta name="description" content="Providence County, RI scores 63/100 on Civica's 6-dimension housing model. Signal: PEAKING. Median home value $450,771. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
 <meta property="og:title" content="Providence County, RI Housing Market — Civica">
-<meta property="og:description" content="Providence County, RI scores 58/100 on Civica's 6-dimension housing model. Signal: BUY. Median home value $450,771. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
+<meta property="og:description" content="Providence County, RI scores 63/100 on Civica's 6-dimension housing model. Signal: PEAKING. Median home value $450,771. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
 <meta property="og:url" content="https://civica.app/output/counties/44007.html">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://civica.app/og_image.png">
@@ -17,7 +17,7 @@
 <link rel="canonical" href="https://civica.app/output/counties/44007.html">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Dataset","name":"Providence County, RI Housing Market Analysis","description":"Providence County, RI scores 58/100 on Civica's 6-dimension housing model. Signal: BUY. Median home value $450,771. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.","url":"https://civica.app/output/counties/44007.html"}
+{"@context":"https://schema.org","@type":"Dataset","name":"Providence County, RI Housing Market Analysis","description":"Providence County, RI scores 63/100 on Civica's 6-dimension housing model. Signal: PEAKING. Median home value $450,771. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.","url":"https://civica.app/output/counties/44007.html"}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://civica.app/"},{"@type":"ListItem","position":2,"name":"RI Counties","item":"https://civica.app/output/states/RI.html"},{"@type":"ListItem","position":3,"name":"Providence County","item":"https://civica.app/output/counties/44007.html"}]}
@@ -70,11 +70,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .verdict-badge { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
 .vb-label { font-size:10px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.08em; }
 .vb-pill { font-size:13px; font-weight:800; padding:8px 18px; border-radius:100px; }
-.vb-strongbuy { background:#16a34a; color:#fff; }
-.vb-buy       { background:#1a7ff0; color:#fff; }
-.vb-watch     { background:#f59e0b; color:#fff; }
-.vb-caution   { background:#f97316; color:#fff; }
-.vb-avoid     { background:#dc2626; color:#fff; }
+.vb-accelerating { background:#16a34a; color:#fff; }
+.vb-peaking      { background:#22c55e; color:#fff; }
+.vb-established  { background:#1a7ff0; color:#fff; }
+.vb-emerging     { background:#8b5cf6; color:#fff; }
+.vb-frontier     { background:#f59e0b; color:#fff; }
+.vb-turning      { background:#f97316; color:#fff; }
+.vb-speculative  { background:#ef4444; color:#fff; }
+.vb-avoid        { background:#dc2626; color:#fff; }
 .vb-score { font-size:11px; color:rgba(255,255,255,.5); text-align:right; margin-top:2px; }
 
 /* SCORE RING */
@@ -425,17 +428,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <svg viewBox="0 0 110 110">
             <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="9"/>
             <circle cx="55" cy="55" r="46" fill="none" stroke="#1a7ff0" stroke-width="9"
-              stroke-dasharray="289.02" stroke-dashoffset="121.89" stroke-linecap="round"/>
+              stroke-dasharray="289.02" stroke-dashoffset="107.99" stroke-linecap="round"/>
           </svg>
-          <div class="sh-num">58</div>
+          <div class="sh-num">63</div>
           <div class="sh-denom">/100</div>
         </div>
-        <div class="sh-grade">Top 10% Nationally</div>
+        <div class="sh-grade">Top 5% Nationally</div>
       </div>
       <div class="verdict-badge" style="padding-top:4px;">
         <div class="vb-label">Civica Signal</div>
-        <div class="vb-pill vb-buy">BUY</div>
-        <div class="vb-score">Score 57.8 · Good fundamentals</div>
+        <div class="vb-pill vb-peaking">PEAKING</div>
+        <div class="vb-score">Score 62.6 · Strong fundamentals, approaching affordability ceiling</div>
       </div>
       <button class="cmp-btn" id="compareBtn" onclick="toggleCompare()">+ Compare</button>
     </div>
@@ -463,18 +466,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       <svg width="88" height="88" viewBox="0 0 110 110">
         <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="10"/>
         <circle cx="55" cy="55" r="46" fill="none" stroke="#1a7ff0" stroke-width="10"
-          stroke-dasharray="289.02" stroke-dashoffset="121.89" stroke-linecap="round" transform="rotate(-90 55 55)"/>
-        <text x="55" y="50" text-anchor="middle" font-size="22" font-weight="900" fill="white" dy=".3em">58</text>
+          stroke-dasharray="289.02" stroke-dashoffset="107.99" stroke-linecap="round" transform="rotate(-90 55 55)"/>
+        <text x="55" y="50" text-anchor="middle" font-size="22" font-weight="900" fill="white" dy=".3em">63</text>
         <text x="55" y="68" text-anchor="middle" font-size="11" fill="rgba(255,255,255,.4)">/100</text>
       </svg>
     </div>
     <div>
-      <h3>Solid market with good fundamentals. The data supports a purchase decision.</h3>
-      <p>Providence County ranks #269 of 2,820 scored US counties (top 10%). Strongest dimensions: Economic Vitality (79/100), Quality of Place (69/100). Weakest: Affordability (32/100).</p>
+      <h3>Strong momentum market near its affordability ceiling. Best for buyers with short-to-medium hold horizons.</h3>
+      <p>Providence County ranks #128 of 2,820 scored US counties (top 5%). Strongest dimensions: Market Dynamics (86/100), Economic Vitality (79/100). Weakest: Affordability (29/100).</p>
       <div class="sbb-items">
         <div class="sbb-item">
           <div class="sbb-name">Affordability</div>
-          <div class="sbb-val">32<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">29<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">25% wt</div>
         </div>
         <div class="sbb-item">
@@ -484,17 +487,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         </div>
         <div class="sbb-item">
           <div class="sbb-name">Market Dynamics</div>
-          <div class="sbb-val">59<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">86<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">20% wt</div>
         </div>
         <div class="sbb-item">
           <div class="sbb-name">Quality of Place</div>
-          <div class="sbb-val">69<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">71<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">15% wt</div>
         </div>
         <div class="sbb-item">
           <div class="sbb-name">Physical Risk</div>
-          <div class="sbb-val">67<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">68<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">12% wt</div>
         </div>
         <div class="sbb-item">
@@ -509,10 +512,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="card">
       <div class="card-title"><span class="ct-icon">✅</span> Bull Case — Why This Works</div>
       <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.55;color:var(--subtext);">
-        <div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">1.</span><div><strong>Strong labor market fundamentals.</strong> Average wage of $65,061/yr with 17.8% per capita income growth over 4 years.</div></div>
-<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">2.</span><div><strong>Quality of place is above average.</strong> Favorable urban access, amenity density, and crime rate versus peer counties.</div></div>
-<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">3.</span><div><strong>Low natural hazard exposure.</strong> Flood, storm, and wildfire risk all below national median — insurance costs are likely at or below national average.</div></div>
-<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">4.</span><div><strong>Housing market has sustained momentum.</strong> FHFA 3-year average appreciation of +7.9%/yr with 640 units permitted — demand signal is consistent.</div></div>
+        <div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">1.</span><div><strong>Housing market has sustained momentum.</strong> FHFA 3-year average appreciation of +7.9%/yr with 640 units permitted — demand signal is consistent.</div></div>
+<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">2.</span><div><strong>Strong labor market fundamentals.</strong> Average wage of $65,061/yr with 17.8% per capita income growth over 4 years.</div></div>
+<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">3.</span><div><strong>Quality of place is above average.</strong> Favorable urban access, amenity density, and crime rate versus peer counties.</div></div>
+<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">4.</span><div><strong>Low natural hazard exposure.</strong> Flood, storm, and wildfire risk all below national median — insurance costs are likely at or below national average.</div></div>
       </div>
     </div>
     <div class="card">
@@ -527,7 +530,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
   <div class="signal sig-green">
     <div class="icon">✅</div>
-    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> Providence County is a <strong>buy</strong>. Solid fundamentals support a purchase decision. The data and the direction are broadly aligned. Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
+    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> Providence County is a <strong>peaking</strong>. Strong fundamentals support a purchase decision, though affordability is tightening. Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
   </div>
 
   </div></div></div>
@@ -751,12 +754,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="card">
       <div class="card-title"><span class="ct-icon">🛡️</span> Safety · FBI NIBRS 2024</div>
       <div class="g2" style="gap:10px;margin-bottom:12px;">
-        <div class="sb"><div class="sb-val">891</div><div class="sb-lbl">Violent Crime / 100k residents</div><div class="sb-delta down">vs ~380 national est.</div></div>
+        <div class="sb"><div class="sb-val">192</div><div class="sb-lbl">Violent Crime / 100k residents</div><div class="sb-delta up">vs ~380 national est.</div></div>
         <div class="sb"><div class="sb-val">24.9</div><div class="sb-lbl">Establishments / 1,000 residents</div><div class="sb-delta flat">Census CBP 2022 · Amenity density</div></div>
       </div>
-      <div class="signal sig-red">
-        <div class="icon">⚠️</div>
-        <div class="body">Violent crime rate of 891 per 100k is above the national estimate of ~380. Source: FBI NIBRS 2024 National Master File (5,887 reported offenses).</div>
+      <div class="signal sig-green">
+        <div class="icon">✅</div>
+        <div class="body">Violent crime rate of 192 per 100k is well below the national estimate of ~380. Source: FBI NIBRS 2024 National Master File (1,270 reported offenses).</div>
       </div>
     </div>
   </div>
@@ -781,14 +784,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">⚠️</span> Physical Risk Matrix · FEMA NFIP + NOAA + USFS</div>
-    <div class="card-intro">Risk is scored relative to all 2,820 counties. Physical Risk dimension score: 67/100 (higher = safer).</div>
+    <div class="card-intro">Risk is scored relative to all 2,820 counties. Physical Risk dimension score: 68/100 (higher = safer).</div>
 
     <div class="risk-matrix">
       <div class="rm-card">
         <div class="rm-icon">🌊</div>
         <div class="rm-name">Flood Risk</div>
         <div class="rm-prob">NFIP claims per capita (10yr avg)</div>
-        <div class="rm-impact impact-low">LOW — $2.77/capita avg annual claims</div>
+        <div class="rm-impact impact-low">LOW — $2.05/capita avg annual claims</div>
       </div>
       <div class="rm-card">
         <div class="rm-icon">🌪️</div>
@@ -824,7 +827,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
     <div class="signal sig-green" style="margin-top:16px;">
       <div class="icon">✅</div>
-      <div class="body"><strong>Physical Risk Summary:</strong> This county scores 67/100 on the Civica Physical Risk dimension (higher = safer). Natural hazard exposure is below the national median across flood, storm, and wildfire categories. Data: FEMA NFIP paid claims, NOAA Storm Events 2019–2023, USFS Wildfire Risk to Communities.</div>
+      <div class="body"><strong>Physical Risk Summary:</strong> This county scores 68/100 on the Civica Physical Risk dimension (higher = safer). Natural hazard exposure is below the national median across flood, storm, and wildfire categories. Data: FEMA NFIP paid claims, NOAA Storm Events 2019–2023, USFS Wildfire Risk to Communities.</div>
     </div>
   </div>
 
@@ -855,48 +858,48 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         <tbody>
           <tr class="hl">
             <td class="cn">Providence County, RI ★</td>
-            <td><strong>58</strong></td>
+            <td><strong>63</strong></td>
             <td class="flat">21.7x</td>
             <td class="flat">5.7 yrs</td>
             <td class="up">+7.9%</td>
             <td class="down">-142</td>
-            <td><span class="tag tag-g">BUY</span></td>
+            <td><span class="tag tag-g">PEAKING</span></td>
           </tr>
           <tr>
-            <td class="cn">Pleasants County, WV</td>
-            <td><strong>58</strong></td>
-            <td class="up">15.5x</td>
-            <td class="down">12.1 yrs</td>
-            <td class="up">+8.0%</td>
-            <td class="down">-108</td>
-            <td><span class="tag tag-y">WATCH</span></td>
-          </tr>
-<tr>
-            <td class="cn">Marshall County, IN</td>
-            <td><strong>58</strong></td>
-            <td class="flat">21.5x</td>
-            <td class="flat">5.8 yrs</td>
-            <td class="up">+6.7%</td>
-            <td class="down">-64</td>
-            <td><span class="tag tag-g">BUY</span></td>
-          </tr>
-<tr>
-            <td class="cn">Natrona County, WY</td>
-            <td><strong>58</strong></td>
-            <td class="flat">23.9x</td>
-            <td class="flat">5.1 yrs</td>
+            <td class="cn">St. Louis County, MO</td>
+            <td><strong>63</strong></td>
+            <td class="flat">19.6x</td>
+            <td class="flat">6.7 yrs</td>
             <td class="up">+5.4%</td>
-            <td class="up">+114</td>
-            <td><span class="tag tag-g">BUY</span></td>
+            <td class="down">-2,225</td>
+            <td><span class="tag tag-g">PEAKING</span></td>
           </tr>
 <tr>
-            <td class="cn">Fulton County, GA</td>
-            <td><strong>58</strong></td>
-            <td class="flat">19.3x</td>
-            <td class="flat">6.9 yrs</td>
-            <td class="up">+3.8%</td>
-            <td class="down">-423</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td class="cn">Campbell County, KY</td>
+            <td><strong>63</strong></td>
+            <td class="flat">18.2x</td>
+            <td class="down">7.7 yrs</td>
+            <td class="up">+6.6%</td>
+            <td class="up">+197</td>
+            <td><span class="tag tag-g">PEAKING</span></td>
+          </tr>
+<tr>
+            <td class="cn">Norfolk County, MA</td>
+            <td><strong>63</strong></td>
+            <td class="flat">22.2x</td>
+            <td class="flat">5.6 yrs</td>
+            <td class="up">+5.5%</td>
+            <td class="down">-1,910</td>
+            <td><span class="tag tag-g">PEAKING</span></td>
+          </tr>
+<tr>
+            <td class="cn">Brown County, WI</td>
+            <td><strong>63</strong></td>
+            <td class="down">25.3x</td>
+            <td class="flat">4.8 yrs</td>
+            <td class="flat">+8.8%</td>
+            <td class="up">+307</td>
+            <td><span class="tag tag-g">PEAKING</span></td>
           </tr>
         </tbody>
       </table>

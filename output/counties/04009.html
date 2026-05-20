@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Graham County, AZ Housing Market Score — Civica Research</title>
-<meta name="description" content="Graham County, AZ scores 47/100 on Civica's 6-dimension housing model. Signal: BUY. Median home value $306,233. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
+<meta name="description" content="Graham County, AZ scores 47/100 on Civica's 6-dimension housing model. Signal: EMERGING. Median home value $306,233. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
 <meta property="og:title" content="Graham County, AZ Housing Market — Civica">
-<meta property="og:description" content="Graham County, AZ scores 47/100 on Civica's 6-dimension housing model. Signal: BUY. Median home value $306,233. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
+<meta property="og:description" content="Graham County, AZ scores 47/100 on Civica's 6-dimension housing model. Signal: EMERGING. Median home value $306,233. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
 <meta property="og:url" content="https://civica.app/output/counties/04009.html">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://civica.app/og_image.png">
@@ -17,7 +17,7 @@
 <link rel="canonical" href="https://civica.app/output/counties/04009.html">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Dataset","name":"Graham County, AZ Housing Market Analysis","description":"Graham County, AZ scores 47/100 on Civica's 6-dimension housing model. Signal: BUY. Median home value $306,233. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.","url":"https://civica.app/output/counties/04009.html"}
+{"@context":"https://schema.org","@type":"Dataset","name":"Graham County, AZ Housing Market Analysis","description":"Graham County, AZ scores 47/100 on Civica's 6-dimension housing model. Signal: EMERGING. Median home value $306,233. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.","url":"https://civica.app/output/counties/04009.html"}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://civica.app/"},{"@type":"ListItem","position":2,"name":"AZ Counties","item":"https://civica.app/output/states/AZ.html"},{"@type":"ListItem","position":3,"name":"Graham County","item":"https://civica.app/output/counties/04009.html"}]}
@@ -70,11 +70,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .verdict-badge { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
 .vb-label { font-size:10px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.08em; }
 .vb-pill { font-size:13px; font-weight:800; padding:8px 18px; border-radius:100px; }
-.vb-strongbuy { background:#16a34a; color:#fff; }
-.vb-buy       { background:#1a7ff0; color:#fff; }
-.vb-watch     { background:#f59e0b; color:#fff; }
-.vb-caution   { background:#f97316; color:#fff; }
-.vb-avoid     { background:#dc2626; color:#fff; }
+.vb-accelerating { background:#16a34a; color:#fff; }
+.vb-peaking      { background:#22c55e; color:#fff; }
+.vb-established  { background:#1a7ff0; color:#fff; }
+.vb-emerging     { background:#8b5cf6; color:#fff; }
+.vb-frontier     { background:#f59e0b; color:#fff; }
+.vb-turning      { background:#f97316; color:#fff; }
+.vb-speculative  { background:#ef4444; color:#fff; }
+.vb-avoid        { background:#dc2626; color:#fff; }
 .vb-score { font-size:11px; color:rgba(255,255,255,.5); text-align:right; margin-top:2px; }
 
 /* SCORE RING */
@@ -425,17 +428,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <svg viewBox="0 0 110 110">
             <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="9"/>
             <circle cx="55" cy="55" r="46" fill="none" stroke="#1a7ff0" stroke-width="9"
-              stroke-dasharray="289.02" stroke-dashoffset="152.71" stroke-linecap="round"/>
+              stroke-dasharray="289.02" stroke-dashoffset="153.98" stroke-linecap="round"/>
           </svg>
           <div class="sh-num">47</div>
           <div class="sh-denom">/100</div>
         </div>
-        <div class="sh-grade">Top 69% Nationally</div>
+        <div class="sh-grade">Top 67% Nationally</div>
       </div>
       <div class="verdict-badge" style="padding-top:4px;">
         <div class="vb-label">Civica Signal</div>
-        <div class="vb-pill vb-buy">BUY</div>
-        <div class="vb-score">Score 47.2 · Good fundamentals</div>
+        <div class="vb-pill vb-emerging">EMERGING</div>
+        <div class="vb-score">Score 46.7 · Building momentum — early-mover window</div>
       </div>
       <button class="cmp-btn" id="compareBtn" onclick="toggleCompare()">+ Compare</button>
     </div>
@@ -463,18 +466,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       <svg width="88" height="88" viewBox="0 0 110 110">
         <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="10"/>
         <circle cx="55" cy="55" r="46" fill="none" stroke="#1a7ff0" stroke-width="10"
-          stroke-dasharray="289.02" stroke-dashoffset="152.71" stroke-linecap="round" transform="rotate(-90 55 55)"/>
+          stroke-dasharray="289.02" stroke-dashoffset="153.98" stroke-linecap="round" transform="rotate(-90 55 55)"/>
         <text x="55" y="50" text-anchor="middle" font-size="22" font-weight="900" fill="white" dy=".3em">47</text>
         <text x="55" y="68" text-anchor="middle" font-size="11" fill="rgba(255,255,255,.4)">/100</text>
       </svg>
     </div>
     <div>
-      <h3>Solid market with good fundamentals. The data supports a purchase decision.</h3>
-      <p>Graham County ranks #1,932 of 2,820 scored US counties (top 69%). Strongest dimensions: Pop. Momentum (73/100), Market Dynamics (67/100). Weakest: Physical Risk (33/100).</p>
+      <h3>Improving fundamentals with early-mover upside. Demand is building ahead of prices.</h3>
+      <p>Graham County ranks #1,887 of 2,820 scored US counties (top 67%). Strongest dimensions: Pop. Momentum (73/100), Market Dynamics (71/100). Weakest: Physical Risk (31/100).</p>
       <div class="sbb-items">
         <div class="sbb-item">
           <div class="sbb-name">Affordability</div>
-          <div class="sbb-val">35<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">32<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">25% wt</div>
         </div>
         <div class="sbb-item">
@@ -484,17 +487,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         </div>
         <div class="sbb-item">
           <div class="sbb-name">Market Dynamics</div>
-          <div class="sbb-val">67<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">71<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">20% wt</div>
         </div>
         <div class="sbb-item">
           <div class="sbb-name">Quality of Place</div>
-          <div class="sbb-val">38<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">36<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">15% wt</div>
         </div>
         <div class="sbb-item">
           <div class="sbb-name">Physical Risk</div>
-          <div class="sbb-val">33<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">31<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">12% wt</div>
         </div>
         <div class="sbb-item">
@@ -524,9 +527,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     </div>
   </div>
 
-  <div class="signal sig-green">
-    <div class="icon">✅</div>
-    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> Graham County is a <strong>buy</strong>. Solid fundamentals support a purchase decision. The data and the direction are broadly aligned. Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
+  <div class="signal sig-yellow">
+    <div class="icon">👀</div>
+    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> Graham County is a <strong>emerging</strong>. Early-mover opportunity. Fundamentals are building — monitor closely before committing. Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
   </div>
 
   </div></div></div>
@@ -750,12 +753,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="card">
       <div class="card-title"><span class="ct-icon">🛡️</span> Safety · FBI NIBRS 2024</div>
       <div class="g2" style="gap:10px;margin-bottom:12px;">
-        <div class="sb"><div class="sb-val">600</div><div class="sb-lbl">Violent Crime / 100k residents</div><div class="sb-delta down">vs ~380 national est.</div></div>
+        <div class="sb"><div class="sb-val">157</div><div class="sb-lbl">Violent Crime / 100k residents</div><div class="sb-delta up">vs ~380 national est.</div></div>
         <div class="sb"><div class="sb-val">14.2</div><div class="sb-lbl">Establishments / 1,000 residents</div><div class="sb-delta flat">Census CBP 2022 · Amenity density</div></div>
       </div>
-      <div class="signal sig-red">
-        <div class="icon">⚠️</div>
-        <div class="body">Violent crime rate of 600 per 100k is above the national estimate of ~380. Source: FBI NIBRS 2024 National Master File (237 reported offenses).</div>
+      <div class="signal sig-green">
+        <div class="icon">✅</div>
+        <div class="body">Violent crime rate of 157 per 100k is well below the national estimate of ~380. Source: FBI NIBRS 2024 National Master File (58 reported offenses).</div>
       </div>
     </div>
   </div>
@@ -780,7 +783,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">⚠️</span> Physical Risk Matrix · FEMA NFIP + NOAA + USFS</div>
-    <div class="card-intro">Risk is scored relative to all 2,820 counties. Physical Risk dimension score: 33/100 (higher = safer).</div>
+    <div class="card-intro">Risk is scored relative to all 2,820 counties. Physical Risk dimension score: 31/100 (higher = safer).</div>
 
     <div class="risk-matrix">
       <div class="rm-card">
@@ -823,7 +826,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
     <div class="signal sig-red" style="margin-top:16px;">
       <div class="icon">⚠️</div>
-      <div class="body"><strong>Physical Risk Summary:</strong> This county scores 33/100 on the Civica Physical Risk dimension (higher = safer). One or more natural hazard categories are above the national median. Review your homeowners insurance quotes carefully before closing. Data: FEMA NFIP paid claims, NOAA Storm Events 2019–2023, USFS Wildfire Risk to Communities.</div>
+      <div class="body"><strong>Physical Risk Summary:</strong> This county scores 31/100 on the Civica Physical Risk dimension (higher = safer). One or more natural hazard categories are above the national median. Review your homeowners insurance quotes carefully before closing. Data: FEMA NFIP paid claims, NOAA Storm Events 2019–2023, USFS Wildfire Risk to Communities.</div>
     </div>
   </div>
 
@@ -859,43 +862,43 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
             <td class="flat">6.2 yrs</td>
             <td class="up">+7.1%</td>
             <td class="up">+111</td>
-            <td><span class="tag tag-g">BUY</span></td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
           <tr>
-            <td class="cn">Russell County, AL</td>
+            <td class="cn">Blount County, AL</td>
             <td><strong>47</strong></td>
             <td class="up">15.1x</td>
-            <td class="down">13.7 yrs</td>
-            <td class="up">+4.8%</td>
-            <td class="up">+5</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td class="down">13.6 yrs</td>
+            <td class="up">+3.9%</td>
+            <td class="up">+62</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
 <tr>
-            <td class="cn">Mille Lacs County, MN</td>
+            <td class="cn">Walton County, FL</td>
             <td><strong>47</strong></td>
-            <td class="flat">23.0x</td>
-            <td class="flat">5.3 yrs</td>
-            <td class="up">+3.8%</td>
-            <td class="down">-21</td>
-            <td><span class="tag tag-g">BUY</span></td>
+            <td class="down">40.2x</td>
+            <td class="up">3.6 yrs</td>
+            <td class="up">+3.4%</td>
+            <td class="up">+1,644</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
 <tr>
-            <td class="cn">Lee County, VA</td>
+            <td class="cn">Clayton County, IA</td>
             <td><strong>47</strong></td>
-            <td class="up">10.4x</td>
-            <td class="down">30.0 yrs</td>
-            <td class="up">+6.0%</td>
-            <td class="up">+31</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td class="down">24.6x</td>
+            <td class="flat">5.0 yrs</td>
+            <td class="up">+5.1%</td>
+            <td class="down">-44</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
 <tr>
-            <td class="cn">Franklin County, ME</td>
+            <td class="cn">Tyler County, TX</td>
             <td><strong>47</strong></td>
-            <td class="flat">18.2x</td>
-            <td class="down">7.7 yrs</td>
-            <td class="up">+6.7%</td>
-            <td class="up">+179</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td class="up">13.7x</td>
+            <td class="down">25.9 yrs</td>
+            <td class="up">+6.4%</td>
+            <td class="up">+45</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
         </tbody>
       </table>

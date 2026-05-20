@@ -66,11 +66,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .verdict-badge { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
 .vb-label { font-size:10px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.08em; }
 .vb-pill { font-size:13px; font-weight:800; padding:8px 18px; border-radius:100px; }
-.vb-strongbuy { background:#16a34a; color:#fff; }
-.vb-buy       { background:#1a7ff0; color:#fff; }
-.vb-watch     { background:#f59e0b; color:#fff; }
-.vb-caution   { background:#f97316; color:#fff; }
-.vb-avoid     { background:#dc2626; color:#fff; }
+.vb-accelerating { background:#16a34a; color:#fff; }
+.vb-peaking      { background:#22c55e; color:#fff; }
+.vb-established  { background:#1a7ff0; color:#fff; }
+.vb-emerging     { background:#8b5cf6; color:#fff; }
+.vb-frontier     { background:#f59e0b; color:#fff; }
+.vb-turning      { background:#f97316; color:#fff; }
+.vb-speculative  { background:#ef4444; color:#fff; }
+.vb-avoid        { background:#dc2626; color:#fff; }
 .vb-score { font-size:11px; color:rgba(255,255,255,.5); text-align:right; margin-top:2px; }
 
 /* SCORE RING */
@@ -397,11 +400,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <h1 style="font-size:36px;font-weight:900;color:#fff;margin:10px 0 16px;line-height:1.05;">Alaska</h1>
     <div class="sp-stat-row" style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:18px;">
       <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#fff;">18</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Counties Scored</div></div>
-      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#1a7ff0;">47.1</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Median Score</div></div>
-      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#4ade80;">62.2</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top County Score</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#1a7ff0;">45.1</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Median Score</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#4ade80;">63.3</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top County Score</div></div>
       <div><div class="sp-stat-top" style="font-size:15px;font-weight:800;color:#fff;max-width:160px;">Anchorage Municipality</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top Ranked County</div></div>
     </div>
-    <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.7;"><strong>6</strong> Watch &nbsp;·&nbsp; <strong>4</strong> Caution &nbsp;·&nbsp; <strong>1</strong> Buy &nbsp;·&nbsp; <strong>7</strong> Avoid</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.7;"><strong>1</strong> Peaking &nbsp;·&nbsp; <strong>6</strong> Emerging &nbsp;·&nbsp; <strong>8</strong> Frontier &nbsp;·&nbsp; <strong>2</strong> Turning &nbsp;·&nbsp; <strong>1</strong> Speculative</div>
   </div>
 </div>
 
@@ -424,199 +427,199 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         <tbody><tr onclick="window.location='../counties/02020.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">1</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Anchorage Municipality</div>
-              <div style="font-size:11px;color:#98989d;">#58 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#105 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">62</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">62.2</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">63</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">63.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">PEAKING</span></td>
           <td style="text-align:right;font-weight:600;">$426,479</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.0%</td>
           <td style="text-align:right;" class="col-wage">$69,385</td>
-        </tr><tr onclick="window.location='../counties/02122.html'" style="cursor:pointer;">
+        </tr><tr onclick="window.location='../counties/02090.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">2</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Kenai Peninsula Borough</div>
-              <div style="font-size:11px;color:#98989d;">#675 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">55</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">54.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$339,500</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.7%</td>
-          <td style="text-align:right;" class="col-wage">$56,674</td>
-        </tr><tr onclick="window.location='../counties/02220.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">3</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Sitka City and Borough</div>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Fairbanks North Star Borough</div>
               <div style="font-size:11px;color:#98989d;">#808 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">54</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">53.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$478,739</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.3%</td>
-          <td style="text-align:right;" class="col-wage">$61,197</td>
-        </tr><tr onclick="window.location='../counties/02090.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">4</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Fairbanks North Star Borough</div>
-              <div style="font-size:11px;color:#98989d;">#815 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">54</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">53.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">54.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
           <td style="text-align:right;font-weight:600;">$305,490</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+4.7%</td>
           <td style="text-align:right;" class="col-wage">$63,551</td>
-        </tr><tr onclick="window.location='../counties/02170.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">5</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Matanuska-Susitna Borough</div>
-              <div style="font-size:11px;color:#98989d;">#885 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/02122.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">3</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Kenai Peninsula Borough</div>
+              <div style="font-size:11px;color:#98989d;">#840 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">53</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">53.2</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">54</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">54.1</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$339,500</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.7%</td>
+          <td style="text-align:right;" class="col-wage">$56,674</td>
+        </tr><tr onclick="window.location='../counties/02170.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">4</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Matanuska-Susitna Borough</div>
+              <div style="font-size:11px;color:#98989d;">#842 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">54</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">54.1</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
           <td style="text-align:right;font-weight:600;">$402,782</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.2%</td>
           <td style="text-align:right;" class="col-wage">$53,506</td>
+        </tr><tr onclick="window.location='../counties/02220.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">5</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Sitka City and Borough</div>
+              <div style="font-size:11px;color:#98989d;">#1104 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">52</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">52.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$478,739</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.3%</td>
+          <td style="text-align:right;" class="col-wage">$61,197</td>
         </tr><tr onclick="window.location='../counties/02110.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">6</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Juneau City and Borough</div>
-              <div style="font-size:11px;color:#98989d;">#1084 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#1185 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">52</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">52.0</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">51.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
           <td style="text-align:right;font-weight:600;">$471,906</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+4.2%</td>
           <td style="text-align:right;" class="col-wage">$61,297</td>
         </tr><tr onclick="window.location='../counties/02063.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">7</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Chugach Census Area</div>
-              <div style="font-size:11px;color:#98989d;">#1531 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">50</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">49.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$75,698</td>
-        </tr><tr onclick="window.location='../counties/02130.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">8</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Ketchikan Gateway Borough</div>
-              <div style="font-size:11px;color:#98989d;">#1704 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#1533 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">49.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$357,014</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$75,698</td>
+        </tr><tr onclick="window.location='../counties/02185.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">8</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">North Slope Borough</div>
+              <div style="font-size:11px;color:#98989d;">#2050 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.1</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$309,757</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$137,954</td>
+        </tr><tr onclick="window.location='../counties/02240.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">9</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Southeast Fairbanks Census Area</div>
+              <div style="font-size:11px;color:#98989d;">#2053 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.1</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$289,625</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$90,339</td>
+        </tr><tr onclick="window.location='../counties/02130.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">10</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Ketchikan Gateway Borough</div>
+              <div style="font-size:11px;color:#98989d;">#2113 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.7</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
           <td style="text-align:right;font-weight:600;">$398,188</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+3.5%</td>
           <td style="text-align:right;" class="col-wage">$56,265</td>
         </tr><tr onclick="window.location='../counties/02016.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">9</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">11</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Aleutians West Census Area</div>
-              <div style="font-size:11px;color:#98989d;">#1949 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2470 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">47</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.1</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">41</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">41.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$357,014</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
           <td style="text-align:right;" class="col-wage">$86,102</td>
-        </tr><tr onclick="window.location='../counties/02240.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">10</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Southeast Fairbanks Census Area</div>
-              <div style="font-size:11px;color:#98989d;">#1975 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">47</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.9</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$289,625</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$90,339</td>
-        </tr><tr onclick="window.location='../counties/02198.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">11</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Prince of Wales-Hyder Census Area</div>
-              <div style="font-size:11px;color:#98989d;">#2226 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.1</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$50,795</td>
-        </tr><tr onclick="window.location='../counties/02185.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">12</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">North Slope Borough</div>
-              <div style="font-size:11px;color:#98989d;">#2348 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">44</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.0</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$309,757</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$137,954</td>
         </tr><tr onclick="window.location='../counties/02290.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">13</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">12</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Yukon-Koyukuk Census Area</div>
-              <div style="font-size:11px;color:#98989d;">#2477 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2508 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">42.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">41</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">40.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$357,014</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
           <td style="text-align:right;" class="col-wage">$59,521</td>
-        </tr><tr onclick="window.location='../counties/02188.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">14</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Northwest Arctic Borough</div>
-              <div style="font-size:11px;color:#98989d;">#2530 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/02198.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">13</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Prince of Wales-Hyder Census Area</div>
+              <div style="font-size:11px;color:#98989d;">#2525 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">42</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">42.1</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">40</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">40.5</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$357,014</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$97,190</td>
+          <td style="text-align:right;" class="col-wage">$50,795</td>
         </tr><tr onclick="window.location='../counties/02180.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">15</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">14</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Nome Census Area</div>
-              <div style="font-size:11px;color:#98989d;">#2551 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2539 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">42</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">41.8</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">40</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">40.2</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$357,014</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
           <td style="text-align:right;" class="col-wage">$78,106</td>
-        </tr><tr onclick="window.location='../counties/02050.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">16</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Bethel Census Area</div>
-              <div style="font-size:11px;color:#98989d;">#2692 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">39</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">38.9</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$58,988</td>
         </tr><tr onclick="window.location='../counties/02150.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">17</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">15</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Kodiak Island Borough</div>
-              <div style="font-size:11px;color:#98989d;">#2702 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2624 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">39</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">38.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">38.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
           <td style="text-align:right;font-weight:600;">$401,636</td>
           <td style="text-align:right;font-weight:600;color:#dc2626;">+1.4%</td>
           <td style="text-align:right;" class="col-wage">$61,852</td>
+        </tr><tr onclick="window.location='../counties/02050.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">16</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Bethel Census Area</div>
+              <div style="font-size:11px;color:#98989d;">#2735 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">36</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">35.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
+          <td style="text-align:right;font-weight:600;">$357,014</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$58,988</td>
+        </tr><tr onclick="window.location='../counties/02188.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">17</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Northwest Arctic Borough</div>
+              <div style="font-size:11px;color:#98989d;">#2767 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">34</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">34.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
+          <td style="text-align:right;font-weight:600;">$357,014</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$97,190</td>
         </tr><tr onclick="window.location='../counties/02158.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">18</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Kusilvak Census Area</div>
-              <div style="font-size:11px;color:#98989d;">#2819 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2810 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">27</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">27.1</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">29</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">29.1</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">SPECULATIVE</span></td>
+          <td style="text-align:right;font-weight:600;">$357,014</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
           <td style="text-align:right;" class="col-wage">$42,395</td>
         </tr></tbody>

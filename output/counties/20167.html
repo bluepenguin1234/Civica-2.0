@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Russell County, KS Housing Market Score — Civica Research</title>
-<meta name="description" content="Russell County, KS scores 50/100 on Civica's 6-dimension housing model. Signal: WATCH. Median home value $117,005. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
+<meta name="description" content="Russell County, KS scores 50/100 on Civica's 6-dimension housing model. Signal: EMERGING. Median home value $117,005. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
 <meta property="og:title" content="Russell County, KS Housing Market — Civica">
-<meta property="og:description" content="Russell County, KS scores 50/100 on Civica's 6-dimension housing model. Signal: WATCH. Median home value $117,005. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
+<meta property="og:description" content="Russell County, KS scores 50/100 on Civica's 6-dimension housing model. Signal: EMERGING. Median home value $117,005. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.">
 <meta property="og:url" content="https://civica.app/output/counties/20167.html">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://civica.app/og_image.png">
@@ -17,7 +17,7 @@
 <link rel="canonical" href="https://civica.app/output/counties/20167.html">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Dataset","name":"Russell County, KS Housing Market Analysis","description":"Russell County, KS scores 50/100 on Civica's 6-dimension housing model. Signal: WATCH. Median home value $117,005. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.","url":"https://civica.app/output/counties/20167.html"}
+{"@context":"https://schema.org","@type":"Dataset","name":"Russell County, KS Housing Market Analysis","description":"Russell County, KS scores 50/100 on Civica's 6-dimension housing model. Signal: EMERGING. Median home value $117,005. See affordability, economic vitality, market dynamics, risk, and 5-year price scenarios.","url":"https://civica.app/output/counties/20167.html"}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://civica.app/"},{"@type":"ListItem","position":2,"name":"KS Counties","item":"https://civica.app/output/states/KS.html"},{"@type":"ListItem","position":3,"name":"Russell County","item":"https://civica.app/output/counties/20167.html"}]}
@@ -70,11 +70,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .verdict-badge { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
 .vb-label { font-size:10px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.08em; }
 .vb-pill { font-size:13px; font-weight:800; padding:8px 18px; border-radius:100px; }
-.vb-strongbuy { background:#16a34a; color:#fff; }
-.vb-buy       { background:#1a7ff0; color:#fff; }
-.vb-watch     { background:#f59e0b; color:#fff; }
-.vb-caution   { background:#f97316; color:#fff; }
-.vb-avoid     { background:#dc2626; color:#fff; }
+.vb-accelerating { background:#16a34a; color:#fff; }
+.vb-peaking      { background:#22c55e; color:#fff; }
+.vb-established  { background:#1a7ff0; color:#fff; }
+.vb-emerging     { background:#8b5cf6; color:#fff; }
+.vb-frontier     { background:#f59e0b; color:#fff; }
+.vb-turning      { background:#f97316; color:#fff; }
+.vb-speculative  { background:#ef4444; color:#fff; }
+.vb-avoid        { background:#dc2626; color:#fff; }
 .vb-score { font-size:11px; color:rgba(255,255,255,.5); text-align:right; margin-top:2px; }
 
 /* SCORE RING */
@@ -425,17 +428,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <svg viewBox="0 0 110 110">
             <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="9"/>
             <circle cx="55" cy="55" r="46" fill="none" stroke="#1a7ff0" stroke-width="9"
-              stroke-dasharray="289.02" stroke-dashoffset="144.39" stroke-linecap="round"/>
+              stroke-dasharray="289.02" stroke-dashoffset="144.02" stroke-linecap="round"/>
           </svg>
           <div class="sh-num">50</div>
           <div class="sh-denom">/100</div>
         </div>
-        <div class="sh-grade">Top 52% Nationally</div>
+        <div class="sh-grade">Top 50% Nationally</div>
       </div>
       <div class="verdict-badge" style="padding-top:4px;">
         <div class="vb-label">Civica Signal</div>
-        <div class="vb-pill vb-watch">WATCH</div>
-        <div class="vb-score">Score 50.0 · Mixed signals — monitor before committing</div>
+        <div class="vb-pill vb-emerging">EMERGING</div>
+        <div class="vb-score">Score 50.2 · Building momentum — early-mover window</div>
       </div>
       <button class="cmp-btn" id="compareBtn" onclick="toggleCompare()">+ Compare</button>
     </div>
@@ -445,7 +448,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="hero-pill"><span class="hp-lbl">Monthly Cost</span><span class="hp-val hp-white">$789/mo</span></div>
     <div class="hero-pill"><span class="hp-lbl">Home Value</span><span class="hp-val hp-white">$117,005</span></div>
     <div class="hero-pill"><span class="hp-lbl">Appreciation</span><span class="hp-val hp-yellow">+9.8%/yr</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Breakeven</span><span class="hp-val hp-red">30.0 yrs</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Breakeven</span><span class="hp-val hp-green">0.0 yrs</span></div>
     <div class="hero-pill"><span class="hp-lbl">Net Migration</span><span class="hp-val hp-red">-19 HH</span></div>
     <div class="hero-pill"><span class="hp-lbl">P/R Ratio</span><span class="hp-val hp-green">11.1x</span></div>
   </div>
@@ -463,18 +466,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       <svg width="88" height="88" viewBox="0 0 110 110">
         <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="10"/>
         <circle cx="55" cy="55" r="46" fill="none" stroke="#1a7ff0" stroke-width="10"
-          stroke-dasharray="289.02" stroke-dashoffset="144.39" stroke-linecap="round" transform="rotate(-90 55 55)"/>
+          stroke-dasharray="289.02" stroke-dashoffset="144.02" stroke-linecap="round" transform="rotate(-90 55 55)"/>
         <text x="55" y="50" text-anchor="middle" font-size="22" font-weight="900" fill="white" dy=".3em">50</text>
         <text x="55" y="68" text-anchor="middle" font-size="11" fill="rgba(255,255,255,.4)">/100</text>
       </svg>
     </div>
     <div>
-      <h3>Mixed or shifting signals. Conditions worth monitoring before committing.</h3>
-      <p>Russell County ranks #1,457 of 2,820 scored US counties (top 52%). Strongest dimensions: Market Dynamics (67/100), Affordability (60/100). Weakest: Physical Risk (31/100).</p>
+      <h3>Improving fundamentals with early-mover upside. Demand is building ahead of prices.</h3>
+      <p>Russell County ranks #1,411 of 2,820 scored US counties (top 50%). Strongest dimension: Affordability (81/100), Pop. Momentum (46/100). Weakest: Physical Risk (31/100).</p>
       <div class="sbb-items">
         <div class="sbb-item">
           <div class="sbb-name">Affordability</div>
-          <div class="sbb-val">60<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">81<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">25% wt</div>
         </div>
         <div class="sbb-item">
@@ -484,12 +487,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         </div>
         <div class="sbb-item">
           <div class="sbb-name">Market Dynamics</div>
-          <div class="sbb-val">67<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">46<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">20% wt</div>
         </div>
         <div class="sbb-item">
           <div class="sbb-name">Quality of Place</div>
-          <div class="sbb-val">43<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
+          <div class="sbb-val">37<span style="font-size:10px;color:rgba(255,255,255,.35)">/100</span></div>
           <div class="sbb-wt">15% wt</div>
         </div>
         <div class="sbb-item">
@@ -509,16 +512,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="card">
       <div class="card-title"><span class="ct-icon">✅</span> Bull Case — Why This Works</div>
       <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.55;color:var(--subtext);">
-        <div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">1.</span><div><strong>Housing market has sustained momentum.</strong> FHFA 3-year average appreciation of +9.8%/yr with 5 units permitted — demand signal is consistent.</div></div>
-<div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">2.</span><div><strong>Affordable relative to national peers.</strong> P/R ratio of 11.1x with a 30.0-year buy-rent breakeven is a strong value signal.</div></div>
+        <div style="display:flex;gap:10px;"><span style="color:var(--green);font-weight:700;flex-shrink:0;">1.</span><div><strong>Affordable relative to national peers.</strong> P/R ratio of 11.1x with a 0.0-year buy-rent breakeven is a strong value signal.</div></div>
       </div>
     </div>
     <div class="card">
       <div class="card-title"><span class="ct-icon">⚠️</span> Bear Case — What Could Go Wrong</div>
       <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.55;color:var(--subtext);">
         <div style="display:flex;gap:10px;"><span style="color:var(--red);font-weight:700;flex-shrink:0;">1.</span><div><strong>Elevated natural hazard exposure.</strong> Flood, storm, or wildfire risk is above the national median. Homeowners insurance costs may be materially above national average.</div></div>
-<div style="display:flex;gap:10px;"><span style="color:var(--red);font-weight:700;flex-shrink:0;">2.</span><div><strong>Weak economic foundation.</strong> Below-median wages and 19.7% income growth over 4 years suggest limited buyer pool expansion.</div></div>
-<div style="display:flex;gap:10px;"><span style="color:var(--red);font-weight:700;flex-shrink:0;">3.</span><div><strong>Below-average quality of place metrics.</strong> Crime rate, urban access, or amenity density scores are below the national median for similarly-sized counties.</div></div>
+<div style="display:flex;gap:10px;"><span style="color:var(--red);font-weight:700;flex-shrink:0;">2.</span><div><strong>Below-average quality of place metrics.</strong> Crime rate, urban access, or amenity density scores are below the national median for similarly-sized counties.</div></div>
+<div style="display:flex;gap:10px;"><span style="color:var(--red);font-weight:700;flex-shrink:0;">3.</span><div><strong>Weak economic foundation.</strong> Below-median wages and 19.7% income growth over 4 years suggest limited buyer pool expansion.</div></div>
         <div style="display:flex;gap:10px;"><span style="color:var(--red);font-weight:700;flex-shrink:0;">4.</span><div><strong style="color:var(--text);">Rate sensitivity.</strong> Stress-test your monthly budget at 8.5% before committing. A 150bps rate increase adds roughly $98/mo to carrying cost.</div></div>
       </div>
     </div>
@@ -526,7 +528,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
   <div class="signal sig-yellow">
     <div class="icon">👀</div>
-    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> Russell County is a <strong>watch</strong>. Conditions are mixed or shifting. Do not rush — monitor for 1–2 quarters before committing capital. Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
+    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> Russell County is a <strong>emerging</strong>. Early-mover opportunity. Fundamentals are building — monitor closely before committing. Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
   </div>
 
   </div></div></div>
@@ -543,7 +545,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="g4" style="margin-bottom:20px;">
       <div class="sb"><div class="sb-val">11.1x</div><div class="sb-lbl">Price-to-Rent Ratio</div><div class="sb-delta up">✓ Below 18x norm</div></div>
       <div class="sb"><div class="sb-val">1.9x</div><div class="sb-lbl">Price-to-Income Ratio</div><div class="sb-delta up">Per capita income basis · See methodology</div></div>
-      <div class="sb"><div class="sb-val">30.0 yrs</div><div class="sb-lbl">Buy vs. Rent Breakeven</div><div class="sb-delta down">↑ Long — above 7yr caution zone</div></div>
+      <div class="sb"><div class="sb-val">0.0 yrs</div><div class="sb-lbl">Buy vs. Rent Breakeven</div><div class="sb-delta up">↓ Strong — under 4yr threshold</div></div>
       <div class="sb"><div class="sb-val">+9.8%</div><div class="sb-lbl">3yr Avg Appreciation (FHFA)</div><div class="sb-delta flat">Above 7% — froth risk</div></div>
     </div>
 
@@ -577,12 +579,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       <div class="meter-lbl">Breakeven Horizon</div>
       <div style="flex:1;">
         <div class="meter-track">
-          <div class="meter-fill" style="width:100%;background:linear-gradient(to right,#16a34a,#d97706,#dc2626);opacity:.7;"></div>
-          <div class="meter-marker" style="left:100%;"></div>
+          <div class="meter-fill" style="width:0%;background:linear-gradient(to right,#16a34a,#d97706,#dc2626);opacity:.7;"></div>
+          <div class="meter-marker" style="left:0%;"></div>
         </div>
         <div class="meter-vals"><span>0 yrs (buy now)</span><span>4 yrs (fair)</span><span>8+ yrs (avoid)</span></div>
       </div>
-      <div class="meter-val down">30.0 yrs</div>
+      <div class="meter-val up">0.0 yrs</div>
     </div>
 
     <div class="meter-row">
@@ -607,7 +609,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     </div>
     <div class="signal sig-blue" style="margin-top:16px;">
       <div class="icon">💡</div>
-      <div class="body"><strong>How breakeven works:</strong> You pay $1/mo more to own than rent. At 9.8% appreciation, your $117,005 home gains approximately $952/mo in value. After accounting for transaction costs (~11%), the ownership premium is recovered in <strong>30.0 years</strong>. For any hold period beyond that, owning is financially superior to renting in this county — assuming current appreciation continues.</div>
+      <div class="body"><strong>How breakeven works:</strong> You pay $1/mo more to own than rent. At 9.8% appreciation, your $117,005 home gains approximately $952/mo in value. After accounting for transaction costs (~11%), the ownership premium is recovered in <strong>0.0 years</strong>. For any hold period beyond that, owning is financially superior to renting in this county — assuming current appreciation continues.</div>
     </div>
   </div>
 
@@ -750,12 +752,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="card">
       <div class="card-title"><span class="ct-icon">🛡️</span> Safety · FBI NIBRS 2024</div>
       <div class="g2" style="gap:10px;margin-bottom:12px;">
-        <div class="sb"><div class="sb-val">803</div><div class="sb-lbl">Violent Crime / 100k residents</div><div class="sb-delta down">vs ~380 national est.</div></div>
+        <div class="sb"><div class="sb-val">253</div><div class="sb-lbl">Violent Crime / 100k residents</div><div class="sb-delta up">vs ~380 national est.</div></div>
         <div class="sb"><div class="sb-val">36.6</div><div class="sb-lbl">Establishments / 1,000 residents</div><div class="sb-delta flat">Census CBP 2022 · Amenity density</div></div>
       </div>
-      <div class="signal sig-red">
-        <div class="icon">⚠️</div>
-        <div class="body">Violent crime rate of 803 per 100k is above the national estimate of ~380. Source: FBI NIBRS 2024 National Master File (54 reported offenses).</div>
+      <div class="signal sig-green">
+        <div class="icon">✅</div>
+        <div class="body">Violent crime rate of 253 per 100k is well below the national estimate of ~380. Source: FBI NIBRS 2024 National Master File (17 reported offenses).</div>
       </div>
     </div>
   </div>
@@ -787,7 +789,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         <div class="rm-icon">🌊</div>
         <div class="rm-name">Flood Risk</div>
         <div class="rm-prob">NFIP claims per capita (10yr avg)</div>
-        <div class="rm-impact impact-med">MODERATE — $15.58/capita avg annual claims</div>
+        <div class="rm-impact impact-med">MODERATE — $12.36/capita avg annual claims</div>
       </div>
       <div class="rm-card">
         <div class="rm-icon">🌪️</div>
@@ -856,46 +858,46 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
             <td class="cn">Russell County, KS ★</td>
             <td><strong>50</strong></td>
             <td class="up">11.1x</td>
-            <td class="down">30.0 yrs</td>
+            <td class="up">0.0 yrs</td>
             <td class="flat">+9.8%</td>
             <td class="down">-19</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
           <tr>
-            <td class="cn">Osage County, OK</td>
+            <td class="cn">Dickinson County, IA</td>
             <td><strong>50</strong></td>
-            <td class="up">14.6x</td>
-            <td class="down">15.9 yrs</td>
-            <td class="up">+6.3%</td>
-            <td class="up">+238</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td class="down">29.0x</td>
+            <td class="flat">4.3 yrs</td>
+            <td class="flat">+9.3%</td>
+            <td class="down">-27</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
 <tr>
-            <td class="cn">Evans County, GA</td>
+            <td class="cn">Price County, WI</td>
             <td><strong>50</strong></td>
-            <td class="up">15.2x</td>
-            <td class="down">13.1 yrs</td>
-            <td class="flat">+16.7%</td>
-            <td class="up">+68</td>
-            <td><span class="tag tag-g">BUY</span></td>
+            <td class="up">17.8x</td>
+            <td class="down">8.1 yrs</td>
+            <td class="up">+7.0%</td>
+            <td class="up">+22</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
 <tr>
-            <td class="cn">Washington County, MS</td>
+            <td class="cn">Iberville Parish, LA</td>
             <td><strong>50</strong></td>
-            <td class="up">5.7x</td>
-            <td class="down">30.0 yrs</td>
-            <td class="up">+5.2%</td>
-            <td class="down">-380</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td class="up">16.7x</td>
+            <td class="down">9.5 yrs</td>
+            <td class="up">+3.8%</td>
+            <td class="down">-58</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
 <tr>
-            <td class="cn">Winona County, MN</td>
+            <td class="cn">Wayne County, GA</td>
             <td><strong>50</strong></td>
-            <td class="flat">21.6x</td>
-            <td class="flat">5.8 yrs</td>
-            <td class="up">+6.1%</td>
-            <td class="down">-64</td>
-            <td><span class="tag tag-y">WATCH</span></td>
+            <td class="up">17.3x</td>
+            <td class="down">8.7 yrs</td>
+            <td class="up">+5.1%</td>
+            <td class="up">+182</td>
+            <td><span class="tag tag-y">EMERGING</span></td>
           </tr>
         </tbody>
       </table>

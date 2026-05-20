@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Civica — Product Walkthrough</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:  #0d2d52;
+  --blue:  #1a7ff0;
+  --green: #16a34a;
+  --red:   #dc2626;
+  --amber: #d97706;
+  --bg:    #f5f7fa;
+  --card:  #ffffff;
+  --border: rgba(0,0,0,.09);
+  --muted: #6b7280;
+  --text:  #1f2937;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+/* ── NAV ── */
+.top-nav { background: var(--navy); color: #fff; padding: 18px 48px; display: flex; align-items: center; gap: 16px; }
+.top-nav .logo { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: -.3px; }
+.top-nav .logo em { font-style: normal; color: var(--blue); }
+.top-nav .tag { font-size: 11px; font-weight: 700; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 100px; padding: 4px 12px; color: rgba(255,255,255,.7); letter-spacing: .06em; text-transform: uppercase; }
+.top-nav .date { margin-left: auto; font-size: 12px; color: rgba(255,255,255,.45); }
+
+/* ── COVER ── */
+.cover { background: linear-gradient(160deg, #060f1e 0%, #091f3a 45%, #0d2d52 100%); color: #fff; padding: 80px 48px; text-align: center; }
+.cover-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 20px; }
+.cover h1 { font-size: 52px; font-weight: 900; line-height: 1.05; letter-spacing: -.8px; margin-bottom: 24px; }
+.cover h1 span { color: var(--blue); }
+.cover-sub { font-size: 17px; color: rgba(255,255,255,.65); line-height: 1.7; max-width: 640px; margin: 0 auto 40px; }
+.cover-pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.cover-pill { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 100px; padding: 8px 20px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,.8); }
+
+/* ── TOC ── */
+.toc { background: var(--card); max-width: 800px; margin: 48px auto; border-radius: 16px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+.toc-header { background: var(--navy); color: #fff; padding: 20px 28px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; }
+.toc-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 6px; }
+.toc-item { display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 10px; text-decoration: none; color: var(--text); transition: background .15s; }
+.toc-item:hover { background: #f0f4ff; }
+.toc-num { font-size: 12px; font-weight: 800; color: var(--blue); min-width: 24px; }
+.toc-title { font-size: 14px; font-weight: 600; }
+.toc-desc { font-size: 12px; color: var(--muted); margin-left: auto; }
+
+/* ── PAGE SECTIONS ── */
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 32px 80px; }
+.section { margin-bottom: 72px; }
+.section-header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 2px solid var(--navy); }
+.section-num { font-size: 48px; font-weight: 900; color: var(--navy); line-height: 1; opacity: .15; flex-shrink: 0; }
+.section-meta { flex: 1; }
+.section-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--blue); margin-bottom: 6px; }
+.section-title { font-size: 28px; font-weight: 900; color: var(--navy); line-height: 1.15; margin-bottom: 8px; }
+.section-desc { font-size: 15px; color: var(--muted); line-height: 1.65; }
+
+/* ── SCREENSHOT BLOCKS ── */
+.screenshot-block { background: var(--card); border-radius: 14px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+.screenshot-caption { background: var(--navy); color: rgba(255,255,255,.7); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 10px 18px; }
+.screenshot-img { display: block; width: 100%; border-bottom: 1px solid var(--border); }
+
+/* ── ANNOTATION GRID ── */
+.ann-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 20px; }
+@media(max-width:640px){ .ann-grid { grid-template-columns: 1fr; } }
+.ann-item { display: flex; gap: 12px; align-items: flex-start; background: #f8fafc; border-radius: 10px; padding: 14px; border: 1px solid #e5e7eb; }
+.ann-badge { font-size: 11px; font-weight: 800; background: var(--navy); color: #fff; border-radius: 6px; padding: 3px 8px; flex-shrink: 0; white-space: nowrap; }
+.ann-badge.green { background: var(--green); }
+.ann-badge.red   { background: var(--red); }
+.ann-badge.amber { background: var(--amber); }
+.ann-badge.blue  { background: var(--blue); }
+.ann-content {}
+.ann-label { font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+.ann-source { font-size: 11px; color: var(--blue); font-weight: 600; margin-bottom: 4px; }
+.ann-body { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── CALLOUT BOXES ── */
+.callout { border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; display: flex; gap: 14px; align-items: flex-start; }
+.callout-green  { background: #f0fdf4; border: 1px solid #bbf7d0; }
+.callout-blue   { background: #eff6ff; border: 1px solid #bfdbfe; }
+.callout-amber  { background: #fffbeb; border: 1px solid #fde68a; }
+.callout-red    { background: #fef2f2; border: 1px solid #fecaca; }
+.callout .icon  { font-size: 22px; flex-shrink: 0; }
+.callout-body   { font-size: 14px; line-height: 1.6; }
+.callout-green  .callout-body { color: #14532d; }
+.callout-blue   .callout-body { color: #1e3a5f; }
+.callout-amber  .callout-body { color: #78350f; }
+.callout-red    .callout-body { color: #7f1d1d; }
+
+/* ── COUNTY SCORECARD ── */
+.county-header { background: linear-gradient(160deg, #060f1e 0%, #091f3a 100%); color: #fff; border-radius: 14px; padding: 28px; margin-bottom: 20px; }
+.county-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+.county-name { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+.county-sub { font-size: 13px; color: rgba(255,255,255,.5); }
+.county-score { text-align: center; }
+.county-score-num { font-size: 44px; font-weight: 900; line-height: 1; }
+.county-score-denom { font-size: 14px; color: rgba(255,255,255,.4); }
+.county-badge { display: inline-block; font-size: 12px; font-weight: 800; border-radius: 100px; padding: 6px 16px; margin-top: 8px; }
+.badge-acc   { background: #16a34a; color: #fff; }
+.badge-peak  { background: #059669; color: #fff; }
+.badge-est   { background: #2563eb; color: #fff; }
+.badge-emg   { background: #7c3aed; color: #fff; }
+.badge-avoid { background: #dc2626; color: #fff; }
+.badge-watch { background: #d97706; color: #fff; }
+
+.dim-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.dim-item { background: rgba(255,255,255,.1); border-radius: 10px; padding: 12px; text-align: center; }
+.dim-name { font-size: 9px; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+.dim-val  { font-size: 20px; font-weight: 900; color: #fff; }
+.dim-wt   { font-size: 10px; color: rgba(255,255,255,.3); }
+
+.hero-pills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.hp2 { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 10px 12px; }
+.hp2-lbl { font-size: 9px; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+.hp2-val { font-size: 14px; font-weight: 700; }
+.hp2-src { font-size: 9px; color: rgba(255,255,255,.35); margin-top: 3px; }
+
+/* ── COMPARISON TABLE ── */
+.comp-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+.comp-table thead { background: var(--navy); color: rgba(255,255,255,.7); }
+.comp-table th { padding: 12px 14px; text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.comp-table th:not(:first-child) { text-align: center; }
+.comp-table td { padding: 11px 14px; border-top: 1px solid #f3f4f6; }
+.comp-table td:not(:first-child) { text-align: center; font-weight: 600; }
+.comp-table .hl { background: #eff6ff; }
+.comp-table .hl td:first-child { font-weight: 800; color: var(--navy); }
+.val-green { color: var(--green); }
+.val-red   { color: var(--red); }
+.val-amber { color: var(--amber); }
+
+/* ── DATA SOURCES TABLE ── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; }
+.data-table thead { background: #f8fafc; }
+.data-table th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+.data-table td { padding: 10px 14px; border-top: 1px solid #f3f4f6; vertical-align: top; }
+.data-table tr:first-child td { border-top: none; }
+
+/* ── DIM BREAKDOWN ── */
+.dim-breakdown { background: var(--card); border-radius: 14px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 20px; }
+.dim-breakdown-header { background: #f8fafc; padding: 14px 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.dim-breakdown-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.dim-row { display: flex; align-items: center; gap: 14px; }
+.dim-row-name { font-size: 13px; font-weight: 700; color: var(--navy); width: 180px; flex-shrink: 0; }
+.dim-row-bar-wrap { flex: 1; }
+.dim-row-bar-track { background: #f1f5f9; border-radius: 100px; height: 8px; position: relative; }
+.dim-row-bar-fill  { height: 8px; border-radius: 100px; background: var(--blue); }
+.dim-row-val  { font-size: 14px; font-weight: 800; color: var(--navy); width: 64px; text-align: right; }
+.dim-row-wt   { font-size: 11px; color: var(--muted); width: 56px; text-align: right; }
+
+/* ── FOOTER ── */
+.doc-footer { background: #111827; color: rgba(255,255,255,.4); font-size: 11px; text-align: center; padding: 32px 24px; line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="top-nav">
+  <span class="logo">civi<em>ca</em></span>
+  <span class="tag">Product Walkthrough</span>
+  <span class="date">May 2026 — Confidential</span>
+</div>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-eyebrow">Business Partner Overview</div>
+  <h1>Every number.<br><span>Every source.</span><br>Explained.</h1>
+  <div class="cover-sub">A complete walkthrough of the Civica platform — what every metric means, where the data comes from, and why it matters for homebuyers and business partners evaluating this product.</div>
+  <div class="cover-pills">
+    <span class="cover-pill">2,820 Counties Scored</span>
+    <span class="cover-pill">14 Datasets (13 Federal + Zillow)</span>
+    <span class="cover-pill">6 Research Dimensions</span>
+    <span class="cover-pill">100-Point Composite Score</span>
+    <span class="cover-pill">8 Market Labels</span>
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <div class="toc-header">Table of Contents</div>
+  <div class="toc-body">
+    <a class="toc-item" href="#homepage">
+      <span class="toc-num">01</span>
+      <span class="toc-title">Homepage — Search, Labels &amp; Score Preview</span>
+      <span class="toc-desc">index.html</span>
+    </a>
+    <a class="toc-item" href="#methodology">
+      <span class="toc-num">02</span>
+      <span class="toc-title">Methodology Page — 6 Dimensions Explained</span>
+      <span class="toc-desc">harvard_model.html</span>
+    </a>
+    <a class="toc-item" href="#lake-il">
+      <span class="toc-num">03</span>
+      <span class="toc-title">County Deep-Dive: Lake County, IL — ACCELERATING</span>
+      <span class="toc-desc">#1 Nationally · Score 72.9</span>
+    </a>
+    <a class="toc-item" href="#hamilton-in">
+      <span class="toc-num">04</span>
+      <span class="toc-title">County Deep-Dive: Hamilton County, IN — ACCELERATING</span>
+      <span class="toc-desc">Top 1% · Score 69.5</span>
+    </a>
+    <a class="toc-item" href="#travis-tx">
+      <span class="toc-num">05</span>
+      <span class="toc-title">County Deep-Dive: Travis County, TX — EMERGING</span>
+      <span class="toc-desc">Mixed Signals · Score 49</span>
+    </a>
+    <a class="toc-item" href="#avoid">
+      <span class="toc-num">06</span>
+      <span class="toc-title">County Deep-Dive: Newton County, AR — AVOID</span>
+      <span class="toc-desc">#2,820 of 2,820 · Score 21.4</span>
+    </a>
+    <a class="toc-item" href="#leaderboard">
+      <span class="toc-num">07</span>
+      <span class="toc-title">Leaderboard — Top Markets Ranked</span>
+      <span class="toc-desc">Sortable · Filterable</span>
+    </a>
+    <a class="toc-item" href="#map">
+      <span class="toc-num">08</span>
+      <span class="toc-title">National Map — Geographic Intelligence</span>
+      <span class="toc-desc">Color-coded by score</span>
+    </a>
+    <a class="toc-item" href="#data">
+      <span class="toc-num">09</span>
+      <span class="toc-title">Data Sources — The Complete Picture</span>
+      <span class="toc-desc">14 datasets · $0 cost</span>
+    </a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 1: HOMEPAGE -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="wrap">
+
+<div class="section" id="homepage">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-meta">
+      <div class="section-eyebrow">Homepage</div>
+      <div class="section-title">The Front Door — Search, Labels &amp; Score Preview</div>
+      <div class="section-desc">The homepage introduces Civica's value proposition, presents the 8-label system, and lets users search any of 2,820 US counties. Everything visible here is backed by federal government data.</div>
+    </div>
+  </div>
+
+  <div class="screenshot-block">
+    <div class="screenshot-caption">Homepage — Hero Section &amp; Navigation</div>
+    <img class="screenshot-img" src="walkthrough_01_homepage_hero.png" alt="Homepage hero">
+  </div>
+
+  <div class="callout callout-blue">
+    <span class="icon">🎯</span>
+    <div class="callout-body"><strong>The core promise:</strong> Civica scores every US county on a 100-point scale using 14 datasets — 13 from US federal agencies plus Zillow ZHVI (the only non-federal source, used because no federal dataset provides county-level median home values at monthly granularity). No agents. No listings. No advertising. No conflict of interest.</div>
+  </div>
+
+  <div class="screenshot-block">
+    <div class="screenshot-caption">Homepage — Full Page including Market Labels &amp; How It Works</div>
+    <img class="screenshot-img" src="walkthrough_02_homepage_full.png" alt="Homepage full">
+  </div>
+
+  <div class="ann-grid">
+    <div class="ann-item">
+      <span class="ann-badge blue">SEARCH</span>
+      <div class="ann-content">
+        <div class="ann-label">County Search Bar</div>
+        <div class="ann-source">Source: index.json (local file)</div>
+        <div class="ann-body">Powered by a pre-built JSON index of all 2,820 scored counties. Autocomplete searches county name and state in real-time — no API calls, no server needed. Results link directly to the county's research report.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge">2,820</span>
+      <div class="ann-content">
+        <div class="ann-label">Counties Scored</div>
+        <div class="ann-source">Source: Census Population Estimates 2023</div>
+        <div class="ann-body">Only counties with population ≥ 5,000 are scored. The 324 excluded counties lack sufficient housing market data — their Zillow, QCEW, and FHFA coverage is too sparse for a reliable score. Largest excluded county: Oneida County, ID (pop 4,953).</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge green">ACCELERATING</span>
+      <div class="ann-content">
+        <div class="ann-label">8-Label Market Signal System</div>
+        <div class="ann-source">Source: Civica composite score thresholds</div>
+        <div class="ann-body">Every county gets exactly one label based on its composite score. Labels are score-threshold based, not qualitative: ACCELERATING ≥68 · PEAKING ≥62 · ESTABLISHED ≥55 · EMERGING ≥46 · FRONTIER ≥38 · TURNING ≥30 · SPECULATIVE ≥26 · AVOID &lt;26. Currently 14 counties carry the top ACCELERATING label.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge amber">HOW IT WORKS</span>
+      <div class="ann-content">
+        <div class="ann-label">3-Step Flow</div>
+        <div class="ann-source">Editorial</div>
+        <div class="ann-body">Search → 6-dimension breakdown → data-backed decision. The product is deliberately designed as a research tool, not a lead-generation funnel. There are no "talk to an agent" CTAs. The score cannot be influenced by any advertiser — that is the core trust differentiator.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 2: METHODOLOGY PAGE -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section" id="methodology">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-meta">
+      <div class="section-eyebrow">Methodology Page</div>
+      <div class="section-title">The Research Framework — 6 Dimensions, 14 Datasets</div>
+      <div class="section-desc">A full transparency page showing exactly how the score is constructed. Every weight, every formula, every known limitation — disclosed. This is what separates Civica from black-box real estate tools.</div>
+    </div>
+  </div>
+
+  <div class="screenshot-block">
+    <div class="screenshot-caption">Methodology Page — Hero &amp; Overview</div>
+    <img class="screenshot-img" src="walkthrough_03_methodology_hero.png" alt="Methodology hero">
+  </div>
+
+  <div class="callout callout-blue">
+    <span class="icon">📐</span>
+    <div class="callout-body"><strong>Why a public methodology page matters:</strong> Competitors like Zillow, Redfin, and Niche use proprietary scoring that cannot be verified. Civica publishes every formula, every weight, and every data limitation. When a sophisticated buyer or institutional partner asks "why does this county score 72?" — we can show them the math, step by step, sourced to a specific government file.</div>
+  </div>
+
+  <div class="screenshot-block">
+    <div class="screenshot-caption">Methodology Page — Dimension Weights &amp; Market Signals Accordion</div>
+    <img class="screenshot-img" src="walkthrough_04_methodology_full.png" alt="Methodology full">
+  </div>
+
+  <div class="ann-grid">
+    <div class="ann-item">
+      <span class="ann-badge blue">25 PTS</span>
+      <div class="ann-content">
+        <div class="ann-label">Dimension 1: Affordability &amp; Value</div>
+        <div class="ann-source">Zillow ZHVI + HUD FMR FY2026 + BEA CAINC1 + FHFA HPI</div>
+        <div class="ann-body">The largest dimension (25% of total score). Measures whether the price is defensible: P/R ratio, price-to-income ratio, buy-vs-rent breakeven, and appreciation quality. Every formula is derived from federal data.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge blue">22 PTS</span>
+      <div class="ann-content">
+        <div class="ann-label">Dimension 2: Economic Vitality</div>
+        <div class="ann-source">BLS QCEW 2023 + BEA CAINC1</div>
+        <div class="ann-body">Average wage level, employment sector quality score (NAICS-weighted), economic diversification (Herfindahl Index), and 4-year per capita income growth. All from the Bureau of Labor Statistics and Bureau of Economic Analysis.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge blue">20 PTS</span>
+      <div class="ann-content">
+        <div class="ann-label">Dimension 3: Housing Market Dynamics</div>
+        <div class="ann-source">FHFA HPI (county) + Zillow inventory + Census BPS</div>
+        <div class="ann-body">Two FHFA price signals (3-year trend + current momentum), supply tightness from Zillow active listings, and new housing permit pipeline from Census Building Permits Survey. Supply and demand together.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge blue">15 PTS</span>
+      <div class="ann-content">
+        <div class="ann-label">Dimension 4: Quality of Place</div>
+        <div class="ann-source">FBI NIBRS 2024 + USDA RUCC 2023 + Census CBP 2022</div>
+        <div class="ann-body">Violent crime rate (FBI National Master File, 21,068 agencies), urban access (USDA Rural-Urban Continuum Code 1–9 scale), and amenity density (private establishments per 1,000 residents from Census County Business Patterns).</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge blue">12 PTS</span>
+      <div class="ann-content">
+        <div class="ann-label">Dimension 5: Physical Risk</div>
+        <div class="ann-source">FEMA NFIP + NOAA Storm Events + USFS Wildfire Risk to Communities</div>
+        <div class="ann-body">Three natural hazard proxies: flood insurance claims per capita (10-year window), storm property damage per capita (5-year window), and USFS wildfire national risk rank. These are the same underlying datasets FEMA uses to build its National Risk Index.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge blue">6 PTS</span>
+      <div class="ann-content">
+        <div class="ann-label">Dimension 6: Population Momentum</div>
+        <div class="ann-source">Census Population Estimates 2023 + IRS SOI Migration 2022-23</div>
+        <div class="ann-body">Net migration rate (Census RNETMIG2023: arrivals minus departures per 1,000 residents) and in-mover income quality (IRS AGI data: do arriving households earn more than departing ones?). 60/40 weighted split.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge">LABELS</span>
+      <div class="ann-content">
+        <div class="ann-label">8-Label Distribution (2,820 Counties)</div>
+        <div class="ann-source">Civica scoring engine v1.2</div>
+        <div class="ann-body">ACCELERATING 14 · PEAKING 143 · ESTABLISHED 558 · EMERGING 1,236 · FRONTIER 703 · TURNING 152 · SPECULATIVE 12 · AVOID 2. The score distribution is by design: mean 50.0, std 7.5, range 21.4–72.9. Percentile normalization ensures no label category is empty.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge amber">DISCLOSED</span>
+      <div class="ann-content">
+        <div class="ann-label">Known Limitations — Fully Disclosed</div>
+        <div class="ann-source">METHODOLOGY.md §14</div>
+        <div class="ann-body">Property tax hardcoded at 1.2% (actual range: 0.28%–2.23%). Inventory is raw listing count, not months of supply. P/I uses per-capita income (BEA), not median household income. HPI signals are correlated, not fully independent. All 14 limitations are publicly documented — competitors hide theirs.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 3: LAKE COUNTY IL -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section" id="lake-il">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-meta">
+      <div class="section-eyebrow">County Deep-Dive · Example 1 of 4</div>
+      <div class="section-title">Lake County, IL — The #1 County in the United States</div>
+      <div class="section-desc">Chicago's northern suburbs. This is the highest-scoring county in Civica's universe of 2,820 scored counties. Score 72.9/100 — ACCELERATING. Strong economy, manageable affordability, low physical risk.</div>
+    </div>
+  </div>
+
+  <div class="county-header">
+    <div class="county-top">
+      <div>
+        <div class="county-name">Lake County, IL</div>
+        <div class="county-sub">FIPS 17097 · Large Metro · RUCC Code 1 · Pop. 708,760</div>
+        <div style="margin-top:10px;"><span class="county-badge badge-acc">ACCELERATING</span></div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:6px;">#1 of 2,820 scored US counties</div>
+      </div>
+      <div class="county-score">
+        <div class="county-score-num">72.9</div>
+        <div class="county-score-denom">/100</div>
+        <div style="font-size:11px;color:#4ade80;margin-top:4px;font-weight:700;">Top 0.1% Nationally</div>
+      </div>
+    </div>
+    <div class="hero-pills-grid">
+      <div class="hp2"><div class="hp2-lbl">Monthly Cost (PITI)</div><div class="hp2-val" style="color:#fff;">$2,629/mo</div><div class="hp2-src">Zillow ZHVI + HUD FMR</div></div>
+      <div class="hp2"><div class="hp2-lbl">Home Value</div><div class="hp2-val" style="color:#fff;">$390,184</div><div class="hp2-src">Zillow ZHVI (latest)</div></div>
+      <div class="hp2"><div class="hp2-lbl">Appreciation</div><div class="hp2-val" style="color:#4ade80;">+7.7%/yr</div><div class="hp2-src">FHFA HPI 3-yr avg</div></div>
+      <div class="hp2"><div class="hp2-lbl">Breakeven</div><div class="hp2-val" style="color:#fbbf24;">7.7 yrs</div><div class="hp2-src">Civica derived metric</div></div>
+      <div class="hp2"><div class="hp2-lbl">Net Migration</div><div class="hp2-val" style="color:#f87171;">-3,884 HH</div><div class="hp2-src">IRS SOI 2022-23</div></div>
+      <div class="hp2"><div class="hp2-lbl">P/R Ratio</div><div class="hp2-val" style="color:#fbbf24;">18.3x</div><div class="hp2-src">Zillow ÷ HUD FMR×12</div></div>
+    </div>
+    <div class="dim-grid" style="margin-top:14px;">
+      <div class="dim-item"><div class="dim-name">Affordability</div><div class="dim-val">57</div><div class="dim-wt">25% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Economic Vitality</div><div class="dim-val">94</div><div class="dim-wt">22% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Market Dynamics</div><div class="dim-val">60</div><div class="dim-wt">20% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Quality of Place</div><div class="dim-val">80</div><div class="dim-wt">15% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Physical Risk</div><div class="dim-val">76</div><div class="dim-wt">12% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Pop. Momentum</div><div class="dim-val">36</div><div class="dim-wt">6% weight</div></div>
+    </div>
+  </div>
+
+  <div class="screenshot-block">
+    <div class="screenshot-caption">Lake County, IL — County Report Hero</div>
+    <img class="screenshot-img" src="walkthrough_05_county_lake_il_top.png" alt="Lake County IL hero">
+  </div>
+
+  <div class="screenshot-block">
+    <div class="screenshot-caption">Lake County, IL — Full Report (Valuation, Economic Fundamentals, Supply &amp; Demand)</div>
+    <img class="screenshot-img" src="walkthrough_06_county_lake_il_full.png" alt="Lake County IL full">
+  </div>
+
+  <div class="ann-grid">
+    <div class="ann-item">
+      <span class="ann-badge">$2,629</span>
+      <div class="ann-content">
+        <div class="ann-label">Monthly Ownership Cost (PITI)</div>
+        <div class="ann-source">Zillow ZHVI ($390,184) + HUD FMR rate assumptions</div>
+        <div class="ann-body">Principal &amp; Interest + Property Tax + Insurance. Formula: $390,184 × 80% loan at 7% 30yr = ~$2,076 P&amp;I + 1.2% property tax ($390/yr) + 0.5% insurance ($163/yr) = $2,629/mo. This is the monthly "cost to own" number that drives the breakeven calculation.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge green">$390,184</span>
+      <div class="ann-content">
+        <div class="ann-label">Median Home Value</div>
+        <div class="ann-source">Zillow ZHVI — County-level Home Value Index (latest month)</div>
+        <div class="ann-body">Zillow ZHVI is the only non-federal data source in Civica's model. It is used here because no federal dataset provides county-level median home values at monthly granularity. FHFA HPI is used for all price-change signals — Zillow only for the dollar-level anchor.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge green">+7.7%/yr</span>
+      <div class="ann-content">
+        <div class="ann-label">3-Year Avg Annual Appreciation</div>
+        <div class="ann-source">FHFA House Price Index — County-Level, 3-Year Average</div>
+        <div class="ann-body">The Federal Housing Finance Agency publishes quarterly HPI for ~2,800 counties. Civica computes the average annual change over the most recent 3 years. Above 7% triggers a "froth risk" flag — sustained appreciation above this range historically precedes cooling. Lake County at 7.7% is right at that threshold.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge amber">7.7 yrs</span>
+      <div class="ann-content">
+        <div class="ann-label">Buy vs. Rent Breakeven Horizon</div>
+        <div class="ann-source">Civica derived metric — Zillow + HUD FMR FY2026</div>
+        <div class="ann-body">The breakeven answers: "How many years must I hold before owning beats renting?" Formula: 20% down payment ÷ (monthly PITI − monthly rent) ÷ 12. HUD Fair Market Rent (2BR) = $1,781/mo. PITI = $2,629/mo. Monthly ownership premium = $848. Down payment = $78,037. Breakeven ≈ $78,037 ÷ ($848 × 12 × appreciation adjustment) = 7.7 years. Above 7 years signals caution.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge red">-3,884 HH</span>
+      <div class="ann-content">
+        <div class="ann-label">Net Household Migration</div>
+        <div class="ann-source">IRS Statistics of Income — Migration Data 2022-23</div>
+        <div class="ann-body">The IRS tracks every household that files a tax return with a different address year-over-year. 296,584 households moved IN; 300,468 moved OUT. Net: -3,884. This is a red flag for Lake County — more households are leaving than arriving. The 1.01x income ratio (in-movers earn 1% more than out-movers) partially offsets the concern.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge amber">18.3x</span>
+      <div class="ann-content">
+        <div class="ann-label">Price-to-Rent Ratio</div>
+        <div class="ann-source">Zillow ZHVI ÷ (HUD FMR 2BR × 12)</div>
+        <div class="ann-body">$390,184 ÷ ($1,781 × 12) = $390,184 ÷ $21,372 = 18.3x. The national norm is 15–18x. At 18.3x, Lake County sits at the upper edge of normal — not stretched, but not a deep-value buy on P/R alone. Markets below 15x are historically undervalued; above 20x suggests renters are getting a better deal.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge blue">94/100</span>
+      <div class="ann-content">
+        <div class="ann-label">Economic Vitality — Near Top Decile</div>
+        <div class="ann-source">BLS QCEW 2023 + BEA CAINC1</div>
+        <div class="ann-body">Average annual wage: $93,318 (above national median). Per capita income growth: +27.5% over 4 years. Sector quality score: 1.04 (above-neutral — mix of professional/finance/healthcare). HHI concentration index: 1,026 (well-diversified — no single sector dominates). This is the dimension driving Lake County's #1 ranking.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge blue">610</span>
+      <div class="ann-content">
+        <div class="ann-label">Violent Crime Rate (per 100k residents)</div>
+        <div class="ann-source">FBI NIBRS 2024 National Master File — 21,068 agencies</div>
+        <div class="ann-body">4,323 violent offenses reported across Lake County agencies. 610 per 100k vs. national estimate of ~380. This is the primary drag on Lake County's Quality of Place score (80/100 — still good, but the crime rate is above average). FBI NIBRS covers UCR Part 1 offenses only: homicide, rape, robbery, aggravated assault — not simple assault or intimidation.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-green">
+    <span class="icon">✅</span>
+    <div class="callout-body"><strong>Why Lake County ranks #1:</strong> It combines a near-top-decile economy (avg wage $93k, diversified employment, strong income growth) with manageable affordability (18.3x P/R — at the edge of normal but not stretched), low physical risk, and above-average quality of place. The net out-migration is a known watch item, but the economic fundamentals are strong enough to overcome it in the composite score. A buyer with a 10+ year horizon in a high-wage job sees this as a compelling market.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 4: HAMILTON COUNTY IN -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section" id="hamilton-in">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-meta">
+      <div class="section-eyebrow">County Deep-Dive · Example 2 of 4</div>
+      <div class="section-title">Hamilton County, IN — Explosive Growth, Different Risk Profile</div>
+      <div class="section-desc">Indianapolis northern suburbs. Score 69.5/100 — ACCELERATING. The contrast with Lake County is instructive: Hamilton has stronger population momentum and lower crime, but much higher P/R ratio and more stretched affordability.</div>
+    </div>
+  </div>
+
+  <div class="county-header">
+    <div class="county-top">
+      <div>
+        <div class="county-name">Hamilton County, IN</div>
+        <div class="county-sub">FIPS 18057 · Large Metro · RUCC Code 1 · Pop. 371,645</div>
+        <div style="margin-top:10px;"><span class="county-badge badge-acc">ACCELERATING</span></div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:6px;">Top 1% of 2,820 scored US counties</div>
+      </div>
+      <div class="county-score">
+        <div class="county-score-num">69.5</div>
+        <div class="county-score-denom">/100</div>
+        <div style="font-size:11px;color:#4ade80;margin-top:4px;font-weight:700;">Top 1% Nationally</div>
+      </div>
+    </div>
+    <div class="hero-pills-grid">
+      <div class="hp2"><div class="hp2-lbl">Monthly Cost (PITI)</div><div class="hp2-val" style="color:#fff;">$3,133/mo</div><div class="hp2-src">Zillow ZHVI + HUD FMR</div></div>
+      <div class="hp2"><div class="hp2-lbl">Home Value</div><div class="hp2-val" style="color:#fff;">$464,834</div><div class="hp2-src">Zillow ZHVI (latest)</div></div>
+      <div class="hp2"><div class="hp2-lbl">Appreciation</div><div class="hp2-val" style="color:#4ade80;">+6.4%/yr</div><div class="hp2-src">FHFA HPI 3-yr avg</div></div>
+      <div class="hp2"><div class="hp2-lbl">Breakeven</div><div class="hp2-val" style="color:#fbbf24;">4.7 yrs</div><div class="hp2-src">Civica derived metric</div></div>
+      <div class="hp2"><div class="hp2-lbl">Net Migration</div><div class="hp2-val" style="color:#4ade80;">+1,259 HH</div><div class="hp2-src">IRS SOI 2022-23</div></div>
+      <div class="hp2"><div class="hp2-lbl">P/R Ratio</div><div class="hp2-val" style="color:#f87171;">26.3x</div><div class="hp2-src">Zillow ÷ HUD FMR×12</div></div>
+    </div>
+    <div class="dim-grid" style="margin-top:14px;">
+      <div class="dim-item"><div class="dim-name">Affordability</div><div class="dim-val">48</div><div class="dim-wt">25% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Economic Vitality</div><div class="dim-val">95</div><div class="dim-wt">22% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Market Dynamics</div><div class="dim-val">53</div><div class="dim-wt">20% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Quality of Place</div><div class="dim-val">84</div><div class="dim-wt">15% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Physical Risk</div><div class="dim-val">84</div><div class="dim-wt">12% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Pop. Momentum</div><div class="dim-val">54</div><div class="dim-wt">6% weight</div></div>
+    </div>
+  </div>
+
+  <div class="screenshot-block">
+    <div class="screenshot-caption">Hamilton County, IN — Full County Report</div>
+    <img class="screenshot-img" src="walkthrough_07_county_hamilton_in_full.png" alt="Hamilton County IN full">
+  </div>
+
+  <div class="ann-grid">
+    <div class="ann-item">
+      <span class="ann-badge red">26.3x</span>
+      <div class="ann-content">
+        <div class="ann-label">Price-to-Rent Ratio — Stretched</div>
+        <div class="ann-source">Zillow ZHVI ($464,834) ÷ HUD FMR 2BR ($1,474 × 12)</div>
+        <div class="ann-body">At 26.3x, Hamilton County's P/R is significantly above the 15–18x national norm. This means renters are getting a comparatively better deal on a monthly basis. The affordability score (48/100) is Hamilton's weakest dimension — buyers are paying a premium for this market's economic quality.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge green">+1,259 HH</span>
+      <div class="ann-content">
+        <div class="ann-label">Net In-Migration — Strong Growth Signal</div>
+        <div class="ann-source">IRS SOI Migration 2022-23</div>
+        <div class="ann-body">Hamilton County is a net destination. +1,259 net households moved in during 2022-23. This is demand-side evidence that the economic fundamentals are real — people are voting with their feet and their tax returns. Combined with avg wage of $68,651 and +31.2% income growth over 4 years, the demand picture is strong.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge amber">4.7 yrs</span>
+      <div class="ann-content">
+        <div class="ann-label">Breakeven Horizon — Fair Range</div>
+        <div class="ann-source">Civica breakeven formula</div>
+        <div class="ann-body">Despite the higher P/R ratio, Hamilton County's breakeven of 4.7 years is actually <em>shorter</em> than Lake County's 7.7 years. Why? Higher appreciation rate compounds faster. The 4–7 year range is considered "fair" — a buyer planning to hold 5+ years would likely come out ahead of renting.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge blue">84/100</span>
+      <div class="ann-content">
+        <div class="ann-label">Physical Risk — Notably Low Hazard Exposure</div>
+        <div class="ann-source">FEMA NFIP + NOAA Storm Events + USFS Wildfire Risk to Communities</div>
+        <div class="ann-body">Hamilton County sits in the Central Indiana interior — no coastline, no wildfire-prone terrain, historically low FEMA flood claims. This is a meaningful advantage as insurance costs escalate nationally. Counties in Florida, Louisiana, and California with similar economic profiles score 20–30 points lower on Physical Risk alone.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-blue">
+    <span class="icon">⚖️</span>
+    <div class="callout-body"><strong>Lake County vs. Hamilton County — the key difference:</strong> Both are ACCELERATING. Lake County has better affordability (18.3x P/R vs. 26.3x) and a shorter breakeven for buyers making a pure financial calculation. Hamilton County has stronger population momentum (net +1,259 HH vs. -3,884 HH) and lower crime. A buyer who prioritizes long-term demand trajectory and safety might prefer Hamilton. A buyer who prioritizes not overpaying relative to rent might prefer Lake County. Civica shows both — the buyer decides.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 5: TRAVIS COUNTY TX -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section" id="travis-tx">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-meta">
+      <div class="section-eyebrow">County Deep-Dive · Example 3 of 4</div>
+      <div class="section-title">Travis County, TX — Great Economy, Softening Market</div>
+      <div class="section-desc">Austin, Texas. Score 49/100 — EMERGING. This is the "interesting mixed signals" case: a world-class tech economy (Economic Vitality 98/100 — nearly the highest in the country) dragged down by negative appreciation and high physical risk. Austin illustrates why Civica's multi-dimensional model catches what a single-metric approach misses.</div>
+    </div>
+  </div>
+
+  <div class="county-header">
+    <div class="county-top">
+      <div>
+        <div class="county-name">Travis County, TX</div>
+        <div class="county-sub">FIPS 48453 · Large Metro · RUCC Code 1 · Pop. 1,334,961</div>
+        <div style="margin-top:10px;"><span class="county-badge badge-emg">EMERGING</span></div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:6px;">#1,607 of 2,820 scored US counties</div>
+      </div>
+      <div class="county-score">
+        <div class="county-score-num">49</div>
+        <div class="county-score-denom">/100</div>
+        <div style="font-size:11px;color:#fbbf24;margin-top:4px;font-weight:700;">Top 57% Nationally</div>
+      </div>
+    </div>
+    <div class="hero-pills-grid">
+      <div class="hp2"><div class="hp2-lbl">Monthly Cost (PITI)</div><div class="hp2-val" style="color:#fff;">$3,233/mo</div><div class="hp2-src">Zillow ZHVI + HUD FMR</div></div>
+      <div class="hp2"><div class="hp2-lbl">Home Value</div><div class="hp2-val" style="color:#fff;">$479,782</div><div class="hp2-src">Zillow ZHVI (latest)</div></div>
+      <div class="hp2"><div class="hp2-lbl">Appreciation</div><div class="hp2-val" style="color:#f87171;">-3.4%/yr</div><div class="hp2-src">FHFA HPI 3-yr avg</div></div>
+      <div class="hp2"><div class="hp2-lbl">Breakeven</div><div class="hp2-val" style="color:#fbbf24;">5.8 yrs</div><div class="hp2-src">Civica derived metric</div></div>
+      <div class="hp2"><div class="hp2-lbl">Net Migration</div><div class="hp2-val" style="color:#4ade80;">+517 HH</div><div class="hp2-src">IRS SOI 2022-23</div></div>
+      <div class="hp2"><div class="hp2-lbl">P/R Ratio</div><div class="hp2-val" style="color:#fbbf24;">21.6x</div><div class="hp2-src">Zillow ÷ HUD FMR×12</div></div>
+    </div>
+    <div class="dim-grid" style="margin-top:14px;">
+      <div class="dim-item"><div class="dim-name">Affordability</div><div class="dim-val">38</div><div class="dim-wt">25% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Economic Vitality</div><div class="dim-val">98</div><div class="dim-wt">22% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Market Dynamics</div><div class="dim-val">21</div><div class="dim-wt">20% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Quality of Place</div><div class="dim-val">63</div><div class="dim-wt">15% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Physical Risk</div><div class="dim-val">26</div><div class="dim-wt">12% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Pop. Momentum</div><div class="dim-val">21</div><div class="dim-wt">6% weight</div></div>
+    </div>
+  </div>
+
+  <div class="screenshot-block">
+    <div class="screenshot-caption">Travis County, TX — Full County Report</div>
+    <img class="screenshot-img" src="walkthrough_08_county_travis_tx_full.png" alt="Travis County TX full">
+  </div>
+
+  <div class="ann-grid">
+    <div class="ann-item">
+      <span class="ann-badge green">98/100</span>
+      <div class="ann-content">
+        <div class="ann-label">Economic Vitality — Near Top of All 2,820 Counties</div>
+        <div class="ann-source">BLS QCEW 2023 + BEA CAINC1</div>
+        <div class="ann-body">Avg wage $93,727/yr. Per capita income growth +37.2% over 4 years — among the fastest in the country. Travis County (Austin metro) houses Dell, Tesla Gigafactory, Apple, Samsung, and the University of Texas. The labor market is objectively exceptional.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge red">-3.4%/yr</span>
+      <div class="ann-content">
+        <div class="ann-label">FHFA 3-Year Appreciation — Negative</div>
+        <div class="ann-source">FHFA House Price Index — County Level</div>
+        <div class="ann-body">Austin's housing market overshot during 2020-2022 (remote work boom + speculative buying) and has since corrected. FHFA data shows a 3-year average annual appreciation of -3.4%. This is the single largest drag on Travis County's composite score. The underlying economy hasn't changed — prices got ahead of it.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge red">21/100</span>
+      <div class="ann-content">
+        <div class="ann-label">Housing Market Dynamics — Near Bottom Decile</div>
+        <div class="ann-source">FHFA HPI + Zillow Inventory + Census BPS</div>
+        <div class="ann-body">Negative appreciation + high active inventory + a glut of newly permitted units = market dynamics score of 21/100. Travis County permitted tens of thousands of new units during the boom years. That supply is now absorbing demand. The market is re-balancing — which is different from permanently broken.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge red">26/100</span>
+      <div class="ann-content">
+        <div class="ann-label">Physical Risk — High Hazard Exposure</div>
+        <div class="ann-source">FEMA NFIP + NOAA Storm Events + USFS Wildfire Risk to Communities</div>
+        <div class="ann-body">Central Texas has elevated flood risk (frequent severe storm events — see NOAA Storm Events database) and moderate wildfire exposure (Texas Hill Country). Combined with high storm damage per capita in the NOAA 5-year window, Physical Risk scores in the bottom quartile. Homeowners insurance premiums reflect this.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-amber">
+    <span class="icon">⚠️</span>
+    <div class="callout-body"><strong>The Travis County paradox — and what Civica catches that Zillow doesn't:</strong> If you search Austin on Zillow, you see homes, prices, and days on market. You don't see that FHFA shows the market declined 3.4% per year over 3 years, or that FEMA claims data flags elevated flood exposure, or that IRS migration data shows net out-migration slowing. Civica synthesizes all of this into a single score and a structured explanation. A buyer can still choose Austin — but they do so with their eyes open.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 6: NEWTON COUNTY AR (AVOID) -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section" id="avoid">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div class="section-meta">
+      <div class="section-eyebrow">County Deep-Dive · Example 4 of 4</div>
+      <div class="section-title">Newton County, AR — The Bottom of 2,820 Counties</div>
+      <div class="section-desc">Rural Arkansas Ozarks. Score 21.4/100 — AVOID. Population 7,071. This is what a county with nearly every dimension failing looks like. Understanding what earns an AVOID label is just as important as understanding what earns ACCELERATING.</div>
+    </div>
+  </div>
+
+  <div class="county-header">
+    <div class="county-top">
+      <div>
+        <div class="county-name">Newton County, AR</div>
+        <div class="county-sub">FIPS 05101 · Rural · RUCC Code 9 · Pop. 7,071</div>
+        <div style="margin-top:10px;"><span class="county-badge badge-avoid">AVOID</span></div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:6px;">#2,820 of 2,820 — Lowest scored county in the US</div>
+      </div>
+      <div class="county-score">
+        <div class="county-score-num">21</div>
+        <div class="county-score-denom">/100</div>
+        <div style="font-size:11px;color:#f87171;margin-top:4px;font-weight:700;">Bottom 0.1% Nationally</div>
+      </div>
+    </div>
+    <div class="hero-pills-grid">
+      <div class="hp2"><div class="hp2-lbl">Monthly Cost (PITI)</div><div class="hp2-val" style="color:#fff;">$1,494/mo</div><div class="hp2-src">Zillow ZHVI + HUD FMR</div></div>
+      <div class="hp2"><div class="hp2-lbl">Home Value</div><div class="hp2-val" style="color:#fff;">$221,764</div><div class="hp2-src">Zillow ZHVI (latest)</div></div>
+      <div class="hp2"><div class="hp2-lbl">Appreciation</div><div class="hp2-val" style="color:#f87171;">+0.4%/yr</div><div class="hp2-src">FHFA HPI 3-yr avg</div></div>
+      <div class="hp2"><div class="hp2-lbl">Breakeven</div><div class="hp2-val" style="color:#fbbf24;">6.0 yrs</div><div class="hp2-src">Civica derived metric</div></div>
+      <div class="hp2"><div class="hp2-lbl">Net Migration</div><div class="hp2-val" style="color:#4ade80;">+73 HH</div><div class="hp2-src">IRS SOI 2022-23</div></div>
+      <div class="hp2"><div class="hp2-lbl">P/R Ratio</div><div class="hp2-val" style="color:#fbbf24;">21.0x</div><div class="hp2-src">Zillow ÷ HUD FMR×12</div></div>
+    </div>
+    <div class="dim-grid" style="margin-top:14px;">
+      <div class="dim-item"><div class="dim-name">Affordability</div><div class="dim-val">36</div><div class="dim-wt">25% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Economic Vitality</div><div class="dim-val">11</div><div class="dim-wt">22% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Market Dynamics</div><div class="dim-val">29</div><div class="dim-wt">20% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Quality of Place</div><div class="dim-val">21</div><div class="dim-wt">15% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Physical Risk</div><div class="dim-val">23</div><div class="dim-wt">12% weight</div></div>
+      <div class="dim-item"><div class="dim-name">Pop. Momentum</div><div class="dim-val">63</div><div class="dim-wt">6% weight</div></div>
+    </div>
+  </div>
+
+  <div class="screenshot-block">
+    <div class="screenshot-caption">Newton County, AR — Full County Report (AVOID Signal)</div>
+    <img class="screenshot-img" src="walkthrough_09_county_avoid_full.png" alt="Newton County AR AVOID">
+  </div>
+
+  <div class="ann-grid">
+    <div class="ann-item">
+      <span class="ann-badge red">11/100</span>
+      <div class="ann-content">
+        <div class="ann-label">Economic Vitality — Bottom Decile</div>
+        <div class="ann-source">BLS QCEW 2023 + BEA CAINC1</div>
+        <div class="ann-body">Newton County AR has very low wages, limited employment diversity, and weak income growth. Rural Ozarks counties with tiny labor markets often score near zero on this dimension — there simply isn't the economic base to support sustainable housing demand or price appreciation.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge red">+0.4%/yr</span>
+      <div class="ann-content">
+        <div class="ann-label">Near-Zero Appreciation</div>
+        <div class="ann-source">FHFA House Price Index — County Level</div>
+        <div class="ann-body">0.4% annual appreciation over 3 years is effectively flat in real terms (below CPI). This means a buyer is paying carrying costs (mortgage, tax, insurance) with essentially no equity accumulation from price growth. The home is a liability, not an appreciating asset, in the near term.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge amber">21.0x</span>
+      <div class="ann-content">
+        <div class="ann-label">P/R Ratio — Elevated Despite Low Prices</div>
+        <div class="ann-source">Zillow ZHVI ($221,764) ÷ HUD FMR 2BR</div>
+        <div class="ann-body">Even though the home price ($221,764) looks "affordable" in absolute dollar terms, the P/R ratio of 21.0x suggests local rents are equally depressed. The homes are cheap because the local economy is weak — not because they represent genuine value. This is the trap the P/R ratio reveals.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge green">63/100</span>
+      <div class="ann-content">
+        <div class="ann-label">Population Momentum — One Green Signal</div>
+        <div class="ann-source">Census Population Estimates 2023 + IRS SOI Migration</div>
+        <div class="ann-body">Newton County actually shows net in-migration (+73 HH) and in-movers earn more than out-movers. This is the one dimension where the county scores reasonably well. But with only 7,071 total residents, 73 net households represents a very small absolute flow — and a single large employer exit could reverse it instantly.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-blue">
+    <span class="icon">💡</span>
+    <div class="callout-body"><strong>Why AVOID matters as much as ACCELERATING:</strong> Civica's AVOID label protects buyers who might otherwise be attracted to a county's "low price" without understanding why it's low. Newton County looks cheap. $221,764 for a home in the Ozarks seems like a bargain. But the FHFA says prices grew 0.4% over 3 years. BLS shows wages in the bottom decile. NOAA and FEMA data shows meaningful physical risk. Civica runs the same analysis on all 2,820 counties — the methodology doesn't discriminate. The score is what the data says.</div>
+  </div>
+
+  <div class="callout callout-green">
+    <span class="icon">📊</span>
+    <div class="callout-body"><strong>Only 2 AVOID counties out of 2,820:</strong> The AVOID label is deliberately hard to earn. Our thresholds are calibrated so that a county must be failing on multiple dimensions simultaneously, not just one. Newton County AR (21.4) and Morgan County KY (24.5) are the only two counties that clear this bar — 0.07% of all scored counties.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 7: LEADERBOARD -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section" id="leaderboard">
+  <div class="section-header">
+    <div class="section-num">07</div>
+    <div class="section-meta">
+      <div class="section-eyebrow">Leaderboard</div>
+      <div class="section-title">Top Markets — Ranked, Sortable, Filterable</div>
+      <div class="section-desc">The leaderboard page lets users browse and compare markets at scale — sort by score, filter by label, find the best county in a specific state, or compare affordability across regions.</div>
+    </div>
+  </div>
+
+  <div class="screenshot-block">
+    <div class="screenshot-caption">Leaderboard — Top Ranked Counties</div>
+    <img class="screenshot-img" src="walkthrough_10_leaderboard.png" alt="Leaderboard">
+  </div>
+
+  <div class="ann-grid">
+    <div class="ann-item">
+      <span class="ann-badge blue">RANK</span>
+      <div class="ann-content">
+        <div class="ann-label">National Rank (of 2,820)</div>
+        <div class="ann-source">Sorted by Civica composite score descending</div>
+        <div class="ann-body">Rankings are deterministic — the same federal data, the same formulas, run on all counties simultaneously. There is no editorial judgment in the ranking order. Lake County IL at rank #1 is purely a mathematical result of the scoring engine.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge">FILTER</span>
+      <div class="ann-content">
+        <div class="ann-label">Filter by Label, State, or Metric</div>
+        <div class="ann-source">All data from index.json</div>
+        <div class="ann-body">A partner evaluating Midwest markets can filter by state. A buyer looking only for PEAKING markets (near ceiling but still moving) can filter by label. The leaderboard loads from a pre-built JSON file — no API, no server costs, instant filtering.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge blue">COLUMNS</span>
+      <div class="ann-content">
+        <div class="ann-label">Displayed Columns: Score, Label, Home Value, Appreciation, Avg Wage</div>
+        <div class="ann-source">county_scores.csv — all federal data</div>
+        <div class="ann-body">The columns shown are deliberately chosen to answer the most common comparison questions: How expensive is it? How fast has it been growing? What are people earning? Together they give enough context to shortlist markets worth deeper investigation.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge green">LINKS</span>
+      <div class="ann-content">
+        <div class="ann-label">Each Row Links to Full County Report</div>
+        <div class="ann-source">output/counties/{fips}.html</div>
+        <div class="ann-body">Every county in the leaderboard links to its dedicated research report — 2,820 individual HTML pages, each containing the full 6-dimension breakdown, buy-vs-rent analysis, 5-year price scenarios, risk matrix, and economic fundamentals. One click from comparison to full report.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 8: MAP -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section" id="map">
+  <div class="section-header">
+    <div class="section-num">08</div>
+    <div class="section-meta">
+      <div class="section-eyebrow">National Map</div>
+      <div class="section-title">Geographic Intelligence — The US in One View</div>
+      <div class="section-desc">The map visualizes all 2,820 county scores as a color-coded geographic layer. Users can see regional clustering, spot outliers, and navigate to any county report directly from the map.</div>
+    </div>
+  </div>
+
+  <div class="screenshot-block">
+    <div class="screenshot-caption">National Map — All 2,820 Scored Counties Color-Coded</div>
+    <img class="screenshot-img" src="walkthrough_11_map.png" alt="National Map">
+  </div>
+
+  <div class="ann-grid">
+    <div class="ann-item">
+      <span class="ann-badge green">COLOR SCALE</span>
+      <div class="ann-content">
+        <div class="ann-label">Green → Red Color Scale (Score 0–100)</div>
+        <div class="ann-source">Civica composite score by county FIPS</div>
+        <div class="ann-body">High-scoring counties (ACCELERATING/PEAKING) appear in green. Mid-range (ESTABLISHED/EMERGING) in amber. Low-scoring (FRONTIER/AVOID) in red. The geographic pattern immediately reveals regional market dynamics — Midwest suburban corridors cluster green; deep rural counties cluster red.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge blue">FIPS</span>
+      <div class="ann-content">
+        <div class="ann-label">County FIPS Codes — The Geographic Anchor</div>
+        <div class="ann-source">Census TIGER/Line county boundaries</div>
+        <div class="ann-body">Every federal dataset uses the 5-digit FIPS code as the county identifier. Civica's scoring engine joins all 14 datasets on this FIPS key. The map renders county polygons using the same FIPS codes — ensuring perfect alignment between the score and the geographic display.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge amber">REGIONAL PATTERNS</span>
+      <div class="ann-content">
+        <div class="ann-label">Geographic Intelligence — Visible Patterns</div>
+        <div class="ann-source">Civica scoring engine output</div>
+        <div class="ann-body">The map makes patterns visible that a table cannot: Sun Belt counties often have strong economic scores but high physical risk (dragging composites down). Northern Midwest suburban corridors consistently score well on economy + risk. Deep South rural counties cluster near the bottom on economic vitality.</div>
+      </div>
+    </div>
+    <div class="ann-item">
+      <span class="ann-badge">CLICK</span>
+      <div class="ann-content">
+        <div class="ann-label">Click Any County → Full Research Report</div>
+        <div class="ann-source">output/counties/{fips}.html</div>
+        <div class="ann-body">The map is not just decorative. Every county polygon is clickable — it opens that county's full research report. A user can visually browse regions, spot an interesting county, and click through to the complete 6-dimension breakdown in one step.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 9: DATA SOURCES -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section" id="data">
+  <div class="section-header">
+    <div class="section-num">09</div>
+    <div class="section-meta">
+      <div class="section-eyebrow">The Data Foundation</div>
+      <div class="section-title">14 Datasets · 13 Federal Sources · $0 Cost</div>
+      <div class="section-desc">Every number on every county page traces back to one of these 14 datasets. The model is fully reproducible — anyone with Python and an internet connection can download these files and verify every score.</div>
+    </div>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Dataset</th>
+        <th>Agency</th>
+        <th>Used For</th>
+        <th>Coverage</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Zillow ZHVI</strong></td>
+        <td>Zillow (only non-federal source)</td>
+        <td>Dim 1: median home value, P/R ratio; Dim 3: active inventory count</td>
+        <td>~2,900 counties, monthly</td>
+      </tr>
+      <tr>
+        <td><strong>FHFA House Price Index</strong></td>
+        <td>Federal Housing Finance Agency</td>
+        <td>Dim 1: appreciation quality; Dim 3: 3-yr trend + current momentum</td>
+        <td>~2,800 counties, quarterly</td>
+      </tr>
+      <tr>
+        <td><strong>HUD Fair Market Rents FY2026</strong></td>
+        <td>Dept. of Housing &amp; Urban Development</td>
+        <td>Dim 1: rent baseline for P/R ratio and buy-vs-rent breakeven</td>
+        <td>All US counties, annual</td>
+      </tr>
+      <tr>
+        <td><strong>BEA CAINC1 (Local Area Income)</strong></td>
+        <td>Bureau of Economic Analysis</td>
+        <td>Dim 1: price-to-income ratio; Dim 2: 4-year income growth rate</td>
+        <td>All US counties, annual</td>
+      </tr>
+      <tr>
+        <td><strong>BLS QCEW (Quarterly Census of Employment &amp; Wages)</strong></td>
+        <td>Bureau of Labor Statistics</td>
+        <td>Dim 2: avg annual wage, sector quality score, HHI diversification index</td>
+        <td>All US counties, annual</td>
+      </tr>
+      <tr>
+        <td><strong>Census Building Permits Survey</strong></td>
+        <td>US Census Bureau</td>
+        <td>Dim 3: new housing supply pipeline (units permitted 2022)</td>
+        <td>All US counties, annual</td>
+      </tr>
+      <tr>
+        <td><strong>Census County Business Patterns</strong></td>
+        <td>US Census Bureau</td>
+        <td>Dim 4: amenity density (private establishments per 1,000 residents)</td>
+        <td>All US counties, annual</td>
+      </tr>
+      <tr>
+        <td><strong>USDA Rural-Urban Continuum Codes</strong></td>
+        <td>USDA Economic Research Service</td>
+        <td>Dim 4: urban access score (1 = large metro, 9 = most rural)</td>
+        <td>All US counties, every 5-10 yrs</td>
+      </tr>
+      <tr>
+        <td><strong>FBI NIBRS 2024 National Master File</strong></td>
+        <td>Federal Bureau of Investigation</td>
+        <td>Dim 4: violent crime rate per 100k residents (UCR Part 1 offenses only)</td>
+        <td>21,068 agencies, 49 states, 2,869 counties</td>
+      </tr>
+      <tr>
+        <td><strong>FEMA NFIP Flood Insurance Claims</strong></td>
+        <td>Federal Emergency Management Agency</td>
+        <td>Dim 5: paid flood claims per capita, 10-year window</td>
+        <td>All insured counties</td>
+      </tr>
+      <tr>
+        <td><strong>NOAA Storm Events Database</strong></td>
+        <td>National Oceanic &amp; Atmospheric Administration</td>
+        <td>Dim 5: property damage per capita from storm events, 5-year window</td>
+        <td>All US counties, 2019–2023</td>
+      </tr>
+      <tr>
+        <td><strong>USFS Wildfire Risk to Communities</strong></td>
+        <td>US Forest Service</td>
+        <td>Dim 5: wildfire national risk rank (exposure index)</td>
+        <td>All US counties</td>
+      </tr>
+      <tr>
+        <td><strong>Census Population Estimates 2023</strong></td>
+        <td>US Census Bureau</td>
+        <td>Base county universe, migration rate denominators, per-capita calculations</td>
+        <td>All US counties, annual</td>
+      </tr>
+      <tr>
+        <td><strong>IRS Statistics of Income — Migration Data</strong></td>
+        <td>Internal Revenue Service</td>
+        <td>Dim 6: net migration rate (via Census); in-mover income quality ratio (AGI basis)</td>
+        <td>All US counties, 2022-23</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-green">
+    <span class="icon">🔒</span>
+    <div class="callout-body"><strong>Why federal data creates the trust moat:</strong> Every federal dataset is (1) publicly available at no cost, (2) collected by agencies with no financial stake in real estate outcomes, (3) methodologically consistent across all 3,143 US counties, and (4) updated on regular government publication schedules. A real estate platform built on agent data or proprietary indices can be influenced. A platform built on IRS tax filings, FBI crime statistics, and FHFA price indices cannot.</div>
+  </div>
+
+  <!-- FOUR-COUNTY COMPARISON TABLE -->
+  <h3 style="font-size:18px;font-weight:800;color:var(--navy);margin:32px 0 16px;">Side-by-Side: Four Counties Compared</h3>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>County</th>
+        <th>Score</th>
+        <th>Label</th>
+        <th>Home Value</th>
+        <th>Appreciation</th>
+        <th>P/R Ratio</th>
+        <th>Avg Wage</th>
+        <th>Net Migration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="hl">
+        <td>Lake County, IL</td>
+        <td class="val-green">72.9</td>
+        <td><span style="background:#16a34a;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;">ACCELERATING</span></td>
+        <td>$390,184</td>
+        <td class="val-green">+7.7%</td>
+        <td class="val-amber">18.3x</td>
+        <td class="val-green">$93,318</td>
+        <td class="val-red">-3,884 HH</td>
+      </tr>
+      <tr>
+        <td>Hamilton County, IN</td>
+        <td class="val-green">69.5</td>
+        <td><span style="background:#16a34a;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;">ACCELERATING</span></td>
+        <td>$464,834</td>
+        <td class="val-green">+6.4%</td>
+        <td class="val-red">26.3x</td>
+        <td class="val-green">$68,651</td>
+        <td class="val-green">+1,259 HH</td>
+      </tr>
+      <tr>
+        <td>Travis County, TX</td>
+        <td class="val-amber">49.0</td>
+        <td><span style="background:#7c3aed;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;">EMERGING</span></td>
+        <td>$479,782</td>
+        <td class="val-red">-3.4%</td>
+        <td class="val-amber">21.6x</td>
+        <td class="val-green">$93,727</td>
+        <td class="val-green">+517 HH</td>
+      </tr>
+      <tr>
+        <td>Newton County, AR</td>
+        <td class="val-red">21.4</td>
+        <td><span style="background:#dc2626;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;">AVOID</span></td>
+        <td>$221,764</td>
+        <td class="val-red">+0.4%</td>
+        <td class="val-amber">21.0x</td>
+        <td class="val-red">Low</td>
+        <td class="val-green">+73 HH</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="font-size:12px;color:var(--muted);margin-top:8px;">Sources: FHFA HPI, Zillow ZHVI, HUD FMR, BLS QCEW, IRS SOI Migration, Census Population Estimates. All data from US federal agencies except Zillow ZHVI (non-federal; used for county-level home value index only).</div>
+</div>
+
+</div><!-- .wrap -->
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- CLOSING SECTION -->
+<!-- ══════════════════════════════════════════════════ -->
+<div style="background:linear-gradient(160deg,#060f1e 0%,#091f3a 100%);color:#fff;padding:60px 48px;text-align:center;">
+  <div style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px;">Summary</div>
+  <div style="font-size:32px;font-weight:900;line-height:1.15;margin-bottom:20px;max-width:640px;margin-left:auto;margin-right:auto;">The intelligence layer missing from every home search.</div>
+  <div style="font-size:15px;color:rgba(255,255,255,.6);line-height:1.7;max-width:600px;margin:0 auto 36px;">Civica scores 2,820 US counties using 14 datasets — 13 from federal agencies plus Zillow ZHVI. Every formula is disclosed. Every score is reproducible. No agents. No advertising. No conflict of interest.</div>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+    <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:16px 24px;text-align:center;min-width:140px;">
+      <div style="font-size:28px;font-weight:900;color:#4ade80;">2,820</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Counties Scored</div>
+    </div>
+    <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:16px 24px;text-align:center;min-width:140px;">
+      <div style="font-size:28px;font-weight:900;color:#60a5fa;">14</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Datasets (13 Federal)</div>
+    </div>
+    <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:16px 24px;text-align:center;min-width:140px;">
+      <div style="font-size:28px;font-weight:900;color:#fbbf24;">$0</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Data Licensing Cost</div>
+    </div>
+    <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:16px 24px;text-align:center;min-width:140px;">
+      <div style="font-size:28px;font-weight:900;color:#f87171;">0</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Agent Advertiser Integrations</div>
+    </div>
+  </div>
+</div>
+
+<div class="doc-footer">
+  Data sources: IRS SOI · FHFA HPI · BLS QCEW · BEA · FBI NIBRS · FEMA NFIP · NOAA Storm Events · USFS Wildfire Risk · USDA RUCC · HUD FMR · Census Population Estimates · Census BPS · Census CBP · Zillow ZHVI<br>
+  Scores are for informational purposes only. Not financial or investment advice. All data from US federal agencies except Zillow ZHVI.<br>
+  Civica Research · May 2026 · Confidential — Business Partner Overview
+</div>
+
+</body>
+</html>

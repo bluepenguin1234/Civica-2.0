@@ -66,11 +66,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .verdict-badge { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
 .vb-label { font-size:10px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.08em; }
 .vb-pill { font-size:13px; font-weight:800; padding:8px 18px; border-radius:100px; }
-.vb-strongbuy { background:#16a34a; color:#fff; }
-.vb-buy       { background:#1a7ff0; color:#fff; }
-.vb-watch     { background:#f59e0b; color:#fff; }
-.vb-caution   { background:#f97316; color:#fff; }
-.vb-avoid     { background:#dc2626; color:#fff; }
+.vb-accelerating { background:#16a34a; color:#fff; }
+.vb-peaking      { background:#22c55e; color:#fff; }
+.vb-established  { background:#1a7ff0; color:#fff; }
+.vb-emerging     { background:#8b5cf6; color:#fff; }
+.vb-frontier     { background:#f59e0b; color:#fff; }
+.vb-turning      { background:#f97316; color:#fff; }
+.vb-speculative  { background:#ef4444; color:#fff; }
+.vb-avoid        { background:#dc2626; color:#fff; }
 .vb-score { font-size:11px; color:rgba(255,255,255,.5); text-align:right; margin-top:2px; }
 
 /* SCORE RING */
@@ -397,11 +400,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <h1 style="font-size:36px;font-weight:900;color:#fff;margin:10px 0 16px;line-height:1.05;">Mississippi</h1>
     <div class="sp-stat-row" style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:18px;">
       <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#fff;">80</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Counties Scored</div></div>
-      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#1a7ff0;">45.6</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Median Score</div></div>
-      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#4ade80;">60.5</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top County Score</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#1a7ff0;">47.0</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Median Score</div></div>
+      <div><div class="sp-stat-val" style="font-size:26px;font-weight:900;color:#4ade80;">60.3</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top County Score</div></div>
       <div><div class="sp-stat-top" style="font-size:15px;font-weight:800;color:#fff;max-width:160px;">Madison County</div><div style="font-size:11px;color:rgba(255,255,255,.5);">Top Ranked County</div></div>
     </div>
-    <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.7;"><strong>10</strong> Buy &nbsp;·&nbsp; <strong>27</strong> Caution &nbsp;·&nbsp; <strong>22</strong> Watch &nbsp;·&nbsp; <strong>21</strong> Avoid</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.7;"><strong>8</strong> Established &nbsp;·&nbsp; <strong>36</strong> Emerging &nbsp;·&nbsp; <strong>26</strong> Frontier &nbsp;·&nbsp; <strong>10</strong> Turning</div>
   </div>
 </div>
 
@@ -424,883 +427,883 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         <tbody><tr onclick="window.location='../counties/28089.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">1</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Madison County</div>
-              <div style="font-size:11px;color:#98989d;">#114 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#240 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">60</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">60.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">60.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
           <td style="text-align:right;font-weight:600;">$336,724</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.0%</td>
           <td style="text-align:right;" class="col-wage">$53,882</td>
-        </tr><tr onclick="window.location='../counties/28021.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">2</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Claiborne County</div>
-              <div style="font-size:11px;color:#98989d;">#821 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">54</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">53.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$96,432</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$72,439</td>
-        </tr><tr onclick="window.location='../counties/28059.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">3</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jackson County</div>
-              <div style="font-size:11px;color:#98989d;">#849 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">53</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">53.4</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$212,175</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.6%</td>
-          <td style="text-align:right;" class="col-wage">$58,512</td>
         </tr><tr onclick="window.location='../counties/28075.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">4</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">2</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lauderdale County</div>
-              <div style="font-size:11px;color:#98989d;">#993 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#458 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">53</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">52.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">57</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">57.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
           <td style="text-align:right;font-weight:600;">$125,198</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.9%</td>
           <td style="text-align:right;" class="col-wage">$45,853</td>
-        </tr><tr onclick="window.location='../counties/28093.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">5</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Marshall County</div>
-              <div style="font-size:11px;color:#98989d;">#1019 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">52</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">52.4</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$213,907</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.3%</td>
-          <td style="text-align:right;" class="col-wage">$47,685</td>
-        </tr><tr onclick="window.location='../counties/28135.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">6</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Tallahatchie County</div>
-              <div style="font-size:11px;color:#98989d;">#1171 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">52</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">51.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$105,849</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$44,480</td>
-        </tr><tr onclick="window.location='../counties/28045.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">7</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Hancock County</div>
-              <div style="font-size:11px;color:#98989d;">#1194 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">51</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">51.4</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$234,323</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+7.5%</td>
-          <td style="text-align:right;" class="col-wage">$55,622</td>
-        </tr><tr onclick="window.location='../counties/28005.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">8</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Amite County</div>
-              <div style="font-size:11px;color:#98989d;">#1239 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">51</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">51.2</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$144,509</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+7.6%</td>
-          <td style="text-align:right;" class="col-wage">$46,882</td>
-        </tr><tr onclick="window.location='../counties/28001.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">9</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Adams County</div>
-              <div style="font-size:11px;color:#98989d;">#1329 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">51</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">50.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$114,948</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.4%</td>
-          <td style="text-align:right;" class="col-wage">$41,008</td>
         </tr><tr onclick="window.location='../counties/28049.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">10</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">3</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Hinds County</div>
-              <div style="font-size:11px;color:#98989d;">#1363 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#479 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">51</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">50.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">57</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">57.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
           <td style="text-align:right;font-weight:600;">$133,485</td>
           <td style="text-align:right;font-weight:600;color:#dc2626;">+2.5%</td>
           <td style="text-align:right;" class="col-wage">$52,990</td>
-        </tr><tr onclick="window.location='../counties/28163.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">11</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Yazoo County</div>
-              <div style="font-size:11px;color:#98989d;">#1373 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">51</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">50.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$112,046</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+7.1%</td>
-          <td style="text-align:right;" class="col-wage">$45,133</td>
-        </tr><tr onclick="window.location='../counties/28121.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">12</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Rankin County</div>
-              <div style="font-size:11px;color:#98989d;">#1374 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">51</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">50.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$268,950</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.9%</td>
-          <td style="text-align:right;" class="col-wage">$51,431</td>
         </tr><tr onclick="window.location='../counties/28051.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">13</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">4</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Holmes County</div>
-              <div style="font-size:11px;color:#98989d;">#1387 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#482 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">50</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">50.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">57</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">57.2</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
           <td style="text-align:right;font-weight:600;">$89,558</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
           <td style="text-align:right;" class="col-wage">$38,440</td>
-        </tr><tr onclick="window.location='../counties/28151.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">14</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Washington County</div>
-              <div style="font-size:11px;color:#98989d;">#1454 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/28135.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">5</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Tallahatchie County</div>
+              <div style="font-size:11px;color:#98989d;">#550 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">50</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">50.0</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$57,775</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.2%</td>
-          <td style="text-align:right;" class="col-wage">$40,196</td>
-        </tr><tr onclick="window.location='../counties/28027.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">15</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Coahoma County</div>
-              <div style="font-size:11px;color:#98989d;">#1461 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">50</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">50.0</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$52,373</td>
-          <td style="text-align:right;font-weight:600;color:#dc2626;">+1.8%</td>
-          <td style="text-align:right;" class="col-wage">$41,998</td>
-        </tr><tr onclick="window.location='../counties/28087.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">16</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lowndes County</div>
-              <div style="font-size:11px;color:#98989d;">#1495 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">50</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">49.8</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$186,576</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.6%</td>
-          <td style="text-align:right;" class="col-wage">$55,663</td>
-        </tr><tr onclick="window.location='../counties/28085.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">17</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lincoln County</div>
-              <div style="font-size:11px;color:#98989d;">#1582 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">49.3</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$169,159</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.6%</td>
-          <td style="text-align:right;" class="col-wage">$45,737</td>
-        </tr><tr onclick="window.location='../counties/28143.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">18</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Tunica County</div>
-              <div style="font-size:11px;color:#98989d;">#1627 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">49.0</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$157,327</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">57</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">56.5</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
+          <td style="text-align:right;font-weight:600;">$105,849</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$40,897</td>
-        </tr><tr onclick="window.location='../counties/28153.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">19</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Wayne County</div>
-              <div style="font-size:11px;color:#98989d;">#1647 nationally</div></td>
+          <td style="text-align:right;" class="col-wage">$44,480</td>
+        </tr><tr onclick="window.location='../counties/28163.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">6</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Yazoo County</div>
+              <div style="font-size:11px;color:#98989d;">#582 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.9</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$143,833</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.7%</td>
-          <td style="text-align:right;" class="col-wage">$43,158</td>
-        </tr><tr onclick="window.location='../counties/28137.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">20</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Tate County</div>
-              <div style="font-size:11px;color:#98989d;">#1668 nationally</div></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">56</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">56.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
+          <td style="text-align:right;font-weight:600;">$112,046</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+7.1%</td>
+          <td style="text-align:right;" class="col-wage">$45,133</td>
+        </tr><tr onclick="window.location='../counties/28001.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">7</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Adams County</div>
+              <div style="font-size:11px;color:#98989d;">#673 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.8</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$242,602</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.9%</td>
-          <td style="text-align:right;" class="col-wage">$42,149</td>
-        </tr><tr onclick="window.location='../counties/28019.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">21</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Choctaw County</div>
-              <div style="font-size:11px;color:#98989d;">#1743 nationally</div></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">55</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">55.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
+          <td style="text-align:right;font-weight:600;">$114,948</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.4%</td>
+          <td style="text-align:right;" class="col-wage">$41,008</td>
+        </tr><tr onclick="window.location='../counties/28021.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">8</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Claiborne County</div>
+              <div style="font-size:11px;color:#98989d;">#708 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.3</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$135,111</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">55</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">55.0</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">ESTABLISHED</span></td>
+          <td style="text-align:right;font-weight:600;">$96,432</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$53,602</td>
+          <td style="text-align:right;" class="col-wage">$72,439</td>
         </tr><tr onclick="window.location='../counties/28077.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">22</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">9</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lawrence County</div>
-              <div style="font-size:11px;color:#98989d;">#1766 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#730 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.2</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">55</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">54.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
           <td style="text-align:right;font-weight:600;">$122,295</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
           <td style="text-align:right;" class="col-wage">$57,818</td>
-        </tr><tr onclick="window.location='../counties/28073.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">23</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lamar County</div>
-              <div style="font-size:11px;color:#98989d;">#1823 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/28059.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">10</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jackson County</div>
+              <div style="font-size:11px;color:#98989d;">#776 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.8</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$266,368</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">55</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">54.6</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$212,175</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.6%</td>
+          <td style="text-align:right;" class="col-wage">$58,512</td>
+        </tr><tr onclick="window.location='../counties/28027.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">11</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Coahoma County</div>
+              <div style="font-size:11px;color:#98989d;">#785 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">55</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">54.5</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$52,373</td>
+          <td style="text-align:right;font-weight:600;color:#dc2626;">+1.8%</td>
+          <td style="text-align:right;" class="col-wage">$41,998</td>
+        </tr><tr onclick="window.location='../counties/28151.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">12</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Washington County</div>
+              <div style="font-size:11px;color:#98989d;">#822 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">54</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">54.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$57,775</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.2%</td>
+          <td style="text-align:right;" class="col-wage">$40,196</td>
+        </tr><tr onclick="window.location='../counties/28143.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">13</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Tunica County</div>
+              <div style="font-size:11px;color:#98989d;">#833 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">54</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">54.2</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$157,327</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$42,752</td>
-        </tr><tr onclick="window.location='../counties/28067.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">24</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jones County</div>
-              <div style="font-size:11px;color:#98989d;">#1833 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$155,886</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.3%</td>
-          <td style="text-align:right;" class="col-wage">$47,179</td>
-        </tr><tr onclick="window.location='../counties/28123.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">25</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Scott County</div>
-              <div style="font-size:11px;color:#98989d;">#1850 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$124,730</td>
-          <td style="text-align:right;font-weight:600;color:#dc2626;">+2.8%</td>
-          <td style="text-align:right;" class="col-wage">$43,824</td>
-        </tr><tr onclick="window.location='../counties/28099.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">26</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Neshoba County</div>
-              <div style="font-size:11px;color:#98989d;">#1858 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$138,592</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.6%</td>
-          <td style="text-align:right;" class="col-wage">$51,309</td>
-        </tr><tr onclick="window.location='../counties/28117.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">27</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Prentiss County</div>
-              <div style="font-size:11px;color:#98989d;">#1883 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">47</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$142,680</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+10.7%</td>
-          <td style="text-align:right;" class="col-wage">$40,029</td>
-        </tr><tr onclick="window.location='../counties/28111.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">28</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Perry County</div>
-              <div style="font-size:11px;color:#98989d;">#1925 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">47</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.2</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$163,753</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$48,573</td>
-        </tr><tr onclick="window.location='../counties/28159.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">29</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Winston County</div>
-              <div style="font-size:11px;color:#98989d;">#1957 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">47</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.0</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$148,405</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.8%</td>
-          <td style="text-align:right;" class="col-wage">$49,254</td>
-        </tr><tr onclick="window.location='../counties/28081.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">30</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lee County</div>
-              <div style="font-size:11px;color:#98989d;">#1999 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">47</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$204,998</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.7%</td>
-          <td style="text-align:right;" class="col-wage">$49,642</td>
+          <td style="text-align:right;" class="col-wage">$40,897</td>
         </tr><tr onclick="window.location='../counties/28113.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">31</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">14</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Pike County</div>
-              <div style="font-size:11px;color:#98989d;">#2005 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#980 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">47</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">53</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">53.1</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
           <td style="text-align:right;font-weight:600;">$107,212</td>
           <td style="text-align:right;font-weight:600;color:#dc2626;">+1.9%</td>
           <td style="text-align:right;" class="col-wage">$37,938</td>
-        </tr><tr onclick="window.location='../counties/28091.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">32</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Marion County</div>
-              <div style="font-size:11px;color:#98989d;">#2020 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/28045.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">15</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Hancock County</div>
+              <div style="font-size:11px;color:#98989d;">#1042 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">47</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$139,805</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.9%</td>
-          <td style="text-align:right;" class="col-wage">$48,548</td>
-        </tr><tr onclick="window.location='../counties/28003.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">33</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Alcorn County</div>
-              <div style="font-size:11px;color:#98989d;">#2031 nationally</div></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">53</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">52.7</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$234,323</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+7.5%</td>
+          <td style="text-align:right;" class="col-wage">$55,622</td>
+        </tr><tr onclick="window.location='../counties/28123.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">16</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Scott County</div>
+              <div style="font-size:11px;color:#98989d;">#1130 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$178,389</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.5%</td>
-          <td style="text-align:right;" class="col-wage">$46,308</td>
-        </tr><tr onclick="window.location='../counties/28141.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">34</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Tishomingo County</div>
-              <div style="font-size:11px;color:#98989d;">#2032 nationally</div></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">52</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">52.1</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$124,730</td>
+          <td style="text-align:right;font-weight:600;color:#dc2626;">+2.8%</td>
+          <td style="text-align:right;" class="col-wage">$43,824</td>
+        </tr><tr onclick="window.location='../counties/28093.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">17</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Marshall County</div>
+              <div style="font-size:11px;color:#98989d;">#1158 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.4</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$192,202</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.4%</td>
-          <td style="text-align:right;" class="col-wage">$46,322</td>
-        </tr><tr onclick="window.location='../counties/28035.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">35</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Forrest County</div>
-              <div style="font-size:11px;color:#98989d;">#2039 nationally</div></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">52</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">51.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$213,907</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.3%</td>
+          <td style="text-align:right;" class="col-wage">$47,685</td>
+        </tr><tr onclick="window.location='../counties/28121.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">18</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Rankin County</div>
+              <div style="font-size:11px;color:#98989d;">#1182 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.4</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$187,960</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.8%</td>
-          <td style="text-align:right;" class="col-wage">$48,768</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">52</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">51.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$268,950</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.9%</td>
+          <td style="text-align:right;" class="col-wage">$51,431</td>
         </tr><tr onclick="window.location='../counties/28007.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">36</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">19</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Attala County</div>
-              <div style="font-size:11px;color:#98989d;">#2058 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#1254 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.3</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">51</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">51.2</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
           <td style="text-align:right;font-weight:600;">$115,067</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
           <td style="text-align:right;" class="col-wage">$42,401</td>
-        </tr><tr onclick="window.location='../counties/28145.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">37</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Union County</div>
-              <div style="font-size:11px;color:#98989d;">#2063 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/28011.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">20</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Bolivar County</div>
+              <div style="font-size:11px;color:#98989d;">#1312 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.2</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$202,602</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+7.1%</td>
-          <td style="text-align:right;" class="col-wage">$48,736</td>
-        </tr><tr onclick="window.location='../counties/28071.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">38</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lafayette County</div>
-              <div style="font-size:11px;color:#98989d;">#2094 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.9</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$402,331</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+11.1%</td>
-          <td style="text-align:right;" class="col-wage">$41,849</td>
-        </tr><tr onclick="window.location='../counties/28041.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">39</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Greene County</div>
-              <div style="font-size:11px;color:#98989d;">#2126 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$159,986</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.9%</td>
-          <td style="text-align:right;" class="col-wage">$44,102</td>
-        </tr><tr onclick="window.location='../counties/28017.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">40</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Chickasaw County</div>
-              <div style="font-size:11px;color:#98989d;">#2144 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$137,983</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$38,134</td>
-        </tr><tr onclick="window.location='../counties/28079.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">41</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Leake County</div>
-              <div style="font-size:11px;color:#98989d;">#2156 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$162,374</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.6%</td>
-          <td style="text-align:right;" class="col-wage">$37,779</td>
-        </tr><tr onclick="window.location='../counties/28129.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">42</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Smith County</div>
-              <div style="font-size:11px;color:#98989d;">#2198 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.2</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$159,192</td>
-          <td style="text-align:right;font-weight:600;color:#dc2626;">+1.4%</td>
-          <td style="text-align:right;" class="col-wage">$51,367</td>
-        </tr><tr onclick="window.location='../counties/28155.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">43</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Webster County</div>
-              <div style="font-size:11px;color:#98989d;">#2214 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.2</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-buy">BUY</span></td>
-          <td style="text-align:right;font-weight:600;">$159,474</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+12.1%</td>
-          <td style="text-align:right;" class="col-wage">$42,232</td>
-        </tr><tr onclick="window.location='../counties/28013.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">44</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Calhoun County</div>
-              <div style="font-size:11px;color:#98989d;">#2221 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.1</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$118,124</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+29.6%</td>
-          <td style="text-align:right;" class="col-wage">$38,790</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">51</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">50.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$121,010</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.5%</td>
+          <td style="text-align:right;" class="col-wage">$43,544</td>
         </tr><tr onclick="window.location='../counties/28083.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">45</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">21</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Leflore County</div>
-              <div style="font-size:11px;color:#98989d;">#2222 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#1417 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.1</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">50</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">50.1</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
           <td style="text-align:right;font-weight:600;">$77,805</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+3.0%</td>
           <td style="text-align:right;" class="col-wage">$40,863</td>
-        </tr><tr onclick="window.location='../counties/28107.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">46</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Panola County</div>
-              <div style="font-size:11px;color:#98989d;">#2247 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/28085.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">22</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lincoln County</div>
+              <div style="font-size:11px;color:#98989d;">#1519 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.9</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$187,860</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+10.3%</td>
-          <td style="text-align:right;" class="col-wage">$44,768</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">49.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$169,159</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.6%</td>
+          <td style="text-align:right;" class="col-wage">$45,737</td>
+        </tr><tr onclick="window.location='../counties/28087.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">23</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lowndes County</div>
+              <div style="font-size:11px;color:#98989d;">#1538 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">49.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$186,576</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.6%</td>
+          <td style="text-align:right;" class="col-wage">$55,663</td>
+        </tr><tr onclick="window.location='../counties/28035.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">24</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Forrest County</div>
+              <div style="font-size:11px;color:#98989d;">#1543 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">49.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$187,960</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.8%</td>
+          <td style="text-align:right;" class="col-wage">$48,768</td>
+        </tr><tr onclick="window.location='../counties/28003.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">25</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Alcorn County</div>
+              <div style="font-size:11px;color:#98989d;">#1554 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">49.2</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$178,389</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.5%</td>
+          <td style="text-align:right;" class="col-wage">$46,308</td>
+        </tr><tr onclick="window.location='../counties/28063.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">26</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jefferson County</div>
+              <div style="font-size:11px;color:#98989d;">#1593 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$93,946</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$48,551</td>
         </tr><tr onclick="window.location='../counties/28029.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">47</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">27</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Copiah County</div>
-              <div style="font-size:11px;color:#98989d;">#2297 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#1600 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">44</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.4</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
           <td style="text-align:right;font-weight:600;">$135,359</td>
           <td style="text-align:right;font-weight:600;color:#dc2626;">+2.4%</td>
           <td style="text-align:right;" class="col-wage">$37,480</td>
-        </tr><tr onclick="window.location='../counties/28109.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">48</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Pearl River County</div>
-              <div style="font-size:11px;color:#98989d;">#2303 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/28111.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">28</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Perry County</div>
+              <div style="font-size:11px;color:#98989d;">#1610 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">44</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.4</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$197,244</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.0%</td>
-          <td style="text-align:right;" class="col-wage">$38,009</td>
-        </tr><tr onclick="window.location='../counties/28061.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">49</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jasper County</div>
-              <div style="font-size:11px;color:#98989d;">#2352 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">44</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.0</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$137,391</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.7%</td>
-          <td style="text-align:right;" class="col-wage">$51,488</td>
-        </tr><tr onclick="window.location='../counties/28037.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">50</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Franklin County</div>
-              <div style="font-size:11px;color:#98989d;">#2380 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">44</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.8</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$156,407</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$163,753</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$47,752</td>
-        </tr><tr onclick="window.location='../counties/28139.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">51</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Tippah County</div>
-              <div style="font-size:11px;color:#98989d;">#2388 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">44</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$143,322</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.8%</td>
-          <td style="text-align:right;" class="col-wage">$42,558</td>
-        </tr><tr onclick="window.location='../counties/28033.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">52</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">DeSoto County</div>
-              <div style="font-size:11px;color:#98989d;">#2391 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">44</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$300,854</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.1%</td>
-          <td style="text-align:right;" class="col-wage">$43,922</td>
+          <td style="text-align:right;" class="col-wage">$48,573</td>
         </tr><tr onclick="window.location='../counties/28133.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">53</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">29</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Sunflower County</div>
-              <div style="font-size:11px;color:#98989d;">#2392 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#1612 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">44</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
           <td style="text-align:right;font-weight:600;">$87,357</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+3.5%</td>
           <td style="text-align:right;" class="col-wage">$38,712</td>
-        </tr><tr onclick="window.location='../counties/28103.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">54</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Noxubee County</div>
-              <div style="font-size:11px;color:#98989d;">#2393 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/28067.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">30</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jones County</div>
+              <div style="font-size:11px;color:#98989d;">#1614 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">44</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$155,886</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.3%</td>
+          <td style="text-align:right;" class="col-wage">$47,179</td>
+        </tr><tr onclick="window.location='../counties/28043.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">31</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Grenada County</div>
+              <div style="font-size:11px;color:#98989d;">#1631 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">49</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.6</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$134,654</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.8%</td>
+          <td style="text-align:right;" class="col-wage">$42,489</td>
+        </tr><tr onclick="window.location='../counties/28137.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">32</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Tate County</div>
+              <div style="font-size:11px;color:#98989d;">#1662 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$242,602</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.9%</td>
+          <td style="text-align:right;" class="col-wage">$42,149</td>
+        </tr><tr onclick="window.location='../counties/28053.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">33</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Humphreys County</div>
+              <div style="font-size:11px;color:#98989d;">#1687 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">48.2</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$82,487</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$36,637</td>
+        </tr><tr onclick="window.location='../counties/28081.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">34</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lee County</div>
+              <div style="font-size:11px;color:#98989d;">#1735 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$204,998</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.7%</td>
+          <td style="text-align:right;" class="col-wage">$49,642</td>
+        </tr><tr onclick="window.location='../counties/28005.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">35</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Amite County</div>
+              <div style="font-size:11px;color:#98989d;">#1739 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$144,509</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+7.6%</td>
+          <td style="text-align:right;" class="col-wage">$46,882</td>
+        </tr><tr onclick="window.location='../counties/28013.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">36</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Calhoun County</div>
+              <div style="font-size:11px;color:#98989d;">#1767 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.7</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$118,124</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+29.6%</td>
+          <td style="text-align:right;" class="col-wage">$38,790</td>
+        </tr><tr onclick="window.location='../counties/28103.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">37</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Noxubee County</div>
+              <div style="font-size:11px;color:#98989d;">#1771 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.6</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
           <td style="text-align:right;font-weight:600;">$109,437</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
           <td style="text-align:right;" class="col-wage">$41,280</td>
-        </tr><tr onclick="window.location='../counties/28101.html'" style="cursor:pointer;">
+        </tr><tr onclick="window.location='../counties/28117.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">38</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Prentiss County</div>
+              <div style="font-size:11px;color:#98989d;">#1773 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">48</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.6</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$142,680</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+10.7%</td>
+          <td style="text-align:right;" class="col-wage">$40,029</td>
+        </tr><tr onclick="window.location='../counties/28153.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">39</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Wayne County</div>
+              <div style="font-size:11px;color:#98989d;">#1830 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">47</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.2</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$143,833</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.7%</td>
+          <td style="text-align:right;" class="col-wage">$43,158</td>
+        </tr><tr onclick="window.location='../counties/28073.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">40</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lamar County</div>
+              <div style="font-size:11px;color:#98989d;">#1853 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">47</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">47.0</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$266,368</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$42,752</td>
+        </tr><tr onclick="window.location='../counties/28019.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">41</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Choctaw County</div>
+              <div style="font-size:11px;color:#98989d;">#1875 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">47</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$135,111</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$53,602</td>
+        </tr><tr onclick="window.location='../counties/28071.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">42</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Lafayette County</div>
+              <div style="font-size:11px;color:#98989d;">#1906 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.5</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$402,331</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+11.1%</td>
+          <td style="text-align:right;" class="col-wage">$41,849</td>
+        </tr><tr onclick="window.location='../counties/28099.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">43</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Neshoba County</div>
+              <div style="font-size:11px;color:#98989d;">#1913 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$138,592</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.6%</td>
+          <td style="text-align:right;" class="col-wage">$51,309</td>
+        </tr><tr onclick="window.location='../counties/28145.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">44</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Union County</div>
+              <div style="font-size:11px;color:#98989d;">#1944 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">46.1</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">EMERGING</span></td>
+          <td style="text-align:right;font-weight:600;">$202,602</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+7.1%</td>
+          <td style="text-align:right;" class="col-wage">$48,736</td>
+        </tr><tr onclick="window.location='../counties/28033.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">45</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">DeSoto County</div>
+              <div style="font-size:11px;color:#98989d;">#1980 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">46</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$300,854</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.1%</td>
+          <td style="text-align:right;" class="col-wage">$43,922</td>
+        </tr><tr onclick="window.location='../counties/28037.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">46</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Franklin County</div>
+              <div style="font-size:11px;color:#98989d;">#2041 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">45.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$156,407</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$47,752</td>
+        </tr><tr onclick="window.location='../counties/28159.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">47</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Winston County</div>
+              <div style="font-size:11px;color:#98989d;">#2076 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$148,405</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.8%</td>
+          <td style="text-align:right;" class="col-wage">$49,254</td>
+        </tr><tr onclick="window.location='../counties/28107.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">48</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Panola County</div>
+              <div style="font-size:11px;color:#98989d;">#2082 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$187,860</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+10.3%</td>
+          <td style="text-align:right;" class="col-wage">$44,768</td>
+        </tr><tr onclick="window.location='../counties/28041.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">49</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Greene County</div>
+              <div style="font-size:11px;color:#98989d;">#2088 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$159,986</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.9%</td>
+          <td style="text-align:right;" class="col-wage">$44,102</td>
+        </tr><tr onclick="window.location='../counties/28079.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">50</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Leake County</div>
+              <div style="font-size:11px;color:#98989d;">#2095 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$162,374</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.6%</td>
+          <td style="text-align:right;" class="col-wage">$37,779</td>
+        </tr><tr onclick="window.location='../counties/28017.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">51</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Chickasaw County</div>
+              <div style="font-size:11px;color:#98989d;">#2101 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.8</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$137,983</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$38,134</td>
+        </tr><tr onclick="window.location='../counties/28023.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">52</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Clarke County</div>
+              <div style="font-size:11px;color:#98989d;">#2109 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.7</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$107,340</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.0%</td>
+          <td style="text-align:right;" class="col-wage">$44,765</td>
+        </tr><tr onclick="window.location='../counties/28091.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">53</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Marion County</div>
+              <div style="font-size:11px;color:#98989d;">#2131 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.6</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$139,805</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+8.9%</td>
+          <td style="text-align:right;" class="col-wage">$48,548</td>
+        </tr><tr onclick="window.location='../counties/28157.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">54</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Wilkinson County</div>
+              <div style="font-size:11px;color:#98989d;">#2134 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">45</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.5</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$118,894</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$37,794</td>
+        </tr><tr onclick="window.location='../counties/28109.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">55</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Newton County</div>
-              <div style="font-size:11px;color:#98989d;">#2430 nationally</div></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Pearl River County</div>
+              <div style="font-size:11px;color:#98989d;">#2165 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">44</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">44.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$197,244</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.0%</td>
+          <td style="text-align:right;" class="col-wage">$38,009</td>
+        </tr><tr onclick="window.location='../counties/28129.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">56</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Smith County</div>
+              <div style="font-size:11px;color:#98989d;">#2242 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">44</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.6</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$159,192</td>
+          <td style="text-align:right;font-weight:600;color:#dc2626;">+1.4%</td>
+          <td style="text-align:right;" class="col-wage">$51,367</td>
+        </tr><tr onclick="window.location='../counties/28141.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">57</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Tishomingo County</div>
+              <div style="font-size:11px;color:#98989d;">#2274 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$192,202</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.4%</td>
+          <td style="text-align:right;" class="col-wage">$46,322</td>
+        </tr><tr onclick="window.location='../counties/28105.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">58</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Oktibbeha County</div>
+              <div style="font-size:11px;color:#98989d;">#2284 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
               <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.3</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$272,258</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.8%</td>
+          <td style="text-align:right;" class="col-wage">$36,397</td>
+        </tr><tr onclick="window.location='../counties/28065.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">59</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jefferson Davis County</div>
+              <div style="font-size:11px;color:#98989d;">#2286 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$99,174</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$40,957</td>
+        </tr><tr onclick="window.location='../counties/28139.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">60</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Tippah County</div>
+              <div style="font-size:11px;color:#98989d;">#2290 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$143,322</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.8%</td>
+          <td style="text-align:right;" class="col-wage">$42,558</td>
+        </tr><tr onclick="window.location='../counties/28047.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">61</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Harrison County</div>
+              <div style="font-size:11px;color:#98989d;">#2311 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.0</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$226,442</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.8%</td>
+          <td style="text-align:right;" class="col-wage">$42,164</td>
+        </tr><tr onclick="window.location='../counties/28101.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">62</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Newton County</div>
+              <div style="font-size:11px;color:#98989d;">#2316 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.0</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
           <td style="text-align:right;font-weight:600;">$140,289</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.1%</td>
           <td style="text-align:right;" class="col-wage">$40,451</td>
         </tr><tr onclick="window.location='../counties/28127.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">56</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">63</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Simpson County</div>
-              <div style="font-size:11px;color:#98989d;">#2431 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2363 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.3</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">42.6</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
           <td style="text-align:right;font-weight:600;">$151,614</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+3.2%</td>
           <td style="text-align:right;" class="col-wage">$35,763</td>
-        </tr><tr onclick="window.location='../counties/28011.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">57</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Bolivar County</div>
-              <div style="font-size:11px;color:#98989d;">#2443 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/28097.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">64</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Montgomery County</div>
+              <div style="font-size:11px;color:#98989d;">#2392 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.2</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$121,010</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.5%</td>
-          <td style="text-align:right;" class="col-wage">$43,544</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">42</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">42.2</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$124,683</td>
+          <td style="text-align:right;font-weight:600;color:#dc2626;">+1.4%</td>
+          <td style="text-align:right;" class="col-wage">$38,844</td>
         </tr><tr onclick="window.location='../counties/28131.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">58</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">65</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Stone County</div>
-              <div style="font-size:11px;color:#98989d;">#2445 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2397 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.1</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">42</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">42.2</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
           <td style="text-align:right;font-weight:600;">$201,844</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+3.9%</td>
           <td style="text-align:right;" class="col-wage">$42,162</td>
         </tr><tr onclick="window.location='../counties/28031.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">59</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">66</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Covington County</div>
-              <div style="font-size:11px;color:#98989d;">#2450 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2402 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.1</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">42</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">42.1</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
           <td style="text-align:right;font-weight:600;">$179,083</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+5.4%</td>
           <td style="text-align:right;" class="col-wage">$42,625</td>
-        </tr><tr onclick="window.location='../counties/28063.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">60</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jefferson County</div>
-              <div style="font-size:11px;color:#98989d;">#2459 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">43.0</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$93,946</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$48,551</td>
-        </tr><tr onclick="window.location='../counties/28043.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">61</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Grenada County</div>
-              <div style="font-size:11px;color:#98989d;">#2471 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">42.8</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$134,654</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.8%</td>
-          <td style="text-align:right;" class="col-wage">$42,489</td>
-        </tr><tr onclick="window.location='../counties/28047.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">62</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Harrison County</div>
-              <div style="font-size:11px;color:#98989d;">#2496 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">43</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">42.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$226,442</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.8%</td>
-          <td style="text-align:right;" class="col-wage">$42,164</td>
-        </tr><tr onclick="window.location='../counties/28023.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">63</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Clarke County</div>
-              <div style="font-size:11px;color:#98989d;">#2500 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">42</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">42.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$107,340</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+5.0%</td>
-          <td style="text-align:right;" class="col-wage">$44,765</td>
-        </tr><tr onclick="window.location='../counties/28009.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">64</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Benton County</div>
-              <div style="font-size:11px;color:#98989d;">#2577 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/28061.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">67</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jasper County</div>
+              <div style="font-size:11px;color:#98989d;">#2460 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">41</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">41.3</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">41.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$137,391</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.7%</td>
+          <td style="text-align:right;" class="col-wage">$51,488</td>
+        </tr><tr onclick="window.location='../counties/28155.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">68</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Webster County</div>
+              <div style="font-size:11px;color:#98989d;">#2502 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">41</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">40.9</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
+          <td style="text-align:right;font-weight:600;">$159,474</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+12.1%</td>
+          <td style="text-align:right;" class="col-wage">$42,232</td>
+        </tr><tr onclick="window.location='../counties/28009.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">69</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Benton County</div>
+              <div style="font-size:11px;color:#98989d;">#2527 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">40</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">40.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
           <td style="text-align:right;font-weight:600;">$152,305</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+33.4%</td>
           <td style="text-align:right;" class="col-wage">$45,087</td>
-        </tr><tr onclick="window.location='../counties/28053.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">65</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Humphreys County</div>
-              <div style="font-size:11px;color:#98989d;">#2603 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">41</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">40.8</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$82,487</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$36,637</td>
-        </tr><tr onclick="window.location='../counties/28105.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">66</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Oktibbeha County</div>
-              <div style="font-size:11px;color:#98989d;">#2610 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">41</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">40.7</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$272,258</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.8%</td>
-          <td style="text-align:right;" class="col-wage">$36,397</td>
-        </tr><tr onclick="window.location='../counties/28069.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">67</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Kemper County</div>
-              <div style="font-size:11px;color:#98989d;">#2655 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">40</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">39.9</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$138,804</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$43,658</td>
-        </tr><tr onclick="window.location='../counties/28147.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">68</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Walthall County</div>
-              <div style="font-size:11px;color:#98989d;">#2670 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">40</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">39.5</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">WATCH</span></td>
-          <td style="text-align:right;font-weight:600;">$156,081</td>
-          <td style="text-align:right;font-weight:600;color:#dc2626;">+2.6%</td>
-          <td style="text-align:right;" class="col-wage">$36,767</td>
-        </tr><tr onclick="window.location='../counties/28161.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">69</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Yalobusha County</div>
-              <div style="font-size:11px;color:#98989d;">#2676 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">39</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">39.3</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$153,973</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.8%</td>
-          <td style="text-align:right;" class="col-wage">$46,800</td>
-        </tr><tr onclick="window.location='../counties/28095.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">70</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Monroe County</div>
-              <div style="font-size:11px;color:#98989d;">#2697 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">39</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">38.8</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$163,462</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.6%</td>
-          <td style="text-align:right;" class="col-wage">$49,533</td>
         </tr><tr onclick="window.location='../counties/28149.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">71</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">70</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Warren County</div>
-              <div style="font-size:11px;color:#98989d;">#2710 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2568 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">38</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">38.4</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">40</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">39.7</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">FRONTIER</span></td>
           <td style="text-align:right;font-weight:600;">$146,197</td>
           <td style="text-align:right;font-weight:600;color:#dc2626;">+2.6%</td>
           <td style="text-align:right;" class="col-wage">$47,974</td>
-        </tr><tr onclick="window.location='../counties/28025.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">72</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Clay County</div>
-              <div style="font-size:11px;color:#98989d;">#2730 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/28147.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">71</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Walthall County</div>
+              <div style="font-size:11px;color:#98989d;">#2656 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">38</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">37.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$149,393</td>
-          <td style="text-align:right;font-weight:600;color:#dc2626;">-7.4%</td>
-          <td style="text-align:right;" class="col-wage">$44,366</td>
-        </tr><tr onclick="window.location='../counties/28097.html'" style="cursor:pointer;">
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">38.0</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
+          <td style="text-align:right;font-weight:600;">$156,081</td>
+          <td style="text-align:right;font-weight:600;color:#dc2626;">+2.6%</td>
+          <td style="text-align:right;" class="col-wage">$36,767</td>
+        </tr><tr onclick="window.location='../counties/28095.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">72</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Monroe County</div>
+              <div style="font-size:11px;color:#98989d;">#2662 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">38</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">37.7</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
+          <td style="text-align:right;font-weight:600;">$163,462</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.6%</td>
+          <td style="text-align:right;" class="col-wage">$49,533</td>
+        </tr><tr onclick="window.location='../counties/28069.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">73</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Montgomery County</div>
-              <div style="font-size:11px;color:#98989d;">#2739 nationally</div></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Kemper County</div>
+              <div style="font-size:11px;color:#98989d;">#2681 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">37</div>
               <span style="font-size:14px;font-weight:800;color:#0d2d52;">37.3</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-caut">CAUTION</span></td>
-          <td style="text-align:right;font-weight:600;">$124,683</td>
-          <td style="text-align:right;font-weight:600;color:#dc2626;">+1.4%</td>
-          <td style="text-align:right;" class="col-wage">$38,844</td>
-        </tr><tr onclick="window.location='../counties/28157.html'" style="cursor:pointer;">
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
+          <td style="text-align:right;font-weight:600;">$138,804</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
+          <td style="text-align:right;" class="col-wage">$43,658</td>
+        </tr><tr onclick="window.location='../counties/28161.html'" style="cursor:pointer;">
           <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">74</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Wilkinson County</div>
-              <div style="font-size:11px;color:#98989d;">#2749 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">37</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">37.0</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$118,894</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$37,794</td>
-        </tr><tr onclick="window.location='../counties/28065.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">75</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Jefferson Davis County</div>
-              <div style="font-size:11px;color:#98989d;">#2763 nationally</div></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Yalobusha County</div>
+              <div style="font-size:11px;color:#98989d;">#2708 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">37</div>
               <span style="font-size:14px;font-weight:800;color:#0d2d52;">36.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$99,174</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
-          <td style="text-align:right;" class="col-wage">$40,957</td>
-        </tr><tr onclick="window.location='../counties/28039.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">76</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">George County</div>
-              <div style="font-size:11px;color:#98989d;">#2765 nationally</div></td>
-          <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">37</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">36.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$210,056</td>
-          <td style="text-align:right;font-weight:600;color:#dc2626;">+2.7%</td>
-          <td style="text-align:right;" class="col-wage">$37,626</td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
+          <td style="text-align:right;font-weight:600;">$153,973</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+4.8%</td>
+          <td style="text-align:right;" class="col-wage">$46,800</td>
         </tr><tr onclick="window.location='../counties/28115.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">77</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">75</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Pontotoc County</div>
-              <div style="font-size:11px;color:#98989d;">#2779 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2724 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">36</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">35.8</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">36.1</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
           <td style="text-align:right;font-weight:600;">$204,693</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+3.4%</td>
           <td style="text-align:right;" class="col-wage">$40,857</td>
-        </tr><tr onclick="window.location='../counties/28057.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">78</span></td>
-          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Itawamba County</div>
-              <div style="font-size:11px;color:#98989d;">#2787 nationally</div></td>
+        </tr><tr onclick="window.location='../counties/28039.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">76</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">George County</div>
+              <div style="font-size:11px;color:#98989d;">#2742 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">35</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">35.1</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$164,060</td>
-          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.4%</td>
-          <td style="text-align:right;" class="col-wage">$40,115</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">36</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">35.6</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
+          <td style="text-align:right;font-weight:600;">$210,056</td>
+          <td style="text-align:right;font-weight:600;color:#dc2626;">+2.7%</td>
+          <td style="text-align:right;" class="col-wage">$37,626</td>
         </tr><tr onclick="window.location='../counties/28015.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">79</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">77</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Carroll County</div>
-              <div style="font-size:11px;color:#98989d;">#2795 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2747 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
               <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">35</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">34.6</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">35.4</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
           <td style="text-align:right;font-weight:600;">$169,006</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
           <td style="text-align:right;" class="col-wage">$41,874</td>
         </tr><tr onclick="window.location='../counties/28119.html'" style="cursor:pointer;">
-          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">80</span></td>
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">78</span></td>
           <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Quitman County</div>
-              <div style="font-size:11px;color:#98989d;">#2810 nationally</div></td>
+              <div style="font-size:11px;color:#98989d;">#2753 nationally</div></td>
           <td><div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">32</div>
-              <span style="font-size:14px;font-weight:800;color:#0d2d52;">31.9</span></div></td>
-          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-avoid">AVOID</span></td>
-          <td style="text-align:right;font-weight:600;">$235,884</td>
+              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">35</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">35.3</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
+          <td style="text-align:right;font-weight:600;">$148,899</td>
           <td style="text-align:right;font-weight:600;color:#16a34a;">+6.0%</td>
           <td style="text-align:right;" class="col-wage">$34,946</td>
+        </tr><tr onclick="window.location='../counties/28025.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">79</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Clay County</div>
+              <div style="font-size:11px;color:#98989d;">#2765 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">35</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">34.6</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
+          <td style="text-align:right;font-weight:600;">$149,393</td>
+          <td style="text-align:right;font-weight:600;color:#dc2626;">-7.4%</td>
+          <td style="text-align:right;" class="col-wage">$44,366</td>
+        </tr><tr onclick="window.location='../counties/28057.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">80</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">Itawamba County</div>
+              <div style="font-size:11px;color:#98989d;">#2775 nationally</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">34</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">34.0</span></div></td>
+          <td><span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;" class="lb-watch">TURNING</span></td>
+          <td style="text-align:right;font-weight:600;">$164,060</td>
+          <td style="text-align:right;font-weight:600;color:#16a34a;">+3.4%</td>
+          <td style="text-align:right;" class="col-wage">$40,115</td>
         </tr></tbody>
       </table>
     </div>

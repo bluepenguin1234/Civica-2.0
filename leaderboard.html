@@ -121,7 +121,7 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.85; max-wi
     <div class="hero-stats">
       <div class="hs"><div class="hs-num" id="totalCount">2,820</div><div class="hs-lbl">Counties Scored</div></div>
       <div class="hs"><div class="hs-num" id="buyCount">—</div><div class="hs-lbl">BUY Markets (score ≥58)</div></div>
-      <div class="hs"><div class="hs-num" id="accelCount">—</div><div class="hs-lbl">STRONG BUY Markets</div></div>
+      <div class="hs"><div class="hs-num" id="accelCount">—</div><div class="hs-lbl">ACCELERATING Markets</div></div>
       <div class="hs"><div class="hs-num" id="medianScore">—</div><div class="hs-lbl">Median Score</div></div>
     </div>
   </div>
@@ -176,20 +176,24 @@ let view = 'top100';
 let lbVisible = 50;
 
 const SIGNAL_CLASS = {
-  'STRONG BUY':'lb-sbuy', 'BUY':'lb-buy', 'WATCH':'lb-watch',
-  'CAUTION':'lb-caut', 'AVOID':'lb-avoid',
+  'ACCELERATING':'lb-sbuy', 'PEAKING':'lb-sbuy',
+  'ESTABLISHED':'lb-buy',   'EMERGING':'lb-buy',
+  'FRONTIER':'lb-watch',    'TURNING':'lb-caut',
+  'SPECULATIVE':'lb-avoid', 'AVOID':'lb-avoid',
 };
 const SCORE_BG = {
-  'STRONG BUY':'#16a34a', 'BUY':'#1a7ff0', 'WATCH':'#f59e0b',
-  'CAUTION':'#f97316', 'AVOID':'#dc2626',
+  'ACCELERATING':'#16a34a', 'PEAKING':'#22c55e',
+  'ESTABLISHED':'#1a7ff0',  'EMERGING':'#8b5cf6',
+  'FRONTIER':'#f59e0b',     'TURNING':'#f97316',
+  'SPECULATIVE':'#ef4444',  'AVOID':'#dc2626',
 };
 
 const VIEW_CONFIG = {
   top100:      { desc: 'Counties with the highest composite Civica scores — strongest fundamentals across all 6 dimensions.', fn: d => d },
   undervalued: { desc: 'High Civica score (≥55) combined with a median home value below the national median (~$310k). These markets have strong fundamentals but haven\'t priced in yet.', fn: d => d.filter(c => c.score >= 55 && c.median_home_value < 310000).sort((a,b) => b.score - a.score) },
   affordable:  { desc: 'Counties ranked by lowest price-to-rent ratio among those with a score above 40. Rent vs. buy math favors ownership.', fn: d => d.filter(c => c.score >= 40).sort((a,b) => a.pr_ratio - b.pr_ratio) },
-  strongbuy:   { desc: 'Counties signaled STRONG BUY: top-tier fundamentals with actively improving conditions. The highest-conviction entry points in the model right now.', fn: d => d.filter(c => c.signal === 'STRONG BUY').sort((a,b) => b.score - a.score) },
-  caution:     { desc: 'Counties signaled CAUTION or AVOID: fundamentals are below average or actively deteriorating. If you are considering buying here, understand the risks first.', fn: d => d.filter(c => c.signal === 'CAUTION' || c.signal === 'AVOID').sort((a,b) => a.score - b.score) },
+  strongbuy:   { desc: 'Counties labeled ACCELERATING or PEAKING: top-tier fundamentals with positive momentum. The highest-conviction entry points in the model right now.', fn: d => d.filter(c => c.signal === 'ACCELERATING' || c.signal === 'PEAKING').sort((a,b) => b.score - a.score) },
+  caution:     { desc: 'Counties labeled SPECULATIVE or AVOID: fundamentals are below average or actively deteriorating. If you are considering buying here, understand the risks first.', fn: d => d.filter(c => c.signal === 'SPECULATIVE' || c.signal === 'AVOID').sort((a,b) => a.score - b.score) },
 };
 
 if (location.protocol === 'file:') {
@@ -217,7 +221,7 @@ fetch('output/index.json')
 
 function updateStats() {
   const buyCount   = ALL.filter(c => c.score >= 58).length;
-  const accelCount = ALL.filter(c => c.signal === 'STRONG BUY').length;
+  const accelCount = ALL.filter(c => c.signal === 'ACCELERATING').length;
   const scores = ALL.map(c => c.score).sort((a,b) => a-b);
   const median = scores[Math.floor(scores.length/2)].toFixed(1);
 
