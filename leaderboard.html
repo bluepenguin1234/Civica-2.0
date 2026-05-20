@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top 100 Counties to Buy a Home in 2026 — Civica Research</title>
+<meta name="description" content="The top 100 US counties to buy a home in 2026, ranked by Civica's 6-dimension housing intelligence model. Covers affordability, economic vitality, market dynamics, climate risk, and population momentum.">
+<meta property="og:title" content="Top 100 Counties to Buy a Home in 2026 — Civica">
+<meta property="og:description" content="The definitive ranking of the best US housing markets. Built on federal data only — no ads, no agents, no conflicts.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://civica.app/og_image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://civica.app/og_image.png">
+<link rel="canonical" href="https://civica.app/leaderboard.html">
+<!-- GA4: replace G-XXXXXXXXXX with your Measurement ID -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script> -->
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+:root { --blue:#1a7ff0; --navy:#1a3a5c; --green:#16a34a; --yellow:#d97706; --red:#dc2626; --bg:#f0f2f5; --border:#e5e7eb; --muted:#9ca3af; --text:#1f2937; --subtext:#6b7280; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); }
+
+.nav { background:#fff; height:56px; padding:0 28px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:300; box-shadow:0 1px 0 var(--border); }
+.logo { display:flex; align-items:center; gap:8px; text-decoration:none; }
+.logo-text { font-size:18px; font-weight:800; color:var(--navy); }
+.logo-text em { font-style:normal; color:var(--blue); }
+.nav-links { display:flex; align-items:center; gap:20px; }
+.nav-links a { font-size:13px; color:var(--subtext); text-decoration:none; font-weight:500; }
+.nav-links a:hover { color:var(--navy); }
+
+.hero { background:var(--navy); padding:56px 28px 64px; }
+.hero-inner { max-width:1000px; margin:0 auto; }
+.hero-eyebrow { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:14px; }
+.hero-h { font-size:52px; font-weight:900; color:#fff; line-height:1.0; margin-bottom:16px; }
+.hero-sub { font-size:16px; color:rgba(255,255,255,.6); line-height:1.7; max-width:580px; margin-bottom:32px; }
+.hero-stats { display:flex; gap:36px; flex-wrap:wrap; }
+.hs { }
+.hs-num { font-size:30px; font-weight:900; color:#fff; }
+.hs-lbl { font-size:12px; color:rgba(255,255,255,.45); margin-top:3px; }
+
+.page { max-width:1000px; margin:0 auto; padding:32px 28px; }
+
+.tab-strip { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+.tab-btn {
+  padding:9px 20px; border-radius:100px; border:1.5px solid var(--border);
+  background:#fff; font-size:13px; font-weight:600; color:var(--subtext);
+  cursor:pointer; font-family:inherit; transition:all .15s;
+}
+.tab-btn:hover { border-color:var(--blue); color:var(--blue); }
+.tab-btn.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+
+.section-h { font-size:22px; font-weight:800; color:var(--navy); margin-bottom:6px; }
+.section-sub { font-size:14px; color:var(--subtext); margin-bottom:20px; }
+
+.lb-table { width:100%; border-collapse:collapse; font-size:13px; background:#fff; border-radius:14px; overflow:hidden; border:1px solid var(--border); }
+.lb-table th { text-align:left; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); padding:12px 16px; border-bottom:2px solid var(--border); white-space:nowrap; background:#f8fafc; }
+.lb-table th.r { text-align:right; }
+.lb-table td { padding:12px 16px; border-bottom:1px solid #f9fafb; vertical-align:middle; }
+.lb-table tbody tr:hover td { background:#fafbfc; cursor:pointer; }
+.lb-table tr:last-child td { border-bottom:none; }
+.rk { font-size:16px; font-weight:900; color:#d1d5db; }
+.rk.top10 { color:#d97706; }
+.rk.top3  { color:#f59e0b; }
+.cname { font-size:14px; font-weight:700; color:var(--navy); }
+.cstate-lbl { font-size:11px; color:var(--muted); margin-top:2px; }
+.sc-circ { width:36px; height:36px; border-radius:50%; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; }
+.sc-num { font-size:15px; font-weight:800; color:var(--navy); }
+.lbadge { font-size:10px; font-weight:700; padding:3px 9px; border-radius:100px; white-space:nowrap; }
+.lb-sbuy  { background:#dcfce7; color:#15803d; }
+.lb-buy   { background:#dbeafe; color:#1d4ed8; }
+.lb-watch { background:#fef3c7; color:#92400e; }
+.lb-caut  { background:#ffedd5; color:#9a3412; }
+.lb-avoid { background:#fee2e2; color:#b91c1c; }
+
+.load-more { display:block; width:100%; padding:13px; border:1.5px solid var(--border); background:#fff; border-radius:10px; font-size:14px; font-weight:700; color:var(--navy); cursor:pointer; font-family:inherit; margin-top:16px; transition:background .15s; }
+.load-more:hover { background:var(--bg); }
+.load-more[style*="none"] { display:none; }
+
+.insight-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:32px; }
+.insight-card { background:#fff; border-radius:14px; padding:22px; border:1px solid var(--border); }
+.ic-num { font-size:28px; font-weight:900; color:var(--navy); }
+.ic-lbl { font-size:12px; color:var(--subtext); margin-top:4px; }
+
+footer { background:#111827; padding:40px 28px; text-align:center; margin-top:48px; }
+footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.85; max-width:720px; margin:0 auto; }
+
+@media (max-width:660px) {
+  .hero-h { font-size:34px; }
+  .insight-strip { grid-template-columns:1fr 1fr; }
+  .tab-strip { gap:6px; }
+  .tab-btn { font-size:12px; padding:7px 14px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="logo" href="index.html">
+    <svg width="22" height="22" viewBox="0 0 30 30" fill="none">
+      <rect width="30" height="30" rx="6" fill="#1a7ff0"/>
+      <path d="M9 21L15 9L21 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="11" y1="17" x2="19" y2="17" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">civi<em>ca</em></span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">← All Counties</a>
+    <a href="compare.html">Compare</a>
+    <a href="harvard_model.html">Methodology</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Civica National Rankings · 2026</div>
+    <h1 class="hero-h">The Best US Counties<br>to Buy a Home</h1>
+    <p class="hero-sub">Ranked by Civica's 6-dimension composite score — 2,820 counties analyzed using only federal government data. No ads. No agents. No conflicts of interest.</p>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-num" id="totalCount">2,820</div><div class="hs-lbl">Counties Scored</div></div>
+      <div class="hs"><div class="hs-num" id="buyCount">—</div><div class="hs-lbl">BUY Markets (score ≥58)</div></div>
+      <div class="hs"><div class="hs-num" id="accelCount">—</div><div class="hs-lbl">STRONG BUY Markets</div></div>
+      <div class="hs"><div class="hs-num" id="medianScore">—</div><div class="hs-lbl">Median Score</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="insight-strip" id="insightStrip" style="display:none;">
+    <div class="insight-card"><div class="ic-num" id="topState">—</div><div class="ic-lbl">State with most BUY-rated counties</div></div>
+    <div class="insight-card"><div class="ic-num" id="topMedian">—</div><div class="ic-lbl">Median home value in the top 100</div></div>
+    <div class="insight-card"><div class="ic-num" id="topWage">—</div><div class="ic-lbl">Average annual wage in the top 100</div></div>
+  </div>
+
+  <div class="tab-strip">
+    <button class="tab-btn active" onclick="setView('top100',this)">Top 100</button>
+    <button class="tab-btn" onclick="setView('strongbuy',this)">Strong Buy Markets</button>
+    <button class="tab-btn" onclick="setView('undervalued',this)">Undervalued Hidden Gems</button>
+    <button class="tab-btn" onclick="setView('affordable',this)">Most Affordable</button>
+    <button class="tab-btn" onclick="setView('caution',this)">Use Caution</button>
+  </div>
+
+  <div id="viewDesc" class="section-sub"></div>
+
+  <table class="lb-table" id="lbTable">
+    <thead>
+      <tr>
+        <th style="width:42px;">#</th>
+        <th>County</th>
+        <th>Score</th>
+        <th>Label</th>
+        <th class="r">Median Price</th>
+        <th class="r">HPI 3yr</th>
+        <th class="r">Avg Wage</th>
+      </tr>
+    </thead>
+    <tbody id="lbBody"><tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted);">Loading…</td></tr></tbody>
+  </table>
+  <button class="load-more" id="lbLoadMore" style="display:none;" onclick="loadMoreLb()">Show more →</button>
+
+  <div style="margin-top:32px;text-align:center;">
+    <a href="index.html" style="display:inline-block;padding:13px 32px;background:var(--blue);color:#fff;border-radius:12px;font-weight:700;text-decoration:none;font-size:15px;">Browse All 2,820 Counties →</a>
+  </div>
+</div>
+
+<footer>
+  <p>Methodology: <a href="harvard_model.html" style="color:rgba(255,255,255,.4);">harvard_model.html</a> · Data: FHFA HPI · BLS QCEW · BEA · FBI NIBRS 2024 · FEMA NFIP · NOAA · USFS · USDA RUCC · HUD FMR · IRS SOI · Census · Zillow ZHVI<br>
+  Civica scores are for informational purposes only and do not constitute financial, investment, or real estate advice. Past appreciation is not indicative of future returns. &copy; 2026 Civica.</p>
+</footer>
+
+<script>
+let ALL = [];
+let view = 'top100';
+let lbVisible = 50;
+
+const SIGNAL_CLASS = {
+  'STRONG BUY':'lb-sbuy', 'BUY':'lb-buy', 'WATCH':'lb-watch',
+  'CAUTION':'lb-caut', 'AVOID':'lb-avoid',
+};
+const SCORE_BG = {
+  'STRONG BUY':'#16a34a', 'BUY':'#1a7ff0', 'WATCH':'#f59e0b',
+  'CAUTION':'#f97316', 'AVOID':'#dc2626',
+};
+
+const VIEW_CONFIG = {
+  top100:      { desc: 'Counties with the highest composite Civica scores — strongest fundamentals across all 6 dimensions.', fn: d => d },
+  undervalued: { desc: 'High Civica score (≥55) combined with a median home value below the national median (~$310k). These markets have strong fundamentals but haven\'t priced in yet.', fn: d => d.filter(c => c.score >= 55 && c.median_home_value < 310000).sort((a,b) => b.score - a.score) },
+  affordable:  { desc: 'Counties ranked by lowest price-to-rent ratio among those with a score above 40. Rent vs. buy math favors ownership.', fn: d => d.filter(c => c.score >= 40).sort((a,b) => a.pr_ratio - b.pr_ratio) },
+  strongbuy:   { desc: 'Counties signaled STRONG BUY: top-tier fundamentals with actively improving conditions. The highest-conviction entry points in the model right now.', fn: d => d.filter(c => c.signal === 'STRONG BUY').sort((a,b) => b.score - a.score) },
+  caution:     { desc: 'Counties signaled CAUTION or AVOID: fundamentals are below average or actively deteriorating. If you are considering buying here, understand the risks first.', fn: d => d.filter(c => c.signal === 'CAUTION' || c.signal === 'AVOID').sort((a,b) => a.score - b.score) },
+};
+
+if (location.protocol === 'file:') {
+  document.getElementById('lbBody').innerHTML =
+    '<tr><td colspan="7" style="text-align:center;padding:40px;color:#dc2626;font-weight:600;">' +
+    '⚠️ Open via a local server to load data.<br>' +
+    '<span style="font-weight:400;color:#6b7280;font-size:12px;margin-top:8px;display:block;">Double-click <strong>launch.bat</strong> in the project folder, or run: <code>python -m http.server 8080</code> then open <a href="http://localhost:8080/leaderboard.html" style="color:#1a7ff0;">localhost:8080/leaderboard.html</a></span>' +
+    '</td></tr>';
+} else {
+fetch('output/index.json')
+  .then(r => r.json())
+  .then(data => {
+    ALL = data;
+    updateStats();
+    renderView();
+  })
+  .catch(() => {
+    document.getElementById('lbBody').innerHTML =
+      '<tr><td colspan="7" style="text-align:center;padding:40px;color:#dc2626;font-weight:600;">' +
+      '⚠️ Could not load county data.<br>' +
+      '<span style="font-weight:400;color:#6b7280;font-size:12px;margin-top:8px;display:block;">Make sure <code>output/index.json</code> exists. Run <code>python county_generator.py</code> if it is missing.</span>' +
+      '</td></tr>';
+  });
+}
+
+function updateStats() {
+  const buyCount   = ALL.filter(c => c.score >= 58).length;
+  const accelCount = ALL.filter(c => c.signal === 'STRONG BUY').length;
+  const scores = ALL.map(c => c.score).sort((a,b) => a-b);
+  const median = scores[Math.floor(scores.length/2)].toFixed(1);
+
+  document.getElementById('buyCount').textContent   = buyCount.toLocaleString();
+  document.getElementById('accelCount').textContent = accelCount.toLocaleString();
+  document.getElementById('medianScore').textContent = median;
+
+  // Insights
+  const top100 = ALL.slice(0, 100);
+  const stateCount = {};
+  top100.forEach(c => { stateCount[c.state] = (stateCount[c.state]||0) + 1; });
+  const topState = Object.entries(stateCount).sort((a,b) => b[1]-a[1])[0];
+  const medHome = Math.round(top100.reduce((s,c) => s+c.median_home_value,0)/top100.length/1000);
+  const medWage = Math.round(top100.reduce((s,c) => s+c.avg_annual_wage,0)/top100.length/1000);
+
+  document.getElementById('topState').textContent   = `${topState[0]} (${topState[1]} counties)`;
+  document.getElementById('topMedian').textContent  = `$${medHome}k median`;
+  document.getElementById('topWage').textContent    = `$${medWage}k/yr avg`;
+  document.getElementById('insightStrip').style.display = 'grid';
+}
+
+function setView(v, btn) {
+  view = v; lbVisible = 50;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderView();
+}
+
+function renderView() {
+  const cfg    = VIEW_CONFIG[view];
+  const rows   = cfg.fn(ALL);
+  document.getElementById('viewDesc').textContent = cfg.desc;
+
+  const shown = rows.slice(0, lbVisible);
+  const body  = document.getElementById('lbBody');
+
+  if (!shown.length) {
+    body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted);">No counties match this filter.</td></tr>';
+    document.getElementById('lbLoadMore').style.display = 'none';
+    return;
+  }
+
+  body.innerHTML = shown.map((c, i) => {
+    const pos = i + 1;
+    const rankCls = pos <= 3 ? 'rk top3' : pos <= 10 ? 'rk top10' : 'rk';
+    const sc_bg = SCORE_BG[c.signal] || '#9ca3af';
+    const lbcls = SIGNAL_CLASS[c.signal] || 'lb-watch';
+    const hpi_c = c.hpi_3yr_avg >= 3 ? 'var(--green)' : 'var(--red)';
+    return `<tr onclick="window.location='output/counties/${c.fips}.html'" style="cursor:pointer;">
+      <td><span class="${rankCls}">${pos}</span></td>
+      <td>
+        <div class="cname">${c.name}</div>
+        <div class="cstate-lbl">${c.state} · Rank #${c.rank} of 2,820</div>
+      </td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="sc-circ" style="background:${sc_bg}">${Math.round(c.score)}</div>
+          <span class="sc-num">${c.score.toFixed(1)}</span>
+        </div>
+      </td>
+      <td><span class="lbadge ${lbcls}">${c.signal}</span></td>
+      <td style="text-align:right;font-weight:600;">$${Math.round(c.median_home_value/1000)}k</td>
+      <td style="text-align:right;font-weight:600;color:${hpi_c};">${c.hpi_3yr_avg>=0?'+':''}${c.hpi_3yr_avg.toFixed(1)}%</td>
+      <td style="text-align:right;">$${Math.round(c.avg_annual_wage/1000)}k</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('lbLoadMore').style.display =
+    rows.length > lbVisible ? 'block' : 'none';
+}
+
+function loadMoreLb() {
+  lbVisible += 50;
+  renderView();
+}
+</script>
+
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#111827;color:rgba(255,255,255,.7);font-size:12px;padding:14px 28px;z-index:500;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
+  <span>This site uses Google Analytics to understand usage patterns. <a href="privacy.html" style="color:#60a5fa;text-decoration:underline;">Privacy Policy</a></span>
+  <button onclick="document.getElementById('cookieBanner').style.display='none';localStorage.setItem('civica_cookie_ok','1')" style="background:#1a7ff0;color:#fff;border:none;border-radius:6px;padding:7px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">Got it</button>
+</div>
+<script>if(!localStorage.getItem('civica_cookie_ok'))document.getElementById('cookieBanner').style.display='flex';</script>
+</body>
+</html>

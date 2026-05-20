@@ -1,758 +1,544 @@
 # Civica Scoring Methodology
-*Complete technical reference — scoring engine v1.2, May 2026*
+*Technical reference for the Harvard-style 6-dimension county scoring model.*  
+*Version 1.2 — May 2026 · Includes FBI NIBRS Dim4*
 
 ---
 
 ## Table of Contents
 
-1. [What Civica Measures and Why](#1-what-civica-measures-and-why)
-2. [The Scoring Architecture](#2-the-scoring-architecture)
-3. [How Percentile Normalization Works](#3-how-percentile-normalization-works)
-4. [Dimension 1 — Affordability & Value (25 pts)](#4-dimension-1--affordability--value-25-pts)
-5. [Dimension 2 — Economic Vitality (22 pts)](#5-dimension-2--economic-vitality-22-pts)
-6. [Dimension 3 — Housing Market Dynamics (20 pts)](#6-dimension-3--housing-market-dynamics-20-pts)
-7. [Dimension 4 — Quality of Place (15 pts)](#7-dimension-4--quality-of-place-15-pts)
-8. [Dimension 5 — Physical Risk (12 pts)](#8-dimension-5--physical-risk-12-pts)
-9. [Dimension 6 — Population Momentum (6 pts)](#9-dimension-6--population-momentum-6-pts)
-10. [Total Score & Market Labels](#10-total-score--market-labels)
-11. [The 8 Derived Metrics](#11-the-8-derived-metrics)
-12. [Data Sources — All 14 Datasets](#12-data-sources--all-14-datasets)
-13. [Coverage, Filters & Missing Data](#13-coverage-filters--missing-data)
-14. [Design Decisions & Tradeoffs](#14-design-decisions--tradeoffs)
-15. [Known Limitations](#15-known-limitations)
+1. [Model Overview](#1-model-overview)
+2. [Scoring Architecture](#2-scoring-architecture)
+3. [Why the Score Range Is 27–70, Not 0–100](#3-why-the-score-range-is-27-70)
+4. [Normalization Method](#4-normalization-method)
+5. [Dimension 1 — Affordability & Value (25 pts)](#5-dimension-1--affordability--value)
+6. [Dimension 2 — Economic Vitality (22 pts)](#6-dimension-2--economic-vitality)
+7. [Dimension 3 — Housing Market Dynamics (20 pts)](#7-dimension-3--housing-market-dynamics)
+8. [Dimension 4 — Quality of Place (15 pts)](#8-dimension-4--quality-of-place)
+9. [Dimension 5 — Physical Risk (12 pts)](#9-dimension-5--physical-risk)
+10. [Dimension 6 — Population Momentum (6 pts)](#10-dimension-6--population-momentum)
+11. [Market Labels](#11-market-labels)
+12. [Monthly Cost Model](#12-monthly-cost-model)
+13. [Data Sources and Vintage](#13-data-sources-and-vintage)
+14. [Design Decisions and Known Tradeoffs](#14-design-decisions-and-known-tradeoffs)
+15. [Update Cadence](#15-update-cadence)
 
 ---
 
-## 1. What Civica Measures and Why
+## 1. Model Overview
 
-Civica answers one question: **Is this county a good place to buy a home right now?**
+Civica scores every US county with a population ≥ 5,000 on a 100-point composite scale. The model is structured around six research dimensions drawn from housing economics literature, each measuring a distinct aspect of county-level market quality. All inputs are free federal government data or Zillow ZHVI (the sole non-federal source, used only because no federal dataset provides county-level median home values at monthly granularity).
 
-That question has six distinct components:
+**Core design principles:**
 
-- **Is the price defensible?** (Affordability & Value)
-- **Is the economy healthy and growing?** (Economic Vitality)
-- **What is the housing market itself doing?** (Market Dynamics)
-- **Is it actually a good place to live?** (Quality of Place)
-- **What are the climate and hazard costs?** (Physical Risk)
-- **Are the right people moving in?** (Population Momentum)
+- **Federal data only.** No agent-affiliated listings, no proprietary indexes, no survey estimates (ACS excluded — administrative equivalents are used for every metric that ACS would otherwise provide).
+- **No advertising, no conflict of interest.** Scores cannot be bought or influenced by any party.
+- **Percentile normalization.** Every metric is normalized relative to the national distribution of scored counties. A county is not judged against an absolute standard — it is judged relative to where it actually stands in the US.
+- **Transparent weights.** Every dimension weight and intra-dimension weight is published. The scoring algorithm is fully reproducible from publicly available federal data.
 
-Each component is scored separately, weighted by its importance to a homebuyer's long-term return, and added into a single 0–100 composite score. The score is derived entirely from free federal government data — no agent opinions, no listing algorithms, no advertising.
+**What the model does not do:**
 
-**Why federal data only?** Because federal data is:
-- Collected consistently across all 3,143 US counties using the same methodology
-- Published publicly with no commercial motive to distort
-- Auditable — every number can be traced to its source file
-- Updated regularly on a published schedule
+- Forecast future prices.
+- Replace local due diligence (neighborhood, school, employer proximity).
+- Predict individual property outcomes.
 
-The one exception is Zillow ZHVI, used only for county-level median home values and active inventory counts. No federal dataset provides both of those at county granularity with monthly updates. All price *appreciation* signals use FHFA, not Zillow.
+The score is a composite signal for county-level market quality at a point in time. It answers: *relative to every other US county right now, how does this one perform across the six dimensions that most affect a homebuyer's financial outcome?*
 
 ---
 
-## 2. The Scoring Architecture
+## 2. Scoring Architecture
 
-### Dimension weights
+### Dimension Weights
 
-| # | Dimension | Points | Weight |
-|---|---|---|---|
-| 1 | Affordability & Value | 25 | 25% |
-| 2 | Economic Vitality | 22 | 22% |
-| 3 | Housing Market Dynamics | 20 | 20% |
-| 4 | Quality of Place | 15 | 15% |
-| 5 | Physical Risk | 12 | 12% |
-| 6 | Population Momentum | 6 | 6% |
-| | **Total** | **100** | **100%** |
-
-### Why these weights?
-
-**Affordability (25%)** is the largest weight because price relative to rent and income is the primary determinant of long-term homebuyer financial outcomes. An overpriced market produces poor returns regardless of how good everything else is.
-
-**Economic Vitality (22%)** drives both rent levels and future price appreciation. A county where workers earn more over time is one where housing demand and values will grow. It is the fundamental engine underneath price trends.
-
-**Market Dynamics (20%)** captures what the market is actually doing right now — not what it should do based on fundamentals, but what it is doing. A market can have good fundamentals but still be turning; this dimension catches that.
-
-**Quality of Place (15%)** matters because homebuyers don't just buy financial assets — they buy places to live. Safety, urban access, and amenity density directly affect daily life and resale demand.
-
-**Physical Risk (12%)** is weighted at roughly half of affordability because climate and hazard costs are partially transferable (insurance, hardening) but represent a real and growing financial tail risk. Counties with high wildfire or flood exposure have higher carrying costs and future insurance uncertainty.
-
-**Population Momentum (6%)** is a leading indicator but a weaker one — migration can reverse quickly and is correlated with economic vitality. It gets meaningful weight because in-mover income quality (who is moving in, not just how many) is a signal no other platform publishes.
-
-### Processing pipeline
-
-```
-14 raw datasets
-       ↓
-  Merge on FIPS code (left join, Census population as universe)
-       ↓
-  Filter: population ≥ 5,000
-       ↓
-  Fill remaining nulls with national median per column
-       ↓
-  Score each dimension (percentile normalization)
-       ↓
-  Sum 6 dimension scores → total_score (clipped 0–100)
-       ↓
-  Apply market label thresholds
-       ↓
-  Output: county_scores.csv (2,820 rows × 35 columns)
-```
-
----
-
-## 3. How Percentile Normalization Works
-
-Every metric inside each dimension is converted to a **national percentile rank** before being weighted. This is the most important design decision in the model, and understanding it explains why the score distribution looks the way it does.
-
-### The two normalization functions
-
-```python
-def pct(s):
-    # Higher raw value → higher score
-    return s.rank(pct=True, na_option='keep') * 100
-
-def pct_inv(s):
-    # Lower raw value → higher score (used for risk/cost metrics)
-    return (1 - s.rank(pct=True, na_option='keep')) * 100
-```
-
-`pct()` is used for metrics where more is better: wages, appreciation, migration rate.
-
-`pct_inv()` is used for metrics where less is better: crime rate, breakeven years, physical risk, price-to-rent ratio.
-
-### What this means in practice
-
-When we rank all 2,820 counties on, say, average annual wage, the result is a number between 0 and 100 for each county — its percentile position in the national distribution. The county with the highest wages gets ~100; the lowest gets ~0; the median county gets ~50.
-
-Percentile normalization has three important properties:
-
-1. **Units cancel.** You can combine wages (dollars/year) with crime rates (offenses/100k) and appreciation (percent/year) without any unit conversion. Every input to the weighted sum is in 0–100 space.
-
-2. **Outliers are compressed.** A county with crime 10× the national average doesn't score 10× worse — it scores near 0 on that metric, same as a county with crime 5× the average. This prevents a single extreme value from dominating the total score.
-
-3. **The total score is mathematically bounded.** Because each metric percentile is 0–100, and dimension scores are scaled to their maximum point value, the theoretical maximum score is 100 and minimum is 0. In practice, no county achieves either extreme — the empirical range is approximately 27–70 (mean 50, std 6.2).
-
-### Why the range is 27–70, not 0–100
-
-The answer is correlation. Metrics within dimensions — and dimensions with each other — are positively correlated. A county with high wages also tends to have high income growth. A county with low crime also tends to have better urban access. Because the inputs are correlated, no county consistently ranks near 0 or 100 on all metrics simultaneously. The math forces the composite toward the center.
-
-This is by design. A 0–100 range that used all 100 points would require manufactured spread (ranking counties against each other on completely uncorrelated metrics). Percentile normalization produces an honest distribution. The label thresholds are calibrated to this empirical range.
-
----
-
-## 4. Dimension 1 — Affordability & Value (25 pts)
-
-**Question: Is the current price defensible relative to what the buyer gets?**
-
-### Metrics and weights
-
-| Metric | Weight | Direction | Source |
-|---|---|---|---|
-| Price-to-Rent Ratio | 30% | Lower = better | Zillow ZHVI ÷ HUD FMR |
-| Price-to-Income Ratio | 30% | Lower = better | Zillow ZHVI ÷ BEA income |
-| Buy vs. Rent Breakeven | 25% | Shorter = better | Derived (see below) |
-| Appreciation Quality | 15% | Closer to 5% = better | FHFA HPI 3-yr avg |
-
-### Formula
-
-```
-dim1 = (pct_inv(pr_ratio)    × 0.30
-      + pct_inv(price_income) × 0.30
-      + pct_inv(breakeven_yrs)× 0.25
-      + pct_inv(appr_deviation)×0.15) / 100 × 25
-```
-
-### Metric definitions
-
-**Price-to-Rent Ratio (P/R)**
-```
-pr_ratio = median_home_value / (fmr_2br × 12)
-```
-The number of years of rent it would take to equal the purchase price. National historical norm: 15–18x. Below 15x = strong buy case relative to renting. Above 22x = renting is increasingly competitive. This metric uses HUD Fair Market Rents (FMR) for the 2-bedroom unit as the rent baseline — federal data, published annually, covers every county.
-
-**Price-to-Income Ratio (P/I)**
-```
-price_income = median_home_value / per_capita_income
-```
-How many years of per-capita income equals the home price. Historical US norm: 4.2x. Above 6x is generally considered stretched; above 8x is crisis territory. Uses BEA per capita personal income (CAINC1), which includes wages, proprietor income, investment income, and transfer payments — a more complete measure than median household income.
-
-**Buy vs. Rent Breakeven**
-```
-r = 0.07 / 12  # monthly rate, 7% 30yr fixed (2024 national average)
-mortgage_factor = r / (1 − (1 + r)^−360)
-
-monthly_piti = (home_value × 0.80 × mortgage_factor)  # 80% LTV mortgage
-             + (home_value × 0.012 / 12)               # 1.2% property tax
-             + (home_value × 0.005 / 12)               # 0.5% homeowner's insurance
-
-monthly_excess = max(monthly_piti − fmr_2br, 1)       # extra cost of owning vs. renting
-breakeven_yrs  = (home_value × 0.20) / (monthly_excess × 12)  # capped at 30 years
-```
-
-The breakeven horizon is the number of years it takes for ownership to become financially superior to renting, assuming: 20% down payment, 7% 30yr fixed mortgage rate, 1.2% annual property tax rate, 0.5% homeowner's insurance, and that appreciation makes up the cost difference. A shorter breakeven means buying wins sooner — under 4 years is generally considered a strong buy signal; over 8 years suggests renting is a better financial decision.
-
-The 7% rate is fixed at the 2024 national average. This creates a consistent comparison across all counties (rather than adjusting for local rate variation, which is minimal) and can be updated when the model is re-run with new data.
-
-**Appreciation Quality**
-```
-appr_deviation = |hpi_3yr_avg − 5.0|   # deviation from the healthy midpoint
-```
-This metric does not reward the highest appreciation — it rewards *healthy* appreciation. The model defines healthy as 3–7% annual real appreciation. The midpoint of this range (5%) is used as the target.
-
-Why penalize high appreciation? Because extreme appreciation (>7%/yr sustained) typically signals a market approaching an affordability ceiling, which constrains future demand. Counties appreciating at 12%/yr look great until they stop, and the correction is usually sharp. Appreciation of 3–7% is empirically associated with sustainable, fundamentals-driven markets.
-
-The raw metric is clipped to –5% to +25% before computing deviation, to prevent extreme outliers from distorting the percentile ranking.
-
----
-
-## 5. Dimension 2 — Economic Vitality (22 pts)
-
-**Question: Is the local economy growing in real terms?**
-
-### Metrics and weights
-
-| Metric | Weight | Direction | Source |
-|---|---|---|---|
-| Wage Level | 35% | Higher = better | BLS QCEW avg annual wage |
-| Sector Quality Score | 25% | Higher = better | BLS QCEW NAICS quality weighting |
-| Economic Diversity (HHI) | 25% | Lower HHI = better | BLS QCEW NAICS Herfindahl Index |
-| Income Growth | 15% | Higher = better | BEA CAINC1 4-yr growth |
-
-### Formula
-
-```
-dim2 = (pct(avg_annual_wage)    × 0.35
-      + pct(sector_quality)     × 0.25
-      + pct_inv(hhi)            × 0.25
-      + pct(income_4yr_growth)  × 0.15) / 100 × 22
-```
-
-### Metric definitions
-
-**Wage Level**
-The average annual wage paid to private-sector workers in the county (BLS QCEW own_code=5, industry_code='10' = total private). Higher wages indicate stronger labor market fundamentals and support both current affordability (workers can afford homes) and future price appreciation (rising purchasing power).
-
-**Sector Quality Score**
-```
-sector_quality = Σ(employment_share_in_sector × sector_weight)
-               across all 2-digit NAICS sectors
-```
-
-Not all jobs are equal. A county dominated by professional services and finance has a fundamentally different economic trajectory than one dominated by retail and legacy manufacturing. Sector quality weights are applied to the share of private employment in each sector:
-
-| NAICS Code | Sector | Weight | Rationale |
-|---|---|---|---|
-| 54 | Professional, Scientific & Technical Services | 1.30 | High-wage, recession-resilient, supports high home values |
-| 52 | Finance & Insurance | 1.30 | High-wage, income-stable, drives urban core premiums |
-| 62 | Healthcare & Social Assistance | 1.00 | Recession-proof demand, stable employment |
-| 61 | Educational Services | 1.00 | Stable, publicly funded, anchors community |
-| All others | Other private sectors | 1.00 | Neutral — no premium or penalty |
-| 23 | Construction | 0.80 | Leading indicator but highly cyclical |
-| 44-45 | Retail Trade | 0.60 | Secular decline risk from e-commerce |
-| 31-33 | Manufacturing (legacy) | 0.60 | Long-term employment contraction trend |
-
-A county with 30% of employment in Professional Services and Finance scores meaningfully higher on this metric than one with 30% in retail and manufacturing, even if total employment is identical.
-
-**Economic Diversity (Herfindahl-Hirschman Index)**
-```
-HHI = Σ(employment_share_in_sector²) × 10,000
-     across all 2-digit NAICS sectors
-```
-
-The HHI is a standard measure of market concentration, applied here to employment rather than market share. It ranges from near 0 (perfectly diversified) to 10,000 (one sector employs everyone).
-
-A highly diversified economy (HHI < 1,500) is resilient to sector-specific downturns. A concentrated economy (HHI > 3,000) — like a county with one major employer or one dominant industry — is vulnerable: when that sector contracts, the entire housing market suffers. Detroit (auto), coal county Appalachia, and single-university towns are all examples of high-HHI markets.
-
-Lower HHI = better, so `pct_inv()` is applied.
-
-**Income Growth**
-```
-income_4yr_growth = (per_capita_income_latest / per_capita_income_4yr_ago − 1) × 100
-```
-Four-year growth in BEA per capita personal income. This measures real improvement in the local economy, not just the current level. A county with high wages but flat income growth is stagnating; a county with average wages but 15% income growth over 4 years is improving. Both matter, which is why wage level and income growth are scored separately.
-
----
-
-## 6. Dimension 3 — Housing Market Dynamics (20 pts)
-
-**Question: What is the housing market actually doing?**
-
-### Metrics and weights
-
-| Metric | Weight | Direction | Source |
-|---|---|---|---|
-| 3-Year Appreciation Trend | 35% | Higher = better | FHFA HPI avg of last 3 years |
-| Current Momentum | 15% | Higher = better | FHFA HPI latest annual change |
-| Supply Tightness | 30% | Lower inventory = better | Zillow active listings (latest month) |
-| Permit Pipeline | 20% | Higher = better | Census BPS 2022 annual permits |
-
-### Formula
-
-```
-dim3 = (pct(hpi_3yr_avg)    × 0.35
-      + pct(hpi_latest)     × 0.15
-      + pct_inv(inventory)  × 0.30
-      + pct(total_permits)  × 0.20) / 100 × 20
-```
-
-### Metric definitions
-
-**3-Year Appreciation Trend (FHFA)**
-Average annual HPI change over the three most recent available years in the FHFA county-level HPI file. This is the primary momentum signal. Three years of data is long enough to filter out single-year spikes or crashes and short enough to reflect the current market regime.
-
-FHFA HPI is a repeat-sales index — it measures price change for the same properties over time, which eliminates compositional bias (the mix of homes sold changing). It covers ~2,800 of 3,143 counties; the rest receive median imputation.
-
-**Current Momentum (FHFA)**
-The most recent single year's annual HPI change. Used as a cross-validation signal: if 3yr trend is strong and current momentum is accelerating, the trend is intact. If current momentum is weakening while the 3yr trend looks good, the market may be topping.
-
-These two metrics are scored independently so the model doesn't double-count a high 3yr trend that is simply being pulled up by a recent spike.
-
-**Supply Tightness (Zillow)**
-Active for-sale listings in the county (latest month available). Lower inventory means a seller's market — more buyers competing for fewer homes, which supports price appreciation. High inventory means softening demand or oversupply.
-
-This is the only metric where lower is better for buyers in the long run (tighter supply supports the value of what they're buying). `pct_inv()` is applied: the county with the fewest listings per capita scores highest.
-
-Note: inventory is used in absolute terms, not per-capita, to match how buyers actually experience market tightness. A major metro will always have more total listings than a rural county, but that's reflected in the national percentile rank.
-
-**Permit Pipeline (Census BPS)**
-Total new housing units permitted in 2022 (all unit sizes: 1-unit, 2-unit, 3-4 unit, 5+). Building permits are a forward-looking supply signal — they predict future inventory. A county issuing large numbers of permits is responding to demand; the question is whether supply growth will outpace or lag demand growth.
-
-Higher permits score higher in this dimension (more supply activity = stronger market response). This is intentional: permit activity signals that the market is healthy enough to attract builders, which is a positive demand signal even though it adds supply.
-
----
-
-## 7. Dimension 4 — Quality of Place (15 pts)
-
-**Question: Is this actually a good place to live?**
-
-### Metrics and weights
-
-| Metric | Weight | Direction | Source |
-|---|---|---|---|
-| Crime Rate | 35% | Lower = better | FBI NIBRS 2024 |
-| Urban Access | 40% | Lower RUCC = better | USDA RUCC 2023 |
-| Amenity Density | 25% | Higher = better | Census CBP 2022 |
-
-### Formula
-
-```
-dim4 = (pct_inv(violent_per100k) × 0.35
-      + pct_inv(rucc)            × 0.40
-      + pct(est_per_1k)          × 0.25) / 100 × 15
-```
-
-### Metric definitions
-
-**Crime Rate — FBI NIBRS 2024**
-```
-violent_per100k = violent_offenses / max(population, 100) × 100,000
-```
-
-Violent offenses per 100,000 residents. "Violent offense" is defined using the FBI's NIBRS Group A offense codes:
-
-| Code | Offense |
-|---|---|
-| 09A | Murder / Non-negligent Manslaughter |
-| 09B | Negligent Manslaughter |
-| 100 | Kidnapping / Abduction |
-| 11A | Rape (except Statutory Rape) |
-| 11B | Sodomy |
-| 11C | Sexual Assault With An Object |
-| 11D | Fondling |
-| 120 | Robbery |
-| 13A | Aggravated Assault |
-| 13B | Simple Assault |
-| 13C | Intimidation |
-
-This data is parsed directly from the 5.8 GB FBI NIBRS 2024 National Master File — a fixed-width text file containing every incident reported by every NIBRS-participating law enforcement agency in the US. The format was decoded empirically:
-- **BH (Agency Header) records**: state abbreviation at chars 4–6 (embedded in ORI), county 3-digit FIPS at chars 269–272
-- **02 (Offense) records**: NIBRS offense code at chars 33–36
-
-Coverage: 21,068 agencies across 49 states and 2,869 counties.
-
-**Imputation for non-reporting counties:** Many rural law enforcement agencies do not participate in NIBRS. A county with zero reported offenses might be genuinely safe, or might simply not report. To avoid penalizing non-reporters, counties with no NIBRS data receive their RUCC-tier median violent crime rate:
-
-| RUCC tier | Counties included | Imputation source |
+| Dimension | Points | Share |
 |---|---|---|
-| Metro (RUCC 1–3) | Large to medium metro | Median of reporting metro counties |
-| Micro (RUCC 4–6) | Small metro / micropolitan | Median of reporting micro counties |
-| Rural (RUCC 7–9) | Small town to remote rural | Median of reporting rural counties |
+| Affordability & Value | 25 | 25% |
+| Economic Vitality | 22 | 22% |
+| Housing Market Dynamics | 20 | 20% |
+| Quality of Place | 15 | 15% |
+| Physical Risk | 12 | 12% |
+| Population Momentum | 6 | 6% |
+| **Total** | **100** | **100%** |
 
-Any remaining nulls after tier imputation receive the overall national median.
+### Intra-Dimension Weights
 
-**Urban Access — USDA RUCC 2023**
-The USDA Rural-Urban Continuum Code (RUCC) classifies every US county on a 1–9 scale:
+Each dimension is composed of 3–4 metrics. Metric scores are expressed as national percentile ranks (0–100), weighted by their intra-dimension share, then scaled to the dimension's point value.
 
-| Code | Description |
-|---|---|
-| 1 | Metro: county in a metro area of ≥1 million population |
-| 2 | Metro: county in a metro area of 250k–1 million |
-| 3 | Metro: county in a metro area of < 250k |
-| 4 | Non-metro: urban population ≥20k, adjacent to metro area |
-| 5 | Non-metro: urban population ≥20k, not adjacent |
-| 6 | Non-metro: urban population 2,500–19,999, adjacent to metro |
-| 7 | Non-metro: urban population 2,500–19,999, not adjacent |
-| 8 | Non-metro: completely rural, adjacent to metro area |
-| 9 | Non-metro: completely rural, not adjacent to metro area |
-
-RUCC is the dominant metric in Dim4 (40% weight) because urban proximity captures a cluster of quality-of-life factors that no other dataset measures at county level: access to major hospitals, airport proximity, cultural amenities, specialized retail, and the density of service infrastructure. It is the best available proxy for "how easy is daily life here" using federal data.
-
-Lower RUCC = more urban = higher score. `pct_inv()` applied.
-
-**Amenity Density — Census CBP 2022**
+**Example — Dim1 (25 pts):**
 ```
-est_per_1k = total_establishments / max(population, 100) × 1,000
+dim1 = (pct_inv(P/R) × 0.30
+      + pct_inv(P/I) × 0.30
+      + pct_inv(breakeven) × 0.25
+      + pct_inv(|hpi_avg − 5|) × 0.15) / 100 × 25
 ```
 
-Private business establishments per 1,000 residents from the Census County Business Patterns (CBP). This is a direct count of the retail stores, restaurants, healthcare practices, gyms, professional services, and other establishments that constitute daily quality of life infrastructure.
+The `/100` converts the 0–100 percentile composite back to a 0–1 fraction before multiplying by the dimension's point value.
 
-Establishments per capita rather than raw count is used to prevent large metros from automatically dominating (they have more establishments but also more people to serve).
+### County Universe
+
+- **3,144 total counties** in the US (including county-equivalents: parishes, boroughs, independent cities)
+- **2,820 scored** (population ≥ 5,000 — Census 2023 estimates)
+- **324 excluded** (population < 5,000 — insufficient data; any score would be nearly pure imputation)
 
 ---
 
-## 8. Dimension 5 — Physical Risk (12 pts)
+## 3. Why the Score Range Is 27–70
 
-**Question: What are the climate and natural hazard costs?**
-
-Lower risk = higher score. All three metrics use `pct_inv()`.
-
-### Metrics and weights
-
-| Metric | Weight | Direction | Source |
-|---|---|---|---|
-| Flood Loss per Capita | 40% | Lower = better | FEMA NFIP (10-year window) |
-| Storm Damage per Capita | 35% | Lower = better | NOAA Storm Events (5-year window) |
-| Wildfire Exposure | 25% | Lower rank = better | USFS Wildfire Risk to Communities |
-
-### Formula
-
-```
-nfip_per_cap  = nfip_claims  / max(population, 100)
-storm_per_cap = storm_damage / max(population, 100)
-
-dim5 = (pct_inv(nfip_per_cap)   × 0.40
-      + pct_inv(storm_per_cap)  × 0.35
-      + pct_inv(wildfire_rank)  × 0.25) / 100 × 12
-```
-
-### Metric definitions
-
-**Flood Loss per Capita — FEMA NFIP**
-Total FEMA National Flood Insurance Program paid claims (building + contents) from 2014–2023 (10-year window), divided by 2023 population. This measures *realized* flood loss, not theoretical flood zone risk. A county in a FEMA AE flood zone that has never filed a claim scores well; a county with chronic flooding and repeated payouts scores poorly, regardless of its official flood zone designation.
-
-The 10-year window smooths year-to-year variation from single major events while capturing recent climate trends. Only paid claims are counted (not just filed claims), which represents actual economic damage.
-
-**Storm Damage per Capita — NOAA Storm Events**
-Total property damage from all NOAA-classified severe weather events (2019–2023, 5-year window), divided by 2023 population. NOAA Storm Events covers all federally-tracked weather: hurricanes, tornadoes, hail, severe thunderstorms, winter storms, flooding, and more.
-
-Damage values in the raw data are encoded as strings ("5.00K", "1.50M") — the engine parses these to dollar amounts. Only "C" (county zone) events are included, not forecast zone events, to ensure precise county attribution.
-
-The 5-year window (shorter than NFIP's 10 years) is used because storm patterns are more volatile and recent events are more predictive of near-term risk.
-
-**Wildfire Exposure — USFS Wildfire Risk to Communities**
-The USFS publishes a county-level wildfire risk score (`RISK_NATIONAL_RANK`) representing each county's wildfire risk percentile nationally (0 = safest, 1 = highest risk). This is based on the potential for wildfire to damage residential structures, accounting for fire probability, fire intensity, housing density, and vegetation.
-
-This is the most forward-looking of the three risk metrics — it reflects structural exposure to future wildfire, not just historical claims. For states like California, Oregon, Colorado, and Texas, this is increasingly the dominant risk factor as insurance markets contract.
-
-### Why these three hazards?
-
-These are the three hazard types causing the most widespread financial harm to US homeowners right now:
-
-1. **Flooding** — ~40% of FEMA disaster declarations; expanding beyond traditional flood zones due to changing rainfall patterns
-2. **Severe storms** — tornadoes, hail, and convective weather cause billions annually; shifting geographically northward
-3. **Wildfire** — expanding "wildland-urban interface" exposure; insurance non-renewal already affecting property values in CA, CO, OR
-
-Earthquake and hurricane risks exist but are geographically concentrated; the three hazards above affect every region of the country.
-
----
-
-## 9. Dimension 6 — Population Momentum (6 pts)
-
-**Question: Are the right people moving in?**
-
-### Metrics and weights
-
-| Metric | Weight | Direction | Source |
-|---|---|---|---|
-| Net Migration Rate | 60% | Higher = better | Census Population Estimates 2023 |
-| In-Mover Income Quality | 40% | Higher ratio = better | IRS SOI Migration 2022–23 |
-
-### Formula
-
-```
-dim6 = (pct(RNETMIG2023)          × 0.60
-      + pct(inmover_income_ratio) × 0.40) / 100 × 6
-```
-
-### Metric definitions
-
-**Net Migration Rate**
-```
-RNETMIG2023 = (international_in + domestic_in − domestic_out) / population × 1,000
-```
-
-Net migration rate per 1,000 residents from Census Population Estimates 2023. This is not just domestic migration — it includes international in-migration. A positive net migration rate means the county is gaining residents; negative means it is losing them.
-
-Net migration is the strongest leading indicator of future housing demand. People move toward opportunity; money follows people; housing demand follows money.
-
-**In-Mover Income Quality**
-```
-inmover_income_ratio = in_mover_avg_AGI / out_mover_avg_AGI
-```
-
-The ratio of the average adjusted gross income (AGI) of households moving *into* the county to the average AGI of households moving *out* of the county. Source: IRS Statistics of Income Migration Data (2022–23 tax year).
-
-- Ratio > 1.0: higher-income people are moving in than are leaving. This is a demand quality signal — wealthier in-movers support higher home prices and local spending.
-- Ratio = 1.0: the income profile of arrivals matches departures.
-- Ratio < 1.0: lower-income people are moving in, higher-income people are leaving. This is a warning sign — it often precedes economic softening and price stagnation.
-
-This metric is unique to Civica. No other consumer real estate platform publishes who is moving in, only how many.
-
-IRS migration data excludes filers with AGI > $200,000 in destination states where disclosure would identify individuals, and also excludes international movers. Special codes (96, 97, 98, 99) representing state totals, foreign origin, and non-migrants are filtered out.
-
----
-
-## 10. Total Score & Market Labels
-
-### Total score
-
-```
-total_score = dim1 + dim2 + dim3 + dim4 + dim5 + dim6
-            (clipped to range 0–100)
-```
-
-Scores are not rounded before label assignment — the full floating-point value is used.
-
-### Empirical score distribution (current run)
+The theoretical scale is 0–100. The empirical distribution from v1.2 is:
 
 | Statistic | Value |
 |---|---|
-| Counties scored | 2,820 |
 | Mean | 50.0 |
 | Standard deviation | 6.24 |
-| Minimum | 26.85 |
-| Maximum | 69.48 |
+| Minimum (Clinch County GA) | 26.85 |
+| Maximum (Hamilton County IN) | 69.48 |
+| AVOID counties (score < 26) | 0 |
 
-The mean of exactly 50.0 is expected: because every metric is percentile-normalized, and every county receives the same imputation procedure for missing data, the system is mathematically balanced around the midpoint.
+**The compression is by design, not a bug.** The six dimensions are positively correlated in the real world. Counties with strong economies also tend to have lower crime, tighter housing markets, and positive migration. The national percentile normalization captures each metric's relative standing, but the correlations between dimensions mean that a county at the 90th percentile on Dim1 is likely also near the 70th–80th percentile on Dim2 and Dim3. There is no county that is simultaneously the best in the country on all six dimensions and the worst on zero — such a county does not exist.
 
-### Market labels
+The practical result: the model correctly identifies *relative* differences among counties (Hamilton County IN vs. Clinch County GA is a 43-point spread), but the absolute values do not map to the labels in a naïve way. ACCELERATING does not mean "near 100" — it means "top of the actual distribution."
 
-| Label | Threshold | Count | Meaning |
-|---|---|---|---|
-| ACCELERATING | ≥ 68 | 2 | All signals aligned; prices still fundamentally defensible |
-| PEAKING | ≥ 62 | 57 | Strong momentum approaching affordability ceiling |
-| ESTABLISHED | ≥ 55 | 563 | Healthy balanced market; sustainable fundamentals |
-| EMERGING | ≥ 46 | 1,463 | Improving fundamentals; early-mover opportunity |
-| FRONTIER | ≥ 38 | 634 | Below-average market; higher uncertainty |
-| TURNING | ≥ 30 | 97 | Softening demand; watch for continued weakness |
-| SPECULATIVE | ≥ 26 | 4 | Poor fundamentals; momentum-only pricing risk |
-| AVOID | < 26 | 0 | Systemic weakness across multiple dimensions |
-
-**Why AVOID has 0 counties:** The empirical score floor with FBI NIBRS crime data integrated is 26.85 — just above the AVOID threshold of 26. The 4 SPECULATIVE counties (scores 26.85–29.x) are the genuinely worst-performing markets. AVOID becomes active if the score floor drops below 26 in a future run (e.g., if a county's crime rate or physical risk worsens significantly relative to peers).
-
-**Why these thresholds?** The percentile normalization produces a score distribution with mean ~50 and std ~6. The original spec used thresholds of 78/68/58/48/38/28/18/0 — designed for a 0–100 distribution that never materializes in practice. The current thresholds are calibrated to the empirical range:
-
-- ACCELERATING starts at 68 ≈ mean + 2.9 std (genuinely exceptional)
-- PEAKING starts at 62 ≈ mean + 1.9 std (strong upper tail)
-- ESTABLISHED starts at 55 ≈ mean + 0.8 std (above average)
-- EMERGING starts at 46 ≈ mean − 0.6 std (slightly below average, but improving)
-- FRONTIER starts at 38 ≈ mean − 1.9 std (clearly below average)
-- TURNING starts at 30 ≈ mean − 3.2 std (lower tail)
-- SPECULATIVE starts at 26 ≈ mean − 3.8 std (near the floor)
-
-### Verdict mapping (county report pages)
-
-| Score range | Verdict | Display |
-|---|---|---|
-| ≥ 58 | BUY | Green badge |
-| 38–57 | HOLD | Yellow badge |
-| < 38 | AVOID | Red badge |
+The score range also reflects the FBI NIBRS integration added in v1.2. Before NIBRS, the lowest-scoring counties could fall to ~23. NIBRS imputation (RUCC-tier median for non-reporting counties) set a higher floor for rural counties that previously scored near zero on crime simply from the absence of NIBRS data.
 
 ---
 
-## 11. The 8 Derived Metrics
+## 4. Normalization Method
 
-These metrics are computed from raw federal data and are unique to Civica — they don't appear in any federal dataset directly, and no consumer real estate platform publishes them.
+All metrics use national percentile rank normalization:
 
-### 1. Price-to-Rent Ratio
-```
-pr_ratio = median_home_value / (fmr_2br × 12)
-```
-National norm: 15–18x. Below 15x: buy strongly favored. Above 22x: renting is increasingly competitive.
+```python
+def pct(s):
+    return s.rank(pct=True, na_option='keep') * 100
 
-### 2. Price-to-Income Ratio
+def pct_inv(s):
+    return (1 - s.rank(pct=True, na_option='keep')) * 100
 ```
-price_income = median_home_value / per_capita_income
-```
-Historical US norm: 4.2x. Above 6x: stretched. Above 8x: crisis territory.
 
-### 3. Buy vs. Rent Breakeven Horizon
-```
-breakeven_yrs = (home_value × 0.20) / ((monthly_piti − fmr_2br) × 12)
-```
-Assumptions: 20% down, 7% 30yr fixed, 1.2% property tax, 0.5% insurance. Capped at 30 years. Under 4 years = strong buy; 4–8 years = neutral; over 8 years = rent.
+`pct()` is used when higher raw value = better (wages, appreciation, in-mover income quality).  
+`pct_inv()` is used when lower raw value = better (P/R ratio, crime rate, flood claims).
 
-### 4. Appreciation Quality Score
-```
-appr_deviation = |hpi_3yr_avg − 5.0|
-```
-Deviation from the 5% healthy midpoint. Lower deviation = healthier appreciation profile.
+**NaN handling:** Counties missing a metric due to data gaps receive NaN for that percentile. NaN propagates through the dimension calculation, reducing the county's total score proportionally to the weight of the missing metric. There is no artificial imputation of the *score* — only the *raw metric* is imputed (national median or RUCC-tier median, depending on the variable).
 
-### 5. Sector Quality Score
-```
-sector_quality = Σ(employment_share_in_sector × NAICS_weight)
-```
-1.30 for Professional/Finance; 1.00 for Healthcare/Education/Other; 0.80 for Construction; 0.60 for Retail/Manufacturing. Score > 1.0 = premium mix; < 1.0 = below-average mix.
+**Missing raw data imputation:**
+- Numeric metrics (home value, wage, income, etc.): national median of scored counties
+- Crime rate (FBI NIBRS): RUCC-tier median (rural non-reporters not penalized relative to similar rural counties)
 
-### 6. Employment Concentration (HHI)
-```
-HHI = Σ(employment_share_in_sector²) × 10,000
-```
-< 1,500 = well-diversified. 1,500–2,500 = moderate concentration. > 2,500 = high risk from sector-specific downturns. > 5,000 = dangerously concentrated (company towns).
+---
 
-### 7. In-Mover Income Quality Ratio
+## 5. Dimension 1 — Affordability & Value
+
+**Weight: 25 points**  
+*Is the price defensible relative to fundamentals?*
+
+| Metric | Intra-weight | Direction | Source |
+|---|---|---|---|
+| Price-to-Rent Ratio | 30% | Lower = better | Zillow ZHVI ÷ (HUD FMR 2BR × 12) |
+| Price-to-Income Ratio | 30% | Lower = better | Zillow ZHVI ÷ BEA per capita income |
+| Buy vs. Rent Breakeven | 25% | Shorter = better | Computed from ZHVI + HUD FMR (see §12) |
+| Appreciation Quality | 15% | Closer to 5% = better | \|FHFA 3-yr avg annual HPI − 5%\| |
+
+### Price-to-Rent Ratio
+
+National norm: 15–18x. Above 20x, ownership cost premium over renting grows meaningfully. The ratio uses HUD Fair Market Rents (2BR, FY2026) as the rent baseline — a federal benchmark for the local rental cost of a standard 2-bedroom unit.
+
+### Price-to-Income Ratio
+
+The ratio uses BEA per capita personal income (2024 estimate), not household income. This is deliberate: per capita income is available at county level from a federal administrative source (BEA) with no sampling error. ACS median household income would require survey data and has high margins of error for small counties.
+
+**Important — benchmark mismatch:** The commonly cited "4.2x historical norm" for price-to-income ratios is based on median *household* income, not per capita income. BEA per capita income is roughly 40–45% lower than median household income nationally (~$67k per capita vs. ~$80k household). As a result, Civica P/I ratios will display roughly 1.5–1.8x higher than the commonly cited benchmark — a county at a normal 4.2x household-income P/I may show 6–7x in Civica's calculation. The *scoring* is unaffected (all counties use the same income base, so relative rankings are valid), but displayed ratios on county report pages must carry a footnote: "P/I uses BEA per capita personal income; the commonly cited 4.2× historical norm uses median household income." The equivalent per-capita historical norm is approximately 2.5–3.0×.
+
+### Buy vs. Rent Breakeven
+
+The number of years a buyer must hold to recoup the cost premium of ownership over renting:
+
 ```
+down_payment = median_home_value × 0.20
+monthly_PITI = P&I (7%, 30yr, 80% LTV) + (home_value × 0.012 / 12) + (home_value × 0.005 / 12)
+monthly_excess = max(monthly_PITI − HUD_2BR_FMR, 1)
+breakeven_years = min(down_payment / (monthly_excess × 12), 30)
+```
+
+Capped at 30 years. Markets where PITI < rent score immediately positive (breakeven ≤ 0 → clipped to 0).
+
+**Known limitation:** Property tax is hardcoded at 1.2% (national median effective rate). Actual effective rates range from 0.28% (Hawaii) to 2.23% (Illinois, New Jersey, Vermont). This systematically underestimates carrying costs in high-tax states and overstates them in low-tax states. State-level average effective rates are available from the Lincoln Institute of Land Policy. This is a documented improvement for a future version.
+
+### Appreciation Quality
+
+`|FHFA_3yr_avg_annual_HPI − 5.0|`
+
+Penalizes deviation from the target in either direction: stagnation (<3%) and froth (>7%) both score lower. Counties near 5% annual appreciation score highest.
+
+**Known limitation:** The 5% target is nominal. At 3% long-run inflation, 5% nominal ≈ 2% real appreciation — a reasonable target. During high-inflation periods (2021–2022 when CPI exceeded 8%), 5% nominal implied negative real appreciation. A county at 8% nominal in 2022 was actually closer to the healthy real target than this formula suggests. The model does not adjust for the inflation environment of the measurement period. This is a deliberate simplification — CPI-adjusting HPI would require time-period-matched inflation data that complicates the pipeline considerably.
+
+---
+
+## 6. Dimension 2 — Economic Vitality
+
+**Weight: 22 points**  
+*Is the local economy growing in real terms?*
+
+| Metric | Intra-weight | Direction | Source |
+|---|---|---|---|
+| Wage Level | 35% | Higher = better | BLS QCEW avg annual wage, 2023 |
+| Sector Quality Score | 25% | Higher = better | BLS QCEW employment × NAICS quality weights |
+| Economic Diversity (HHI) | 25% | Lower = better | Herfindahl-Hirschman Index, BLS QCEW NAICS |
+| Income Growth | 15% | Higher = better | BEA CAINC1 per capita income, 4-yr growth |
+
+### Wage Level
+
+Avg annual wage from BLS QCEW 2023 (total private + government). Higher wage counties score higher. This captures both the current economic standard of living and the attractiveness of the labor market to in-movers.
+
+### Sector Quality Score
+
+```python
+sector_quality = sum(employment_share_i × quality_weight_i for all NAICS supersectors)
+```
+
+**NAICS quality weights (Civica editorial judgments):**
+
+| NAICS | Sector | Weight | Rationale |
+|---|---|---|---|
+| 54 | Professional, Scientific, Technical | 1.30 | Above-median wages; historically strong growth |
+| 52 | Finance & Insurance | 1.30 | Above-median wages; relatively low cyclicality |
+| 62 | Health Care & Social Assistance | 1.00 | Stable; median wages |
+| 61 | Educational Services | 1.00 | Stable; median wages |
+| All others | — | 1.00 | Neutral |
+| 23 | Construction | 0.80 | Leading indicator but highly cyclical |
+| 44-45 | Retail Trade | 0.60 | Secular headwinds from e-commerce |
+| 31-33 | Manufacturing | 0.60 | Secular US employment decline |
+
+**Important note:** These weights are Civica editorial judgments, not sourced from a specific academic study or BLS dataset. Finance at 1.30 reflects historically above-median wages and lower cyclicality than manufacturing. Manufacturing at 0.60 reflects 40 years of secular US employment decline. They are defensible as general proxies but should be understood as choices, not facts.
+
+### Economic Diversity (HHI)
+
+```python
+HHI = sum((employment_share_i × 100) ** 2 for all NAICS codes)
+```
+
+Standard Herfindahl-Hirschman Index. HHI < 1,500 = diversified; HHI > 2,500 = concentrated. Single-industry towns (coal mining, oil extraction) score at the low end of this metric. `pct_inv()` is applied so lower HHI (more diversified) = higher percentile = better score.
+
+### Income Growth
+
+BEA per capita personal income growth over 4 years (latest available year vs. 4 years prior). Captures whether real economic conditions are improving. Counties with rising per capita incomes attract both workers and buyers.
+
+---
+
+## 7. Dimension 3 — Housing Market Dynamics
+
+**Weight: 20 points**  
+*What is the market actually doing?*
+
+| Metric | Intra-weight | Direction | Source |
+|---|---|---|---|
+| 3-Year Appreciation Trend | 35% | Higher = better | FHFA HPI 3-yr avg annual change |
+| Current Momentum | 15% | Higher = better | FHFA HPI latest annual change |
+| Supply Tightness | 30% | Lower = better | Zillow active inventory, latest month |
+| Permit Pipeline | 20% | Higher = better | Census BPS total units permitted 2022 |
+
+### 3-Year Appreciation Trend and Current Momentum
+
+Both metrics come from FHFA HPI — the 3-yr trend is the mean of the three most recent annual percentage changes; current momentum is the latest annual change. They are correlated by construction (a county with strong sustained appreciation almost always shows positive current momentum), with a typical inter-metric correlation of ~0.7–0.9. They are not two independent signals — they are two time-horizon views of the same underlying FHFA trend. The combined 50% weight in Dim3 (35% + 15%) should be understood as a single FHFA appreciation signal with extra emphasis on longer-term trend.
+
+The two-horizon structure is still useful: a county with a strong 3-yr average but decelerating current momentum is a different risk profile from one accelerating on both. But do not describe them as "independent cross-validation" — that overstates their independence.
+
+**Note on interaction with Dim1:** There is a deliberate tension between Dim1's Appreciation Quality metric (which penalizes deviation from 5% in either direction) and Dim3's Appreciation Trend (which rewards raw appreciation magnitude). A market at 10% annual appreciation will score well on Dim3 and be penalized on Dim1. The model does not resolve this tension — it captures both signals and lets them compete with different weights (Dim3 trend 35%×20% = 7% of total vs. Dim1 quality 15%×25% = 3.75% of total). The net result is that the model *slightly favors momentum over stability*, but with a ceiling imposed by the affordability penalty. This is by design: a hot market should score higher on market dynamics; a buyer should see the full picture of both the momentum and the stretched affordability.
+
+### Supply Tightness
+
+Zillow active for-sale inventory, latest available month. `pct_inv()` applied: fewer homes available relative to other counties = more seller-side demand pressure = better market dynamics score.
+
+**Known limitation — raw count vs. months of supply:** The downloaded Zillow inventory file provides raw listing counts, not months of supply (listings ÷ monthly sales rate). A large county with 5,000 listings and 4,000 sales/month (strong seller's market) looks worse than a small county with 200 listings and 20 sales/month (buyer's market). Percentile normalization partially compensates — large counties mostly compete against other large counties for rank — but the correction is imperfect. The proper metric is months of supply, which requires a Zillow county-level sales-count file that was not downloaded. This is a documented data gap for v1.3.
+
+### Permit Pipeline
+
+Census BPS total housing units authorized 2022. Scored higher = better.
+
+**Known limitation:** This is the most contested metric in the model. Higher permits is described as "supply responding to demand" — a positive signal. The valid critique: this interpretation double-counts demand signals already captured in the appreciation trend and inventory tightness metrics, and systematically favors Sun Belt build-heavy counties (Phoenix, Houston suburbs, Boise) regardless of whether that construction volume reflects genuine absorption or speculative overbuilding. The theoretically correct metric is a permit-gap ratio (permitted units ÷ projected household formation), which would penalize both under-building and over-building. That ratio requires ACS household formation projections, which conflict with Civica's no-survey-data policy.
+
+The current implementation is a pragmatic choice given the data available: permits as a raw count is a demand-signal proxy, not a supply-adequacy measure. Users in Sun Belt markets should apply judgment — a county with 10,000 permitted units and 8,000 net new households is fine; one with 10,000 permitted units and 2,000 net new households is absorbing excess supply that will eventually weigh on prices. The county report page can surface this context directly.
+
+---
+
+## 8. Dimension 4 — Quality of Place
+
+**Weight: 15 points**  
+*Is it a good place to actually live?*
+
+| Metric | Intra-weight | Direction | Source |
+|---|---|---|---|
+| Crime Rate | 35% | Lower = better | FBI NIBRS 2024 — violent offenses per 100k |
+| Urban Access | 40% | Lower RUCC = better | USDA Rural-Urban Continuum Codes 2023 |
+| Amenity Density | 25% | Higher = better | Census CBP 2022 — establishments per 1,000 |
+
+### Crime Rate (FBI NIBRS)
+
+Violent offenses per 100,000 residents, derived from the FBI NIBRS 2024 National Master File (5.8 GB, fixed-width format). Offense counts are aggregated from 02 (offense) record segments by county, then divided by Census 2023 population estimates.
+
+**Coverage:** 21,068 agencies across 49 states (New York does not participate). 2,869 of 3,144 counties have at least one reporting agency.
+
+**Imputation for non-reporting counties:** Counties with no NIBRS-participating agency receive their RUCC-tier median violent crime rate. This prevents rural non-reporters from appearing artificially safe. The imputation is clearly flagged in the `county_scores.csv` output column `nibrs_imputed`.
+
+**Offense code scope:** All NIBRS Group A violent offense codes are included (09A–09C homicide, 11A–11D sex offenses, 120 robbery, 13A–13C assault). Property crimes are excluded.
+
+### Urban Access (USDA RUCC)
+
+RUCC codes 1–9: 1 = metro area ≥ 1 million; 9 = completely rural, not adjacent to a metro area. `pct_inv()` applied so metro counties score higher. The 40% weight reflects that urban access is the single strongest predictor of long-term real estate liquidity and buyer pool depth.
+
+### Amenity Density
+
+Census CBP 2022: total private business establishments ÷ county population × 1,000. Higher density = more restaurants, services, employers, retail — a proxy for the economic texture of daily life. Note: CBP has an 18-month publication lag; 2022 data was the latest available.
+
+---
+
+## 9. Dimension 5 — Physical Risk
+
+**Weight: 12 points** *(lower raw risk = higher score)*  
+*What are the real climate and natural hazard costs?*
+
+FEMA's National Risk Index (NRI) was not downloadable despite multiple attempts (direct download and manual fallback both blocked). Physical Risk is scored using the three datasets FEMA itself uses to build the NRI.
+
+| Metric | Intra-weight | Direction | Source |
+|---|---|---|---|
+| Flood Loss Proxy | 40% | Lower = better | FEMA NFIP paid claims ÷ Census pop (10-yr avg) |
+| Storm Damage Proxy | 35% | Lower = better | NOAA Storm Events property damage ÷ pop (5-yr avg) |
+| Wildfire Exposure | 25% | Lower = better | USFS Wildfire Risk to Communities score |
+
+**Composite:**
+```
+Physical Risk Score = pct_inv(flood_loss_per_cap) × 0.40
+                    + pct_inv(storm_damage_per_cap) × 0.35
+                    + pct_inv(wildfire_rank) × 0.25
+```
+
+Higher composite = lower physical risk = higher Dim5 score.
+
+**Note on NFIP coverage:** NFIP only captures insured flood losses. Uninsured flood damage (common in lower-income counties and areas outside Special Flood Hazard Areas) is not reflected. NOAA Storm Events covers all storm types regardless of insurance status and partially offsets this gap.
+
+**Homeowners insurance cost model (county report cards):**  
+National median homeowners insurance ≈ $159/mo. County risk multiplier:
+- Low-risk county (Physical Risk Score ≥ 85): × 0.72 → ~$115/mo
+- Average county: × 1.00 → $159/mo
+- High-risk county (Physical Risk Score ≤ 22): × 2.10 → ~$334/mo
+
+---
+
+## 10. Dimension 6 — Population Momentum
+
+**Weight: 6 points**  
+*Are people choosing this county, and what does that tell us?*
+
+| Metric | Intra-weight | Direction | Source |
+|---|---|---|---|
+| Net Migration Rate | 60% | Higher = better | Census Population Estimates 2023 (RNETMIG2023) |
+| Income Quality of In-Movers | 40% | Higher = better | IRS SOI Migration 2022-23 |
+
+**Net Migration Rate:** RNETMIG2023 — net migration per 1,000 residents. Combines domestic and international net migration. A positive rate means more people are choosing to move in than out.
+
+**Income Quality of In-Movers:**
+```python
 inmover_income_ratio = in_mover_avg_AGI / out_mover_avg_AGI
 ```
-> 1.0 = higher-income arrivals than departures. National median ≈ 1.03. Ratios above 1.15 indicate unusually strong demand quality.
+Ratio > 1.0 = higher-income households arriving than leaving. A ratio of 1.15 means incoming households earn on average 15% more than outgoing households — a positive signal for future tax base growth and housing demand quality.
 
-### 8. Violent Crime Rate
-```
-violent_per100k = violent_offenses / population × 100,000
-```
-FBI-defined violent crime (murder, rape, robbery, assault, kidnapping). Imputed from RUCC-tier median for non-NIBRS counties.
+**Why only 6%:** Migration is a *corroborating* signal, not a primary one. A county with strong economic fundamentals (Dim2) and strong market dynamics (Dim3) that also shows positive net migration is a high-conviction outcome — migration confirms what the other signals already establish. The 6% weight reflects this role: migration adds confirmation value at the margin, not independent analytical weight. A county should not score near the top on migration alone; if the economy is weak and prices are stretched, temporary in-migration (driven by relative affordability, not fundamentals) should not rescue the score.
+
+**What this is not:** Migration is not a leading indicator in this model. It is a trailing confirmation signal. The description "strongest leading indicator" that may appear in earlier versions of this document is incorrect and should be disregarded.
 
 ---
 
-## 12. Data Sources — All 14 Datasets
+## 11. Market Labels
 
-| # | Dataset | File | Vintage | Used For |
-|---|---|---|---|---|
-| 1 | Census Population Estimates | co-est2023-alldata.csv | 2023 | Base county universe, population denominators, migration rates |
-| 2 | BEA Local Area Income (CAINC1) | CAINC1__ALL_AREAS_1969_2024.csv | 2024 | Per capita income, 4-yr income growth |
-| 3 | Zillow ZHVI | County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv | Latest month | Median home value |
-| 4 | Zillow Inventory | County_invt_fs_uc_sfrcondo_sm_month.csv | Latest month | Active for-sale listings |
-| 5 | HUD Fair Market Rents | FY26_FMRs_revised.xlsx | FY2026 | 2BR rent baseline for P/R ratio and breakeven |
-| 6 | FHFA HPI County | hpi_at_county.xlsx | Latest available | 3yr appreciation trend, current momentum |
-| 7 | BLS QCEW | 2023.annual.singlefile.csv | 2023 | Wages, sector mix, HHI diversification |
-| 8 | Census CBP | cbp22co.txt | 2022 | Establishment count for amenity density |
-| 9 | Census BPS | co2022a.txt | 2022 | Building permits for supply pipeline |
-| 10 | IRS SOI Migration | countyinflow2223.csv, countyoutflow2223.csv | 2022–23 | In-mover income quality ratio |
-| 11 | FEMA NFIP Claims | fema_nfip_claims.csv | 2014–2023 | Flood loss per capita |
-| 12 | NOAA Storm Events | 5 CSV files | 2019–2023 | Storm damage per capita |
-| 13 | USFS Wildfire Risk | wrc_download_20260415.xlsx | 2026 | Wildfire national risk rank |
-| 14 | FBI NIBRS | 2024_NIBRS_NATIONAL_MASTER_FILE.txt | 2024 | Violent crime rate per 100k |
+Every county receives exactly one label based on total score.
 
-**Not used (and why):**
+| Label | Score Threshold | Guidance |
+|---|---|---|
+| ACCELERATING | ≥ 68 | All signals positive. Window still open, but monitor affordability trajectory. |
+| PEAKING | ≥ 62 | Strong momentum; fundamentals show ceiling pressure. Best for shorter hold horizons. |
+| ESTABLISHED | ≥ 55 | Solid, balanced market. Buy for stability and lifestyle, not appreciation upside. |
+| EMERGING | ≥ 46 | Improving fundamentals with early-mover upside. Risk is real. |
+| FRONTIER | ≥ 38 | Thin market. Fundamentals mixed — requires additional local due diligence. |
+| TURNING | ≥ 30 | Softening demand signals. Monitor for continued weakness before committing. |
+| SPECULATIVE | ≥ 26 | Poor fundamentals. Prices appear disconnected from underlying economics. |
+| AVOID | < 26 | No dimension is working. (0 counties in v1.2 — empirical floor is 26.85.) |
 
-| Dataset | Reason not used |
-|---|---|
-| USDA RUCC 2023 | *(Is used — Dim4 Urban Access metric)* |
-| EIA Form 861 (electricity) | Maps to utility service territories, not county FIPS; spatial join required |
-| EIA Natural Gas prices | State-level only; no county decomposition available |
-| Census STC (state/local finances) | State-level only; no county FIPS in the file |
-| NOAA Climate Normals | Weather station points; spatial aggregation to county level not implemented |
-| FEMA NRI | Was not downloadable; reconstructed from its component datasets (NFIP, NOAA, USFS) |
+**Label calibration:** Thresholds were set so that each label covers a meaningful, non-trivial fraction of the county distribution. ACCELERATING and PEAKING are intentionally rare (top ~2%); ESTABLISHED and EMERGING cover the core of the distribution. AVOID has 0 counties in v1.2 — the NIBRS integration raised the score floor above the 26-point threshold.
+
+**v1.2 distribution:**
+```
+ACCELERATING:   2 counties    (0.1%)
+PEAKING:       57 counties    (2.0%)
+ESTABLISHED:  563 counties   (20.0%)
+EMERGING:   1,463 counties   (51.9%)
+FRONTIER:     634 counties   (22.5%)
+TURNING:       97 counties    (3.4%)
+SPECULATIVE:    4 counties    (0.1%)
+AVOID:          0 counties    (0.0%)
+```
 
 ---
 
-## 13. Coverage, Filters & Missing Data
+## 12. Monthly Cost Model
 
-### Population filter
+The scoring engine computes `monthly_piti` for each county — the all-in ownership carrying cost used in the Dim1 breakeven calculation.
 
 ```python
-df = df[df['POPESTIMATE2023'] >= 5_000]
+r = 0.07 / 12  # 7% annual rate, monthly
+mortgage_factor = r / (1 - (1 + r) ** -360)  # 30-year amortization factor
+
+monthly_PITI = (
+    median_home_value × 0.80 × mortgage_factor   # principal & interest (80% LTV)
+  + median_home_value × 0.012 / 12               # property tax (1.2% annual)
+  + median_home_value × 0.005 / 12               # homeowners insurance (0.5% annual)
+)
 ```
 
-Counties with fewer than 5,000 residents are excluded from scoring. Reason: these counties have insufficient data across multiple dimensions:
-- Zillow ZHVI coverage is effectively zero below ~5,000 population
-- BLS QCEW suppresses employment figures for small counties to protect business confidentiality
-- FHFA HPI requires enough home sales to build a repeat-sales index — impossible in thin markets
-- Any score produced would be nearly 100% median imputation, conveying no real information
+**Known limitation — property tax:** The 1.2% effective rate is the national median. Actual effective property tax rates span 0.28% (Hawaii) to 2.23% (New Jersey, Illinois, Vermont). At a $400,000 home value, this creates a monthly cost error of $315/mo (Hawaii overstated by $300; NJ understated by $340). State-level average effective rates are published by the Lincoln Institute of Land Policy and could replace the hardcoded rate in a future version. Until then, users in high-tax states (IL, NJ, TX, WI, NH) should mentally adjust the displayed breakeven horizon upward.
 
-**324 counties are excluded.** The largest excluded county is Oneida County, ID (pop. 4,953). The smallest is Loving County, TX (pop. 43).
+**Rate assumption:** 7% reflects the approximate national 30-year fixed rate through 2024. This will be updated as rates change in future scoring runs.
 
-The score output covers **2,820 of 3,144 US counties** — 89.7% of the county universe, representing over 99% of the US population.
+---
 
-### Missing data imputation
+## 13. Data Sources and Vintage
 
-After the population filter, remaining missing values are filled with the **national median** for each numeric column:
+| # | Dataset | Vintage | Used For |
+|---|---|---|---|
+| 1 | Zillow ZHVI (county median home value) | Monthly through 2025 | Dim1: P/R, P/I, breakeven; Dim3: inventory |
+| 2 | FHFA HPI (county-level) | Annual through 2024 | Dim1: appreciation quality; Dim3: trend + momentum |
+| 3 | HUD Fair Market Rents | FY2026 | Dim1: rent baseline, P/R, breakeven |
+| 4 | BEA CAINC1 (per capita income) | 2024 estimate | Dim1: P/I; Dim2: income growth |
+| 5 | BLS QCEW (wages, employment) | 2023 annual | Dim2: wages, sector quality, HHI |
+| 6 | Census Building Permits Survey | 2022 | Dim3: permit pipeline |
+| 7 | Census CBP (business establishments) | 2022 | Dim4: amenity density |
+| 8 | USDA Rural-Urban Continuum Codes | 2023 | Dim4: urban access |
+| 9 | FBI NIBRS National Master File | 2024 | Dim4: violent crime per 100k |
+| 10 | FEMA NFIP (flood insurance claims) | 10-yr avg through 2023 | Dim5: flood loss per capita |
+| 11 | NOAA Storm Events | 2019–2023 | Dim5: storm damage per capita |
+| 12 | USFS Wildfire Risk to Communities | 2022 | Dim5: wildfire exposure |
+| 13 | Census Population Estimates | 2023 | Base universe; migration rates; denominators |
+| 14 | IRS SOI Migration | 2022–2023 | Dim6: in-mover income quality |
 
-```python
-num_cols = df.select_dtypes(include=[np.number]).columns
-medians  = df[num_cols].median()
-df[num_cols] = df[num_cols].fillna(medians)
-```
+**Note on Zillow:** Zillow ZHVI is the sole non-federal source. It is used only for county-level median home value (no federal equivalent at monthly county granularity) and active inventory count. All appreciation signals use FHFA HPI only.
 
-This is the most conservative imputation choice available. It assigns a county with missing data the exact middle score on that metric — neither rewarding nor penalizing it for the data gap. The practical effect is that heavily imputed counties gravitate toward the mean score (~50) rather than the extremes.
+**FHFA coverage:** FHFA HPI covers approximately 2,800 of 3,143 counties. The remaining ~340 rural counties receive national median imputation for all FHFA-derived metrics.
 
-Specific imputation cases:
+**Known data vintage gaps:** CBP is 18 months behind (2022 data, used in 2026); BPS is similarly lagged. These are the latest vintages available; no alternative county-level sources exist.
 
-| Dataset gap | Counties affected | Method |
+---
+
+## 14. Design Decisions and Known Tradeoffs
+
+This section documents the major methodological choices, including honest acknowledgment of known limitations and alternative approaches considered.
+
+### 14.1 Permits Scored Higher = Better (Known Limitation)
+
+The permit pipeline metric treats higher new construction as a positive signal ("demand response"). The valid critique is threefold:
+
+1. **Double-counting:** Strong permit activity in a county already shows up in Dim3's appreciation trend (rising prices attract builders) and inventory tightness (builders respond to low supply). Permits adds a third read on the same demand signal.
+2. **Sun Belt inflation:** High-permit-volume metros like Phoenix, Austin, Houston suburbs, and Boise score well on this metric regardless of whether their permit volume reflects genuine household absorption or speculative overbuilding.
+3. **The correct metric** is a permit-gap ratio (permits ÷ projected household formation). A county under-building relative to its household formation has genuine supply constraint. A county over-building relative to its household formation is accumulating future price headwind. That ratio requires ACS household formation projections, which conflict with the no-survey-data policy.
+
+The current implementation is an acknowledged simplification. Users analyzing Sun Belt markets should check permits against net migration (Dim6 net migration rate) — if permits substantially exceed net household formation, the county may be over-building.
+
+### 14.2 The Appreciation Tension: Dim1 vs. Dim3
+
+Dim1 Appreciation Quality penalizes deviation from 5% annual appreciation. Dim3 Appreciation Trend rewards raw appreciation magnitude. A market at 10% annual appreciation gets a Dim1 penalty (deviation of 5 pts from target) and a Dim3 bonus (strong trend). The net effect is that the model slightly favors momentum over stability.
+
+This is intentional, not an error. A hot market *should* score well on market dynamics; a buyer *should* simultaneously see the stretched affordability penalty. The two signals compete with different weights (Dim3 trend drives ~7% of the total vs. Dim1 appreciation quality ~3.75%), so the model gives more credit to momentum than to stability — reflecting the empirical reality that buyers benefit from market direction.
+
+The alternative — deviation-based scoring in both Dim1 and Dim3 — would penalize fast-appreciating markets twice and systematically favor slow-growth markets regardless of whether that stability reflects health or stagnation. The current approach is the more informative of the two.
+
+### 14.3 ZHVI Imputation Bias (Known Limitation)
+
+When Zillow has no home value for a county, the national median home value (~$350k as of 2025) is imputed. This creates systematic ratio bias:
+
+A rural county with $600/mo FMR rents gets:
+- Imputed P/R = $350,000 / ($600 × 12) = 48.6x (extreme; scores near Dim1 floor)
+- Actual P/R may be $130,000 / ($600 × 12) = 18.1x (national norm)
+
+The correct fix is to impute the P/R ratio directly from comparable counties (same RUCC tier, same state), rather than imputing the numerator alone and letting the ratio distort. This is documented as a future improvement. Counties with imputed ZHVI are flagged in the output; their Dim1 scores should be interpreted with caution.
+
+### 14.4 Nominal Appreciation Target (Known Limitation)
+
+The Appreciation Quality target (5% annual) is nominal. The real implication changes with the inflation environment:
+
+| Inflation | 5% nominal implies | Notes |
 |---|---|---|
-| FHFA HPI (no HPI history) | ~340 rural counties | National median appreciation |
-| Zillow ZHVI (no home value data) | Some rural counties | National median home value |
-| FEMA NFIP (no claims on file) | Counties with no flood insurance policies | 0 (no claims = no flood loss) |
-| FBI NIBRS (no participating agency) | ~251 counties | RUCC-tier median violent crime rate |
-| BPS (no permits filed) | Some counties | 0 (no permits = no new supply) |
+| 3% | +2% real | Reasonable long-run target |
+| 6% | -1% real | Penalizes counties that are barely keeping up |
+| 8% (2022) | -3% real | Severely penalizes counties during high inflation |
 
-The FBI NIBRS imputation is an exception to the national-median rule — RUCC-tier median is used instead because non-reporting is strongly correlated with rurality, and rural counties genuinely have lower violent crime rates than the national median.
+The model does not adjust for the inflation environment of the measurement period. During the 2021–2022 inflation episode, a county at 8–9% nominal appreciation was closer to a healthy real target than a county at 5% nominal — but the formula scored them in the opposite direction. A CPI-adjusted version using Federal Reserve H.15 or BLS CPI data would resolve this. The pipeline cost is moderate; this is a candidate for v1.3.
 
-### Dataset linkage
+### 14.5 Property Tax Hardcoded at 1.2% (Known Limitation)
 
-All datasets are joined using the 5-digit FIPS code (zero-padded state + county code). Census population serves as the base table; all other datasets are left-joined onto it. This means:
-- Every county in the Census file appears in the output (subject to the pop filter)
-- Counties not covered by a particular dataset receive NaN for that dataset's columns, then median imputation
-- No county is excluded due to missing data in a single dataset
+See §12 Monthly Cost Model. The national median effective property tax rate is used as a universal constant. The $315/mo error range (Hawaii vs. NJ at $400k home value) is material and affects the breakeven horizon significantly.
 
----
+At a $400k home:
+- Hawaii (0.28%): actual monthly tax = $93; model uses $400 → breakeven understated by $307/mo
+- NJ (2.23%): actual monthly tax = $743; model uses $400 → breakeven overstated by $343/mo
 
-## 14. Design Decisions & Tradeoffs
+**Immediate workaround for users:** The displayed monthly cost and breakeven on county report pages should include a disclaimer for high-tax states.
 
-### Why percentile normalization instead of absolute thresholds?
+### 14.6 Sector Quality Weights Are Editorial
 
-The alternative is to define absolute cutoffs: "P/R ratio below 15x scores full points, above 25x scores zero." This fails because:
-1. The "correct" threshold changes over time (as national prices move, the norm shifts)
-2. Absolute thresholds create cliffs — tiny changes near the threshold cause large score jumps
-3. The model can't be compared across different vintages without re-calibrating every threshold
+The NAICS quality multipliers reflect Civica's judgment, not a sourced academic framework. Finance and Professional Services at 1.30 reflects historical US wage data (both sectors are consistently above median wage in BLS OEWS) and relatively stable long-term employment share. Manufacturing at 0.60 reflects 40 years of secular US employment decline as a share of total employment.
 
-Percentile normalization self-calibrates: the threshold is always "how does this county compare to all other US counties right now." The score always means "what percentile nationally" regardless of what year the model is run.
+These weights have not been validated against county-level outcome data (e.g., does a county with more Professional Services workers actually see stronger price appreciation over 10 years?). They are reasonable priors but should be clearly labeled as Civica's analytical choices in all external communication.
 
-### Why not use ACS (American Community Survey) data?
+### 14.7 Migration Weight vs. Its Corroborating Role
 
-The American Community Survey is the most widely cited source for county-level demographics. Civica deliberately excludes it for three reasons:
-1. ACS estimates for small counties have very wide margins of error (sometimes ±30% for a 5-year estimate in a county of 10,000)
-2. ACS is a sample survey, not a census — at county level, the uncertainty is too large for scoring use
-3. ACS data is already partially incorporated into BEA and BLS products (which use it as a denominator), so excluding it doesn't mean ignoring its signal
+Population Momentum is weighted 6% — the lowest dimension weight. This is correct. Migration is a confirming signal: it tells you that people are already acting on the fundamentals that Dim1–Dim3 describe. It does not predict future fundamentals independently.
 
-### Why use 2BR Fair Market Rents as the rent baseline?
+The framing to avoid: "migration is the strongest leading indicator." It is not. It is a trailing signal. A county with collapsing affordability and declining wages that still shows positive net migration (perhaps driven by relative affordability vs. an adjacent coastal market) will correctly show mild Dim6 credit while being penalized on Dim1 and Dim2. The model handles this correctly. The 6% weight reflects that migration alone cannot rescue a county with weak fundamentals.
 
-HUD FMR is a conservative rent baseline — it represents the 40th percentile of gross rents in a market. This means the breakeven calculation uses a rent that 60% of renters pay more than. The breakeven horizon is therefore conservative (it will take longer to break even against a lower rent baseline), making the BUY verdict harder to achieve and more credible when it is.
+### 14.8 No ACS Survey Data
 
-Alternative: median market rent from a private source (Zillow, Apartment List). Rejected because these sources have coverage gaps, are not standardized across counties, and introduce private data into an otherwise pure federal-data model.
+All metrics use federal administrative data (BEA, BLS, Census population estimates, FHFA, HUD, IRS, FBI, FEMA, NOAA, USFS) rather than ACS sample survey data. This is deliberate: ACS has high margins of error for small counties (population < 20,000) and introduces a survey sampling layer that administrative data avoids. Administrative equivalents exist for every metric that ACS would otherwise provide.
 
-### Why doesn't the model use school quality data?
+### 14.9 No School Data
 
-School quality (NCES EDFacts or F-33 data) is on the roadmap but not in the current model for a practical reason: the data requires significant cleaning and grade-level aggregation to produce a meaningful county-level score, and the downloaded files were not included in the initial data pipeline. When added, school quality would most likely replace part of the Amenity Density metric in Dim4 or add a 4th metric to that dimension.
+School quality is not scored. The best county-level school data sources (NCES Common Core of Data, Stanford Education Data Archive) are not in the data pipeline. More importantly, school quality is highly intra-county variable — the county-level average would obscure the school district variation that actually matters to buyers. A county with one top-performing and one low-performing district would show a middling average that is meaningless to any individual buyer. School quality is better addressed at the school district or ZIP level, which Civica does not currently score.
 
-### Why are permits scored as higher = better?
+### 14.10 Why Two-Bedroom FMR
 
-Building permits are a supply signal, and more supply typically means more competition for existing homes (bad for price appreciation). The decision to score permits as higher = better reflects the view that permit activity is primarily a demand indicator: builders only build when they expect buyers. High permit activity means the market is strong enough to attract capital investment, which is a positive signal. The supply effect is already captured elsewhere — in the inventory tightness metric.
+HUD Fair Market Rents are published for 0BR, 1BR, 2BR, 3BR, and 4BR. Civica uses 2BR FMR as the rent baseline for all ratio calculations. This is the standard HUD reference unit for housing affordability analysis and approximates the relevant unit size for a median buyer household (2+ person household). Using studio or 1BR FMR would understate the rent-equivalent for buyers with families; using 3BR+ would overstate it for singles and couples.
 
----
+### 14.11 IRS AGI Retirement Destination Bias
 
-## 15. Known Limitations
+The in-mover income quality metric (Dim6) uses average IRS AGI for households filing in a destination county that previously filed in a different county. AGI includes capital gains, which are often realized in the year of a major life transition such as retirement — selling appreciated employer stock, liquidating a portfolio, or converting a primary residence. Retirees moving to FL, AZ, NV, and SC frequently show very high AGI in their move year for this reason, making those counties appear to attract far wealthier households than their earned income would suggest.
 
-| Limitation | Impact | Current handling |
+The correct fix is to use wage-and-salary income only from the IRS SOI migration file (the data does include this breakout). However, this would exclude the legitimate economic value of retirees with genuinely high investment income. The current implementation is a known upward bias for warm-climate retirement destinations and should be noted when interpreting Dim6 scores for FL, AZ, NV, and SC counties.
+
+### 14.12 Zillow Drives 27% of the Total Score (Single-Source Concentration)
+
+Zillow ZHVI is the only non-federal data source in the model. It influences four distinct metrics:
+
+| Metric | Dimension | Total weight |
 |---|---|---|
-| FHFA covers only ~2,800 of 3,143 counties | ~340 rural counties receive median HPI imputation | Documented; score reliability lower for these counties |
-| BLS QCEW has 18-month publication lag | Economic vitality scores reflect 2023 employment | Accepted; no alternative real-time county-level source |
-| Census CBP has 18-month publication lag | Amenity density reflects 2022 establishment counts | Same; CBP is the only federal county-level establishment dataset |
-| Census BPS also 2022 vintage | Permit pipeline is 2 years behind | Accepted; directionally correct for identifying supply-active markets |
-| NIBRS participation is voluntary | ~251 counties lack crime data; rural coverage is lower | RUCC-tier median imputation; non-reporters are not penalized |
-| Zillow ZHVI is not federal data | One non-federal source in an otherwise federal model | Only alternative would be FHFA HPI for price level — but FHFA is an index (change), not a price level |
-| Small county distortion | In counties with 5,000–15,000 pop, one employer can swing wages and HHI significantly | Pop ≥ 5,000 filter catches worst cases; scores for 5k–15k counties should be treated with caution |
-| Single-year IRS migration data | Migration patterns from 2022–23 may not reflect post-COVID normalization | Acknowledged; IRS releases annually and model can be updated |
-| Breakeven assumes fixed 7% rate | A county at 5.5% rates vs. 7% rates has a different breakeven | Rate is standardized nationally for comparability; users should adjust the breakeven output for their actual rate |
+| Median home value (numerator of P/R and P/I) | Dim1 | ~15% of Dim1 |
+| Breakeven numerator (down payment = ZHVI × 0.20) | Dim1 | ~6% of Dim1 |
+| Active inventory count | Dim3 | 30% of Dim3 |
+
+Combined, Zillow data directly drives approximately 27% of every county's total score — more than any individual federal source. This creates a data concentration risk: if Zillow changes its methodology, access policy, or file format, a disproportionate share of the model breaks. There is no federal equivalent for county-level median home values at monthly granularity, so this dependency cannot be fully eliminated. It should be disclosed in the methodology and monitored for file availability on each scoring run.
 
 ---
 
-*Civica Scoring Engine v1.2 · All data from free US federal government sources · No financial advice — for informational purposes only*
+## 15. Update Cadence
+
+| Dataset | Vintage in Model | Next Expected Release | Update Priority |
+|---|---|---|---|
+| FHFA HPI (county) | Annual through 2024 | Q1 2026 | High — core Dim1/Dim3 signals |
+| BLS QCEW | 2023 annual | Q2 2026 | High — Dim2 wages and sector quality |
+| BEA CAINC1 | 2024 estimate | Q3 2026 | High — Dim1 P/I, Dim2 income growth |
+| FBI NIBRS | 2024 | Q4 2026 | High — Dim4 crime rate |
+| IRS SOI Migration | 2022–23 | Q4 2026 | Medium — Dim6 in-mover quality |
+| FEMA NFIP Claims | 10-yr avg | Annually | Medium — Dim5 flood proxy |
+| NOAA Storm Events | 2019–2023 | Annually | Medium — Dim5 storm proxy |
+| Zillow ZHVI | Monthly | Continuous | High on next major run |
+| HUD FMR | FY2026 | FY2027 (Oct 2026) | High — affects all Dim1 ratios |
+| Census Population Estimates | 2023 | Q3 2026 | Medium — denominators |
+| Census BPS | 2022 | 2023 data in 2025 | Low — permits lag ~18 months |
+| Census CBP | 2022 | 2023 data in 2025 | Low — CBP lag ~18 months |
+| USDA RUCC | 2023 (10-yr cycle) | ~2033 | None until next cycle |
+| USFS Wildfire Risk | 2022 | ~2027 | Low |
+
+**Recommended re-score trigger:** When FHFA HPI, BLS QCEW, and BEA CAINC1 all have fresh annual releases — approximately Q3/Q4 of each calendar year. A full re-score takes ~4 minutes on a standard laptop. All 2,820 county scores are recomputed from scratch each run; there is no incremental update.

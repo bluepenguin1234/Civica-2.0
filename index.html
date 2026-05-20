@@ -4,6 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Civica — Research-Grade Housing Intelligence for Every US County</title>
+<meta name="description" content="Civica scores all 2,820 US counties on affordability, economic vitality, market dynamics, quality of place, climate risk, and population growth. Free housing intelligence for homebuyers.">
+<meta property="og:title" content="Civica — Research-Grade County Housing Intelligence">
+<meta property="og:description" content="Scores, ranks, and investment thesis for every US county — built entirely on federal government data. No agents. No ads. No conflicts.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://civica.app/og_image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://civica.app/og_image.png">
+<link rel="canonical" href="https://civica.app/">
+<!-- GA4: replace G-XXXXXXXXXX with your Google Analytics 4 Measurement ID -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script> -->
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -269,64 +282,41 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .tag-purple { background: #ede9fe; color: #5b21b6; }
 .tag-yellow { background: #fef3c7; color: #92400e; }
 
-/* ── TOP COUNTIES ─────────────────────────────────── */
-.table-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-.table-head-left { display: flex; flex-direction: column; gap: 4px; }
-.table-sub { font-size: 13px; color: var(--subtext); }
-.filter-strip { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-.fbtn {
-  padding: 7px 16px; border-radius: 100px;
-  border: 1.5px solid var(--border); background: #fff;
-  font-size: 12px; font-weight: 600; color: var(--subtext);
-  cursor: pointer; transition: all .15s; font-family: inherit;
-}
-.fbtn:hover { border-color: var(--blue); color: var(--blue); }
-.fbtn.active { border-color: var(--blue); background: var(--blue); color: #fff; }
-.state-sel {
-  height: 36px; border-radius: 100px;
-  border: 1.5px solid var(--border);
-  padding: 0 14px; font-size: 12px;
-  color: var(--subtext); outline: none;
-  background: #fff; cursor: pointer; font-family: inherit;
-}
-
-.ctable { width: 100%; border-collapse: collapse; font-size: 13px; }
-.ctable th {
-  text-align: left; font-size: 11px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .06em;
-  color: var(--muted); padding: 0 14px 12px;
-  border-bottom: 2px solid var(--border); white-space: nowrap;
-}
-.ctable th.r { text-align: right; }
-.ctable td { padding: 13px 14px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
-.ctable tbody tr:hover td { background: #fafbfc; }
-.ctable td.r { text-align: right; font-weight: 600; }
-.rank { font-size: 13px; font-weight: 700; color: #d1d5db; }
-.cname { font-size: 14px; font-weight: 700; color: var(--navy); }
-.cstate { font-size: 11px; color: var(--muted); margin-top: 1px; }
-.score-display { display: flex; align-items: center; gap: 8px; }
-.score-circ {
-  width: 34px; height: 34px; border-radius: 50%;
-  font-size: 12px; font-weight: 800; color: #fff;
+/* ── SAVED COUNTIES ─────────────────────────────── */
+.save-btn {
+  background: none; border: 1.5px solid var(--border);
+  border-radius: 6px; width: 28px; height: 28px;
+  cursor: pointer; font-size: 13px; line-height: 1;
   display: flex; align-items: center; justify-content: center;
+  transition: all .12s; flex-shrink: 0;
 }
-.score-num { font-size: 15px; font-weight: 800; color: var(--navy); }
-.lbadge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 100px; white-space: nowrap; }
-.lb-accel  { background: #dcfce7; color: #15803d; }
-.lb-peak   { background: #fef3c7; color: #92400e; }
-.lb-estab  { background: #dbeafe; color: #1d4ed8; }
-.lb-emerg  { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
-.lb-front  { background: #f3f4f6; color: #4b5563; }
+.save-btn:hover { border-color: var(--blue); background: #eff6ff; }
+.save-btn.saved { border-color: var(--blue); background: #eff6ff; color: var(--blue); }
+.saves-pill {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--navy); color: #fff;
+  border-radius: 100px; padding: 10px 20px;
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.25);
+  z-index: 450; cursor: pointer;
+}
+.saves-pill-clr { background: none; border: none; color: rgba(255,255,255,.55); font-size: 12px; cursor: pointer; font-family: inherit; }
+.saves-pill-clr:hover { color: #fff; }
 
-.load-more-btn {
-  display: block; width: 100%; margin-top: 18px;
-  padding: 13px; border: 1.5px solid var(--border);
-  background: #fff; border-radius: 10px;
-  font-size: 14px; font-weight: 700; color: var(--navy);
-  cursor: pointer; font-family: inherit;
-  transition: background .15s;
-}
-.load-more-btn:hover { background: var(--bg); }
+/* ── COUNTY MAP ─────────────────────────────────── */
+.map-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; justify-content: center; }
+.map-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--subtext); }
+.map-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; border: 1px solid rgba(0,0,0,.08); }
+#countyMap path { transition: opacity .1s; }
+#countyMap path:hover { opacity: .75; }
+
+.lbadge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 100px; white-space: nowrap; }
+.lb-sbuy  { background: #dcfce7; color: #15803d; }
+.lb-buy   { background: #dbeafe; color: #1d4ed8; }
+.lb-watch { background: #fef3c7; color: #92400e; }
+.lb-caut  { background: #ffedd5; color: #9a3412; }
+.lb-avoid { background: #fee2e2; color: #b91c1c; }
 
 /* ── EMAIL STRIP ──────────────────────────────────── */
 .email-form { display: flex; gap: 10px; max-width: 480px; margin: 0 auto; flex-wrap: wrap; }
@@ -355,6 +345,19 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .footer-nav a:hover { color: rgba(255,255,255,.7); }
 .footer-sources { font-size: 11px; color: rgba(255,255,255,.22); line-height: 1.85; max-width: 720px; margin: 0 auto 16px; }
 .footer-copy { font-size: 11px; color: rgba(255,255,255,.18); }
+
+/* ── MOBILE NAV OVERLAY ──────────────────────────── */
+.mobile-nav {
+  display: none;
+  position: fixed; inset: 0; background: #fff; z-index: 400;
+  flex-direction: column; padding: 20px 28px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+.mobile-nav-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #6b7280; }
+.mobile-nav a { font-size: 20px; font-weight: 700; color: #1a3a5c; text-decoration: none; padding: 14px 0; border-bottom: 1px solid #f3f4f6; }
+.mobile-nav a:last-child { border-bottom: none; }
+.mobile-nav a:hover { color: #1a7ff0; }
 
 /* ── RESPONSIVE ─────────────────────────────────── */
 @media (max-width: 860px) {
@@ -390,9 +393,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   </a>
   <div class="nav-links">
     <a href="#how">How It Works</a>
-    <a href="#counties">Top Counties</a>
+    <a href="#map">County Map</a>
+    <a href="leaderboard.html">Leaderboard</a>
     <a href="harvard_model.html">Methodology</a>
-    <a href="#" class="nav-cta">Search Counties</a>
+    <a href="#" class="nav-cta" onclick="event.preventDefault();document.getElementById('searchInput').focus();document.querySelector('.hero').scrollIntoView({behavior:'smooth'});">Search Counties</a>
   </div>
   <button class="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -433,7 +437,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         <div class="search-dropdown" id="searchDrop"></div>
       </div>
 
-      <a href="#counties" class="hero-link">Browse all counties →</a>
+      <a href="#map" class="hero-link">Browse all counties →</a>
     </div>
 
     <!-- RIGHT: Floating Score Card -->
@@ -455,7 +459,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           </div>
         </div>
 
-        <div class="sc-badge">ACCELERATING</div>
+        <div class="sc-badge">STRONG BUY</div>
 
         <div class="sc-bars">
           <div class="sc-bar-row">
@@ -480,7 +484,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           </div>
         </div>
 
-        <button class="sc-view-btn">View Full Report →</button>
+        <button class="sc-view-btn" onclick="window.location='output/counties/18057.html'">View Full Report →</button>
         <div class="sc-tag">#1 of 2,820 counties</div>
       </div>
     </div>
@@ -568,7 +572,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       <div class="feat-card">
         <div class="feat-icon">📈</div>
         <div class="feat-title">Market Dynamics Signal</div>
-        <div class="feat-body">Two independent FHFA price signals — 3-year trend and current momentum — plus Zillow inventory tightness and the Census permit pipeline. Four signals that cross-validate each other.</div>
+        <div class="feat-body">Two FHFA price time horizons (3-year trend and current momentum), Zillow inventory tightness, and the Census permit pipeline — four signals that give you a 360° view of where the market is headed.</div>
         <span class="feat-tag tag-blue">FHFA + Zillow Data</span>
       </div>
       <div class="feat-card">
@@ -594,53 +598,62 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 </section>
 
 
-<!-- ══════════ TOP COUNTIES ══════════ -->
-<section class="sec sec-white" id="counties">
+<!-- ══════════ MARKET LABELS ══════════ -->
+<section class="sec sec-gray" id="labels">
   <div class="sec-inner">
-
-    <div class="table-head">
-      <div class="table-head-left">
-        <div class="eyebrow" style="text-align:left;margin-bottom:4px;">Top Counties</div>
-        <h2 class="sec-h" style="text-align:left;font-size:32px;margin-bottom:0;">The best markets right now</h2>
-        <div class="table-sub">Ranked by Civica Score · Updated quarterly · Sample data shown</div>
+    <div class="eyebrow">How We Signal</div>
+    <h2 class="sec-h">What does your county's signal mean?</h2>
+    <p class="sec-sub">Every county gets one of 5 plain-English signals. It combines the strength of the local market with whether conditions are improving or softening right now.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:32px;">
+      <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #bbf7d0;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#16a34a;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">STRONG BUY</div>
+        <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:6px;">All signals firing</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Strong fundamentals across all dimensions, and the market is actively improving. Highest-conviction entry point in the model.</div>
       </div>
-      <select class="state-sel" id="stateFilter" onchange="filterTable()">
-        <option value="">All States</option>
-        <option>CO</option><option>FL</option><option>GA</option>
-        <option>ID</option><option>IN</option><option>MD</option>
-        <option>MN</option><option>NC</option><option>OH</option>
-        <option>TN</option><option>TX</option><option>UT</option>
-        <option>VA</option><option>WI</option>
-      </select>
+      <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #bfdbfe;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#1a7ff0;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">BUY</div>
+        <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:6px;">Good fundamentals</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Strong market holding steady, or a solid market actively improving. The data supports buying with confidence.</div>
+      </div>
+      <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #fde68a;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#f59e0b;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">WATCH</div>
+        <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:6px;">Mixed signals</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Market conditions are mixed or shifting. Might be right for you, but don't rush — monitor for a quarter before committing.</div>
+      </div>
+      <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #fed7aa;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#f97316;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">CAUTION</div>
+        <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:6px;">Weakening</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Fundamentals are below average or softening. Higher risk of near-term value erosion. Needs strong personal reasons to buy here now.</div>
+      </div>
+      <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #fecaca;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#dc2626;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">AVOID</div>
+        <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:6px;">Poor fundamentals</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Multiple dimensions are weak with no positive momentum. Unless you have a strong non-financial reason, your money works harder elsewhere.</div>
+      </div>
     </div>
+    <div style="text-align:center;margin-top:24px;">
+      <a href="harvard_model.html#labels" style="font-size:13px;color:var(--blue);font-weight:600;text-decoration:none;">Full signal guide and methodology →</a>
+    </div>
+  </div>
+</section>
 
-    <div class="filter-strip">
-      <button class="fbtn active" onclick="setFilter('ALL',this)">All Labels</button>
-      <button class="fbtn" onclick="setFilter('ACCELERATING',this)">Accelerating</button>
-      <button class="fbtn" onclick="setFilter('PEAKING',this)">Peaking</button>
-      <button class="fbtn" onclick="setFilter('ESTABLISHED',this)">Established</button>
-      <button class="fbtn" onclick="setFilter('EMERGING',this)">Emerging</button>
-    </div>
 
-    <div style="overflow-x:auto;">
-      <table class="ctable" id="countiesTable">
-        <thead>
-          <tr>
-            <th style="width:40px;">#</th>
-            <th>County</th>
-            <th>Score</th>
-            <th>Label</th>
-            <th class="r">Median Price</th>
-            <th class="r">HPI 3yr</th>
-            <th class="r">Avg Wage</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <!-- rows injected by JS -->
-        </tbody>
-      </table>
+<!-- ══════════ COUNTY MAP ══════════ -->
+<section class="sec sec-white" id="map">
+  <div class="sec-inner">
+    <div class="eyebrow">County Map</div>
+    <h2 class="sec-h">Every county, scored</h2>
+    <p class="sec-sub" style="margin-bottom:28px;">2,820 counties colored by Civica signal. Click any county to view its full report.</p>
+    <div id="mapLoading" style="text-align:center;padding:48px 0;color:#9ca3af;font-size:14px;">Loading map…</div>
+    <svg id="countyMap" style="width:100%;height:auto;display:none;"></svg>
+    <div class="map-legend" id="mapLegend" style="display:none;">
+      <div class="map-legend-item"><span class="map-dot" style="background:#16a34a;"></span>Strong Buy</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#1a7ff0;"></span>Buy</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#f59e0b;"></span>Watch</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#f97316;"></span>Caution</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#dc2626;"></span>Avoid</div>
+      <div class="map-legend-item"><span class="map-dot" style="background:#e5e7eb;"></span>No data</div>
     </div>
-    <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">Show more counties ↓</button>
   </div>
 </section>
 
@@ -682,11 +695,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <div class="eyebrow">Stay Informed</div>
     <h2 class="sec-h" style="margin-bottom:12px;">Get notified when scores update</h2>
     <p class="sec-sub" style="margin-bottom:36px;">Quarterly re-score as new FHFA, BLS, and IRS data releases. No spam — one email per quarter.</p>
-    <div class="email-form">
-      <input class="email-in" type="email" placeholder="your@email.com">
-      <button class="email-btn-sub">Notify Me</button>
-    </div>
-    <div style="font-size:12px;color:rgba(255,255,255,.3);margin-top:14px;">No account needed. Unsubscribe any time.</div>
+    <!-- SETUP: replace YOUR_FORMSPREE_ID with your Formspree form ID from formspree.io -->
+    <form class="email-form" id="notifyForm" onsubmit="handleNotifySubmit(event)">
+      <input class="email-in" type="email" id="notifyEmail" placeholder="your@email.com" required>
+      <button class="email-btn-sub" type="submit">Notify Me</button>
+    </form>
+    <div style="font-size:12px;color:rgba(255,255,255,.3);margin-top:14px;" id="notifyMsg">No account needed. Unsubscribe any time.</div>
   </div>
 </section>
 
@@ -703,12 +717,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       <span class="footer-logo-text">civi<em>ca</em></span>
     </a>
     <div class="footer-nav">
-      <a href="#">Methodology</a>
-      <a href="#">Top Counties</a>
-      <a href="#">Compare</a>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-      <a href="#">Disclaimer</a>
+      <a href="harvard_model.html">Methodology</a>
+      <a href="#map">County Map</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="compare.html">Compare</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="disclaimer.html">Disclaimer</a>
     </div>
     <div class="footer-sources">
       Data sources: IRS SOI Migration · FHFA HPI · BLS QCEW · BEA CAINC1 · FBI NIBRS 2024 · FEMA NFIP · NOAA Storm Events · USFS Wildfire Risk · USDA RUCC 2023 · HUD FMR FY2026 · Census Population Estimates · Census CBP · Census BPS · Zillow ZHVI
@@ -720,133 +735,260 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 </footer>
 
 
+<!-- Mobile nav overlay -->
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-top">
+    <a class="logo" href="#">
+      <svg width="22" height="22" viewBox="0 0 30 30" fill="none">
+        <rect width="30" height="30" rx="6" fill="#1a7ff0"/>
+        <path d="M9 21L15 9L21 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <line x1="11" y1="17" x2="19" y2="17" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span class="logo-text">civi<em>ca</em></span>
+    </a>
+    <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+  </div>
+  <a href="#how" onclick="closeMobileNav()">How It Works</a>
+  <a href="#map" onclick="closeMobileNav()">County Map</a>
+  <a href="leaderboard.html">Leaderboard</a>
+  <a href="harvard_model.html">Methodology</a>
+  <a href="compare.html">Compare</a>
+  <a href="disclaimer.html">Disclaimer</a>
+</div>
+
+<!-- Saved counties pill -->
+<div class="saves-pill" id="savesPill" style="display:none;">
+  <span id="savesCount">📌 0 saved</span>
+  <button class="saves-pill-clr" onclick="clearSaved()">Clear all ✕</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson@3/dist/topojson.min.js"></script>
+
+<!-- Cookie consent banner -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#111827;color:rgba(255,255,255,.7);font-size:12px;padding:14px 28px;z-index:500;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
+  <span>This site uses Google Analytics to understand usage patterns. No personal data is sold. <a href="privacy.html" style="color:#60a5fa;text-decoration:underline;">Privacy Policy</a></span>
+  <button onclick="acceptCookies()" style="background:#1a7ff0;color:#fff;border:none;border-radius:6px;padding:7px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Got it</button>
+</div>
+
 <script>
-// ── Sample county data (replace with fetch('output/index.json') in production)
-const COUNTIES = [
-  { rank:1,  name:'Hamilton County',   state:'IN', score:69.5, label:'ACCELERATING', price:'$412k', hpi:'+8.1%', wage:'$74k' },
-  { rank:2,  name:'Williamson County', state:'TN', score:65.1, label:'PEAKING',       price:'$628k', hpi:'+6.4%', wage:'$71k' },
-  { rank:3,  name:'Douglas County',    state:'CO', score:64.8, label:'PEAKING',       price:'$694k', hpi:'+5.9%', wage:'$84k' },
-  { rank:4,  name:'Fort Bend County',  state:'TX', score:63.4, label:'PEAKING',       price:'$388k', hpi:'+5.2%', wage:'$76k' },
-  { rank:5,  name:'Carver County',     state:'MN', score:62.7, label:'PEAKING',       price:'$441k', hpi:'+5.0%', wage:'$78k' },
-  { rank:6,  name:'Collin County',     state:'TX', score:61.9, label:'PEAKING',       price:'$472k', hpi:'+4.8%', wage:'$82k' },
-  { rank:7,  name:'Forsyth County',    state:'GA', score:61.2, label:'PEAKING',       price:'$524k', hpi:'+6.1%', wage:'$74k' },
-  { rank:8,  name:'Delaware County',   state:'OH', score:59.6, label:'ESTABLISHED',   price:'$388k', hpi:'+4.1%', wage:'$72k' },
-  { rank:9,  name:'Howard County',     state:'MD', score:58.4, label:'ESTABLISHED',   price:'$566k', hpi:'+3.8%', wage:'$96k' },
-  { rank:10, name:'Ozaukee County',    state:'WI', score:57.8, label:'ESTABLISHED',   price:'$378k', hpi:'+3.6%', wage:'$68k' },
-  { rank:11, name:'Chester County',    state:'PA', score:57.2, label:'ESTABLISHED',   price:'$498k', hpi:'+3.4%', wage:'$88k' },
-  { rank:12, name:'Washington County', state:'UT', score:56.8, label:'ESTABLISHED',   price:'$448k', hpi:'+4.2%', wage:'$62k' },
-  { rank:13, name:'Wake County',       state:'NC', score:56.1, label:'ESTABLISHED',   price:'$436k', hpi:'+4.6%', wage:'$78k' },
-  { rank:14, name:'Ada County',        state:'ID', score:55.4, label:'ESTABLISHED',   price:'$488k', hpi:'+3.2%', wage:'$62k' },
-  { rank:15, name:'Loudoun County',    state:'VA', score:54.9, label:'ESTABLISHED',   price:'$692k', hpi:'+3.0%', wage:'$104k' },
-];
+// Cookie consent
+function acceptCookies() {
+  localStorage.setItem('civica_cookie_ok', '1');
+  document.getElementById('cookieBanner').style.display = 'none';
+}
+if (!localStorage.getItem('civica_cookie_ok')) {
+  document.getElementById('cookieBanner').style.display = 'flex';
+}
+</script>
 
-const LABEL_CLASS = {
-  'ACCELERATING': 'lb-accel',
-  'PEAKING':      'lb-peak',
-  'ESTABLISHED':  'lb-estab',
-  'EMERGING':     'lb-emerg',
-  'FRONTIER':     'lb-front',
+<script>
+// Mobile nav
+document.querySelector('.hamburger').addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+let COUNTIES = [];
+
+const SIGNAL_CLASS = {
+  'STRONG BUY':'lb-sbuy', 'BUY':'lb-buy', 'WATCH':'lb-watch',
+  'CAUTION':'lb-caut', 'AVOID':'lb-avoid',
 };
-
 const SCORE_BG = {
-  'ACCELERATING': '#16a34a',
-  'PEAKING':      '#d97706',
-  'ESTABLISHED':  '#1a7ff0',
-  'EMERGING':     '#16a34a',
-  'FRONTIER':     '#9ca3af',
+  'STRONG BUY':'#16a34a', 'BUY':'#1a7ff0', 'WATCH':'#f59e0b',
+  'CAUTION':'#f97316', 'AVOID':'#dc2626',
+};
+const MAP_COLOR = {
+  'STRONG BUY':'#16a34a', 'BUY':'#1a7ff0', 'WATCH':'#f59e0b',
+  'CAUTION':'#f97316', 'AVOID':'#dc2626',
 };
 
-let currentFilter = 'ALL';
-let visibleCount = 10;
-
-function renderTable() {
-  const state = document.getElementById('stateFilter').value;
-  const body = document.getElementById('tableBody');
-  const filtered = COUNTIES.filter(c => {
-    if (currentFilter !== 'ALL' && c.label !== currentFilter) return false;
-    if (state && c.state !== state) return false;
-    return true;
-  });
-  const shown = filtered.slice(0, visibleCount);
-  body.innerHTML = shown.map(c => `
-    <tr>
-      <td><span class="rank">${c.rank}</span></td>
-      <td>
-        <div class="cname">${c.name}</div>
-        <div class="cstate">${c.state}</div>
-      </td>
-      <td>
-        <div class="score-display">
-          <div class="score-circ" style="background:${SCORE_BG[c.label]||'#9ca3af'}">${Math.round(c.score)}</div>
-          <span class="score-num">${c.score.toFixed(1)}</span>
-        </div>
-      </td>
-      <td><span class="lbadge ${LABEL_CLASS[c.label]||'lb-front'}">${c.label}</span></td>
-      <td class="r">${c.price}</td>
-      <td class="r" style="color:var(--green);">${c.hpi}</td>
-      <td class="r">${c.wage}</td>
-    </tr>
-  `).join('');
-  document.getElementById('loadMoreBtn').style.display =
-    filtered.length > visibleCount ? 'block' : 'none';
+// Load real data
+if (location.protocol === 'file:') {
+  document.getElementById('mapLoading').innerHTML =
+    '<div style="color:#dc2626;font-weight:700;font-size:15px;margin-bottom:10px;">⚠️ County data requires a local server to load</div>' +
+    '<div style="color:#6b7280;font-size:13px;line-height:1.7;">Double-click <strong>launch.bat</strong> in the project folder<br>' +
+    'or run: <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">python -m http.server 8080</code><br>' +
+    'then open <a href="http://localhost:8080/" style="color:#1a7ff0;">http://localhost:8080/</a></div>';
+} else {
+  fetch('output/index.json')
+    .then(r => r.json())
+    .then(data => {
+      COUNTIES = data;
+      initMap(COUNTIES);
+      renderSavesPill();
+    })
+    .catch(() => {
+      document.getElementById('mapLoading').innerHTML =
+        '<span style="color:#dc2626;font-weight:600;">⚠️ Could not load <code>output/index.json</code>. Run <code>python county_generator.py</code> to generate it.</span>';
+    });
 }
 
-function setFilter(label, btn) {
-  currentFilter = label;
-  visibleCount = 10;
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderTable();
+let mapRendered = false;
+function initMap(counties) {
+  if (mapRendered || typeof d3 === 'undefined' || typeof topojson === 'undefined') return;
+  mapRendered = true;
+  const lookup = new Map(counties.map(c => [String(c.fips).padStart(5, '0'), c]));
+  const svg = d3.select('#countyMap');
+  const w = 960, h = 600;
+  svg.attr('viewBox', `0 0 ${w} ${h}`);
+  const proj = d3.geoAlbersUsa().scale(1280).translate([w / 2, h / 2]);
+  const path = d3.geoPath().projection(proj);
+  const tip = document.createElement('div');
+  tip.id = 'mapTip';
+  tip.style.cssText = 'display:none;position:fixed;background:#1a3a5c;color:#fff;border-radius:10px;padding:12px 16px;font-size:13px;pointer-events:none;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,.3);max-width:220px;line-height:1.5;';
+  document.body.appendChild(tip);
+  d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json')
+    .then(us => {
+      document.getElementById('mapLoading').style.display = 'none';
+      svg.style('display', 'block');
+      document.getElementById('mapLegend').style.display = 'flex';
+      svg.append('g')
+        .selectAll('path')
+        .data(topojson.feature(us, us.objects.counties).features)
+        .join('path')
+        .attr('d', path)
+        .attr('fill', d => {
+          const fips = String(d.id).padStart(5, '0');
+          const c = lookup.get(fips);
+          return c ? (MAP_COLOR[c.signal] || '#e5e7eb') : '#e5e7eb';
+        })
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 0.3)
+        .style('cursor', d => lookup.has(String(d.id).padStart(5, '0')) ? 'pointer' : 'default')
+        .on('mousemove', (event, d) => {
+          const c = lookup.get(String(d.id).padStart(5, '0'));
+          if (!c) { tip.style.display = 'none'; return; }
+          tip.style.display = 'block';
+          tip.style.left = (event.clientX + 14) + 'px';
+          tip.style.top  = (event.clientY - 40) + 'px';
+          const sigColor = MAP_COLOR[c.signal] || '#9ca3af';
+          tip.innerHTML =
+            '<div style="font-weight:700;font-size:14px;margin-bottom:4px;">' + c.name + ', ' + c.state + '</div>' +
+            '<div style="display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:100px;background:' + sigColor + ';color:#fff;margin-bottom:8px;">' + (c.signal || '') + '</div>' +
+            '<div style="display:flex;gap:16px;font-size:12px;margin-bottom:4px;">' +
+            '<span><b style="color:#4ade80;">' + c.score.toFixed(1) + '</b> Score</span>' +
+            '<span><b>$' + Math.round(c.median_home_value / 1000) + 'k</b> Median</span></div>' +
+            '<div style="font-size:11px;color:rgba(255,255,255,.5);">Rank #' + c.rank + ' of 2,820</div>';
+        })
+        .on('mouseleave', () => { tip.style.display = 'none'; })
+        .on('click', (event, d) => {
+          const c = lookup.get(String(d.id).padStart(5, '0'));
+          if (c) window.location = 'output/counties/' + c.fips + '.html';
+        });
+      svg.append('path')
+        .datum(topojson.mesh(us, us.objects.states, (a, b) => a !== b))
+        .attr('fill', 'none')
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 0.8)
+        .attr('d', path);
+    })
+    .catch(() => {
+      document.getElementById('mapLoading').innerHTML =
+        '<span style="color:#dc2626;">⚠️ Map tiles could not load. Check your internet connection.</span>';
+    });
 }
 
-function filterTable() {
-  visibleCount = 10;
-  renderTable();
+// Saved counties — localStorage
+const SAVES_KEY = 'civica_saved';
+function getSaved() { try { return JSON.parse(localStorage.getItem(SAVES_KEY)||'[]'); } catch(e) { return []; } }
+function isSaved(fips) { return getSaved().some(c => c.fips === fips); }
+function toggleSave(fips, name, state) {
+  let saves = getSaved();
+  const idx = saves.findIndex(c => c.fips === fips);
+  if (idx >= 0) { saves.splice(idx, 1); } else { saves.push({fips, name, state}); }
+  localStorage.setItem(SAVES_KEY, JSON.stringify(saves));
+  const btn = document.getElementById('sv-' + fips);
+  if (btn) {
+    const saved = isSaved(fips);
+    btn.textContent = saved ? '📌' : '🔖';
+    btn.classList.toggle('saved', saved);
+    btn.title = saved ? 'Remove from saved' : 'Save county';
+  }
+  renderSavesPill();
+}
+function clearSaved() {
+  localStorage.removeItem(SAVES_KEY);
+  renderSavesPill();
+}
+function renderSavesPill() {
+  const saves = getSaved();
+  const pill = document.getElementById('savesPill');
+  if (saves.length === 0) { pill.style.display = 'none'; return; }
+  pill.style.display = 'flex';
+  document.getElementById('savesCount').textContent = `📌 ${saves.length} saved`;
 }
 
-function loadMore() {
-  visibleCount += 10;
-  renderTable();
-}
-
-// ── Search autocomplete
+// Search
 function handleSearch(val) {
   const drop = document.getElementById('searchDrop');
-  if (!val.trim()) { drop.className = 'search-dropdown'; return; }
+  if (!val.trim() || !COUNTIES.length) { drop.className = 'search-dropdown'; return; }
   const q = val.toLowerCase();
   const hits = COUNTIES.filter(c =>
     c.name.toLowerCase().includes(q) || c.state.toLowerCase().includes(q)
-  ).slice(0, 5);
-  if (!hits.length) { drop.className = 'search-dropdown'; return; }
-  drop.innerHTML = hits.map(c => `
-    <div class="sd-row" onclick="goToCounty('${c.name}', '${c.state}')">
+  ).slice(0, 6);
+  if (!hits.length) {
+    drop.innerHTML = `<div style="padding:14px 18px;color:#9ca3af;font-size:13px;">No results for "${val.trim()}" — try a state abbreviation (e.g. TN, IN)</div>`;
+    drop.className = 'search-dropdown open';
+    return;
+  }
+  drop.innerHTML = hits.map(c => {
+    return `
+    <div class="sd-row" onclick="goToCounty('${c.fips}')">
       <div class="sd-left">
         <div class="sd-name">${c.name}, ${c.state}</div>
-        <div class="sd-meta">Score ${c.score} · ${c.label}</div>
+        <div class="sd-meta">Score ${c.score.toFixed(1)} · Rank #${c.rank}</div>
       </div>
       <div class="sd-right">
-        <span class="sd-score">${c.score}</span>
-        <span class="sd-label lbadge ${LABEL_CLASS[c.label]||'lb-front'}">${c.label}</span>
+        <span class="sd-score">${c.score.toFixed(0)}</span>
+        <span class="sd-label lbadge ${SIGNAL_CLASS[c.signal]||'lb-watch'}">${c.signal}</span>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
   drop.className = 'search-dropdown open';
 }
 
-function goToCounty(name, state) {
-  document.getElementById('searchInput').value = `${name}, ${state}`;
-  document.getElementById('searchDrop').className = 'search-dropdown';
-  // In production: window.location = `output/counties/${fips}.html`
+function goToCounty(fips) {
+  window.location = 'output/counties/' + fips + '.html';
 }
 
 document.addEventListener('click', e => {
-  if (!e.target.closest('.search-wrap')) {
+  if (!e.target.closest('.search-wrap'))
     document.getElementById('searchDrop').className = 'search-dropdown';
-  }
 });
 
-// Init
-renderTable();
+// Email capture — POST to Formspree when endpoint is configured
+const FORMSPREE_ID = 'YOUR_FORMSPREE_ID'; // Replace with your ID from formspree.io
+function handleNotifySubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('notifyEmail').value;
+  const msg = document.getElementById('notifyMsg');
+  if (FORMSPREE_ID === 'YOUR_FORMSPREE_ID') {
+    msg.textContent = '✓ Thanks! Notifications will be live once the form endpoint is connected.';
+    msg.style.color = '#4ade80';
+    return;
+  }
+  fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+    body: JSON.stringify({email}),
+  })
+  .then(r => r.json())
+  .then(() => {
+    msg.textContent = '✓ You\'re on the list. We\'ll email you when scores update.';
+    msg.style.color = '#4ade80';
+    document.getElementById('notifyForm').style.display = 'none';
+  })
+  .catch(() => {
+    msg.textContent = 'Something went wrong. Please try again.';
+    msg.style.color = '#fca5a5';
+  });
+}
 </script>
 
 </body>

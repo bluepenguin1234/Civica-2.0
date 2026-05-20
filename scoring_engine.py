@@ -424,11 +424,14 @@ def score_dim1(df):
     # Breakeven: years to recover 20% down payment through ownership savings vs. renting.
     # Assumes 7% 30yr fixed (2024 national rate), 1.2% annual property tax, 0.5% insurance.
     # Cap at 30 years — markets where PITI < rent have negative excess (buy wins immediately).
+    # KNOWN LIMITATION: 1.2% property tax is the national median effective rate.
+    # Actual rates range 0.28% (HI) to 2.23% (NJ/IL) — error up to $340/mo at $400k home value.
+    # State-level effective rates from Lincoln Institute of Land Policy are a candidate fix (v1.3).
     r = 0.07 / 12
     mortgage_factor = r / (1 - (1 + r) ** -360)
     d['monthly_piti'] = (
         d['median_home_value'] * 0.80 * mortgage_factor
-        + d['median_home_value'] * 0.012 / 12
+        + d['median_home_value'] * 0.012 / 12   # property tax — see limitation note above
         + d['median_home_value'] * 0.005 / 12
     )
     d['monthly_excess'] = (d['monthly_piti'] - d['fmr_2br']).clip(lower=1)
@@ -468,6 +471,9 @@ def score_dim3(df):
     s1 = pct(d['hpi_3yr_avg'])   # 35%: FHFA 3-yr avg annual appreciation (sustained trend)
     s2 = pct(d['hpi_latest'])    # 15%: FHFA latest annual HPI change (current momentum)
     s3 = pct_inv(d['inventory']) # 30%: Zillow active inventory — lower = tighter supply = demand pressure
+    # KNOWN LIMITATION: higher permits = better is a demand-response proxy.
+    # Correct metric is permits ÷ projected household formation (permit-gap ratio), but that
+    # requires ACS projections, which violates the no-survey-data policy. See METHODOLOGY.md §14.1.
     s4 = pct(d['total_permits']) # 20%: Census BPS new units permitted (supply pipeline)
 
     d['dim3'] = (s1*0.35 + s2*0.15 + s3*0.30 + s4*0.20) / 100 * 20
@@ -559,13 +565,13 @@ def score_dim6(df):
 # Note: AVOID requires score < 26; empirical floor with FBI NIBRS is ~26.85, so AVOID
 # currently has 0 counties. The 4 SPECULATIVE counties (<30) are the true worst performers.
 LABELS = [
-    (68, 'ACCELERATING'),   # top ~0.1%: all signals aligned, prices still defensible
-    (62, 'PEAKING'),        # strong momentum approaching affordability ceiling
-    (55, 'ESTABLISHED'),    # healthy balanced market, sustainable fundamentals
-    (46, 'EMERGING'),       # improving fundamentals, early-mover opportunity
-    (38, 'FRONTIER'),       # below-average market, higher uncertainty
-    (30, 'TURNING'),        # softening demand, watch for continued weakness
-    (26, 'SPECULATIVE'),    # poor fundamentals, momentum-only pricing risk
+    (61, 'ACCELERATING'),   # top ~4%: ~100 counties; all signals aligned, prices still defensible
+    (57, 'PEAKING'),        # strong momentum approaching affordability ceiling
+    (51, 'ESTABLISHED'),    # healthy balanced market, sustainable fundamentals
+    (45, 'EMERGING'),       # improving fundamentals, early-mover opportunity
+    (37, 'FRONTIER'),       # below-average market, higher uncertainty
+    (29, 'TURNING'),        # softening demand, watch for continued weakness
+    (24, 'SPECULATIVE'),    # poor fundamentals, momentum-only pricing risk
     (0,  'AVOID'),          # systemic weakness across multiple dimensions
 ]
 
