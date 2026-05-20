@@ -484,11 +484,13 @@ Table: score, county, state, label badge, median home value, HPI 3yr, avg wage �
 | Metric | Weight | Source | Formula |
 |---|---|---|---|
 | Price-to-Rent Ratio | 30% | Zillow ZHVI ÷ HUD FMR×12 | National norm: 15–18x |
-| Price-to-Income Ratio | 30% | Zillow ZHVI ÷ BEA per capita income | Historical norm: 4.2x |
+| Price-to-Income Ratio | 30% | Zillow ZHVI ÷ BEA per capita income | Per-capita norm: ~2.5–3x (NOT the 4.2x household-income norm) |
 | Buy vs. Rent Breakeven | 25% | Down payment (20%) ÷ (monthly PITI − HUD FMR) × 12 | Shorter = stronger buy case |
 | Appreciation Quality | 15% | FHFA 3-yr avg annual HPI change | Penalizes deviation from 3–7% healthy range |
 
 **Note:** Utility Burden (EIA) was the original spec'd metric for the 15% slot. The EIA data maps to utility territories, not county FIPS — a spatial join would be needed to aggregate to county level. Appreciation Quality from FHFA is used instead as a defensible federal-data substitute. The breakeven assumes 7% 30-yr fixed (2024 national rate), 1.2% property tax, 0.5% insurance, 20% down; capped at 30 years.
+
+**P/I benchmark warning:** Civica uses BEA per capita personal income (~$67k national avg). The commonly cited "4.2x historical norm" uses median household income (~$80k). Civica's displayed P/I ratios will appear ~1.5–1.8× higher than standard benchmarks. County report pages must include a footnote: "P/I uses BEA per capita personal income; the commonly cited 4.2× norm uses median household income." Per-capita historical norm ≈ 2.5–3.0×. Scoring is unaffected (all counties use same base); display requires the caveat.
 
 ### 2. Economic Vitality — 22 points
 *Is the local economy growing in real terms?*
@@ -512,17 +514,27 @@ Table: score, county, state, label badge, median home value, HPI 3yr, avg wage �
 - Retail (NAICS 44-45): × 0.60 (secular decline risk)
 - Legacy Manufacturing (NAICS 31-33): × 0.60
 
+**Important:** These multipliers are Civica editorial judgments, not sourced from a specific academic study or BLS framework. They reflect general US wage and employment-share trends. They should be clearly labeled as analytical choices, not established facts, in any external communication. See METHODOLOGY.md §14.6.
+
 ### 3. Housing Market Dynamics — 20 points
 *What is the market actually doing?*
 
 | Metric | Weight | Source | Formula |
 |---|---|---|---|
 | 3-Year Appreciation Trend | 35% | FHFA HPI 3-yr avg annual change | Sustained appreciation = strong underlying demand |
-| Current Momentum | 15% | FHFA HPI latest annual change | Cross-validates trend; rising = acceleration |
-| Supply Tightness | 30% | Zillow active inventory (latest month) | Lower inventory = seller's market |
+| Current Momentum | 15% | FHFA HPI latest annual change | Same FHFA source — two time horizons, not independent signals |
+| Supply Tightness | 30% | Zillow active inventory (latest month) | Raw listing count — NOT months of supply (see limitation below) |
 | Permit Pipeline | 20% | Census BPS new housing units permitted | Higher = supply responding to demand |
 
 **Note:** Original spec called for Permit Gap Ratio (permits ÷ net new households), Supply Elasticity (permit trend vs. price trend), and Rent Trend (HUD FMR YoY change). HUD FMR is a single vintage file (FY2026) with no prior-year comparison in the download. The four metrics above use all available downloaded data and two independent FHFA price signals (trend + momentum) to cross-validate appreciation.
+
+**Permit Pipeline limitation:** Higher permits = better is a known approximation. It double-counts demand signals already captured in the appreciation trend and inventory metrics, and inflates scores for Sun Belt build-heavy markets (Phoenix, Houston suburbs) regardless of whether that volume represents genuine absorption or overbuilding. The correct metric is permits ÷ projected household formation (a permit-gap ratio), but that requires ACS projections, which violates the no-survey-data policy. See METHODOLOGY.md §14.1 for full discussion.
+
+**FHFA signal correlation:** hpi_3yr_avg and hpi_latest are correlated (~0.7–0.9) by construction — they are two time-horizon views of the same FHFA trend, not independent signals. Do not describe them as "two independent FHFA signals" in any copy or documentation.
+
+**Inventory limitation:** The downloaded Zillow file is raw listing count, not months of supply. Large counties are penalized for having more listings even when turnover rate is identical to smaller counties. Fix requires a Zillow county sales-count file (not downloaded). See METHODOLOGY.md §7 and §14.
+
+**Appreciation tension:** Dim1 penalizes deviation from 5% annual appreciation; Dim3 rewards raw appreciation magnitude. A market at 10% appreciation is penalized by Dim1 and rewarded by Dim3. The model slightly favors momentum over stability by design. See METHODOLOGY.md §14.2.
 
 ### 4. Quality of Place — 15 points
 *Is it a good place to actually live?*
@@ -567,6 +579,8 @@ National median homeowners insurance ≈ $159/mo. Apply county risk multiplier:
 |---|---|---|---|
 | Net Migration Rate | 60% | Census Population Estimates 2023 | RNETMIG2023: net migration per 1,000 residents |
 | Income Quality of In-Movers | 40% | IRS SOI Migration 2022-2023 | in-mover avg AGI ÷ out-mover avg AGI; ratio > 1.0 = higher-income arrivals |
+
+**Note on framing:** Migration is a *corroborating* signal, not a leading indicator. The 6% weight is correct — migration confirms conclusions established by Dim1–Dim3, it does not independently predict them. Do not describe it as "the strongest leading indicator" anywhere in copy or documentation.
 
 ---
 
@@ -615,8 +629,10 @@ The scoring engine computes `monthly_piti` for each county — the ownership cos
 | Component | Source | Method |
 |---|---|---|
 | Mortgage (P&I) | Zillow ZHVI median home value | 30-yr fixed at 7% (2024 national rate), 20% down |
-| Property Tax | Hardcoded 1.2% annual rate | National median effective rate; not county-specific |
+| Property Tax | Hardcoded 1.2% annual rate | National median effective rate; NOT county-specific |
 | Homeowner Insurance | Hardcoded 0.5% annual rate | National median; not risk-adjusted per county |
+
+**Property tax is a known simplification.** Effective rates range 0.28% (HI) to 2.23% (NJ, IL, VT). At $400k, the monthly error is up to $340 vs. the hardcoded $400. Users in IL, NJ, TX, WI, NH should adjust mentally. State-level rates from the Lincoln Institute of Land Policy are a candidate improvement for v1.3. See METHODOLOGY.md §14.5.
 
 **Note:** Full all-in cost breakdown (electricity, gas, maintenance) is intended for county report cards via `county_generator.py` and is not yet implemented. EIA electricity maps to utility service territories, not county FIPS. NOAA Climate Normals (station-level, no county FIPS) would require a spatial join to derive heating/cooling degree days. Both are documented future enhancements.
 
@@ -660,9 +676,15 @@ The scoring engine computes `monthly_piti` for each county — the ownership cos
 | FHFA covers ~2,800 of 3,143 counties | FHFA HPI | ~340 rural counties missing appreciation data | National median imputed; reduces score slightly for FHFA-absent counties |
 | CBP has 18-month publication lag | Census CBP | Establishment data ~2 years behind | Accepted; no alternative county-level source available |
 | Small county distortion | All | 1 employer can swing all metrics | 324 counties under 5,000 pop excluded entirely — no imputed scores |
-| Zillow coverage gaps | Zillow ZHVI | Some rural counties have no home value data | National median imputed via left-join merge |
+| Zillow coverage gaps → ratio bias | Zillow ZHVI | Imputing national median home value (~$350k) into a rural county with $600 FMR rents creates P/R of 48.6x — far above the actual ratio if real home values are $120–150k | Known limitation; flagged in output; correct fix is to impute P/R directly from similar-RUCC counties, not the numerator alone |
 | NIBRS coverage gaps | FBI NIBRS | ~251 counties lack a participating agency (rural) | RUCC-tier median violent crime rate imputed; non-reporters not penalized |
 | NFIP only captures insured flood losses | FEMA NFIP | Uninsured flood damage not counted | NOAA Storm Events covers all storm types; combined with NFIP |
+| Property tax hardcoded at 1.2% | Monthly cost model | Actual effective rates: 0.28% (HI) to 2.23% (NJ/IL); error up to $340/mo at $400k home value | Accepted simplification; displayed breakeven should carry a high-tax-state disclaimer |
+| Appreciation target not inflation-adjusted | FHFA HPI (Dim1) | 5% nominal = −3% real at 8% inflation (2022); penalizes counties near healthy real target during high-inflation periods | Documented limitation; CPI adjustment is a candidate for v1.3 |
+| Inventory is raw count not months of supply | Zillow inventory | Large counties penalized for having more listings even when market tightness is identical to smaller counties | Data gap — fix requires Zillow county sales-count file (not downloaded); document on county pages |
+| P/I uses per capita income; norm uses household income | BEA + all Dim1 display | Displayed P/I ratios appear 1.5–1.8× higher than industry standard; confuses users comparing to "4.2× norm" | Add footnote on county report pages; scoring unaffected; per-capita norm ≈ 2.5–3.0× |
+| IRS AGI includes capital gains; retirement bias | IRS SOI Migration | FL/AZ/NV/SC retirement counties show inflated in-mover income quality due to one-time capital gains realizations at retirement | Documented limitation; wage-only income is available in SOI and is a candidate fix for v1.3 |
+| Zillow drives ~27% of total score | Zillow ZHVI + inventory | Single non-federal source has highest data concentration in model; methodology risk if Zillow changes access or format | Monitor file availability each run; no federal alternative at monthly county granularity |
 | EIA and Census STC not county-level | EIA, STC | Utility burden and fiscal capacity not scored | Documented as not implemented; appreciation quality and income growth used instead |
 
 ---
