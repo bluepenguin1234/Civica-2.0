@@ -313,13 +313,13 @@ COMPARE_CSS = '''<style>
 .tray-clr-btn { background: transparent; color: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.2); border-radius: 8px; padding: 9px 16px; font-size: 13px; cursor: pointer; font-family: inherit; }
 .tray-clr-btn:hover { color: #fff; }
 @media print {
-  .nav, .tab-bar, .hero-pills, .cmp-btn, .compare-tray, .cta-row { display: none !important; }
+  .nav, .hero-pills, .cmp-btn, .compare-tray, .cta-row, .acc-header { display: none !important; }
   .hero { padding: 20px 0; background: #fff !important; color: #1a3a5c !important; }
   .hero-eyebrow, .hero-sub { color: #6b7280 !important; }
   h1 { color: #1a3a5c !important; }
-  .panel { display: flex !important; flex-direction: column; gap: 16px; }
+  .acc-section { box-shadow: none !important; }
+  .acc-body { grid-template-rows: 1fr !important; }
   .card { box-shadow: none; border: 1px solid #e5e7eb; break-inside: avoid; }
-  .panel:not(.active) { display: none !important; }
   body { background: #fff; }
   a { color: inherit; text-decoration: none; }
 }
@@ -462,22 +462,12 @@ def build_hero(row, county_name: str, state: str, rucc_label: str) -> str:
   </div>
 
   <div class="hero-pills">
-    <div class="hero-pill"><span class="hp-lbl">Price-to-Rent Ratio</span><span class="hp-val {pr_col}">{pr:.1f}x</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Breakeven Horizon</span><span class="hp-val {be_col}">{be:.1f} years</span></div>
-    <div class="hero-pill"><span class="hp-lbl">3yr Appreciation (FHFA)</span><span class="hp-val {hpi_col}">{hpi:+.1f}% / yr</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Net Household Migration</span><span class="hp-val {mig_col}">{netmig:+,} HH</span></div>
     <div class="hero-pill"><span class="hp-lbl">Monthly Cost (PITI)</span><span class="hp-val hp-white">{money(piti)}/mo</span></div>
-    <div class="hero-pill"><span class="hp-lbl">4yr Income Growth</span><span class="hp-val {inc_col}">{row['income_4yr_growth']:+.1f}%</span></div>
-  </div>
-
-  <div class="score-tabs" id="tabBar">
-    <div class="score-tab active" onclick="showTab('thesis')">Investment Thesis</div>
-    <div class="score-tab" onclick="showTab('valuation')">Valuation</div>
-    <div class="score-tab" onclick="showTab('supply')">Supply &amp; Demand</div>
-    <div class="score-tab" onclick="showTab('scenarios')">5-Year Scenarios</div>
-    <div class="score-tab" onclick="showTab('fundamentals')">Fundamentals</div>
-    <div class="score-tab" onclick="showTab('risk')">Risk Matrix</div>
-    <div class="score-tab" onclick="showTab('compare')">Comparables</div>
+    <div class="hero-pill"><span class="hp-lbl">Home Value</span><span class="hp-val hp-white">{money(row['median_home_value'])}</span></div>
+    <div class="hero-pill"><span class="hp-lbl">3yr Appreciation (FHFA)</span><span class="hp-val {hpi_col}">{hpi:+.1f}% / yr</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Breakeven Horizon</span><span class="hp-val {be_col}">{be:.1f} years</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Net Migration</span><span class="hp-val {mig_col}">{netmig:+,} HH</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Price-to-Rent Ratio</span><span class="hp-val {pr_col}">{pr:.1f}x</span></div>
   </div>
 </div>'''
 
@@ -522,7 +512,12 @@ def build_thesis_panel(row, county_name: str) -> str:
 
     sig_class, sig_icon, verdict_short, verdict_body = VERDICT_SIGNAL.get(signal, VERDICT_SIGNAL['WATCH'])
 
-    return f'''<div class="panel active" id="panel-thesis">
+    return f'''<div class="acc-section open" id="acc-thesis">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">📊</span> Investment Thesis</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="score-banner">
     <div>
@@ -562,6 +557,7 @@ def build_thesis_panel(row, county_name: str) -> str:
     <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> {county_name} is a <strong>{verdict_short}</strong>. {verdict_body} Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
   </div>
 
+  </div></div></div>
 </div>'''
 
 
@@ -586,7 +582,12 @@ def build_valuation_panel(row) -> str:
     be_col  = vcolor(be,  good_below=4,  warn_below=7)
     hpi_col = 'up' if 3 <= hpi <= 7 else 'flat'
 
-    return f'''<div class="panel" id="panel-valuation">
+    return f'''<div class="acc-section" id="acc-valuation">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">🏠</span> Valuation &amp; Breakeven</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">⚖️</span> Valuation Dashboard · FHFA + HUD FMR + BEA</div>
@@ -661,6 +662,7 @@ def build_valuation_panel(row) -> str:
     </div>
   </div>
 
+  </div></div></div>
 </div>'''
 
 
@@ -690,7 +692,12 @@ def build_supply_panel(row, county_name: str) -> str:
         f'Census net migration rate: {rnet:+.1f} per 1,000 residents.'
     )
 
-    return f'''<div class="panel" id="panel-supply">
+    return f'''<div class="acc-section" id="acc-supply">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">🏗️</span> Supply &amp; Demand</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">🏗️</span> Supply-Demand Balance</div>
@@ -719,6 +726,7 @@ def build_supply_panel(row, county_name: str) -> str:
     </div>
   </div>
 
+  </div></div></div>
 </div>'''
 
 
@@ -729,7 +737,13 @@ def build_scenarios_panel(row) -> str:
     bear  = home * 0.93
     ev    = 0.30 * bull + 0.50 * base + 0.20 * bear
 
-    return f'''<div class="panel" id="panel-scenarios">
+    return f'''<div class="acc-section" id="acc-scenarios">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">🔭</span> 5-Year Price Scenarios</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
+
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">🔭</span> 5-Year Price Scenarios · FHFA Trend Analysis</div>
@@ -779,6 +793,7 @@ def build_scenarios_panel(row) -> str:
     </div>
   </div>
 
+  </div></div></div>
 </div>'''
 
 
@@ -803,7 +818,12 @@ def build_fundamentals_panel(row, county_name: str) -> str:
     crime_col = 'up' if crime < NAT_MEDIAN_CRIME else 'down'
     crime_vs  = f'vs ~{NAT_MEDIAN_CRIME} national est.'
 
-    return f'''<div class="panel" id="panel-fundamentals">
+    return f'''<div class="acc-section" id="acc-fundamentals">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">💼</span> Economic Fundamentals</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="g2">
     <div class="card">
@@ -840,6 +860,7 @@ def build_fundamentals_panel(row, county_name: str) -> str:
     </div>
   </div>
 
+  </div></div></div>
 </div>'''
 
 
@@ -856,7 +877,12 @@ def build_risk_panel(row) -> str:
     overall_sig = 'sig-green' if dim5 >= 65 else ('sig-yellow' if dim5 >= 40 else 'sig-red')
     overall_icon = '✅' if dim5 >= 65 else '⚠️'
 
-    return f'''<div class="panel" id="panel-risk">
+    return f'''<div class="acc-section" id="acc-risk">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">⚠️</span> Risk Matrix</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">⚠️</span> Physical Risk Matrix · FEMA NFIP + NOAA + USFS</div>
@@ -907,6 +933,7 @@ def build_risk_panel(row) -> str:
     </div>
   </div>
 
+  </div></div></div>
 </div>'''
 
 
@@ -940,7 +967,12 @@ def build_compare_panel(row, comp_rows, comp_names, comp_states) -> str:
         for i in range(len(comp_rows))
     )
 
-    return f'''<div class="panel" id="panel-compare">
+    return f'''<div class="acc-section" id="acc-compare">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">⚖️</span> Comparable Counties</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">⚖️</span> Comparable Counties — Nearest Civica Scores</div>
@@ -975,6 +1007,7 @@ def build_compare_panel(row, comp_rows, comp_names, comp_states) -> str:
     <button class="cta cta-s" onclick="window.location='../../index.html'">Back to All Counties</button>
   </div>
 
+  </div></div></div>
 </div>'''
 
 
@@ -990,12 +1023,8 @@ COMPARE_TRAY_HTML = '''<div class="compare-tray" id="compareTray">
 def build_js(fips: str, county_name: str, state: str) -> str:
     this_data = json.dumps({"fips": fips, "name": county_name, "state": state})
     return f'''<script>
-function showTab(name) {{
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.score-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
-  event.target.classList.add('active');
-  window.scrollTo({{ top: document.querySelector('.hero').offsetHeight - 52, behavior: 'smooth' }});
+function toggleAcc(header) {{
+  header.closest('.acc-section').classList.toggle('open');
 }}
 const _THIS = {this_data};
 const CMP_KEY = 'civica_compare';

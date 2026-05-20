@@ -85,10 +85,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .sh-denom { font-size:13px; color:rgba(255,255,255,.4); position:relative; z-index:1; }
 .sh-grade { margin-top:5px; font-size:12px; font-weight:700; color:#4ade80; }
 
-/* HERO STATS STRIP */
-.hero-pills { display:flex; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; margin-top:24px; border-top:1px solid rgba(255,255,255,.1); background:rgba(0,0,0,.2); }
-.hero-pills::-webkit-scrollbar { display:none; }
-.hero-pill { flex-shrink:0; padding:13px 18px; border-right:1px solid rgba(255,255,255,.08); display:flex; flex-direction:column; gap:3px; min-width:108px; }
+/* HERO STATS STRIP — 6 pills, 3-col grid on mobile */
+.hero-pills { display:flex; border-top:1px solid rgba(255,255,255,.1); background:rgba(0,0,0,.2); margin-top:24px; }
+.hero-pill { flex:1; padding:13px 18px; border-right:1px solid rgba(255,255,255,.08); display:flex; flex-direction:column; gap:3px; min-width:108px; }
+.hero-pill:last-child { border-right:none; }
 .hp-lbl { font-size:9px; color:rgba(255,255,255,.45); text-transform:uppercase; letter-spacing:.06em; font-weight:600; }
 .hp-val { font-size:13px; font-weight:700; }
 .hp-green  { color:#4ade80; }
@@ -97,24 +97,36 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .hp-white  { color:#fff; }
 .hp-purple { color:#c4b5fd; }
 
-/* TABS */
-.score-tabs { background:rgba(0,0,0,.3); display:flex; overflow-x:auto; scrollbar-width:none; border-top:1px solid rgba(255,255,255,.07); }
-.score-tabs::-webkit-scrollbar { display:none; }
-.score-tab { flex-shrink:0; padding:13px 20px; font-size:13px; font-weight:600; color:rgba(255,255,255,.45); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; transition:all .18s; letter-spacing:-.1px; }
-.score-tab:hover { color:rgba(255,255,255,.8); }
-.score-tab.active { color:#fff; border-bottom-color:#1a7ff0; }
+@media(max-width:640px) {
+  .hero { padding:28px 20px 0; }
+  .hero-pills { display:grid; grid-template-columns:repeat(3,1fr); }
+  .hero-pill { min-width:unset; flex:unset; border-right:none; border-bottom:1px solid rgba(255,255,255,.08); }
+  .hero-pill:nth-child(4),.hero-pill:nth-child(5),.hero-pill:nth-child(6) { border-bottom:none; }
+  .hero-pill:nth-child(1),.hero-pill:nth-child(2),
+  .hero-pill:nth-child(4),.hero-pill:nth-child(5) { border-right:1px solid rgba(255,255,255,.08); }
+}
 
 /* PAGE */
-.page { max-width:960px; margin:0 auto; padding:28px 20px; display:flex; flex-direction:column; gap:20px; }
-.panel { display:none; flex-direction:column; gap:20px; }
-.panel.active { display:flex; }
+.page { max-width:960px; margin:0 auto; padding:28px 20px; display:flex; flex-direction:column; gap:16px; }
 
 /* CARD */
-.card { background:var(--card); border-radius:var(--r); padding:24px; box-shadow:var(--shadow); border:1px solid var(--border); transition:box-shadow .2s, transform .2s; }
-.card:hover { box-shadow:var(--shadow-lg); }
+.card { background:var(--card); border-radius:var(--r-sm); padding:24px; border:1px solid var(--border); }
 .card-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:18px; display:flex; align-items:center; gap:7px; }
 .card-title .ct-icon { font-size:16px; }
 .card-intro { font-size:14px; color:var(--subtext); line-height:1.65; margin-bottom:18px; }
+
+/* ACCORDION */
+.acc-section { background:var(--card); border-radius:var(--r); box-shadow:var(--shadow); border:1px solid var(--border); overflow:hidden; }
+.acc-header { display:flex; align-items:center; justify-content:space-between; padding:18px 24px; cursor:pointer; user-select:none; transition:background .15s; }
+.acc-header:hover { background:#fafafa; }
+.acc-title { font-size:15px; font-weight:700; color:var(--navy); display:flex; align-items:center; gap:10px; }
+.acc-icon { font-size:20px; }
+.acc-chevron { color:var(--muted); transition:transform .25s; font-size:20px; line-height:1; }
+.acc-section.open .acc-chevron { transform:rotate(180deg); }
+.acc-body { display:grid; grid-template-rows:0fr; transition:grid-template-rows .28s ease; }
+.acc-section.open .acc-body { grid-template-rows:1fr; }
+.acc-inner { overflow:hidden; }
+.acc-content { border-top:1px solid var(--border); padding:24px; display:flex; flex-direction:column; gap:20px; }
 
 /* GRIDS */
 .g2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
@@ -136,7 +148,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
 /* SIGNALS */
 .signal { border-radius:var(--r-sm); padding:14px 16px; display:flex; gap:12px; align-items:flex-start; }
-/* v5-style standout callout */
 .prof-standout { padding:12px 16px; background:#f0f6ff; border-radius:var(--r-sm); font-size:.82rem; line-height:1.6; color:#1d4ed8; border:1px solid rgba(13,45,82,.12); margin-top:14px; }
 .sig-green  { background:#f0fdf4; border:1px solid #bbf7d0; }
 .sig-yellow { background:#fffbeb; border:1px solid #fde68a; }
@@ -162,15 +173,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .sbb-wt    { font-size:10px; color:rgba(255,255,255,.35); }
 
 /* VALUATION METER */
-.meter-row { display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid #f3f4f6; }
+.meter-row { display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid #f3f4f6; flex-wrap:wrap; }
 .meter-row:last-child { border-bottom:none; }
 .meter-lbl { font-size:13px; font-weight:600; color:var(--navy); width:160px; flex-shrink:0; }
-.meter-track { flex:1; background:#f1f5f9; border-radius:100px; height:8px; position:relative; }
+.meter-track { flex:1; min-width:120px; background:#f1f5f9; border-radius:100px; height:8px; position:relative; }
 .meter-fill  { height:100%; border-radius:100px; }
 .meter-marker { position:absolute; top:-4px; width:2px; height:16px; background:var(--subtext); border-radius:1px; }
 .meter-vals { display:flex; justify-content:space-between; font-size:10px; color:var(--muted); margin-top:3px; }
 .meter-val  { font-size:13px; font-weight:700; width:70px; text-align:right; }
-.meter-note { font-size:11px; color:var(--muted); width:100px; text-align:right; }
+@media(max-width:560px) { .meter-lbl { width:100%; } }
 
 /* SCENARIO TABLE */
 .scenario-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
@@ -190,16 +201,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .sc-bear .sc-val { color:#b91c1c; }
 .sc-rate  { font-size:13px; font-weight:600; margin-bottom:10px; }
 .sc-trigger { font-size:12px; color:var(--subtext); line-height:1.5; }
-
-/* SUPPLY-DEMAND GAUGE */
-.sd-gauge { display:flex; align-items:center; gap:14px; }
-.sd-track { flex:1; background:#f1f5f9; border-radius:100px; height:12px; position:relative; overflow:visible; }
-.sd-center { position:absolute; left:50%; top:-4px; width:2px; height:20px; background:var(--border); border-radius:1px; }
-.sd-fill { position:absolute; top:0; height:100%; border-radius:100px; }
-.sd-left  { right:50%; background:#dc2626; }
-.sd-right { left:50%; background:#16a34a; }
-.sd-lbl-left  { font-size:11px; color:var(--muted); width:60px; text-align:right; }
-.sd-lbl-right { font-size:11px; color:var(--muted); width:60px; }
 
 /* BAR CHART */
 .bar-chart { display:flex; flex-direction:column; gap:10px; }
@@ -296,13 +297,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .tray-clr-btn { background: transparent; color: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.2); border-radius: 8px; padding: 9px 16px; font-size: 13px; cursor: pointer; font-family: inherit; }
 .tray-clr-btn:hover { color: #fff; }
 @media print {
-  .nav, .tab-bar, .hero-pills, .cmp-btn, .compare-tray, .cta-row { display: none !important; }
+  .nav, .hero-pills, .cmp-btn, .compare-tray, .cta-row, .acc-header { display: none !important; }
   .hero { padding: 20px 0; background: #fff !important; color: #1a3a5c !important; }
   .hero-eyebrow, .hero-sub { color: #6b7280 !important; }
   h1 { color: #1a3a5c !important; }
-  .panel { display: flex !important; flex-direction: column; gap: 16px; }
+  .acc-section { box-shadow: none !important; }
+  .acc-body { grid-template-rows: 1fr !important; }
   .card { box-shadow: none; border: 1px solid #e5e7eb; break-inside: avoid; }
-  .panel:not(.active) { display: none !important; }
   body { background: #fff; }
   a { color: inherit; text-decoration: none; }
 }
@@ -355,26 +356,21 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
   </div>
 
   <div class="hero-pills">
-    <div class="hero-pill"><span class="hp-lbl">Price-to-Rent Ratio</span><span class="hp-val hp-yellow">18.5x</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Breakeven Horizon</span><span class="hp-val hp-red">7.5 years</span></div>
-    <div class="hero-pill"><span class="hp-lbl">3yr Appreciation (FHFA)</span><span class="hp-val hp-green">+8.9% / yr</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Net Household Migration</span><span class="hp-val hp-green">+204 HH</span></div>
     <div class="hero-pill"><span class="hp-lbl">Monthly Cost (PITI)</span><span class="hp-val hp-white">$1,453/mo</span></div>
-    <div class="hero-pill"><span class="hp-lbl">4yr Income Growth</span><span class="hp-val hp-green">+17.5%</span></div>
-  </div>
-
-  <div class="score-tabs" id="tabBar">
-    <div class="score-tab active" onclick="showTab('thesis')">Investment Thesis</div>
-    <div class="score-tab" onclick="showTab('valuation')">Valuation</div>
-    <div class="score-tab" onclick="showTab('supply')">Supply &amp; Demand</div>
-    <div class="score-tab" onclick="showTab('scenarios')">5-Year Scenarios</div>
-    <div class="score-tab" onclick="showTab('fundamentals')">Fundamentals</div>
-    <div class="score-tab" onclick="showTab('risk')">Risk Matrix</div>
-    <div class="score-tab" onclick="showTab('compare')">Comparables</div>
+    <div class="hero-pill"><span class="hp-lbl">Home Value</span><span class="hp-val hp-white">$215,557</span></div>
+    <div class="hero-pill"><span class="hp-lbl">3yr Appreciation (FHFA)</span><span class="hp-val hp-green">+8.9% / yr</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Breakeven Horizon</span><span class="hp-val hp-red">7.5 years</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Net Migration</span><span class="hp-val hp-green">+204 HH</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Price-to-Rent Ratio</span><span class="hp-val hp-yellow">18.5x</span></div>
   </div>
 </div>
 <div class="page">
-<div class="panel active" id="panel-thesis">
+<div class="acc-section open" id="acc-thesis">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">📊</span> Investment Thesis</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="score-banner">
     <div>
@@ -446,8 +442,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> Marinette County is a <strong>buy</strong>. Solid fundamentals support a purchase decision. The data and the direction are broadly aligned. Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
   </div>
 
+  </div></div></div>
 </div>
-<div class="panel" id="panel-valuation">
+<div class="acc-section" id="acc-valuation">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">🏠</span> Valuation &amp; Breakeven</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">⚖️</span> Valuation Dashboard · FHFA + HUD FMR + BEA</div>
@@ -522,8 +524,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     </div>
   </div>
 
+  </div></div></div>
 </div>
-<div class="panel" id="panel-supply">
+<div class="acc-section" id="acc-supply">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">🏗️</span> Supply &amp; Demand</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">🏗️</span> Supply-Demand Balance</div>
@@ -552,8 +560,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     </div>
   </div>
 
+  </div></div></div>
 </div>
-<div class="panel" id="panel-scenarios">
+<div class="acc-section" id="acc-scenarios">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">🔭</span> 5-Year Price Scenarios</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
+
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">🔭</span> 5-Year Price Scenarios · FHFA Trend Analysis</div>
@@ -623,8 +638,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     </div>
   </div>
 
+  </div></div></div>
 </div>
-<div class="panel" id="panel-fundamentals">
+<div class="acc-section" id="acc-fundamentals">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">💼</span> Economic Fundamentals</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="g2">
     <div class="card">
@@ -661,8 +682,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     </div>
   </div>
 
+  </div></div></div>
 </div>
-<div class="panel" id="panel-risk">
+<div class="acc-section" id="acc-risk">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">⚠️</span> Risk Matrix</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">⚠️</span> Physical Risk Matrix · FEMA NFIP + NOAA + USFS</div>
@@ -713,8 +740,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     </div>
   </div>
 
+  </div></div></div>
 </div>
-<div class="panel" id="panel-compare">
+<div class="acc-section" id="acc-compare">
+  <div class="acc-header" onclick="toggleAcc(this)">
+    <div class="acc-title"><span class="acc-icon">⚖️</span> Comparable Counties</div>
+    <span class="acc-chevron">▾</span>
+  </div>
+  <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="card">
     <div class="card-title"><span class="ct-icon">⚖️</span> Comparable Counties — Nearest Civica Scores</div>
@@ -792,6 +825,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <button class="cta cta-s" onclick="window.location='../../index.html'">Back to All Counties</button>
   </div>
 
+  </div></div></div>
 </div>
 <div class="footer">
   Data as of Q1 2026 (scoring engine last run May 2026). BLS QCEW reflects 2023 annual data (18-month publication lag). FHFA HPI through Q4 2025. FBI NIBRS 2024 National Master File.<br>
@@ -808,12 +842,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
   </div>
 </div>
 <script>
-function showTab(name) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.score-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
-  event.target.classList.add('active');
-  window.scrollTo({ top: document.querySelector('.hero').offsetHeight - 52, behavior: 'smooth' });
+function toggleAcc(header) {
+  header.closest('.acc-section').classList.toggle('open');
 }
 const _THIS = {"fips": "55075", "name": "Marinette County", "state": "WI"};
 const CMP_KEY = 'civica_compare';
