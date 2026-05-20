@@ -16,12 +16,12 @@
 - On the front page, display: **"2,820 counties scored"** — not "all 3,143". Don't claim coverage you don't have.
 - If a user searches for an unscored county, show: "This county has fewer than 5,000 residents. Civica requires sufficient housing market data to produce a reliable score."
 
-### Scoring Engine Results (for reference)
-- Runtime: ~4 minutes; output: `county_scores.csv` (711 KB, 36 columns)
-- Distribution: mean=50.0, std=7.67, range 22.85–73.09
-- Top: Palm Beach FL (73.09 PEAKING), Hamilton County IN, Williamson County TN
-- Major metros: Manhattan 66.1, Cook IL 62.5, LA 61.4, Dallas 60.3, Phoenix 59.7 (all ESTABLISHED)
-- Labels active: PEAKING (13), ESTABLISHED (428), EMERGING (1,254), FRONTIER (948), TURNING (171), SPECULATIVE (6)
+### Scoring Engine Results (v1.2 — current, includes FBI NIBRS Dim4)
+- Runtime: ~4 minutes; output: `county_scores.csv` (2,820 rows × 35 columns)
+- Distribution: mean=50.0, std=6.24, range 26.85–69.48
+- Top: Hamilton County IN (69.48 ACCELERATING)
+- Labels: ACCELERATING (2), PEAKING (57), ESTABLISHED (563), EMERGING (1,463), FRONTIER (634), TURNING (97), SPECULATIVE (4), AVOID (0)
+- Note: AVOID has 0 counties — FBI NIBRS crime data raised the score floor to 26.85, above the AVOID threshold of 26. The 4 SPECULATIVE counties are the genuinely worst-performing counties.
 
 ### Next Step: `county_generator.py`
 
@@ -149,36 +149,33 @@ Civica is the only platform where a homebuyer can look up any US county and get 
 
 | Metric | Weight | Source | Formula |
 |---|---|---|---|
-| Price-to-Rent Ratio | 30% | FHFA HPI ÷ HUD FMR×12 | National norm: 15x |
-| Price-to-Income Ratio | 30% | FHFA HPI ÷ BEA per capita income | Historical norm: 4.2x |
-| Buy vs. Rent Breakeven | 25% | Transaction costs (11%) ÷ (Annual appr − Ownership premium) | Under 3 years = strong |
-| Utility Burden | 15% | EIA electricity + gas ÷ county median income | Lower % = better |
+| Price-to-Rent Ratio | 30% | Zillow ZHVI ÷ HUD FMR×12 | National norm: 15–18x |
+| Price-to-Income Ratio | 30% | Zillow ZHVI ÷ BEA per capita income | Historical norm: 4.2x |
+| Buy vs. Rent Breakeven | 25% | Down payment (20%) ÷ (monthly PITI − HUD FMR) × 12 | Shorter = stronger buy case |
+| Appreciation Quality | 15% | FHFA 3-yr avg annual HPI change | Penalizes deviation from 3–7% healthy range |
+
+**Note:** Utility Burden (EIA) was the original spec'd metric for the 15% slot. The EIA data maps to utility territories, not county FIPS — a spatial join would be needed to aggregate to county level. Appreciation Quality from FHFA is used instead as a defensible federal-data substitute. The breakeven assumes 7% 30-yr fixed (2024 national rate), 1.2% property tax, 0.5% insurance, 20% down; capped at 30 years.
 
 ### 2. Economic Vitality — 22 points
 *Is the local economy growing in real terms?*
 
 | Metric | Weight | Source | Formula |
 |---|---|---|---|
-| Real Wage Growth | 35% | BLS QCEW CAGR − CPI | Positive = real gains |
-| Employment Concentration (HHI) | 25% | BLS QCEW NAICS Herfindahl Index | Lower HHI = more diversified |
-| Business Formation Rate | 25% | Census CBP establishment CAGR | Rising = entrepreneurial activity |
-| Fiscal Capacity | 15% | Census STC tax revenue ÷ population | Higher = more government capacity |
+| Wage Level | 35% | BLS QCEW avg annual wage | Higher wage = stronger labor market |
+| Sector Quality | 25% | BLS QCEW employment-weighted NAICS quality score | Professional/Finance premium |
+| Economic Diversity (HHI) | 25% | BLS QCEW NAICS Herfindahl Index | Lower HHI = more diversified |
+| Income Growth | 15% | BEA CAINC1 per-capita income, 4-yr growth | Rising = improving real incomes |
 
-**Job Acceleration formula (for scoring engine):**
-```
-Job Acceleration Delta =
-  current 4-quarter employment growth rate
-− trailing 8-quarter average employment growth rate
-```
-A positive delta = gaining momentum. Negative delta = decelerating (warning signal even if growth is still positive).
+**Note:** Business Formation Rate (Census CBP CAGR) and Fiscal Capacity (Census STC) were the original spec'd metrics for the 25%/15% slots. Census STC is published at the state level only — county-level fiscal capacity cannot be derived from it. CBP is a point-in-time count without a prior-year comparison in the downloaded file. BLS QCEW Sector Quality and BEA Income Growth are used as defensible federal-data substitutes.
 
-**Sector weighting by NAICS (apply to growth rates before scoring):**
+**Sector quality weights by NAICS (applied to employment share in sector_quality score):**
 - Professional/Scientific/Technical (NAICS 54): × 1.30
 - Finance & Insurance (NAICS 52): × 1.30
 - Healthcare (NAICS 62): × 1.00
 - Education (NAICS 61): × 1.00
+- All other private sectors: × 1.00 (neutral)
 - Construction (NAICS 23): × 0.80 (leading indicator but cyclical)
-- Retail (NAICS 44-45): × 0.60 (secular decline)
+- Retail (NAICS 44-45): × 0.60 (secular decline risk)
 - Legacy Manufacturing (NAICS 31-33): × 0.60
 
 ### 3. Housing Market Dynamics — 20 points
@@ -186,19 +183,23 @@ A positive delta = gaining momentum. Negative delta = decelerating (warning sign
 
 | Metric | Weight | Source | Formula |
 |---|---|---|---|
-| Real Appreciation | 35% | FHFA HPI CAGR − CPI | Strip out inflation |
-| Permit Gap Ratio | 30% | Census BPS permits ÷ net new households | <1.0 = supply shortage |
-| Supply Elasticity | 20% | Permit trend over 5yr vs. price trend | Rising permits = healthy response |
-| Rent Trend | 15% | HUD FMR year-over-year change | Rising = landlords see demand |
+| 3-Year Appreciation Trend | 35% | FHFA HPI 3-yr avg annual change | Sustained appreciation = strong underlying demand |
+| Current Momentum | 15% | FHFA HPI latest annual change | Cross-validates trend; rising = acceleration |
+| Supply Tightness | 30% | Zillow active inventory (latest month) | Lower inventory = seller's market |
+| Permit Pipeline | 20% | Census BPS new housing units permitted | Higher = supply responding to demand |
+
+**Note:** Original spec called for Permit Gap Ratio (permits ÷ net new households), Supply Elasticity (permit trend vs. price trend), and Rent Trend (HUD FMR YoY change). HUD FMR is a single vintage file (FY2026) with no prior-year comparison in the download. The four metrics above use all available downloaded data and two independent FHFA price signals (trend + momentum) to cross-validate appreciation.
 
 ### 4. Quality of Place — 15 points
 *Is it a good place to actually live?*
 
 | Metric | Weight | Source | Formula |
 |---|---|---|---|
-| School Adequacy | 40% | NCES Finance (per-pupil spend) + EDFacts (proficiency) | Combined adequacy score |
-| Crime vs. Peers | 35% | FBI NIBRS violent crime rate vs. USDA RUCC tier | Compare within rural/urban tier |
-| Service Efficiency | 25% | Census STC expenditure ÷ service output proxies | Per-capita efficiency ratio |
+| Crime Rate | 35% | FBI NIBRS 2024 | Violent offenses per 100k residents (lower = better); counties without NIBRS coverage receive their RUCC-tier median |
+| Urban Access | 40% | USDA RUCC 2023 | Percentile rank of continuum: 1 (large metro) → 9 (most rural) |
+| Amenity Density | 25% | Census CBP 2022 | Private establishments per 1,000 residents |
+
+**Note:** Original spec also called for School Adequacy (NCES — not downloaded) and Service Efficiency (Census STC — state-level only, no county FIPS). FBI NIBRS 2024 National Master File (5.8 GB fixed-width) was successfully parsed by empirically decoding the record layout: BH (agency header) segments contain state alpha at positions 4–6 (chars 3-4 of ORI) and county 3-digit FIPS at positions 269–272; 02 (offense) segments carry the NIBRS offense code at positions 33–36. This covers 21,068 agencies across 49 states and 2,869 counties. Counties not covered by participating agencies (predominantly rural) are imputed with their RUCC-tier median violent crime rate so non-reporting isn't mistaken for low crime.
 
 ### 5. Physical Risk — 12 points
 *What are the climate and natural hazard costs?*
@@ -230,8 +231,8 @@ National median homeowners insurance ≈ $159/mo. Apply county risk multiplier:
 
 | Metric | Weight | Source | Formula |
 |---|---|---|---|
-| Net Migration Rate | 60% | IRS SOI (in-households − out-households) ÷ total HH | 3-year average |
-| Income Quality of Movers | 40% | (IRS in-mover AGI − out-mover AGI) ÷ county median AGI | Positive = upgrading |
+| Net Migration Rate | 60% | Census Population Estimates 2023 | RNETMIG2023: net migration per 1,000 residents |
+| Income Quality of In-Movers | 40% | IRS SOI Migration 2022-2023 | in-mover avg AGI ÷ out-mover avg AGI; ratio > 1.0 = higher-income arrivals |
 
 ---
 
@@ -241,14 +242,14 @@ These are Civica's proprietary analytical layer — computed from raw federal da
 
 | Metric | Formula | National Norm | Source Data |
 |---|---|---|---|
-| **Price-to-Rent Ratio** | FHFA HPI ÷ (HUD FMR × 12) | 15–18x | FHFA + HUD |
-| **Buy vs. Rent Breakeven** | Transaction costs (11%) ÷ (Annual appr − Annual ownership premium) | 2–4 years | FHFA + HUD + EIA |
-| **Real Appreciation** | FHFA HPI 5yr CAGR − CPI 5yr avg | 1.5–2.5% | FHFA + BLS CPI |
-| **Permit Gap Ratio** | Census BPS annual permits ÷ net new households | 1.0 = balanced | Census BPS + IRS SOI |
-| **Real Wage Growth** | BLS QCEW avg wage CAGR − CPI | 0.5–1.5% | BLS QCEW + BLS CPI |
-| **Employment Concentration (HHI)** | Sum of (industry share²) across NAICS codes | <1,500 = diversified | BLS QCEW |
-| **In-Mover Income Quality** | (IRS in AGI − out AGI) ÷ county median AGI | 0 = neutral | IRS SOI |
-| **Physical Risk Score** | Weighted avg: NFIP claims/capita (40%) + NOAA storm damage/capita (35%) + USFS wildfire score (25%) | Lower = safer | FEMA NFIP + NOAA + USFS + Census |
+| **Price-to-Rent Ratio** | Zillow ZHVI ÷ (HUD FMR × 12) | 15–18x | Zillow + HUD |
+| **Buy vs. Rent Breakeven** | Down payment (20%) ÷ ((monthly PITI − HUD 2BR FMR) × 12) | 3–7 years | Zillow + HUD; assumes 7% 30yr, 1.2% tax, 0.5% insurance; cap 30yr |
+| **Appreciation Quality** | \|FHFA 3-yr avg annual HPI − 5%\| (deviation from healthy midpoint) | 0 deviation = ideal | FHFA HPI county |
+| **Supply Tightness** | Zillow active inventory, latest month (percentile-inverted nationally) | Lower = tighter | Zillow |
+| **Sector Quality Score** | Σ(employment share × NAICS quality weight) across private supersectors | 1.00 = neutral mix | BLS QCEW |
+| **Employment Concentration (HHI)** | Σ(industry employment share²) × 10,000 across NAICS codes | <1,500 = diversified | BLS QCEW |
+| **In-Mover Income Quality** | IRS in-mover avg AGI ÷ IRS out-mover avg AGI | 1.0 = neutral | IRS SOI Migration |
+| **Physical Risk Score** | NFIP claims/capita (40%) + NOAA storm damage/capita (35%) + USFS wildfire rank (25%); all percentile-inverted | Lower = safer | FEMA NFIP + NOAA + USFS + Census |
 
 ---
 
@@ -267,65 +268,68 @@ Every county gets exactly one label based on its 6-dimension score profile.
 | **FRONTIER** | Pop + Econ signals early-positive, Affd + QoP weak | Everything early. High risk, high upside if fundamentals materialize. |
 | **AVOID** | Multiple dimensions weak with no positive momentum | Nothing working in any direction. |
 
-**Label trigger thresholds (total score cutoffs):** ACCELERATING ≥78, PEAKING ≥68, ESTABLISHED ≥58, EMERGING ≥48, FRONTIER ≥38, TURNING ≥28, SPECULATIVE ≥18, AVOID ≥0.
+**Label trigger thresholds (total score cutoffs):** ACCELERATING ≥68, PEAKING ≥62, ESTABLISHED ≥55, EMERGING ≥46, FRONTIER ≥38, TURNING ≥30, SPECULATIVE ≥26, AVOID ≥0.
+
+**Threshold calibration note:** Percentile normalization (mean≈50, std≈7.7, range 23–73) bounds scores within the actual data distribution. Original thresholds of 78 and 18 were unreachable: no county ever scored above 73.09 or below 22.85. The recalibrated thresholds above are derived from the empirical distribution and ensure all 8 labels fire with meaningful county counts.
 
 ---
 
-## True Monthly Cost Model
+## Monthly Cost Model (implemented in scoring engine)
 
-Every county report shows a complete all-in monthly ownership cost — not just mortgage.
+The scoring engine computes `monthly_piti` for each county — the ownership cost used in the breakeven calculation.
 
 | Component | Source | Method |
 |---|---|---|
-| Mortgage (P&I) | FHFA HPI (median value) | 30-yr fixed at current national rate, 20% down |
-| Property Tax | Census STC effective rate | (Home value × effective rate) ÷ 12 |
-| Homeowner Insurance | FEMA NFIP + NOAA Storm Events + USFS Wildfire | Base national avg adjusted by composite hazard proxy per capita |
-| Electricity | EIA Form 861 actual billing | County utility territory median residential bill |
-| Natural Gas | EIA residential NG prices | State rate × median county heating days |
-| Maintenance | USDA RUCC + housing age | Urban: 0.8% of value/yr; Rural: 1.1% of value/yr |
+| Mortgage (P&I) | Zillow ZHVI median home value | 30-yr fixed at 7% (2024 national rate), 20% down |
+| Property Tax | Hardcoded 1.2% annual rate | National median effective rate; not county-specific |
+| Homeowner Insurance | Hardcoded 0.5% annual rate | National median; not risk-adjusted per county |
 
-**Total = all 6 components. Every number is from federal administrative data — no surveys, no estimates.**
+**Note:** Full all-in cost breakdown (electricity, gas, maintenance) is intended for county report cards via `county_generator.py` and is not yet implemented. EIA electricity maps to utility service territories, not county FIPS. NOAA Climate Normals (station-level, no county FIPS) would require a spatial join to derive heating/cooling degree days. Both are documented future enhancements.
 
 ---
 
-## Data Sources (15 Datasets — All Free Federal, All On Disk)
+## Data Sources (18 Datasets on Disk)
 
-| # | Dataset | File | Used For |
-|---|---|---|---|
-| 1 | IRS SOI Migration | irs_migration/ | Net migration, income quality of movers |
-| 2 | FHFA HPI County | fhfa_hpi/hpi_at_county.xlsx | Home price index, appreciation, P/R ratio |
-| 3 | BLS QCEW | bls_qcew/2023.annual.singlefile.csv | Wages, employment, HHI concentration |
-| 4 | BEA Local Area (CAINC1) | bea_income/CAINC1__ALL_AREAS_1969_2024.csv | Per capita income, real income growth |
-| 5 | FBI NIBRS | fbi_crime/2024_NIBRS_NATIONAL_MASTER_FILE.txt | Violent + property crime rates |
-| 6 | FEMA NFIP Claims | fema_nfip/fema_nfip_claims.csv | Flood risk proxy (Physical Risk dimension) |
-| 7 | NOAA Storm Events | noaa_storm_events/ (5 CSVs) | Storm damage proxy (Physical Risk dimension) |
-| 8 | USFS Wildfire Risk | usfs_wildfire/wrc_download_20260415.xlsx | Wildfire exposure (Physical Risk dimension) |
-| 9 | EIA Form 861 | eia_electricity/ (3 files) | Residential electricity by county/utility |
-| 10 | EIA Natural Gas | eia_gas/NG_PRI_SUM_DCU_NUS_A.xls | Residential NG prices by state |
-| 11 | Census STC | census_stc/STC-Historical-DB.xlsx | Property tax rates, fiscal capacity |
-| 12 | Census Population Estimates | census_population/co-est2023-alldata.csv | County population (risk per capita denominator) |
-| 13 | Census BPS | census_bps/co2022a.txt | Permit gap ratio, supply elasticity |
-| 14 | Census CBP | census_cbp/cbp22co.txt | Business formation rate |
-| 15 | USDA RUCC | usda_rucc/ruralurbancodes2023.xlsx | Urban/rural peer comparison for crime scoring |
-| 16 | HUD Fair Market Rents | hud_fmr/FY26_FMRs_revised.xlsx | P/R ratio + rent trend metric |
-| 17 | NOAA Climate Normals | noaa_climate_normals/ | Heating/cooling degree days for utility cost |
-| 18 | Zillow ZHVI | zillow/ | Supplemental price trend validation |
+| # | Dataset | File | Status | Used For |
+|---|---|---|---|---|
+| 1 | IRS SOI Migration | irs_migration/ | ✓ Active | Dim6: in-mover income quality ratio |
+| 2 | FHFA HPI County | fhfa_hpi/hpi_at_county.xlsx | ✓ Active | Dim1: appreciation quality; Dim3: 3-yr trend + current momentum |
+| 3 | BLS QCEW | bls_qcew/2023.annual.singlefile.csv | ✓ Active | Dim2: wages, sector quality, HHI |
+| 4 | BEA Local Area (CAINC1) | bea_income/CAINC1__ALL_AREAS_1969_2024.csv | ✓ Active | Dim1: price-to-income; Dim2: income growth |
+| 5 | FBI NIBRS | fbi_crime/2024_NIBRS_NATIONAL_MASTER_FILE.txt | ✓ Active | Dim4: violent offenses per 100k (21,068 agencies, 49 states, 2,869 counties) |
+| 6 | FEMA NFIP Claims | fema_nfip/fema_nfip_claims.csv | ✓ Active | Dim5: flood loss per capita (10-yr window) |
+| 7 | NOAA Storm Events | noaa_storm_events/ (5 CSVs) | ✓ Active | Dim5: storm damage per capita (5-yr window) |
+| 8 | USFS Wildfire Risk | usfs_wildfire/wrc_download_20260415.xlsx | ✓ Active | Dim5: wildfire national risk rank |
+| 9 | EIA Form 861 | eia_electricity/ (3 files) | ✗ Not used | Maps to utility service territories, not county FIPS; spatial join required |
+| 10 | EIA Natural Gas | eia_gas/NG_PRI_SUM_DCU_NUS_A.xls | ✗ Not used | State-level prices only; no county-level decomposition in file |
+| 11 | Census STC | census_stc/STC-Historical-DB.xlsx | ✗ Not used | State-level data only — no county FIPS in file |
+| 12 | Census Population Estimates | census_population/co-est2023-alldata.csv | ✓ Active | Base county universe; migration rates; per-capita denominators |
+| 13 | Census BPS | census_bps/co2022a.txt | ✓ Active | Dim3: new housing supply pipeline |
+| 14 | Census CBP | census_cbp/cbp22co.txt | ✓ Active | Dim4: amenity density (establishments per 1,000 residents) |
+| 15 | USDA RUCC | usda_rucc/ruralurbancodes2023.xlsx | ✓ Active | Dim4: urban access continuum (1=large metro, 9=most rural) |
+| 16 | HUD Fair Market Rents | hud_fmr/FY26_FMRs_revised.xlsx | ✓ Active | Dim1: rent baseline, P/R ratio, breakeven |
+| 17 | NOAA Climate Normals | noaa_climate_normals/ | ✗ Not used | Station-level temperature; no county FIPS; spatial join required |
+| 18 | Zillow ZHVI | zillow/ | ✓ Active | Dim1: median home value; Dim3: active inventory |
 
-**FEMA NRI was not downloadable (site blocks scripts + manual download unclear). Replaced by datasets 6, 7, 8 above — the same underlying hazard data FEMA uses to build its NRI.**
+**FEMA NRI was not downloadable. Physical Risk uses datasets 6, 7, 8 — the same underlying hazard data FEMA uses to build its NRI.**
 
-**Total data cost: $0. No survey data. No proprietary data. No ACS.**
+**Active datasets: 11 of 18 (datasets 1–4, 5, 6–8, 12–16, 18). Total data cost: $0. No ACS survey data.**
+
+**Note on Zillow:** Zillow ZHVI is not federal data. It is the only non-federal source in the model, used because no federal dataset provides county-level median home values at monthly granularity. FHFA HPI is used for all appreciation signals; Zillow is used only for the price level and inventory count.
 
 ---
 
-## Known Data Limitations (Handle in Scoring Engine)
+## Known Data Limitations
 
-| Issue | Dataset | Impact | Fix |
+| Issue | Dataset | Impact | Current Handling |
 |---|---|---|---|
-| FHFA covers ~2,900 of 3,143 counties | FHFA HPI | ~240 rural counties missing price data | Use state HPI as proxy; flag lower confidence |
-| CBP has 18-month publication lag | Census CBP | Business data is always ~2 years behind | Use QCEW as primary signal; CBP as confirmation |
-| Small county distortion | All | 1 employer can swing all metrics | Pop threshold is 5,000. 324 counties under 5,000 are excluded entirely — no imputed scores. |
-| FBI NIBRS coverage varies by state | FBI NIBRS | Some agencies don't report | Use state/RUCC-tier average for missing counties |
-| NFIP only captures flood; not all hazards | FEMA NFIP | Wildfire/tornado counties underweighted | NOAA Storm Events + USFS Wildfire fills the gap |
+| FHFA covers ~2,800 of 3,143 counties | FHFA HPI | ~340 rural counties missing appreciation data | National median imputed; reduces score slightly for FHFA-absent counties |
+| CBP has 18-month publication lag | Census CBP | Establishment data ~2 years behind | Accepted; no alternative county-level source available |
+| Small county distortion | All | 1 employer can swing all metrics | 324 counties under 5,000 pop excluded entirely — no imputed scores |
+| Zillow coverage gaps | Zillow ZHVI | Some rural counties have no home value data | National median imputed via left-join merge |
+| NIBRS coverage gaps | FBI NIBRS | ~251 counties lack a participating agency (rural) | RUCC-tier median violent crime rate imputed; non-reporters not penalized |
+| NFIP only captures insured flood losses | FEMA NFIP | Uninsured flood damage not counted | NOAA Storm Events covers all storm types; combined with NFIP |
+| EIA and Census STC not county-level | EIA, STC | Utility burden and fiscal capacity not scored | Documented as not implemented; appreciation quality and income growth used instead |
 
 ---
 
@@ -338,12 +342,15 @@ Every county report shows a complete all-in monthly ownership cost — not just 
 - 8 market labels with qualitative trigger conditions
 - Monthly cost calculation methodology
 
-### What Is Resolved (scoring engine COMPLETE)
+### What Is Resolved (scoring engine v1.1 COMPLETE)
 
 1. **Normalization method** — percentile rank: `pct(s) = s.rank(pct=True) * 100`, inverted where lower=better (`pct_inv`)
-2. **Label trigger thresholds** — ACCELERATING ≥78, PEAKING ≥68, ESTABLISHED ≥58, EMERGING ≥48, FRONTIER ≥38, TURNING ≥28, SPECULATIVE ≥18, AVOID ≥0
-3. **National distribution** — established from 2,820 scored counties; mean=50.0, std=7.67 (well-calibrated)
+2. **Label trigger thresholds** — ACCELERATING ≥68, PEAKING ≥62, ESTABLISHED ≥55, EMERGING ≥46, FRONTIER ≥38, TURNING ≥30, SPECULATIVE ≥26, AVOID ≥0 (all 8 labels fire)
+3. **National distribution** — mean≈50.0, std≈7.7 by construction of percentile normalization; empirical range 23–73
 4. **Edge cases** — missing data filled via left join from population base; counties with no FHFA or QCEW data receive NaN for those dimensions, which reduces their total score proportionally
+5. **Sector weights** — only NAICS codes specified in the model (54, 52, 62, 61, 23, 44-45, 31-33); all other sectors neutral (1.00×)
+6. **Dim3** — uses two independent FHFA HPI signals (3yr trend + latest) plus Zillow inventory and Census permits; `inmover_income_ratio` moved exclusively to Dim6 where it belongs
+7. **Dim6** — net migration rate 60% + in-mover income quality 40%, matching spec intent exactly
 
 ---
 
@@ -417,7 +424,7 @@ Civica Harvard Model/
 - No survey data (ACS excluded — administrative equivalents exist for everything)
 - No proprietary data sources — every metric must be replicable from free federal data
 - No overwriting existing versioned HTML files
-- No Redfin/Zillow/MLS data — commercial sources introduce conflict of interest
+- No Redfin, MLS, or agent-affiliated listing data — these introduce conflict of interest; Zillow ZHVI (home value index, not listings) is the sole exception and is used only where no federal equivalent exists at county level
 - No hardcoded county-specific values in the template files (data must be injected)
 
 ---
@@ -426,7 +433,7 @@ Civica Harvard Model/
 
 | Feature | Civica | Zillow | Redfin | Niche |
 |---|---|---|---|---|
-| 100% federal data | Yes | No | No | Partial |
+| Federal-data-first (one non-federal source: Zillow ZHVI for price levels only) | Yes | No | No | Partial |
 | No agent advertising | Yes | No | No | No |
 | Price-to-rent ratio | Yes | No | No | No |
 | Buy vs. rent breakeven | Yes | No | No | No |

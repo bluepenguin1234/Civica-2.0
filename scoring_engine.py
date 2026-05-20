@@ -200,14 +200,20 @@ def load_qcew():
     sec_df['annual_avg_emplvl'] = pd.to_numeric(sec_df['annual_avg_emplvl'], errors='coerce').fillna(0)
     sec_df['naics2'] = sec_df['industry_code'].astype(str).str[:2]
 
-    # Per CLAUDE.md: sector quality weights
+    # Sector quality weights per CLAUDE.md spec (unspecified NAICS = 1.00 neutral)
     WEIGHTS = {
-        '51': 1.30, '52': 1.30, '53': 1.30, '54': 1.30, '55': 1.30,  # Professional / Finance
-        '62': 1.00, '61': 1.00,                                          # Healthcare / Education
-        '72': 0.90, '71': 0.90, '23': 0.80,                             # Hospitality / Construction
-        '44': 0.60, '45': 0.60, '31': 0.60, '32': 0.60, '33': 0.60,   # Retail / Legacy Mfg
+        '54': 1.30,  # Professional/Scientific/Technical
+        '52': 1.30,  # Finance & Insurance
+        '62': 1.00,  # Healthcare
+        '61': 1.00,  # Education
+        '23': 0.80,  # Construction (cyclical leading indicator)
+        '44': 0.60,  # Retail (secular decline risk)
+        '45': 0.60,  # Retail
+        '31': 0.60,  # Legacy Manufacturing
+        '32': 0.60,  # Legacy Manufacturing
+        '33': 0.60,  # Legacy Manufacturing
     }
-    sec_df['weight'] = sec_df['naics2'].map(WEIGHTS).fillna(0.90)
+    sec_df['weight'] = sec_df['naics2'].map(WEIGHTS).fillna(1.00)
 
     def _sector_quality(g):
         tot = g['annual_avg_emplvl'].sum()
@@ -341,77 +347,172 @@ def load_rucc():
     return df[['fips', 'RUCC_2023']].rename(columns={'RUCC_2023': 'rucc'})
 
 
+def load_nibrs_crime():
+    """FBI NIBRS 2024: violent crime rate per 100k residents by county.
+
+    Field positions discovered empirically from the National Master File format:
+      BH record: ORI = chars 3-11 (0-indexed 2:11); county 3-digit FIPS = chars 270-272 (269:272)
+      02 record: ORI = chars 3-11 (2:11); NIBRS offense code = chars 34-36 (33:36)
+
+    Violent crime codes (FBI NIBRS Group A):
+      09A=Murder, 09B=Negligent Manslaughter, 100=Kidnapping,
+      11A=Rape, 11B=Sodomy, 11C=Sexual Assault w/ Object, 11D=Fondling,
+      120=Robbery, 13A=Aggravated Assault, 13B=Simple Assault, 13C=Intimidation
+    """
+    print("    Streaming FBI NIBRS 2024 (5.8 GB) — this takes ~10 minutes...")
+
+    VIOLENT = {'09A','09B','100','11A','11B','11C','11D','120','13A','13B','13C'}
+
+    STATE_FIPS = {
+        'AL':'01','AK':'02','AZ':'04','AR':'05','CA':'06','CO':'08','CT':'09',
+        'DE':'10','FL':'12','GA':'13','HI':'15','ID':'16','IL':'17','IN':'18',
+        'IA':'19','KS':'20','KY':'21','LA':'22','ME':'23','MD':'24','MA':'25',
+        'MI':'26','MN':'27','MS':'28','MO':'29','MT':'30','NE':'31','NV':'32',
+        'NH':'33','NJ':'34','NM':'35','NY':'36','NC':'37','ND':'38','OH':'39',
+        'OK':'40','OR':'41','PA':'42','RI':'44','SC':'45','SD':'46','TN':'47',
+        'TX':'48','UT':'49','VT':'50','VA':'51','WA':'53','WV':'54','WI':'55',
+        'WY':'56','DC':'11'
+    }
+
+    ori_to_fips  = {}   # 9-char ORI -> 5-char county FIPS
+    violent_cnts = {}   # 5-char county FIPS -> int count
+
+    fpath = f'{DATA}/fbi_crime/2024_NIBRS_NATIONAL_MASTER_FILE.txt'
+    with open(fpath, 'r', encoding='latin1', errors='replace') as f:
+        for line in f:
+            seg = line[:2]
+
+            if seg == 'BH' and len(line) >= 272:
+                ori         = line[2:11]            # 9-char ORI
+                state_alpha = line[4:6]             # embedded state abbrev
+                county3     = line[269:272].strip() # 3-digit county FIPS
+                state_fips  = STATE_FIPS.get(state_alpha)
+                if state_fips and county3.isdigit() and len(county3) == 3:
+                    ori_to_fips[ori] = state_fips + county3
+
+            elif seg == '02' and len(line) >= 36:
+                ori    = line[2:11]
+                code   = line[33:36].strip()
+                fips5  = ori_to_fips.get(ori)
+                if fips5 and code in VIOLENT:
+                    violent_cnts[fips5] = violent_cnts.get(fips5, 0) + 1
+
+    print(f"    Parsed {len(ori_to_fips):,} agencies across "
+          f"{len({v[:2] for v in ori_to_fips.values()})} states")
+    print(f"    Violent offenses counted: {sum(violent_cnts.values()):,}")
+    print(f"    Counties with crime data: {len(violent_cnts):,}")
+
+    crime_df = pd.DataFrame(
+        list(violent_cnts.items()), columns=['fips', 'violent_offenses']
+    )
+    return crime_df
+
+
 # ── Scoring Functions ──────────────────────────────────────────────────────────
 # Each function receives the merged dataframe and returns it with a new dim_N column.
 # Percentile normalization is applied within each metric nationally, then weighted.
 
 def score_dim1(df):
-    """Affordability & Value — 25 pts."""
+    """Affordability & Value — 25 pts.
+    P/R Ratio 30% | Price/Income 30% | Buy-Rent Breakeven 25% | Appreciation Quality 15%
+    """
     d = df.copy()
     d['annual_rent']  = d['fmr_2br'] * 12
     d['pr_ratio']     = d['median_home_value'] / d['annual_rent'].clip(lower=1)
     d['price_income'] = d['median_home_value'] / d['per_capita_income'].clip(lower=1)
 
-    # Breakeven horizon: years to recover down payment vs. renting
-    # (7% 30yr fixed, 1.2% property tax, 0.5% insurance)
+    # Breakeven: years to recover 20% down payment through ownership savings vs. renting.
+    # Assumes 7% 30yr fixed (2024 national rate), 1.2% annual property tax, 0.5% insurance.
+    # Cap at 30 years — markets where PITI < rent have negative excess (buy wins immediately).
     r = 0.07 / 12
     mortgage_factor = r / (1 - (1 + r) ** -360)
     d['monthly_piti'] = (
-        d['median_home_value'] * 0.80 * mortgage_factor   # principal + interest
-        + d['median_home_value'] * 0.012 / 12              # property tax
-        + d['median_home_value'] * 0.005 / 12              # hazard insurance
+        d['median_home_value'] * 0.80 * mortgage_factor
+        + d['median_home_value'] * 0.012 / 12
+        + d['median_home_value'] * 0.005 / 12
     )
     d['monthly_excess'] = (d['monthly_piti'] - d['fmr_2br']).clip(lower=1)
     d['breakeven_yrs']  = (d['median_home_value'] * 0.20 / (d['monthly_excess'] * 12)).clip(0, 30)
 
-    # Appreciation quality: deviation from ideal 3-7% annual band (centered at 5%)
+    # Appreciation quality: penalizes stagnation (<3%) and froth (>7%), rewards 3–7% range.
     d['appr_deviation'] = (d['hpi_3yr_avg'].clip(-5, 25) - 5.0).abs()
 
-    s1 = pct_inv(d['pr_ratio'])       # lower P/R = more rental value = better buy
-    s2 = pct_inv(d['price_income'])   # lower price/income = more affordable
-    s3 = pct_inv(d['breakeven_yrs'])  # shorter breakeven = better
-    s4 = pct_inv(d['appr_deviation']) # closer to 5% growth = healthier market
-    s5 = pct(d['per_capita_income'])  # higher income base = stronger market
+    s1 = pct_inv(d['pr_ratio'])       # 30%: lower P/R = better buy vs. rent
+    s2 = pct_inv(d['price_income'])   # 30%: lower price/income = more affordable
+    s3 = pct_inv(d['breakeven_yrs'])  # 25%: shorter breakeven = stronger buy case
+    s4 = pct_inv(d['appr_deviation']) # 15%: deviation from healthy 3–7% band
 
-    d['dim1'] = (s1*0.20 + s2*0.24 + s3*0.20 + s4*0.20 + s5*0.16) / 100 * 25
+    d['dim1'] = (s1*0.30 + s2*0.30 + s3*0.25 + s4*0.15) / 100 * 25
     return d
 
 
 def score_dim2(df):
-    """Economic Vitality — 22 pts."""
+    """Economic Vitality — 22 pts.
+    Wage Level 35% | Sector Quality 25% | Economic Diversity 25% | Income Growth 15%
+    """
     d = df.copy()
-    s1 = pct(d['avg_annual_wage'])       # wage level
-    s2 = pct(d['sector_quality'])        # high-quality sector mix (Professional/Finance weight)
-    s3 = pct_inv(d['hhi'])              # lower HHI = more economically diverse = more resilient
-    s4 = pct(d['income_4yr_growth'])     # income trajectory
-    s5 = pct(d['private_employment'])    # absolute job base size
+    s1 = pct(d['avg_annual_wage'])     # 35%: wage level (proxy for real wage strength)
+    s2 = pct(d['sector_quality'])      # 25%: quality-weighted sector mix (Prof/Finance premium)
+    s3 = pct_inv(d['hhi'])            # 25%: lower HHI = more diversified = more resilient
+    s4 = pct(d['income_4yr_growth'])   # 15%: real income trajectory (BEA per capita growth)
 
-    d['dim2'] = (s1*0.30 + s2*0.25 + s3*0.20 + s4*0.15 + s5*0.10) / 100 * 22
+    d['dim2'] = (s1*0.35 + s2*0.25 + s3*0.25 + s4*0.15) / 100 * 22
     return d
 
 
 def score_dim3(df):
-    """Housing Market Dynamics — 20 pts."""
+    """Housing Market Dynamics — 20 pts.
+    3yr Appreciation Trend 35% | Current Momentum 15% | Supply Tightness 30% | Permit Pipeline 20%
+    """
     d = df.copy()
-    s1 = pct(d['hpi_3yr_avg'])            # price momentum (sustained appreciation)
-    s2 = pct_inv(d['inventory'])          # lower active inventory = tighter supply = demand pressure
-    s3 = pct(d['total_permits'])          # new construction pipeline (supply response)
-    s4 = pct(d['inmover_income_ratio'])   # higher-income in-movers = quality demand signal
+    s1 = pct(d['hpi_3yr_avg'])   # 35%: FHFA 3-yr avg annual appreciation (sustained trend)
+    s2 = pct(d['hpi_latest'])    # 15%: FHFA latest annual HPI change (current momentum)
+    s3 = pct_inv(d['inventory']) # 30%: Zillow active inventory — lower = tighter supply = demand pressure
+    s4 = pct(d['total_permits']) # 20%: Census BPS new units permitted (supply pipeline)
 
-    d['dim3'] = (s1*0.30 + s2*0.25 + s3*0.20 + s4*0.25) / 100 * 20
+    d['dim3'] = (s1*0.35 + s2*0.15 + s3*0.30 + s4*0.20) / 100 * 20
     return d
 
 
 def score_dim4(df):
-    """Quality of Place — 15 pts."""
-    d = df.copy()
-    # Urban access: RUCC 1-3 metro, 4-6 micropolitan, 7-9 rural
-    s1 = pct_inv(d['rucc'].fillna(5))
-    # Service density: establishments per 1,000 residents (retail, restaurants, healthcare, etc.)
-    d['est_per_1k'] = d['establishments'] / d['POPESTIMATE2023'].clip(lower=100) * 1000
-    s2 = pct(d['est_per_1k'])
+    """Quality of Place — 15 pts.
+    Crime Rate 35% | Urban Access 40% | Amenity Density 25%
 
-    d['dim4'] = (s1*0.55 + s2*0.45) / 100 * 15
+    Crime: FBI NIBRS 2024 violent offenses per 100k residents.
+    Counties without NIBRS coverage receive their RUCC-tier median rate
+    (rural agencies have lower NIBRS participation; tier imputation prevents
+    penalizing rural counties for non-reporting rather than low crime).
+    """
+    d = df.copy()
+
+    # Crime rate per 100k — lower is better
+    d['violent_per100k'] = (
+        d['violent_offenses'].fillna(0) /
+        d['POPESTIMATE2023'].clip(lower=100) * 100_000
+    )
+
+    # Impute missing/zero counties with their RUCC-tier median to avoid
+    # penalising non-reporters (many rural agencies don't participate in NIBRS).
+    d['rucc_tier'] = pd.cut(
+        d['rucc'].fillna(5),
+        bins=[0, 3, 6, 9],
+        labels=['metro', 'micro', 'rural']
+    )
+    tier_medians = (
+        d[d['violent_offenses'] > 0]
+        .groupby('rucc_tier')['violent_per100k']
+        .median()
+    )
+    mask = d['violent_offenses'].isna() | (d['violent_offenses'] == 0)
+    d.loc[mask, 'violent_per100k'] = d.loc[mask, 'rucc_tier'].map(tier_medians)
+    d['violent_per100k'] = d['violent_per100k'].fillna(d['violent_per100k'].median())
+
+    s1 = pct_inv(d['violent_per100k'])  # 35%: lower crime rate = better
+    s2 = pct_inv(d['rucc'].fillna(5))   # 40%: USDA RUCC urban access
+    d['est_per_1k'] = d['establishments'] / d['POPESTIMATE2023'].clip(lower=100) * 1000
+    s3 = pct(d['est_per_1k'])            # 25%: Census CBP amenity density
+
+    d['dim4'] = (s1*0.35 + s2*0.40 + s3*0.25) / 100 * 15
     return d
 
 
@@ -438,26 +539,33 @@ def score_dim5(df):
 
 
 def score_dim6(df):
-    """Population Momentum — 6 pts."""
+    """Population Momentum — 6 pts.
+    Net Migration Rate 60% | Income Quality of In-Movers 40%
+    """
     d = df.copy()
-    s1 = pct(d['RNETMIG2023'])         # net migration rate per 1,000 (2023)
-    s2 = pct(d['RDOMESTICMIG2023'])    # domestic migration rate (revealed preference)
-    s3 = pct(d['in_hh'])               # absolute inflow volume (market liquidity signal)
+    s1 = pct(d['RNETMIG2023'])           # 60%: net migration rate per 1,000 (Census 2023)
+    s2 = pct(d['inmover_income_ratio'])  # 40%: in-mover AGI ÷ out-mover AGI (IRS SOI) — ratio
+                                         # > 1.0 means higher-income people arriving than leaving
 
-    d['dim6'] = (s1*0.45 + s2*0.35 + s3*0.20) / 100 * 6
+    d['dim6'] = (s1*0.60 + s2*0.40) / 100 * 6
     return d
 
 
 # ── Market Labels ──────────────────────────────────────────────────────────────
 
+# Label thresholds calibrated to the actual score distribution (mean≈50, std≈6.2, range 27–70).
+# Original thresholds (78/68/58/48/38/28/18/0) assumed a wider range than the percentile
+# normalization produces. These recalibrated thresholds span the empirical range.
+# Note: AVOID requires score < 26; empirical floor with FBI NIBRS is ~26.85, so AVOID
+# currently has 0 counties. The 4 SPECULATIVE counties (<30) are the true worst performers.
 LABELS = [
-    (78, 'ACCELERATING'),   # top ~15%: all signals firing, prices still justifiable
-    (68, 'PEAKING'),        # strong momentum but nearing affordability ceiling
-    (58, 'ESTABLISHED'),    # healthy balanced market, sustainable growth
-    (48, 'EMERGING'),       # improving fundamentals, early-mover opportunity
-    (38, 'FRONTIER'),       # thin data / small market, high uncertainty
-    (28, 'TURNING'),        # softening demand, watch for continued weakness
-    (18, 'SPECULATIVE'),    # poor fundamentals, momentum-only pricing risk
+    (68, 'ACCELERATING'),   # top ~0.1%: all signals aligned, prices still defensible
+    (62, 'PEAKING'),        # strong momentum approaching affordability ceiling
+    (55, 'ESTABLISHED'),    # healthy balanced market, sustainable fundamentals
+    (46, 'EMERGING'),       # improving fundamentals, early-mover opportunity
+    (38, 'FRONTIER'),       # below-average market, higher uncertainty
+    (30, 'TURNING'),        # softening demand, watch for continued weakness
+    (26, 'SPECULATIVE'),    # poor fundamentals, momentum-only pricing risk
     (0,  'AVOID'),          # systemic weakness across multiple dimensions
 ]
 
@@ -514,10 +622,13 @@ def main():
     print("[13/13] USDA Rural-Urban Codes...")
     rucc = load_rucc();        print(f"          {len(rucc):,} counties")
 
+    print("[14/14] FBI NIBRS Crime (2024)...")
+    nibrs = load_nibrs_crime(); print(f"          {len(nibrs):,} counties with crime data")
+
     # ── Merge ────────────────────────────────────────────────────────────────
     print("\nMerging all datasets on FIPS...")
     df = pop.copy()
-    for ds in [bea, zil, fmr, hpi, qcew, cbp, bps, irs, nfip, noaa, usfs, rucc]:
+    for ds in [bea, zil, fmr, hpi, qcew, cbp, bps, irs, nfip, noaa, usfs, rucc, nibrs]:
         df = df.merge(ds, on='fips', how='left')
     print(f"  Merged: {len(df):,} rows × {len(df.columns)} columns")
 
@@ -558,6 +669,7 @@ def main():
         'nfip_per_cap', 'storm_per_cap', 'wildfire_rank',
         'RNETMIG2023', 'RDOMESTICMIG2023', 'rucc',
         'est_per_1k', 'in_hh', 'out_hh',
+        'violent_offenses', 'violent_per100k',
     ]
     available = [c for c in out_cols if c in df.columns]
     out = df[available].round(4)
