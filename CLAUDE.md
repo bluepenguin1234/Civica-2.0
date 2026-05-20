@@ -287,6 +287,195 @@ Tags: `.tag-g` bg #dcfce7 color #15803d / `.tag-y` bg #fef3c7 color #92400e / `.
 
 ---
 
+## Front Page Design (index.html)
+
+**The county report pages use the Harvard template. The front page (index.html) must match the feel of the original Civica MA app screenshots.** Same brand colors and fonts — different layout pattern: marketing landing page, not a report.
+
+### Overall Page Structure (top to bottom)
+
+1. **Sticky white nav**
+2. **Dark navy hero** — full-width, headline + search + floating score card preview
+3. **"The Problem" section** — light gray bg, centered headline, 3-column feature cards
+4. **"How It Works" section** — white bg, 3-step flow
+5. **"What You Get" section** — light gray bg, 2-column feature cards with badge tags
+6. **Top Counties table** — white bg, sortable, filterable
+7. **Email capture / CTA strip**
+8. **Footer**
+
+---
+
+### 1. Nav
+- White background, no border-bottom (or very subtle), height ~52px, sticky
+- Left: Civica logo (same SVG + logotype as county reports)
+- Right: hamburger menu icon (☰) — mobile-first nav, no inline links at this stage
+- Same nav as county reports — consistent across site
+
+---
+
+### 2. Hero Section
+**Reference: Screenshot 1 (the MA app hero)**
+
+- Full-width, background: var(--navy) `#1a3a5c`
+- Max-width inner container: ~960–1100px, centered, padding 60px 24px
+- Layout: two-column flex — left = text + search, right = floating score card
+
+**Status pill** (above headline):
+```
+Now live · 2,820 counties scored
+```
+Small gray pill: bg rgba(255,255,255,.1), border rgba(255,255,255,.15), text rgba(255,255,255,.6), font 12px, border-radius 100px, padding 5px 14px
+
+**Headline** — very large, font-weight 900, line-height 1.0:
+```
+Know before          ← color: #fff
+you buy.             ← "you" in #fff, "buy." in var(--blue) #1a7ff0
+```
+Font-size: ~56–68px on desktop, scales down on mobile. The blue accent word is the key brand moment — never change it.
+
+**Sub-headline**: 16–17px, color rgba(255,255,255,.65), line-height 1.6, max-width ~440px:
+> "Civica scores every US county on affordability, economic strength, market dynamics, quality of place, climate risk, and population growth — the intelligence layer missing from every home search."
+
+**Search bar**:
+- White background, border-radius 100px (pill shape), height ~52px, width 100% of left column
+- Left: 🔍 search icon (gray, inside the pill)
+- Placeholder: "Search your county or state..."
+- Box-shadow: `0 4px 20px rgba(0,0,0,.25)`
+- On focus: border 2px solid var(--blue)
+- Powered by `index.json` — autocomplete dropdown shows top 5 matching counties as user types
+
+**Secondary CTA** (below search bar):
+```
+See all counties →
+```
+White bg, navy text, border-radius 100px, padding 12px 24px, font-weight 700, font-size 14px
+
+**Floating Score Card** (right column):
+- White card, border-radius 16px, box-shadow `0 8px 40px rgba(0,0,0,.3)`, padding 20px, min-width ~200px
+- Shows a real top-scoring county (e.g., Hamilton County IN — the #1 county)
+- Card structure:
+  - County name (bold, 16px, var(--navy)) + state + pop
+  - Small score ring (60px) in top-right corner showing score (e.g., 69)
+  - Label badge pills: market label (e.g., "ACCELERATING" in green) + maybe 1–2 signal pills
+  - 3 metric rows with colored bar and value: Affordability, Economic Vitality, Quality of Place
+  - "View Full Report →" — blue pill button at bottom
+- This card should feel like a teaser of what every county page looks like
+
+---
+
+### 3. "The Problem" Section
+**Reference: Screenshots 1 bottom + Screenshot 2 top**
+
+- Background: var(--bg) `#f0f2f5` (light gray)
+- Padding: 80px 24px
+
+**Eyebrow**: `THE PROBLEM` — 11px, font-weight 700, letter-spacing .12em, uppercase, color var(--muted), text-align center, margin-bottom 16px
+
+**Headline** — very large, centered, font-weight 900, color var(--navy), font-size ~40–48px:
+> "Home search tools tell you the price.  
+> Nobody tells you if the county works."
+
+**Sub-text**: centered, 15–16px, color var(--subtext), line-height 1.7, max-width 540px, margin auto:
+> "You're about to make the biggest financial decision of your life. Your agent doesn't know if the local economy is growing. Zillow doesn't show you who's moving in. Nobody tells you the real climate risk — until after you close."
+
+**3-column feature card row** (white cards, light border or slight shadow):
+| Card | Emoji | Title | Body |
+|---|---|---|---|
+| 1 | 🏛️ | Is the local economy getting stronger? | Wage growth, sector quality, income growth — none of this appears on a listing. |
+| 2 | 📈 | Is the housing market peaking or just starting? | FHFA appreciation trend, inventory tightness, permit pipeline. Civica shows the data. |
+| 3 | 🔥 | What's the real climate and cost risk? | Flood claims, storm damage, wildfire exposure — the insurance crisis is already here in some counties. |
+
+Card style: white bg, border-radius 12px, padding 22px, border 1px solid var(--border). Emoji: 28px. Title: 15px weight 700 var(--navy). Body: 13px var(--subtext) line-height 1.6.
+
+---
+
+### 4. "How It Works" Section
+
+- Background: #fff
+- Padding: 80px 24px
+
+**Eyebrow**: `HOW IT WORKS`
+
+**Headline**: "From search to decision in 3 steps" — large, centered, font-weight 900
+
+**3-step horizontal flow**:
+1. **Search your county** — type a county name or browse the map
+2. **Read the 6-dimension breakdown** — affordability, economy, market dynamics, place quality, climate risk, population momentum
+3. **Make a data-backed decision** — BUY / HOLD / AVOID verdict with full reasoning
+
+Step style: centered column, number circle (40px, bg var(--blue), white text weight 800), title (16px weight 700), body (14px var(--subtext)).
+
+---
+
+### 5. "What You Get" Section
+**Reference: Screenshot 3**
+
+- Background: var(--bg) `#f0f2f5`
+- Padding: 80px 24px
+
+**Eyebrow**: `WHAT YOU GET`
+
+**Headline**: "Everything your agent doesn't know" — large, centered, font-weight 900
+
+**Sub**: "Six research dimensions. One composite score. Built for buyers who do their homework." — centered, var(--subtext)
+
+**2-column card grid** (white cards with light border):
+
+| Card | Icon | Title | Tag | Body |
+|---|---|---|---|---|
+| 1 | 📊 | Civica Score (0–100) | `CORE FEATURE` (green) | A single composite score derived from 6 weighted research dimensions. Instantly comparable across all 2,820 scored counties. |
+| 2 | 🏠 | Affordability Analysis | `PROPRIETARY METRIC` (blue) | Price-to-rent ratio, buy-vs-rent breakeven horizon, and price-to-income — the metrics that tell you if the price is actually defensible. |
+| 3 | 📈 | Market Dynamics | `FHFA DATA` (blue) | 3-year appreciation trend plus current momentum from FHFA. Two independent price signals to cross-validate whether the market is accelerating or topping. |
+| 4 | 💡 | Investment Thesis | `NO SPIN` (gray) | Every county report opens with a plain-English summary of what the data says — the strengths, the risks, and the verdict. No agent spin. |
+
+Tag badge style: 10px, font-weight 700, uppercase, border-radius 100px, padding 3px 10px:
+- `CORE FEATURE`: bg #dcfce7, color #15803d
+- `PROPRIETARY METRIC`: bg #dbeafe, color #1d4ed8
+- `FHFA DATA`: bg #dbeafe, color #1d4ed8
+- `NO SPIN`: bg #f3f4f6, color #4b5563
+
+---
+
+### 6. Top Counties Table
+
+- Background: #fff
+- Padding: 60px 24px
+- **Eyebrow**: `TOP COUNTIES`
+- **Headline**: "The best markets right now" — large, centered or left-aligned
+
+Table: score, county, state, label badge, median home value, HPI 3yr, avg wage — sortable columns. Filter strip above: by label (ACCELERATING / PEAKING / ESTABLISHED / etc.) + state dropdown. Default sort: score descending, show top 25. "Load more" button or pagination.
+
+---
+
+### 7. Email Capture Strip
+
+- Background: var(--navy) `#1a3a5c`
+- Centered, padding 60px 24px
+- Headline: "Get notified when scores update" (white, weight 800, 24px)
+- Sub: "Quarterly re-score as new FHFA, BLS, and IRS data releases." (rgba(255,255,255,.65))
+- Email input + "Notify Me" button inline (Formspree endpoint)
+
+---
+
+### 8. Footer
+
+- Background: #111827 (near-black, darker than navy)
+- 11px, color rgba(255,255,255,.4), line-height 1.8
+- Data sources listed: IRS SOI · FHFA HPI · BLS QCEW · BEA · FBI NIBRS · FEMA NFIP · NOAA · USFS · USDA RUCC · HUD FMR · Census · Zillow ZHVI
+- Disclaimer: "Scores are for informational purposes only. Not financial or investment advice."
+- "civica" logotype in white + blue "ca"
+
+---
+
+### Front Page Typography Scale
+- Hero headline: 56–68px, weight 900, line-height 1.0
+- Section headline: 36–48px, weight 900, color var(--navy)
+- Eyebrow labels: 11px, weight 700, letter-spacing .12em, uppercase, color var(--muted)
+- Card titles: 15–16px, weight 700, color var(--navy)
+- Body text: 13–15px, color var(--subtext), line-height 1.6–1.7
+- Same font stack as county reports: `-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`
+
+---
+
 ## The 6 Dimensions
 
 ### 1. Affordability & Value — 25 points
