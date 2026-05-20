@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
 <meta name="description" content="Civica scores all 2,820 US counties on affordability, economic vitality, market dynamics, quality of place, climate risk, and population growth. Free housing intelligence for homebuyers.">
 <meta property="og:title" content="Civica — Research-Grade County Housing Intelligence">
-<meta property="og:description" content="Scores, ranks, and investment thesis for every US county — built entirely on federal government data. No agents. No ads. No conflicts.">
+<meta property="og:description" content="Scores, ranks, and investment thesis for every US county — built from federal government data and Zillow ZHVI. No agents. No ads. No conflicts.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://civica.app/og_image.png">
 <meta property="og:image:width" content="1200">
@@ -496,20 +496,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
         <div class="sc-top">
           <div>
             <div class="sc-county-name">Hamilton County</div>
-            <div class="sc-county-sub">Indiana · Pop. 364,522</div>
+            <div class="sc-county-sub">Indiana · Pop. 364,522 · #2</div>
           </div>
-          <!-- Mini ring: r=23, circ=144.5, offset=144.5*(1-0.695)=44.1 -->
+          <!-- Mini ring: r=23, circ=144.5, offset=144.5*(1-0.724)=39.8 -->
           <div class="mini-ring-wrap">
             <svg width="56" height="56" viewBox="0 0 56 56">
               <circle cx="28" cy="28" r="23" fill="none" stroke="#f1f5f9" stroke-width="5"/>
               <circle cx="28" cy="28" r="23" fill="none" stroke="#1a7ff0" stroke-width="5"
-                stroke-dasharray="144.5" stroke-dashoffset="44.1" stroke-linecap="round"/>
+                stroke-dasharray="144.5" stroke-dashoffset="39.8" stroke-linecap="round"/>
             </svg>
-            <div class="mini-ring-num">69</div>
+            <div class="mini-ring-num">72</div>
           </div>
         </div>
 
-        <div class="sc-badge">STRONG BUY</div>
+        <div class="sc-badge">ACCELERATING</div>
 
         <div class="sc-bars">
           <div class="sc-bar-row">
@@ -592,7 +592,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       <div class="step">
         <div class="step-num">3</div>
         <div class="step-title">Make a data-backed decision</div>
-        <div class="step-body">Every county report delivers a BUY / HOLD / AVOID verdict with a full investment thesis, 5-year scenarios, and risk matrix. No agent spin.</div>
+        <div class="step-body">Every county report delivers one of 8 market labels (ACCELERATING through AVOID) with a full investment thesis, 5-year scenarios, and risk matrix. No agent spin.</div>
       </div>
     </div>
   </div>
@@ -652,33 +652,48 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 <section class="sec sec-gray" id="labels">
   <div class="sec-inner">
     <div class="eyebrow">How We Signal</div>
-    <h2 class="sec-h">What does your county's signal mean?</h2>
-    <p class="sec-sub">Every county gets one of 5 plain-English signals. It combines the strength of the local market with whether conditions are improving or softening right now.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:32px;">
+    <h2 class="sec-h">What does your county's label mean?</h2>
+    <p class="sec-sub">Every county gets one of 8 plain-English signals based on its composite score. No direction overlay — just where the market stands relative to all 2,820 scored counties.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:32px;">
       <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #bbf7d0;">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#16a34a;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">STRONG BUY</div>
-        <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:6px;">All signals firing</div>
-        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Strong fundamentals across all dimensions, and the market is actively improving. Highest-conviction entry point in the model.</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#15803d;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">ACCELERATING</div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:6px;">All signals positive</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Score ≥ 68 · 2 counties</div>
+      </div>
+      <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #bbf7d0;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#16a34a;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">PEAKING</div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:6px;">Strong momentum</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Score ≥ 62 · 57 counties</div>
       </div>
       <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #bfdbfe;">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#1a7ff0;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">BUY</div>
-        <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:6px;">Good fundamentals</div>
-        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Strong market holding steady, or a solid market actively improving. The data supports buying with confidence.</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#1d4ed8;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">ESTABLISHED</div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:6px;">Solid, balanced market</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Score ≥ 55 · 563 counties</div>
+      </div>
+      <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #bfdbfe;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#1a7ff0;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">EMERGING</div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:6px;">Improving fundamentals</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Score ≥ 46 · 1,463 counties</div>
       </div>
       <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #fde68a;">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#f59e0b;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">WATCH</div>
-        <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:6px;">Mixed signals</div>
-        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Market conditions are mixed or shifting. Might be right for you, but don't rush — monitor for a quarter before committing.</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#b45309;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">FRONTIER</div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:6px;">Thin market</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Score ≥ 38 · 634 counties</div>
       </div>
       <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #fed7aa;">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#f97316;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">CAUTION</div>
-        <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:6px;">Weakening</div>
-        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Fundamentals are below average or softening. Higher risk of near-term value erosion. Needs strong personal reasons to buy here now.</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#ea580c;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">TURNING</div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:6px;">Softening demand</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Score ≥ 30 · 97 counties</div>
       </div>
       <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #fecaca;">
-        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#dc2626;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">AVOID</div>
-        <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:6px;">Poor fundamentals</div>
-        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Multiple dimensions are weak with no positive momentum. Unless you have a strong non-financial reason, your money works harder elsewhere.</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#dc2626;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">SPECULATIVE</div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:6px;">Poor fundamentals</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Score ≥ 26 · 4 counties</div>
+      </div>
+      <div style="background:#fff;border-radius:12px;padding:20px;border:2px solid #fecaca;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.06em;background:#991b1b;color:#fff;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;">AVOID</div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:6px;">No dimension working</div>
+        <div style="font-size:12px;color:var(--subtext);line-height:1.6;">Score &lt; 26 · 2 counties</div>
       </div>
     </div>
     <div style="text-align:center;margin-top:24px;">
@@ -825,8 +840,10 @@ function closeMobileNav() {
 let COUNTIES = [];
 
 const SIGNAL_CLASS = {
-  'STRONG BUY':'lb-sbuy', 'BUY':'lb-buy', 'WATCH':'lb-watch',
-  'CAUTION':'lb-caut', 'AVOID':'lb-avoid',
+  'ACCELERATING':'lb-sbuy', 'PEAKING':'lb-sbuy',
+  'ESTABLISHED':'lb-buy', 'EMERGING':'lb-buy',
+  'FRONTIER':'lb-watch', 'TURNING':'lb-caut',
+  'SPECULATIVE':'lb-avoid', 'AVOID':'lb-avoid',
 };
 const STATE_NAMES = {
   'AL':'Alabama','AK':'Alaska','AZ':'Arizona','AR':'Arkansas','CA':'California',

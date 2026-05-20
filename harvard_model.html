@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How Civica Works — Methodology</title>
-<meta name="description" content="How Civica scores 2,820 US counties for homebuyers. Six dimensions, 14 federal datasets, zero advertiser influence.">
+<meta name="description" content="How Civica scores 2,820 US counties for homebuyers. Six dimensions, 13 federal datasets plus Zillow ZHVI, zero advertiser influence.">
 <meta property="og:title" content="Civica Methodology — How the Score Works">
 <meta property="og:image" content="https://civica.app/og_image.png">
 <link rel="canonical" href="https://civica.app/harvard_model.html">
@@ -175,11 +175,11 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
 
 <div class="hero">
   <div class="hero-eyebrow">How Civica Works</div>
-  <h1>Every score is built from federal data — no opinions, no estimates, no advertising.</h1>
-  <div class="hero-sub">Six dimensions. Fourteen federal datasets. Zero survey data. Every number traces back to a government source you can verify yourself.</div>
+  <h1>Every score is built from government and public data — no opinions, no estimates, no advertising.</h1>
+  <div class="hero-sub">Six dimensions. Thirteen federal datasets plus Zillow ZHVI. Zero survey data. Every number traces back to a verifiable public source.</div>
   <div class="hero-pills">
     <div class="hero-pill"><span class="hp-lbl">Dimensions</span><span class="hp-val">6</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Federal Datasets</span><span class="hp-val">14</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Data Sources</span><span class="hp-val">14</span></div>
     <div class="hero-pill"><span class="hp-lbl">Counties Scored</span><span class="hp-val">2,820</span></div>
     <div class="hero-pill"><span class="hp-lbl">Survey Data</span><span class="hp-val">None</span></div>
     <div class="hero-pill"><span class="hp-lbl">Advertiser Influence</span><span class="hp-val">None</span></div>
@@ -257,9 +257,9 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
     <div class="card-title">🔢 How Scores Are Calculated</div>
     <div class="card-intro">Every metric is converted to a national percentile (0–100) so counties of all sizes are comparable. Higher is always better — metrics where lower is better (like crime rate or flood loss) are inverted before scoring. The six dimension scores are then weighted and summed into the Civica Score.</div>
     <div style="background:#fff;border-radius:10px;padding:16px;font-size:13px;color:var(--subtext);line-height:1.8;border:1px solid var(--border);">
-      <strong style="color:var(--navy);">Score range:</strong> 26.9 – 69.5 &nbsp;&nbsp;
+      <strong style="color:var(--navy);">Score range:</strong> 21.4 – 72.9 &nbsp;&nbsp;
       <strong style="color:var(--navy);">National mean:</strong> 50.0 &nbsp;&nbsp;
-      <strong style="color:var(--navy);">Std deviation:</strong> 6.2 &nbsp;&nbsp;
+      <strong style="color:var(--navy);">Std deviation:</strong> 7.5 &nbsp;&nbsp;
       <strong style="color:var(--navy);">Counties excluded:</strong> 324 (pop &lt; 5,000 — insufficient data)
     </div>
   </div>
@@ -281,49 +281,70 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
   </div>
   <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
-  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">Every county gets one signal. It combines the <strong>strength of local fundamentals</strong> (Civica Score) with <strong>current market direction</strong> (HPI momentum vs. 3-year average + net migration rate). The result is one plain-English answer to "should I buy here right now?"</div>
+  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">Every county gets exactly one label based on its total Civica Score. Labels are score thresholds — no secondary direction adjustment. The result is one plain-English read of where the county sits in the national distribution right now.</div>
 
-  <div class="label-grid">
+  <div class="label-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));">
 
     <div class="label-card" style="border-color:#bbf7d0;background:#f0fdf4;">
-      <span class="label-badge" style="background:#16a34a;color:#fff;">STRONG BUY</span>
-      <div class="label-name">All signals firing</div>
-      <div class="label-desc">Top-tier fundamentals — strong economy, defensible prices, low risk, people moving in — <em>and</em> the market is actively improving. The highest-conviction entry point in the model.</div>
-      <div class="label-score">Score ≥ 57 + market improving &nbsp;·&nbsp; ~75 counties (2.7%)</div>
+      <span class="label-badge" style="background:#15803d;color:#fff;">ACCELERATING</span>
+      <div class="label-name">All signals positive</div>
+      <div class="label-desc">Window still open, but monitor affordability trajectory.</div>
+      <div class="label-score">Score ≥ 68 &nbsp;·&nbsp; 2 counties (0.1%)</div>
+    </div>
+
+    <div class="label-card" style="border-color:#bbf7d0;background:#f0fdf4;">
+      <span class="label-badge" style="background:#16a34a;color:#fff;">PEAKING</span>
+      <div class="label-name">Strong momentum</div>
+      <div class="label-desc">Fundamentals show ceiling pressure. Best for shorter hold horizons.</div>
+      <div class="label-score">Score ≥ 62 &nbsp;·&nbsp; 57 counties (2.0%)</div>
     </div>
 
     <div class="label-card" style="border-color:#bfdbfe;background:#eff6ff;">
-      <span class="label-badge" style="background:#1a7ff0;color:#fff;">BUY</span>
-      <div class="label-name">Good fundamentals</div>
-      <div class="label-desc">Either a strong market holding steady, or a solid market actively improving. The data supports buying with confidence — this is where most well-researched purchases land.</div>
-      <div class="label-score">Score ≥ 57 + stable, or score 45–56 + improving &nbsp;·&nbsp; ~629 counties (22%)</div>
+      <span class="label-badge" style="background:#1d4ed8;color:#fff;">ESTABLISHED</span>
+      <div class="label-name">Solid, balanced market</div>
+      <div class="label-desc">Buy for stability and lifestyle, not appreciation upside.</div>
+      <div class="label-score">Score ≥ 55 &nbsp;·&nbsp; 563 counties (20.0%)</div>
+    </div>
+
+    <div class="label-card" style="border-color:#bfdbfe;background:#eff6ff;">
+      <span class="label-badge" style="background:#1a7ff0;color:#fff;">EMERGING</span>
+      <div class="label-name">Improving fundamentals</div>
+      <div class="label-desc">Early-mover upside with real risk. Due diligence required.</div>
+      <div class="label-score">Score ≥ 46 &nbsp;·&nbsp; 1,463 counties (51.9%)</div>
     </div>
 
     <div class="label-card" style="border-color:#fde68a;background:#fffbeb;">
-      <span class="label-badge" style="background:#f59e0b;color:#fff;">WATCH</span>
-      <div class="label-name">Mixed signals</div>
-      <div class="label-desc">Market conditions are mixed or in transition. Might be right for your situation — but don't rush. Monitor for a quarter before committing. The largest bucket by design.</div>
-      <div class="label-score">Varies by score + direction &nbsp;·&nbsp; ~1,199 counties (42%)</div>
+      <span class="label-badge" style="background:#b45309;color:#fff;">FRONTIER</span>
+      <div class="label-name">Thin market</div>
+      <div class="label-desc">Fundamentals mixed — requires additional local due diligence.</div>
+      <div class="label-score">Score ≥ 38 &nbsp;·&nbsp; 634 counties (22.5%)</div>
     </div>
 
     <div class="label-card" style="border-color:#fed7aa;background:#fff7ed;">
-      <span class="label-badge" style="background:#f97316;color:#fff;">CAUTION</span>
-      <div class="label-name">Weakening</div>
-      <div class="label-desc">Fundamentals are below average or softening. Higher risk of near-term value erosion. Requires a strong personal or financial reason to buy here now — the data isn't on your side.</div>
-      <div class="label-score">Score 45–56 + declining, or score 37–44 + stable &nbsp;·&nbsp; ~706 counties (25%)</div>
+      <span class="label-badge" style="background:#ea580c;color:#fff;">TURNING</span>
+      <div class="label-name">Softening demand</div>
+      <div class="label-desc">Monitor for continued weakness before committing capital.</div>
+      <div class="label-score">Score ≥ 30 &nbsp;·&nbsp; 97 counties (3.4%)</div>
     </div>
 
     <div class="label-card" style="border-color:#fecaca;background:#fef2f2;">
-      <span class="label-badge" style="background:#dc2626;color:#fff;">AVOID</span>
+      <span class="label-badge" style="background:#dc2626;color:#fff;">SPECULATIVE</span>
       <div class="label-name">Poor fundamentals</div>
-      <div class="label-desc">Multiple dimensions are underperforming with no meaningful positive trend. Unless you have a strong non-financial reason (family, job), your capital works harder somewhere else.</div>
-      <div class="label-score">Score &lt; 37, or score 37–44 + declining &nbsp;·&nbsp; ~211 counties (7.5%)</div>
+      <div class="label-desc">Prices appear disconnected from underlying economics.</div>
+      <div class="label-score">Score ≥ 26 &nbsp;·&nbsp; 4 counties (0.1%)</div>
+    </div>
+
+    <div class="label-card" style="border-color:#fecaca;background:#fef2f2;">
+      <span class="label-badge" style="background:#991b1b;color:#fff;">AVOID</span>
+      <div class="label-name">No dimension working</div>
+      <div class="label-desc">Empirical score floor is 26.9 in v1.2 — 0 counties currently in this band.</div>
+      <div class="label-score">Score &lt; 26 &nbsp;·&nbsp; 2 counties (0.1%)</div>
     </div>
 
   </div>
 
   <div style="padding:14px 16px;background:#f8fafc;border-radius:10px;font-size:12px;color:var(--subtext);line-height:1.7;border:1px solid var(--border);">
-    <strong style="color:var(--text);">How direction is measured:</strong> Market direction uses two signals from the data already in the model: (1) whether the latest FHFA HPI annual change is more than 1 percentage point above or below the county's 3-year average, and (2) whether the Census net migration rate is above or below ±1.0 per 1,000 residents. A county scores +1 or −1 on each. Sum ≥ 1 = improving; sum ≤ −1 = declining; otherwise stable.
+    <strong style="color:var(--text);">Label calibration:</strong> Thresholds are set so each label covers a meaningful fraction of the county distribution. ACCELERATING and PEAKING are intentionally rare (top ~5.6%); ESTABLISHED and EMERGING cover the core of the distribution. Labels are based on composite score only — no secondary market-direction overlay. v1.2 distribution: ACCELERATING (14) · PEAKING (143) · ESTABLISHED (558) · EMERGING (1,236) · FRONTIER (703) · TURNING (152) · SPECULATIVE (12) · AVOID (2).
   </div>
 
   </div></div></div>
@@ -431,7 +452,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
     <div class="metric-block">
       <div class="metric-header">
         <div class="metric-name">Price-to-Rent Ratio</div>
-        <span class="metric-tag">PROPRIETARY</span>
+        <span class="metric-tag">DERIVED METRIC</span>
       </div>
       <div class="metric-formula"><strong>Formula:</strong> Zillow ZHVI ÷ (HUD Fair Market Rent × 12)</div>
       <div class="metric-why"><strong>Why it matters:</strong> The single most useful valuation check in real estate. Under 15× = buying is clearly cheaper than renting. 15–20× = fair value. Over 20× = you're paying a premium to own. Over 25× = the market is pricing in significant future appreciation that may not materialize.</div>
@@ -440,7 +461,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
     <div class="metric-block">
       <div class="metric-header">
         <div class="metric-name">Buy vs. Rent Breakeven</div>
-        <span class="metric-tag">PROPRIETARY</span>
+        <span class="metric-tag">DERIVED METRIC</span>
       </div>
       <div class="metric-formula"><strong>Formula:</strong> Down payment (20%) ÷ (monthly PITI − HUD 2BR FMR) × 12. Assumes 7% 30-yr fixed, 1.2% property tax, 0.5% insurance. Capped at 30 years.</div>
       <div class="metric-why"><strong>Why it matters:</strong> The most practical number for a buyer deciding whether to buy now or keep renting. Under 3 years = strong case for buying. 3–6 years = reasonable. Over 6 years = renting is likely the better financial choice at current prices.</div>
@@ -449,7 +470,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
     <div class="metric-block">
       <div class="metric-header">
         <div class="metric-name">Sector Quality Score</div>
-        <span class="metric-tag">PROPRIETARY</span>
+        <span class="metric-tag">DERIVED METRIC</span>
       </div>
       <div class="metric-formula"><strong>Formula:</strong> Σ(employment share × NAICS quality weight) across BLS QCEW supersectors. Professional/Finance: 1.30×. Healthcare/Education: 1.00×. Retail: 0.60×. Legacy Manufacturing: 0.60×.</div>
       <div class="metric-why"><strong>Why it matters:</strong> Two counties can have identical employment levels but very different economic quality. A county where 40% of workers are in professional services is structurally more resilient than one where 40% are in retail.</div>
@@ -458,7 +479,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
     <div class="metric-block">
       <div class="metric-header">
         <div class="metric-name">Employment Concentration (HHI)</div>
-        <span class="metric-tag">PROPRIETARY</span>
+        <span class="metric-tag">DERIVED METRIC</span>
       </div>
       <div class="metric-formula"><strong>Formula:</strong> Herfindahl-Hirschman Index = Σ(sector employment share²) × 10,000 across NAICS codes. Under 1,500 = diversified. Over 2,500 = concentrated.</div>
       <div class="metric-why"><strong>Why it matters:</strong> A county where 60% of jobs are in one industry is fragile. When that sector contracts, home values follow. Diversification is the housing market equivalent of portfolio risk management.</div>
@@ -467,7 +488,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
     <div class="metric-block">
       <div class="metric-header">
         <div class="metric-name">In-Mover Income Quality</div>
-        <span class="metric-tag">PROPRIETARY</span>
+        <span class="metric-tag">DERIVED METRIC</span>
       </div>
       <div class="metric-formula"><strong>Formula:</strong> IRS SOI in-mover average AGI ÷ IRS SOI out-mover average AGI (2022–2023 migration flows)</div>
       <div class="metric-why"><strong>Why it matters:</strong> Raw migration counts can mislead. A county gaining low-income households while losing high-income ones is deteriorating economically even if net migration is positive. This ratio captures whether the county is becoming more or less affluent over time.</div>
@@ -476,7 +497,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
     <div class="metric-block">
       <div class="metric-header">
         <div class="metric-name">Physical Risk Index</div>
-        <span class="metric-tag">PROPRIETARY</span>
+        <span class="metric-tag">DERIVED METRIC</span>
       </div>
       <div class="metric-formula"><strong>Formula:</strong> NFIP flood claims per capita (40%) + NOAA storm damage per capita (35%) + USFS wildfire rank (25%). All percentile-inverted so lower risk = higher score.</div>
       <div class="metric-why"><strong>Why it matters:</strong> Insurance costs are already rising 20–40% in high-risk counties. This index captures actual realized losses — not modeled probabilities — using the same source hazard data FEMA uses internally to build the National Risk Index.</div>
@@ -496,7 +517,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
   </div>
   <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
-  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">14 datasets, all federal, all free. Every score in Civica is replicable from public data. Zillow ZHVI is the only non-federal source — used because no federal dataset provides county-level median home values at monthly granularity.</div>
+  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">14 datasets — 13 federal plus Zillow ZHVI. Every score in Civica is replicable from public data. Zillow ZHVI is the only non-federal source — used because no federal dataset provides county-level median home values at monthly granularity. All appreciation signals use FHFA HPI, not Zillow.</div>
 
   <div style="overflow-x:auto;">
     <table class="src-table">
@@ -553,7 +574,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
 
   <div class="faq-item">
     <div class="faq-q">Why is the AVOID label at zero counties?</div>
-    <div class="faq-a">The FBI NIBRS crime integration raised the score floor. The worst-performing county now scores 26.9, which is above the AVOID threshold of 24. The 4 counties labeled SPECULATIVE (scoring 24–29) are the genuine worst performers in the model. This threshold will be reviewed in the next scoring engine update.</div>
+    <div class="faq-a">Two counties score below the AVOID threshold of 26 in v1.2: Montgomery County AR (21.4) and Morgan County KY (24.5). Both are genuinely weak on multiple dimensions — low wages, poor affordability, and high physical risk. The wider score range in v1.2 (21.4–72.9, std 7.5) reflects using UCR Part 1 violent crime only (removing simple assault and intimidation), which creates greater spread between high-crime and low-crime counties.</div>
   </div>
 
   <div class="faq-item">
@@ -576,7 +597,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
 </div>
 
 <div class="footer">
-  Civica Research Model · Data as of Q1 2026 · 14 federal datasets · 0 advertiser relationships<br>
+  Civica Research Model · Data as of Q1 2026 · 13 federal datasets + Zillow ZHVI · 0 advertiser relationships<br>
   <strong>civi<em style="font-style:normal;color:#1a7ff0;">ca</em></strong> — research-grade county intelligence for homebuyers
 </div>
 

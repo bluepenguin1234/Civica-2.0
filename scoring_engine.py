@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Civica Scoring Engine v1.0
+Civica Scoring Engine v1.2
 Harvard-style 6-dimension housing market analysis for all US counties.
 
 Dimensions:
@@ -95,12 +95,20 @@ def load_bea():
 
     df['per_capita_income']  = pd.to_numeric(df[latest], errors='coerce')
     df['income_prior']       = pd.to_numeric(df[prior],  errors='coerce')
+    # Nominal 4-year growth — compare to cumulative CPI for real gains
     df['income_4yr_growth']  = (df['per_capita_income'] / df['income_prior'] - 1) * 100
     return df[['fips', 'per_capita_income', 'income_4yr_growth']].dropna(subset=['fips'])
 
 
 def load_zillow():
-    """Zillow ZHVI median home values + active inventory (latest month)."""
+    """Zillow ZHVI median home values + active inventory (latest month).
+
+    Returns (county_df, state_hv_medians, state_inv_medians).
+    State-level medians are computed from ALL counties in the Zillow file before
+    any Census FIPS filtering. This lets main() impute counties whose FIPS changed
+    (e.g., Connecticut planning regions post-2022) with the correct state median
+    rather than the national median.
+    """
     zhvi = pd.read_csv(
         f'{DATA}/zillow/County_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv'
     )
@@ -109,9 +117,12 @@ def load_zillow():
     date_cols = sorted([c for c in zhvi.columns if c[:4].isdigit()])
     latest    = date_cols[-1]
     yr3_back  = [c for c in date_cols if c.startswith(str(int(latest[:4]) - 3))]
-    zhvi['median_home_value']       = pd.to_numeric(zhvi[latest], errors='coerce')
-    zhvi['home_value_3yr_ago']      = pd.to_numeric(zhvi[yr3_back[0] if yr3_back else latest], errors='coerce')
-    zhvi['home_appreciation_3yr']   = (zhvi['median_home_value'] / zhvi['home_value_3yr_ago'] - 1) * 100
+    zhvi['median_home_value']  = pd.to_numeric(zhvi[latest], errors='coerce')
+    zhvi['home_value_3yr_ago'] = pd.to_numeric(zhvi[yr3_back[0] if yr3_back else latest], errors='coerce')
+    # Total appreciation from January of year-3 to latest month (~3.8 yrs, not annualized)
+    zhvi['home_appreciation_total_3yr'] = (
+        zhvi['median_home_value'] / zhvi['home_value_3yr_ago'] - 1
+    ) * 100
 
     inv = pd.read_csv(
         f'{DATA}/zillow/County_invt_fs_uc_sfrcondo_sm_month.csv'
@@ -121,9 +132,19 @@ def load_zillow():
     inv_dates    = sorted([c for c in inv.columns if c[:4].isdigit()])
     inv['inventory'] = pd.to_numeric(inv[inv_dates[-1]], errors='coerce')
 
-    return zhvi[['fips', 'median_home_value', 'home_appreciation_3yr']].merge(
+    # State-level medians from the full Zillow county universe (before Census FIPS filtering).
+    # Zillow still carries old county FIPS (e.g., CT pre-2022 counties) that have no match
+    # in the current Census pop file, so these medians are richer than what the merged df can
+    # compute on its own.
+    zhvi['_state'] = zhvi['StateCodeFIPS'].astype(str).str.zfill(2)
+    inv['_state']  = inv['StateCodeFIPS'].astype(str).str.zfill(2)
+    state_hv  = zhvi.dropna(subset=['median_home_value']).groupby('_state')['median_home_value'].median()
+    state_inv = inv.dropna(subset=['inventory']).groupby('_state')['inventory'].median()
+
+    county_df = zhvi[['fips', 'median_home_value', 'home_appreciation_total_3yr']].merge(
         inv[['fips', 'inventory']], on='fips', how='left'
     )
+    return county_df, state_hv, state_inv
 
 
 def load_fmr():
@@ -200,18 +221,20 @@ def load_qcew():
     sec_df['annual_avg_emplvl'] = pd.to_numeric(sec_df['annual_avg_emplvl'], errors='coerce').fillna(0)
     sec_df['naics2'] = sec_df['industry_code'].astype(str).str[:2]
 
-    # Sector quality weights per CLAUDE.md spec (unspecified NAICS = 1.00 neutral)
+    # Sector quality weights — ratios reflect BLS OEWS median wages by supersector
+    # relative to the all-private median. Professional/Finance consistently 30-40%
+    # above private median; Retail/Manufacturing 20-40% below. See METHODOLOGY.md §14.6.
     WEIGHTS = {
-        '54': 1.30,  # Professional/Scientific/Technical
-        '52': 1.30,  # Finance & Insurance
-        '62': 1.00,  # Healthcare
-        '61': 1.00,  # Education
-        '23': 0.80,  # Construction (cyclical leading indicator)
-        '44': 0.60,  # Retail (secular decline risk)
-        '45': 0.60,  # Retail
-        '31': 0.60,  # Legacy Manufacturing
-        '32': 0.60,  # Legacy Manufacturing
-        '33': 0.60,  # Legacy Manufacturing
+        '54': 1.30,  # Professional, Scientific, Technical (OEWS: ~40% above median)
+        '52': 1.30,  # Finance & Insurance (OEWS: ~35% above median)
+        '62': 1.00,  # Healthcare & Social Assistance (near median)
+        '61': 1.00,  # Educational Services (near median)
+        '23': 0.80,  # Construction (cyclical; ~10% above median but volatile)
+        '44': 0.60,  # Retail Trade (OEWS: ~25% below median)
+        '45': 0.60,  # Retail Trade
+        '31': 0.60,  # Manufacturing (secular US employment decline; ~10% below median)
+        '32': 0.60,
+        '33': 0.60,
     }
     sec_df['weight'] = sec_df['naics2'].map(WEIGHTS).fillna(1.00)
 
@@ -280,10 +303,15 @@ def load_irs():
     out_g = out.groupby('fips').agg(out_hh=('n1','sum'), out_agi=('agi','sum')).reset_index()
 
     m = inf_g.merge(out_g, on='fips', how='outer')
-    m['in_avg_agi']  = m['in_agi']  / m['in_hh'].clip(lower=1)
-    m['out_avg_agi'] = m['out_agi'] / m['out_hh'].clip(lower=1)
+    # Require ≥10 households on each side to produce a reliable average AGI
+    m['in_avg_agi']  = np.where(m['in_hh']  >= 10, m['in_agi']  / m['in_hh'],  np.nan)
+    m['out_avg_agi'] = np.where(m['out_hh'] >= 10, m['out_agi'] / m['out_hh'], np.nan)
     # Ratio > 1 means higher-income people moving in than leaving (positive demand signal)
-    m['inmover_income_ratio'] = m['in_avg_agi'] / m['out_avg_agi'].clip(lower=1)
+    m['inmover_income_ratio'] = np.where(
+        (m['in_hh'] >= 10) & (m['out_hh'] >= 10),
+        m['in_avg_agi'] / m['out_avg_agi'],
+        np.nan
+    )
     return m[['fips', 'inmover_income_ratio', 'in_hh', 'out_hh']]
 
 
@@ -301,7 +329,7 @@ def load_nfip():
     )
     if 'yearOfLoss' in df.columns:
         df['yr'] = pd.to_numeric(df['yearOfLoss'], errors='coerce')
-        df = df[df['yr'] >= 2014]
+        df = df[df['yr'].between(2014, 2023)]  # enforce documented 10-year window
     return df.groupby('fips')['paid'].sum().reset_index().rename(columns={'paid': 'nfip_claims'})
 
 
@@ -312,6 +340,10 @@ def load_noaa_storm():
     storm_dir = f'{DATA}/noaa_storm_events'
     for fn in sorted(os.listdir(storm_dir)):
         if not fn.endswith('.csv'):
+            continue
+        # Only include files for years in the documented 5-year window (2019-2023)
+        # NOAA filenames follow pattern: StormEvents_details-ftp_v1.0_d{YYYY}_*.csv
+        if not any(f'_d{y}_' in fn for y in range(2019, 2024)):
             continue
         df = pd.read_csv(
             f'{storm_dir}/{fn}',
@@ -354,14 +386,19 @@ def load_nibrs_crime():
       BH record: ORI = chars 3-11 (0-indexed 2:11); county 3-digit FIPS = chars 270-272 (269:272)
       02 record: ORI = chars 3-11 (2:11); NIBRS offense code = chars 34-36 (33:36)
 
-    Violent crime codes (FBI NIBRS Group A):
-      09A=Murder, 09B=Negligent Manslaughter, 100=Kidnapping,
+    Violent crime codes — UCR Part 1 definition (murder, sex offenses, robbery,
+    aggravated assault). Simple assault (13B) and intimidation (13C) are excluded
+    because they are not UCR Part 1 violent crimes and would inflate county rates
+    relative to published FBI statistics.
+      09A=Murder/Non-Negligent Manslaughter, 09B=Negligent Manslaughter,
       11A=Rape, 11B=Sodomy, 11C=Sexual Assault w/ Object, 11D=Fondling,
-      120=Robbery, 13A=Aggravated Assault, 13B=Simple Assault, 13C=Intimidation
+      120=Robbery, 13A=Aggravated Assault
     """
     print("    Streaming FBI NIBRS 2024 (5.8 GB) — this takes ~10 minutes...")
 
-    VIOLENT = {'09A','09B','100','11A','11B','11C','11D','120','13A','13B','13C'}
+    # UCR Part 1 violent crimes only — excludes 13B (simple assault), 13C (intimidation),
+    # and 100 (kidnapping), which are not in the standard FBI violent crime rate definition.
+    VIOLENT = {'09A', '09B', '11A', '11B', '11C', '11D', '120', '13A'}
 
     STATE_FIPS = {
         'AL':'01','AK':'02','AZ':'04','AR':'05','CA':'06','CO':'08','CT':'09',
@@ -421,21 +458,25 @@ def score_dim1(df):
     d['pr_ratio']     = d['median_home_value'] / d['annual_rent'].clip(lower=1)
     d['price_income'] = d['median_home_value'] / d['per_capita_income'].clip(lower=1)
 
-    # Breakeven: years to recover 20% down payment through ownership savings vs. renting.
-    # Assumes 7% 30yr fixed (2024 national rate), 1.2% annual property tax, 0.5% insurance.
-    # Cap at 30 years — markets where PITI < rent have negative excess (buy wins immediately).
+    # Monthly ownership cost: P&I (7% 30yr 80% LTV) + property tax (1.2%) + insurance (0.5%).
     # KNOWN LIMITATION: 1.2% property tax is the national median effective rate.
     # Actual rates range 0.28% (HI) to 2.23% (NJ/IL) — error up to $340/mo at $400k home value.
-    # State-level effective rates from Lincoln Institute of Land Policy are a candidate fix (v1.3).
     r = 0.07 / 12
     mortgage_factor = r / (1 - (1 + r) ** -360)
     d['monthly_piti'] = (
         d['median_home_value'] * 0.80 * mortgage_factor
-        + d['median_home_value'] * 0.012 / 12   # property tax — see limitation note above
+        + d['median_home_value'] * 0.012 / 12
         + d['median_home_value'] * 0.005 / 12
     )
-    d['monthly_excess'] = (d['monthly_piti'] - d['fmr_2br']).clip(lower=1)
-    d['breakeven_yrs']  = (d['median_home_value'] * 0.20 / (d['monthly_excess'] * 12)).clip(0, 30)
+
+    # Breakeven: years to recover 20% down payment through monthly cost savings vs. renting.
+    # When PITI < FMR (buying immediately beats renting), breakeven = 0 — best possible score.
+    monthly_savings = d['monthly_piti'] - d['fmr_2br']
+    d['breakeven_yrs'] = np.where(
+        monthly_savings <= 0,
+        0.0,  # buying cheaper than renting from day 1
+        (d['median_home_value'] * 0.20 / (monthly_savings * 12)).clip(0, 30)
+    )
 
     # Appreciation quality: penalizes stagnation (<3%) and froth (>7%), rewards 3–7% range.
     d['appr_deviation'] = (d['hpi_3yr_avg'].clip(-5, 25) - 5.0).abs()
@@ -455,9 +496,9 @@ def score_dim2(df):
     """
     d = df.copy()
     s1 = pct(d['avg_annual_wage'])     # 35%: wage level (proxy for real wage strength)
-    s2 = pct(d['sector_quality'])      # 25%: quality-weighted sector mix (Prof/Finance premium)
+    s2 = pct(d['sector_quality'])      # 25%: OEWS-calibrated sector mix (Prof/Finance premium)
     s3 = pct_inv(d['hhi'])            # 25%: lower HHI = more diversified = more resilient
-    s4 = pct(d['income_4yr_growth'])   # 15%: real income trajectory (BEA per capita growth)
+    s4 = pct(d['income_4yr_growth'])   # 15%: nominal income trajectory (BEA per capita growth)
 
     d['dim2'] = (s1*0.35 + s2*0.25 + s3*0.25 + s4*0.15) / 100 * 22
     return d
@@ -470,7 +511,13 @@ def score_dim3(df):
     d = df.copy()
     s1 = pct(d['hpi_3yr_avg'])   # 35%: FHFA 3-yr avg annual appreciation (sustained trend)
     s2 = pct(d['hpi_latest'])    # 15%: FHFA latest annual HPI change (current momentum)
-    s3 = pct_inv(d['inventory']) # 30%: Zillow active inventory — lower = tighter supply = demand pressure
+
+    # Normalize inventory by population to remove county-size bias (r=0.83 with raw count).
+    # inventory_per_1k is a proxy for market tightness; months-of-supply would be ideal
+    # but requires a Zillow sales-count file not currently downloaded. See METHODOLOGY.md §14.
+    d['inventory_per_1k'] = d['inventory'] / d['POPESTIMATE2023'].clip(lower=100) * 1000
+    s3 = pct_inv(d['inventory_per_1k'])  # 30%: lower listings per 1k = tighter market
+
     # KNOWN LIMITATION: higher permits = better is a demand-response proxy.
     # Correct metric is permits ÷ projected household formation (permit-gap ratio), but that
     # requires ACS projections, which violates the no-survey-data policy. See METHODOLOGY.md §14.1.
@@ -484,37 +531,37 @@ def score_dim4(df):
     """Quality of Place — 15 pts.
     Crime Rate 35% | Urban Access 40% | Amenity Density 25%
 
-    Crime: FBI NIBRS 2024 violent offenses per 100k residents.
-    Counties without NIBRS coverage receive their RUCC-tier median rate
-    (rural agencies have lower NIBRS participation; tier imputation prevents
-    penalizing rural counties for non-reporting rather than low crime).
+    Crime: FBI NIBRS 2024 violent offenses per 100k residents (UCR Part 1 definition).
+    Counties without NIBRS coverage (nibrs_imputed=1, set in main() before median fill)
+    receive their RUCC-tier median rate so non-reporting is not mistaken for low crime.
     """
     d = df.copy()
 
     # Crime rate per 100k — lower is better
     d['violent_per100k'] = (
-        d['violent_offenses'].fillna(0) /
+        d['violent_offenses'] /
         d['POPESTIMATE2023'].clip(lower=100) * 100_000
     )
 
-    # Impute missing/zero counties with their RUCC-tier median to avoid
-    # penalising non-reporters (many rural agencies don't participate in NIBRS).
+    # Impute non-reporting counties with RUCC-tier median using the nibrs_imputed flag
+    # (set before global median fill in main() so it correctly identifies missing counties)
     d['rucc_tier'] = pd.cut(
         d['rucc'].fillna(5),
         bins=[0, 3, 6, 9],
         labels=['metro', 'micro', 'rural']
     )
     tier_medians = (
-        d[d['violent_offenses'] > 0]
+        d[d['nibrs_imputed'] == 0]
         .groupby('rucc_tier')['violent_per100k']
         .median()
     )
-    mask = d['violent_offenses'].isna() | (d['violent_offenses'] == 0)
+    mask = d['nibrs_imputed'] == 1
     d.loc[mask, 'violent_per100k'] = d.loc[mask, 'rucc_tier'].map(tier_medians)
     d['violent_per100k'] = d['violent_per100k'].fillna(d['violent_per100k'].median())
 
     s1 = pct_inv(d['violent_per100k'])  # 35%: lower crime rate = better
-    s2 = pct_inv(d['rucc'].fillna(5))   # 40%: USDA RUCC urban access
+    s2 = pct_inv(d['rucc'])             # 40%: USDA RUCC — metro counties score higher
+                                         # (metro proximity predicts resale liquidity; see §14)
     d['est_per_1k'] = d['establishments'] / d['POPESTIMATE2023'].clip(lower=100) * 1000
     s3 = pct(d['est_per_1k'])            # 25%: Census CBP amenity density
 
@@ -550,8 +597,8 @@ def score_dim6(df):
     """
     d = df.copy()
     s1 = pct(d['RNETMIG2023'])           # 60%: net migration rate per 1,000 (Census 2023)
-    s2 = pct(d['inmover_income_ratio'])  # 40%: in-mover AGI ÷ out-mover AGI (IRS SOI) — ratio
-                                         # > 1.0 means higher-income people arriving than leaving
+    s2 = pct(d['inmover_income_ratio'])  # 40%: in-mover AGI ÷ out-mover AGI (IRS SOI)
+                                         # ratio > 1.0 means higher-income people arriving than leaving
 
     d['dim6'] = (s1*0.60 + s2*0.40) / 100 * 6
     return d
@@ -559,19 +606,18 @@ def score_dim6(df):
 
 # ── Market Labels ──────────────────────────────────────────────────────────────
 
-# Label thresholds calibrated to the actual score distribution (mean≈50, std≈6.2, range 27–70).
-# Original thresholds (78/68/58/48/38/28/18/0) assumed a wider range than the percentile
-# normalization produces. These recalibrated thresholds span the empirical range.
-# Note: AVOID requires score < 26; empirical floor with FBI NIBRS is ~26.85, so AVOID
-# currently has 0 counties. The 4 SPECULATIVE counties (<30) are the true worst performers.
+# Thresholds calibrated to the empirical score distribution (mean≈50, std≈7.5, range 21–73).
+# v1.2 distribution (post CT-ZHVI fix, UCR Part 1 crime):
+# ACCELERATING (14) · PEAKING (143) · ESTABLISHED (558) · EMERGING (1236) ·
+# FRONTIER (703) · TURNING (152) · SPECULATIVE (12) · AVOID (2)
 LABELS = [
-    (61, 'ACCELERATING'),   # top ~4%: ~100 counties; all signals aligned, prices still defensible
-    (57, 'PEAKING'),        # strong momentum approaching affordability ceiling
-    (51, 'ESTABLISHED'),    # healthy balanced market, sustainable fundamentals
-    (45, 'EMERGING'),       # improving fundamentals, early-mover opportunity
-    (37, 'FRONTIER'),       # below-average market, higher uncertainty
-    (29, 'TURNING'),        # softening demand, watch for continued weakness
-    (24, 'SPECULATIVE'),    # poor fundamentals, momentum-only pricing risk
+    (68, 'ACCELERATING'),   # top ~0.1%: all signals aligned and prices still defensible
+    (62, 'PEAKING'),        # strong momentum approaching affordability ceiling
+    (55, 'ESTABLISHED'),    # healthy balanced market, sustainable fundamentals
+    (46, 'EMERGING'),       # improving fundamentals, early-mover opportunity
+    (38, 'FRONTIER'),       # below-average market, higher uncertainty
+    (30, 'TURNING'),        # softening demand, watch for continued weakness
+    (26, 'SPECULATIVE'),    # poor fundamentals, momentum-only pricing risk
     (0,  'AVOID'),          # systemic weakness across multiple dimensions
 ]
 
@@ -586,46 +632,47 @@ def classify(score):
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main():
-    print("Civica Harvard Scoring Engine v1.0")
+    print("Civica Harvard Scoring Engine v1.2")
     print("=" * 60)
 
-    print("\n[1/13]  Census Population...")
+    print("\n[1/14]  Census Population...")
     pop  = load_population();  print(f"          {len(pop):,} counties")
 
-    print("[2/13]  BEA Income...")
+    print("[2/14]  BEA Income...")
     bea  = load_bea();         print(f"          {len(bea):,} counties")
 
-    print("[3/13]  Zillow Home Values + Inventory...")
-    zil  = load_zillow();      print(f"          {len(zil):,} counties")
+    print("[3/14]  Zillow Home Values + Inventory...")
+    zil, _zhvi_state_hv, _zhvi_state_inv = load_zillow()
+    print(f"          {len(zil):,} counties")
 
-    print("[4/13]  HUD Fair Market Rents...")
+    print("[4/14]  HUD Fair Market Rents...")
     fmr  = load_fmr();         print(f"          {len(fmr):,} FMR areas")
 
-    print("[5/13]  FHFA HPI...")
+    print("[5/14]  FHFA HPI...")
     hpi  = load_hpi();         print(f"          {len(hpi):,} counties")
 
-    print("[6/13]  BLS QCEW...")
+    print("[6/14]  BLS QCEW...")
     qcew = load_qcew();        print(f"          {len(qcew):,} counties")
 
-    print("[7/13]  Census CBP...")
+    print("[7/14]  Census CBP...")
     cbp  = load_cbp();         print(f"          {len(cbp):,} counties")
 
-    print("[8/13]  Census BPS Permits...")
+    print("[8/14]  Census BPS Permits...")
     bps  = load_bps();         print(f"          {len(bps):,} counties")
 
-    print("[9/13]  IRS Migration...")
+    print("[9/14]  IRS Migration...")
     irs  = load_irs();         print(f"          {len(irs):,} counties")
 
-    print("[10/13] FEMA NFIP Claims...")
+    print("[10/14] FEMA NFIP Claims...")
     nfip = load_nfip();        print(f"          {len(nfip):,} counties")
 
-    print("[11/13] NOAA Storm Events...")
+    print("[11/14] NOAA Storm Events...")
     noaa = load_noaa_storm();  print(f"          {len(noaa):,} counties")
 
-    print("[12/13] USFS Wildfire Risk...")
+    print("[12/14] USFS Wildfire Risk...")
     usfs = load_usfs();        print(f"          {len(usfs):,} counties")
 
-    print("[13/13] USDA Rural-Urban Codes...")
+    print("[13/14] USDA Rural-Urban Codes...")
     rucc = load_rucc();        print(f"          {len(rucc):,} counties")
 
     print("[14/14] FBI NIBRS Crime (2024)...")
@@ -642,7 +689,33 @@ def main():
     df = df[df['POPESTIMATE2023'] >= 5_000].copy()
     print(f"  After pop ≥ 5,000 filter: {len(df):,} counties")
 
-    # Fill missing values with national medians so every county gets a score
+    # Flag counties with no NIBRS data BEFORE median fill so score_dim4 can
+    # apply RUCC-tier imputation to the correct counties (not median-filled ones)
+    df['nibrs_imputed'] = df['violent_offenses'].isna().astype(int)
+
+    # Flag counties with no Zillow ZHVI BEFORE any home value imputation.
+    # This flag is exported to county_scores.csv so downstream tools can warn users.
+    df['zhvi_imputed'] = df['median_home_value'].isna().astype(int)
+
+    # State-level ZHVI imputation for counties missing home value data.
+    # Uses state medians from the full Zillow county file (_zhvi_state_hv/_zhvi_state_inv),
+    # which includes old county FIPS that no longer appear in Census (e.g., CT pre-2022
+    # counties 09001-09015). This prevents CT planning regions (09110-09190) from being
+    # imputed with the ~$236k national median when CT's actual median is ~$380k.
+    df['_state'] = df['fips'].str[:2]
+    _hv_miss  = df['zhvi_imputed'] == 1
+    _inv_miss = df['inventory'].isna()
+    df.loc[_hv_miss,  'median_home_value'] = df.loc[_hv_miss,  '_state'].map(_zhvi_state_hv)
+    df.loc[_inv_miss, 'inventory']          = df.loc[_inv_miss, '_state'].map(_zhvi_state_inv)
+    df.drop(columns=['_state'], inplace=True)
+    n_zhvi_state = _hv_miss.sum() - df['median_home_value'].isna().sum()
+    n_zhvi_nat   = df['median_home_value'].isna().sum()
+    if _hv_miss.any():
+        print(f"  ZHVI imputed (state-level): {n_zhvi_state}, (national fallback): {n_zhvi_nat}")
+
+    # Fill remaining missing values with national medians so every county gets a score.
+    # Note: counties with missing inputs receive the median score for those metrics,
+    # not a reduced score. See METHODOLOGY.md §4 for accurate description of this behavior.
     num_cols = df.select_dtypes(include=[np.number]).columns
     medians  = df[num_cols].median()
     df[num_cols] = df[num_cols].fillna(medians)
@@ -668,14 +741,16 @@ def main():
         'dim1', 'dim2', 'dim3', 'dim4', 'dim5', 'dim6',
         # Raw metrics for county report cards
         'median_home_value', 'fmr_2br', 'pr_ratio', 'price_income',
-        'breakeven_yrs', 'hpi_3yr_avg', 'hpi_latest',
+        'breakeven_yrs', 'monthly_piti', 'hpi_3yr_avg', 'hpi_latest',
+        'home_appreciation_total_3yr',  # Zillow total gain ~3.8yr, not annualized
         'per_capita_income', 'income_4yr_growth',
         'private_employment', 'avg_annual_wage', 'sector_quality', 'hhi',
-        'inventory', 'total_permits', 'inmover_income_ratio',
+        'inventory', 'inventory_per_1k', 'total_permits', 'inmover_income_ratio',
         'nfip_per_cap', 'storm_per_cap', 'wildfire_rank',
         'RNETMIG2023', 'RDOMESTICMIG2023', 'rucc',
         'est_per_1k', 'in_hh', 'out_hh',
-        'violent_offenses', 'violent_per100k',
+        'violent_offenses', 'violent_per100k', 'nibrs_imputed',
+        'zhvi_imputed',
     ]
     available = [c for c in out_cols if c in df.columns]
     out = df[available].round(4)

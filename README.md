@@ -1,10 +1,10 @@
 # Civica
 
-Research-grade housing market intelligence for all 3,143 US counties — built entirely on free federal government data.
+Research-grade housing market intelligence for 2,820 US counties (pop ≥ 5,000) — built from 13 federal government datasets plus Zillow ZHVI.
 
 ## What it does
 
-Civica scores every US county on a 100-point scale using a Harvard-style 6-dimension research model. Each score is derived exclusively from federal government sources: no agents, no listings, no advertising, no conflict of interest.
+Civica scores every US county on a 100-point scale using a Harvard-style 6-dimension research model. Each score is derived from 13 federal government sources plus Zillow ZHVI (the only non-federal source, used for county-level median home values and active inventory — no federal equivalent exists at monthly county granularity): no agents, no listings, no advertising, no conflict of interest.
 
 ### The 6 Dimensions
 
@@ -46,7 +46,7 @@ All data is free and publicly available from US federal agencies.
 
 ```
 Civica-2.0/
-├── scoring_engine.py          # Scores all 3,143 counties → county_scores.csv
+├── scoring_engine.py          # Scores 2,820 counties (pop ≥ 5,000) → county_scores.csv
 ├── civica_data_downloader_v4.py  # Downloads all datasets to civica_data/
 ├── harvard_county_profile.html   # County report template
 ├── harvard_model.html            # Methodology explainer page
@@ -83,10 +83,10 @@ Runtime: ~4 minutes. Output: `county_scores.csv` (2,820 counties, 36 columns).
 |---|---|
 | Counties scored | 2,820 |
 | Mean score | 50.0 |
-| Std deviation | 6.24 |
-| Range | 26.9 – 69.5 |
-| Top county | Hamilton County IN (69.5 — ACCELERATING) |
-| Labels active | ACCELERATING (2), PEAKING (57), ESTABLISHED (563), EMERGING (1,463), FRONTIER (634), TURNING (97), SPECULATIVE (4), AVOID (0) |
+| Std deviation | 7.51 |
+| Range | 21.4 – 72.9 |
+| Top county | Lake County IL (72.9 — ACCELERATING) |
+| Labels active | ACCELERATING (14), PEAKING (143), ESTABLISHED (558), EMERGING (1,236), FRONTIER (703), TURNING (152), SPECULATIVE (12), AVOID (2) |
 
 ## Status
 

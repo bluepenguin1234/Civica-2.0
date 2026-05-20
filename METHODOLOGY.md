@@ -88,16 +88,16 @@ The theoretical scale is 0–100. The empirical distribution from v1.2 is:
 | Statistic | Value |
 |---|---|
 | Mean | 50.0 |
-| Standard deviation | 6.24 |
-| Minimum (Clinch County GA) | 26.85 |
-| Maximum (Hamilton County IN) | 69.48 |
-| AVOID counties (score < 26) | 0 |
+| Standard deviation | 7.51 |
+| Minimum (Montgomery County AR) | 21.40 |
+| Maximum (Lake County IL) | 72.94 |
+| AVOID counties (score < 26) | 2 |
 
 **The compression is by design, not a bug.** The six dimensions are positively correlated in the real world. Counties with strong economies also tend to have lower crime, tighter housing markets, and positive migration. The national percentile normalization captures each metric's relative standing, but the correlations between dimensions mean that a county at the 90th percentile on Dim1 is likely also near the 70th–80th percentile on Dim2 and Dim3. There is no county that is simultaneously the best in the country on all six dimensions and the worst on zero — such a county does not exist.
 
-The practical result: the model correctly identifies *relative* differences among counties (Hamilton County IN vs. Clinch County GA is a 43-point spread), but the absolute values do not map to the labels in a naïve way. ACCELERATING does not mean "near 100" — it means "top of the actual distribution."
+The practical result: the model correctly identifies *relative* differences among counties (Lake County IL vs. Montgomery County AR is a 51-point spread), but the absolute values do not map to the labels in a naïve way. ACCELERATING does not mean "near 100" — it means "top of the actual distribution."
 
-The score range also reflects the FBI NIBRS integration added in v1.2. Before NIBRS, the lowest-scoring counties could fall to ~23. NIBRS imputation (RUCC-tier median for non-reporting counties) set a higher floor for rural counties that previously scored near zero on crime simply from the absence of NIBRS data.
+The score range reflects the FBI NIBRS UCR Part 1 crime integration and Zillow ZHVI state-level imputation added in v1.2. The wider standard deviation (7.51 vs. ~6 in earlier versions) comes from restricting violent crime to UCR Part 1 offenses only — removing simple assault (13B) and intimidation (13C) creates greater spread between high-crime and low-crime counties. Two counties (score < 26) fall into the AVOID band; the rest span SPECULATIVE through ACCELERATING.
 
 ---
 
@@ -116,7 +116,7 @@ def pct_inv(s):
 `pct()` is used when higher raw value = better (wages, appreciation, in-mover income quality).  
 `pct_inv()` is used when lower raw value = better (P/R ratio, crime rate, flood claims).
 
-**NaN handling:** Counties missing a metric due to data gaps receive NaN for that percentile. NaN propagates through the dimension calculation, reducing the county's total score proportionally to the weight of the missing metric. There is no artificial imputation of the *score* — only the *raw metric* is imputed (national median or RUCC-tier median, depending on the variable).
+**NaN handling:** Raw numeric metrics with missing values are filled with the national median of scored counties *before* percentile normalization runs. A county missing a metric therefore receives approximately the 50th-percentile score for that metric — neither penalized for the data gap nor boosted above median. Crime rate for non-reporting counties is handled separately: non-reporters receive their RUCC-tier median violent crime rate (benchmarked against rural or urban peers, not against all counties). No NaN values propagate into dimension calculations.
 
 **Missing raw data imputation:**
 - Numeric metrics (home value, wage, income, etc.): national median of scored counties
@@ -151,13 +151,17 @@ The ratio uses BEA per capita personal income (2024 estimate), not household inc
 The number of years a buyer must hold to recoup the cost premium of ownership over renting:
 
 ```
-down_payment = median_home_value × 0.20
-monthly_PITI = P&I (7%, 30yr, 80% LTV) + (home_value × 0.012 / 12) + (home_value × 0.005 / 12)
-monthly_excess = max(monthly_PITI − HUD_2BR_FMR, 1)
-breakeven_years = min(down_payment / (monthly_excess × 12), 30)
+down_payment    = median_home_value × 0.20
+monthly_PITI   = P&I (7%, 30yr, 80% LTV) + (home_value × 0.012 / 12) + (home_value × 0.005 / 12)
+monthly_savings = monthly_PITI − HUD_2BR_FMR
+
+breakeven_years = 0                                              if monthly_savings ≤ 0  (buying ≤ renting from day 1)
+                = min(down_payment / (monthly_savings × 12), 30) otherwise
 ```
 
-Capped at 30 years. Markets where PITI < rent score immediately positive (breakeven ≤ 0 → clipped to 0).
+Capped at 30 years. Markets where PITI ≤ rent receive a breakeven of 0 — buying costs no more than renting, so the holding period to recoup the down payment opportunity cost is immediate.
+
+**Known limitation — formula conservatism:** The breakeven calculation ignores three factors that shorten the effective breakeven: (1) equity buildup — each mortgage payment reduces principal, building ownership stake; (2) expected appreciation — if the home gains value, the down payment is leveraged; (3) mortgage interest deductibility — itemizing homeowners in high-bracket states partially offset PITI costs. These omissions make the formula structurally conservative: the displayed breakeven is an upper bound, not a precise estimate. It is useful for ranking markets relative to each other; it should not be taken as a precise holding-period target.
 
 **Known limitation:** Property tax is hardcoded at 1.2% (national median effective rate). Actual effective rates range from 0.28% (Hawaii) to 2.23% (Illinois, New Jersey, Vermont). This systematically underestimates carrying costs in high-tax states and overstates them in low-tax states. State-level average effective rates are available from the Lincoln Institute of Land Policy. This is a documented improvement for a future version.
 
@@ -174,7 +178,7 @@ Penalizes deviation from the target in either direction: stagnation (<3%) and fr
 ## 6. Dimension 2 — Economic Vitality
 
 **Weight: 22 points**  
-*Is the local economy growing in real terms?*
+*Is the local economy growing?*
 
 | Metric | Intra-weight | Direction | Source |
 |---|---|---|---|
@@ -218,7 +222,7 @@ Standard Herfindahl-Hirschman Index. HHI < 1,500 = diversified; HHI > 2,500 = co
 
 ### Income Growth
 
-BEA per capita personal income growth over 4 years (latest available year vs. 4 years prior). Captures whether real economic conditions are improving. Counties with rising per capita incomes attract both workers and buyers.
+BEA per capita personal income growth over 4 years (latest available year vs. 4 years prior). Captures whether per-capita nominal income is growing. This metric is not inflation-adjusted; a county where incomes grew 5% while prices rose 8% will still score positively. Counties with rising nominal incomes attract both workers and buyers, and nominal growth remains the relevant signal for housing demand (buyers qualify for mortgages based on nominal income).
 
 ---
 
@@ -277,11 +281,15 @@ Violent offenses per 100,000 residents, derived from the FBI NIBRS 2024 National
 
 **Imputation for non-reporting counties:** Counties with no NIBRS-participating agency receive their RUCC-tier median violent crime rate. This prevents rural non-reporters from appearing artificially safe. The imputation is clearly flagged in the `county_scores.csv` output column `nibrs_imputed`.
 
-**Offense code scope:** All NIBRS Group A violent offense codes are included (09A–09C homicide, 11A–11D sex offenses, 120 robbery, 13A–13C assault). Property crimes are excluded.
+**Offense code scope:** UCR Part 1 violent offenses only: 09A (murder/non-negligent manslaughter), 09B (negligent manslaughter), 11A–11D (sex offenses), 120 (robbery), 13A (aggravated assault). Excluded: 09C (justifiable homicide — not a criminal offense), 13B (simple assault), 13C (intimidation). This scope matches the FBI's published violent crime statistics, ensuring Civica rates are comparable to nationally cited benchmarks. Property crimes are excluded.
 
 ### Urban Access (USDA RUCC)
 
 RUCC codes 1–9: 1 = metro area ≥ 1 million; 9 = completely rural, not adjacent to a metro area. `pct_inv()` applied so metro counties score higher. The 40% weight reflects that urban access is the single strongest predictor of long-term real estate liquidity and buyer pool depth.
+
+**Note on what RUCC measures:** RUCC predicts market liquidity — how quickly a property can be sold, how deep the buyer pool is in a downturn, how easily financing can be obtained for rural parcels. It does not directly measure lifestyle quality. A highly rural county can have excellent quality of life (low crime, scenic amenities, low cost) while still scoring poorly on RUCC, because rural properties carry real liquidity risk for buyers who may need to sell on short notice. The "Quality of Place" section name understates this metric's role as a real estate marketability signal rather than a livability score.
+
+**Coverage for non-reporting counties:** Counties with no NIBRS-participating agency are assigned their RUCC-tier median violent crime rate (metro RUCC 1–3, micropolitan RUCC 4–6, rural RUCC 7–9). The `nibrs_imputed` flag in `county_scores.csv` identifies which counties received imputed crime rates. Counties where all participating agencies report zero violent offenses receive an actual rate of 0.0 per 100k — these are distinct from non-reporters and are not imputed.
 
 ### Amenity Density
 
@@ -360,18 +368,18 @@ Every county receives exactly one label based on total score.
 | SPECULATIVE | ≥ 26 | Poor fundamentals. Prices appear disconnected from underlying economics. |
 | AVOID | < 26 | No dimension is working. (0 counties in v1.2 — empirical floor is 26.85.) |
 
-**Label calibration:** Thresholds were set so that each label covers a meaningful, non-trivial fraction of the county distribution. ACCELERATING and PEAKING are intentionally rare (top ~2%); ESTABLISHED and EMERGING cover the core of the distribution. AVOID has 0 counties in v1.2 — the NIBRS integration raised the score floor above the 26-point threshold.
+**Label calibration:** Thresholds were set so that each label covers a meaningful, non-trivial fraction of the county distribution. ACCELERATING and PEAKING are intentionally rare (top ~5.6%); ESTABLISHED and EMERGING cover the core of the distribution. AVOID has 2 counties in v1.2 (Montgomery County AR and Morgan County KY), both scoring below 26 across multiple weak dimensions.
 
 **v1.2 distribution:**
 ```
-ACCELERATING:   2 counties    (0.1%)
-PEAKING:       57 counties    (2.0%)
-ESTABLISHED:  563 counties   (20.0%)
-EMERGING:   1,463 counties   (51.9%)
-FRONTIER:     634 counties   (22.5%)
-TURNING:       97 counties    (3.4%)
-SPECULATIVE:    4 counties    (0.1%)
-AVOID:          0 counties    (0.0%)
+ACCELERATING:  14 counties    (0.5%)
+PEAKING:      143 counties    (5.1%)
+ESTABLISHED:  558 counties   (19.8%)
+EMERGING:   1,236 counties   (43.8%)
+FRONTIER:     703 counties   (24.9%)
+TURNING:      152 counties    (5.4%)
+SPECULATIVE:   12 counties    (0.4%)
+AVOID:          2 counties    (0.1%)
 ```
 
 ---
@@ -446,15 +454,23 @@ This is intentional, not an error. A hot market *should* score well on market dy
 
 The alternative — deviation-based scoring in both Dim1 and Dim3 — would penalize fast-appreciating markets twice and systematically favor slow-growth markets regardless of whether that stability reflects health or stagnation. The current approach is the more informative of the two.
 
-### 14.3 ZHVI Imputation Bias (Known Limitation)
+### 14.3 ZHVI Imputation (State-Level, with Known Residual Bias)
 
-When Zillow has no home value for a county, the national median home value (~$350k as of 2025) is imputed. This creates systematic ratio bias:
+When Zillow has no home value for a county, the scoring engine uses a two-stage imputation:
 
-A rural county with $600/mo FMR rents gets:
-- Imputed P/R = $350,000 / ($600 × 12) = 48.6x (extreme; scores near Dim1 floor)
-- Actual P/R may be $130,000 / ($600 × 12) = 18.1x (national norm)
+1. **State-level median** — computed from all counties in the Zillow file that have valid data for that state. Because Zillow carries historical county FIPS (e.g., pre-2022 Connecticut county FIPS 09001–09015) that may no longer appear in Census population files, this state median is richer than what the merged dataset alone provides.
+2. **National median fallback** — used only if no in-state Zillow data exists at all (very rare).
 
-The correct fix is to impute the P/R ratio directly from comparable counties (same RUCC tier, same state), rather than imputing the numerator alone and letting the ratio distort. This is documented as a future improvement. Counties with imputed ZHVI are flagged in the output; their Dim1 scores should be interpreted with caution.
+**Why state-level matters:** Connecticut restructured from 8 counties to 9 planning regions in 2022. Census now uses the new planning region FIPS (09110–09190); Zillow still carries data for the old county FIPS. Without state-level imputation, all 7+ CT planning regions received the national median (~$236k), severely understating CT's actual median (~$380k) and inflating their Dim1 affordability scores. State-level imputation corrects this by using CT's actual county-level ZHVI distribution as the basis.
+
+**Residual bias:** State-level imputation is better than national but still imperfect. A rural county imputed with its state's median home value may still have a distorted P/R ratio if its local FMR rents differ significantly from the state median:
+
+| Scenario | Imputed P/R | Likely actual P/R |
+|---|---|---|
+| Rural CT county (FMR $900/mo) imputed at CT state median $380k | 35.2x | May be 18–25x |
+| Rural AK county imputed at AK median | Similar distortion |
+
+Counties with imputed ZHVI are flagged in `county_scores.csv` via the `zhvi_imputed` column (1 = imputed). Their Dim1 scores should be interpreted with caution. The correct fix is to impute the P/R ratio directly from comparable counties (same RUCC tier, same state) rather than imputing the numerator alone.
 
 ### 14.4 Nominal Appreciation Target (Known Limitation)
 
@@ -467,6 +483,8 @@ The Appreciation Quality target (5% annual) is nominal. The real implication cha
 | 8% (2022) | -3% real | Severely penalizes counties during high inflation |
 
 The model does not adjust for the inflation environment of the measurement period. During the 2021–2022 inflation episode, a county at 8–9% nominal appreciation was closer to a healthy real target than a county at 5% nominal — but the formula scored them in the opposite direction. A CPI-adjusted version using Federal Reserve H.15 or BLS CPI data would resolve this. The pipeline cost is moderate; this is a candidate for v1.3.
+
+**Vintage correction (self-correcting):** The 3-year appreciation window used by both this metric and Dim3's trend metric rolls forward with each scoring run. As the 2021–2022 high-inflation years age out of the trailing window (they exit the 3-year lookback by 2024–2025 data vintages), the distortion described above diminishes automatically. Counties that were penalized for "too-high" nominal appreciation during peak inflation will see their Appreciation Quality scores improve without any model changes. No manual correction is needed.
 
 ### 14.5 Property Tax Hardcoded at 1.2% (Known Limitation)
 
@@ -508,15 +526,46 @@ The in-mover income quality metric (Dim6) uses average IRS AGI for households fi
 
 The correct fix is to use wage-and-salary income only from the IRS SOI migration file (the data does include this breakout). However, this would exclude the legitimate economic value of retirees with genuinely high investment income. The current implementation is a known upward bias for warm-climate retirement destinations and should be noted when interpreting Dim6 scores for FL, AZ, NV, and SC counties.
 
-### 14.12 Zillow Drives 27% of the Total Score (Single-Source Concentration)
+### 14.12 HHI Excludes Government Employment
+
+The Economic Diversity (HHI) metric is computed from BLS QCEW private-sector NAICS codes only. Government employment (federal, state, and local government — QCEW ownership codes 1–3) is excluded from both the employment share numerator and the HHI calculation.
+
+**Rationale:** Government employment reflects administrative geography rather than market-driven economic structure. A county that hosts a federal military installation, a state capital, or a county administrative center has elevated government employment not because of economic diversification or private-sector health, but because of jurisdictional assignment. Including government workers would artificially inflate diversification scores for these counties and obscure the private-sector concentration that actually determines economic resilience.
+
+**Known limitation:** Government employment is not economically irrelevant. Counties with large public universities, federal research labs (NIH, national laboratories), or military bases have stable, high-wage anchor employers that genuinely reduce economic risk. This stability is partially captured in Dim2 through wage level and sector quality (which include government employees in the BLS QCEW wage data), but the HHI calculation does not credit the stabilizing effect of large government employers.
+
+### 14.13 FHFA HPI Concentration (Single-Series Weight)
+
+FHFA House Price Index data drives three distinct metrics across two dimensions:
+
+| Metric | Dimension | Total score weight |
+|---|---|---|
+| Appreciation Quality (|HPI_avg − 5%|) | Dim1 | 15% × 25% = **3.75%** |
+| 3-Year Appreciation Trend | Dim3 | 35% × 20% = **7.00%** |
+| Current Momentum | Dim3 | 15% × 20% = **3.00%** |
+| **Total FHFA weight** | | **13.75%** |
+
+A single FHFA HPI time series therefore drives 13.75% of every county's total score — comparable to the Zillow concentration documented in §14.12 (27%). Additionally, the 3-year trend and current momentum metrics are correlated by construction (typical r ≈ 0.7–0.9), so the 10% combined Dim3 FHFA weight is not distributed across two truly independent signals. The effective informational contribution is closer to one signal with two time-horizon views.
+
+**Risk implication:** If FHFA expands county coverage, changes its repeat-sales methodology, or revises historical HPI values, up to 13.75% of every county's score will shift simultaneously. Monitor FHFA methodology notes on each scoring run.
+
+### 14.14 Wage Level Without Cost-of-Living Adjustment
+
+Dim2's wage level metric uses BLS QCEW average annual wages without adjusting for local cost of living. Counties with nominally high wages (San Jose CA, San Francisco CA, Manhattan NY) score well on this metric, but the wage premium is largely consumed by housing costs and general cost-of-living differentials that are among the highest in the country.
+
+**The model partially self-corrects:** A high-wage county with extreme home prices will also score poorly on Dim1 (P/I ratio, P/R ratio, breakeven horizon), which partially offsets the inflated Dim2 wage score. The correction is not exact — the offsetting penalties in Dim1 are weighted differently than the wage bonus in Dim2, and the net effect on the composite score can still favor nominally high-wage markets even when real purchasing power is comparable to lower-wage markets.
+
+**User guidance:** Interpret Dim2 wage scores as nominal wage signals, not real purchasing power signals. In coastal high-cost counties, cross-reference the Dim1 score — strong Dim1 + strong Dim2 indicates genuine affordability; weak Dim1 + strong Dim2 indicates high wages consumed by high costs.
+
+### 14.15 Zillow Drives 27% of the Total Score (Single-Source Concentration)
 
 Zillow ZHVI is the only non-federal data source in the model. It influences four distinct metrics:
 
-| Metric | Dimension | Total weight |
+| Metric | Dimension | Approximate total weight |
 |---|---|---|
 | Median home value (numerator of P/R and P/I) | Dim1 | ~15% of Dim1 |
 | Breakeven numerator (down payment = ZHVI × 0.20) | Dim1 | ~6% of Dim1 |
-| Active inventory count | Dim3 | 30% of Dim3 |
+| Active inventory per 1,000 residents | Dim3 | 30% of Dim3 |
 
 Combined, Zillow data directly drives approximately 27% of every county's total score — more than any individual federal source. This creates a data concentration risk: if Zillow changes its methodology, access policy, or file format, a disproportionate share of the model breaks. There is no federal equivalent for county-level median home values at monthly granularity, so this dependency cannot be fully eliminated. It should be disclosed in the methodology and monitored for file availability on each scoring run.
 
