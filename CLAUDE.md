@@ -109,36 +109,181 @@ Civica is the only platform where a homebuyer can look up any US county and get 
 
 ## Design System — Lock These Values
 
-### CSS Variables (use exactly these)
+*This is the Harvard county profile design. It is the only active design direction. Two earlier concepts (4-question buyer card and 4-pillar v2) were explored and discarded — do not revert to them.*
+
+### CSS Variables (all 12 — use exactly these)
 ```css
---blue:   #1a7ff0;   /* primary brand blue — CTAs, links, highlights */
---navy:   #1a3a5c;   /* headings, hero background, logo text */
---green:  #16a34a;   /* positive signals, BUY verdict, ACCELERATING badge */
---yellow: #d97706;   /* caution signals, PEAKING/SPECULATIVE */
---red:    #dc2626;   /* negative signals, AVOID verdict */
---bg:     #f0f2f5;   /* page background */
---white:  #ffffff;   /* card backgrounds */
+:root {
+  --blue:    #1a7ff0;   /* primary brand — CTAs, links, score ring, active tabs */
+  --navy:    #1a3a5c;   /* hero background, headings, logo text, stat values */
+  --green:   #16a34a;   /* positive signals, BUY verdict, ACCELERATING badge */
+  --yellow:  #d97706;   /* caution signals, PEAKING/SPECULATIVE, flat delta */
+  --red:     #dc2626;   /* negative signals, AVOID verdict, bear scenario */
+  --purple:  #7c3aed;   /* supplemental accent — IRS migration signals */
+  --bg:      #f0f2f5;   /* page background (light gray) */
+  --card:    #ffffff;   /* card background */
+  --border:  #e5e7eb;   /* dividers, table borders, card borders */
+  --muted:   #9ca3af;   /* secondary labels, card-title text, meter range labels */
+  --text:    #1f2937;   /* primary body text */
+  --subtext: #6b7280;   /* secondary body text, card-intro, signal body */
+}
 ```
 
 ### Typography
-- Font stack: `-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`
-- Score numbers: font-size 48px+, font-weight 900
-- Section headings: font-weight 800, color var(--navy)
-- Body text: 14-15px, color #374151, line-height 1.55
-- Labels/caps: 11-12px, letter-spacing .07em, text-transform uppercase
+- **Font stack**: `-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif` (system font — no external load)
+- **Score ring number**: 34px, font-weight 900, color #fff (hero ring); 22px weight 900 in score banner SVG
+- **"Top X% Nationally"**: 12px, font-weight 700, color #4ade80 (bright green, below ring)
+- **H1 county name**: 28px, font-weight 900, line-height 1.1, color #fff
+- **Eyebrow labels**: 11px, font-weight 700, letter-spacing .1em, uppercase, color rgba(255,255,255,.4)
+- **Hero sub**: 13px, color rgba(255,255,255,.5)
+- **Card title**: 11px, font-weight 700, uppercase, letter-spacing .08em, color var(--muted)
+- **Card intro text**: 14px, color var(--subtext), line-height 1.65
+- **Stat box value (`.sb-val`)**: 24px, font-weight 800, color var(--navy); `.big` variant = 32px
+- **Stat box label**: 11px, color var(--muted), font-weight 500, line-height 1.3
+- **Delta text**: 12px, font-weight 600 — `.up` green / `.down` red / `.flat` yellow
+- **Body / signal text**: 13px, line-height 1.55, color var(--subtext)
+- **Section headings inside cards**: 12px, font-weight 700, uppercase, letter-spacing .07em, color var(--muted)
+- **Nav links**: 13px, color var(--blue); nav tag: 11px weight 700, bg #f1f5f9, color var(--subtext)
+- **Footer**: 11px, color var(--muted), line-height 1.8, text-align center
 
-### Logo Spec — Never Alter
-- 30×30 blue SVG icon (A-shaped path with crossbar)
-- Logotype: `civi<em>ca</em>` — "ca" in `#1a7ff0` blue, "civi" in `#1a3a5c` navy
-- Apply consistently on every page, every version
+### Logo — Never Alter
+```html
+<svg width="22" height="22" viewBox="0 0 30 30" fill="none">
+  <rect width="30" height="30" rx="6" fill="#1a7ff0"/>
+  <path d="M9 21L15 9L21 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <line x1="11" y1="17" x2="19" y2="17" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
+<span class="logo-text">civi<em>ca</em></span>
+```
+- Blue rounded-rect icon with white A-shape (inverted V + crossbar)
+- Logotype: "civi" in var(--navy) #1a3a5c, "ca" in italic tag at var(--blue) #1a7ff0
+- Font: 17px, font-weight 800
 
-### Key Components
-- **Score ring**: SVG circle, circumference 289.02, stroke-dashoffset = (1 - score/100) × 289.02
-- **Tab navigation**: `.tab-btn.active` + `showTab(name)` JS pattern
-- **Verdict badges**: ACCELERATING=green, PEAKING=yellow, AVOID=red (see full 8-label table)
-- **Score banner**: horizontal strip showing all 6 dimension scores at a glance
-- **Meter bars**: visual 0-100 range bars with national median marker line
-- **Signal cards**: icon + metric name + value + benchmark comparison
+### Nav Bar
+- White background, 52px height, sticky top z-index 200
+- Border-bottom: 1px solid var(--border)
+- Right side: "Research Report" tag chip + "← Back to map" link in blue
+
+### Hero Section
+- Background: var(--navy) `#1a3a5c`
+- Padding: 28px 24px top, 0 bottom (tabs flush to bottom)
+- Left side: eyebrow ("County Research Report · 2026") + H1 county name + sub (RUCC + pop)
+- Right side: score ring (110×110px SVG) + verdict badge (BUY/HOLD/AVOID pill)
+- Score ring: SVG circle r=46, cx=cy=55, circumference=289.02; track stroke rgba(255,255,255,.1); fill stroke #1a7ff0; `stroke-dashoffset = 289.02 × (1 − score/100)`; `stroke-linecap: round`; `transform: rotate(-90deg)` on svg so ring starts at top
+- Verdict pill: `.vb-buy` bg #16a34a / `.vb-hold` bg #d97706 / `.vb-avoid` bg #dc2626; 13px weight 800, border-radius 100px, padding 8px 18px
+
+### Hero Pills (data callouts on navy background)
+```css
+.hero-pill {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 8px;
+  padding: 8px 14px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.hp-lbl { font-size:10px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.06em; font-weight:600; }
+.hp-val { font-size:13px; font-weight:700; }
+/* value colors: .hp-green=#4ade80  .hp-yellow=#fbbf24  .hp-red=#f87171  .hp-white=#fff  .hp-purple=#c4b5fd */
+```
+Pills wrap in a flex row, gap 8px, margin-top 18px, padding-bottom 20px.
+
+### Tab Bar
+- Background: rgba(0,0,0,.25) on top of navy hero — sits flush at hero bottom
+- Tabs: 13px weight 600, color rgba(255,255,255,.5) inactive; #fff active; border-bottom 2px solid var(--blue) active
+- Overflow-x: auto (hidden scrollbar) — mobile horizontal scroll
+- On tab click: panels toggle `.active`, scroll to hero bottom - 52px (nav height)
+
+### Page Layout
+- max-width: 960px, margin: 0 auto, padding: 24px 16px
+- Panels: `display:none` → `display:flex; flex-direction:column; gap:20px` when active
+
+### Cards (`.card`)
+- Background: #fff, border-radius: 14px, padding: 22px
+- Box-shadow: `0 2px 8px rgba(0,0,0,.06)`
+- No border
+
+### Grid System
+```css
+.g2 { grid-template-columns: 1fr 1fr; gap: 16px; }
+.g3 { grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.g4 { grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+/* @media(max-width:640px) → all collapse to 1fr 1fr */
+/* @media(max-width:400px) → all collapse to 1fr */
+```
+
+### Stat Box (`.sb`)
+- Background: #f8fafc, border-radius: 10px, padding: 14px
+- Value: 24px weight 800 var(--navy). Delta: 12px weight 600 with `.up/.down/.flat` color
+
+### Signal Cards (colored callout boxes)
+```css
+.sig-green  { background:#f0fdf4; border:1px solid #bbf7d0; }  /* body: #14532d */
+.sig-yellow { background:#fffbeb; border:1px solid #fde68a; }  /* body: #78350f */
+.sig-red    { background:#fef2f2; border:1px solid #fecaca; }  /* body: #7f1d1d */
+.sig-blue   { background:#eff6ff; border:1px solid #bfdbfe; }  /* body: #1e3a5f */
+.sig-purple { background:#f5f3ff; border:1px solid #ddd6fe; }  /* body: #4c1d95 */
+```
+Structure: `.signal` wrapper (flex, gap 12px) + `.icon` (20px emoji) + `.body` (13px text)
+
+### Score Banner (Thesis tab, top of page)
+```css
+.score-banner {
+  background: linear-gradient(135deg, #1a3a5c 0%, #0f2340 100%);
+  border-radius: 14px; padding: 24px; color: #fff;
+  display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+}
+```
+- Left: 88×88 SVG score ring (same formula, but SVG includes text nodes for score number)
+- Right: thesis heading (17px weight 800) + paragraph (13px rgba(255,255,255,.65)) + `.sbb-items` row
+- `.sbb-item`: bg rgba(255,255,255,.1), border-radius 8px, padding 8px 12px, min-width 90px
+- `.sbb-name`: 10px, rgba(255,255,255,.45), uppercase; `.sbb-val`: 15px weight 800 white; `.sbb-wt`: 10px rgba(255,255,255,.35)
+
+### Valuation Meter Bars
+```css
+.meter-row { display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid #f3f4f6; }
+.meter-lbl { font-size:13px; font-weight:600; color:var(--navy); width:160px; flex-shrink:0; }
+.meter-track { flex:1; background:#f1f5f9; border-radius:100px; height:8px; position:relative; }
+.meter-fill { height:100%; border-radius:100px; background:linear-gradient(to right,#16a34a,#d97706,#dc2626); opacity:.7; }
+.meter-marker { position:absolute; top:-4px; width:2px; height:16px; background:var(--subtext); border-radius:1px; }
+```
+Range labels below track: 10px, color var(--muted), flex space-between.
+
+### Scenario Cards
+```css
+.sc-bull { background:#f0fdf4; border:2px solid #bbf7d0; }   /* green */
+.sc-base { background:#eff6ff; border:2px solid #bfdbfe; }   /* blue */
+.sc-bear { background:#fef2f2; border:2px solid #fecaca; }   /* red */
+```
+Grid: 3 columns (1fr on mobile). Value: 24px weight 900. Label: 11px weight 700 uppercase.
+
+### Bar Chart (industry mix, migration origins)
+```css
+.bar-lbl { font-size:12px; color:var(--subtext); width:140px; text-align:right; }
+.bar-track { flex:1; background:#f1f5f9; border-radius:4px; height:10px; }
+.bar-fill { height:100%; border-radius:4px; background:#1a7ff0; }
+.bar-val { font-size:12px; font-weight:600; color:var(--text); width:60px; }
+```
+
+### Comparables Table
+```css
+.comp-table th { font-size:11px; font-weight:700; uppercase; letter-spacing:.06em; color:var(--muted); border-bottom:1px solid var(--border); }
+.comp-table td { font-size:13px; padding:9px 10px; border-top:1px solid #f3f4f6; }
+.comp-table .hl td { background:#eff6ff; }   /* highlighted "this county" row */
+```
+Tags: `.tag-g` bg #dcfce7 color #15803d / `.tag-y` bg #fef3c7 color #92400e / `.tag-r` bg #fee2e2 color #b91c1c
+
+### CTA Buttons
+```css
+.cta-p { background:var(--blue); color:#fff; }         /* primary */
+.cta-s { background:#fff; color:var(--navy); border:1.5px solid var(--border); } /* secondary */
+/* Both: border-radius 10px, padding 13px, font-size 14px weight 700, flex:1 min-width:150px */
+```
+
+### Sparklines
+- SVG polyline, stroke #1a7ff0 (nominal) or #16a34a dashed (real/adjusted)
+- Gradient fill under nominal line using linearGradient with stop-opacity fade to 0
+- Height: 72px for full charts, 45px for mini trend lines
+- Labels below: 10px, color var(--muted), flex space-between
 
 ---
 
