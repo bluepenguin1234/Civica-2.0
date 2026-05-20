@@ -269,7 +269,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 
     <!-- Search bar below map -->
     <div class="search-section">
-      <div class="search-label">Search any county</div>
+      <div class="search-label">Search by county or state</div>
       <div class="search-wrap">
         <div class="search-icon-wrap">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.2" stroke-linecap="round">
@@ -277,7 +277,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           </svg>
         </div>
         <input class="search-input" id="searchInput" type="text"
-          placeholder="Search by county name or state (e.g. Hamilton, TN)..."
+          placeholder="Try &quot;Indiana&quot; or &quot;Hamilton County&quot;..."
           oninput="handleSearch(this.value)"
           onfocus="handleSearch(this.value)"
           autocomplete="off">
@@ -445,15 +445,63 @@ function initMap(counties) {
     });
 }
 
+const STATE_NAMES = {
+  'AL':'Alabama','AK':'Alaska','AZ':'Arizona','AR':'Arkansas','CA':'California',
+  'CO':'Colorado','CT':'Connecticut','DE':'Delaware','DC':'District of Columbia',
+  'FL':'Florida','GA':'Georgia','HI':'Hawaii','ID':'Idaho','IL':'Illinois',
+  'IN':'Indiana','IA':'Iowa','KS':'Kansas','KY':'Kentucky','LA':'Louisiana',
+  'ME':'Maine','MD':'Maryland','MA':'Massachusetts','MI':'Michigan','MN':'Minnesota',
+  'MS':'Mississippi','MO':'Missouri','MT':'Montana','NE':'Nebraska','NV':'Nevada',
+  'NH':'New Hampshire','NJ':'New Jersey','NM':'New Mexico','NY':'New York',
+  'NC':'North Carolina','ND':'North Dakota','OH':'Ohio','OK':'Oklahoma',
+  'OR':'Oregon','PA':'Pennsylvania','RI':'Rhode Island','SC':'South Carolina',
+  'SD':'South Dakota','TN':'Tennessee','TX':'Texas','UT':'Utah','VT':'Vermont',
+  'VA':'Virginia','WA':'Washington','WV':'West Virginia','WI':'Wisconsin','WY':'Wyoming'
+};
+
+function detectState(q) {
+  const upper = q.trim().toUpperCase();
+  if (STATE_NAMES[upper]) return upper;
+  const lower = q.trim().toLowerCase();
+  return Object.keys(STATE_NAMES).find(k => STATE_NAMES[k].toLowerCase().startsWith(lower)) || null;
+}
+
 function handleSearch(val) {
   const drop = document.getElementById('searchDrop');
   if (!val.trim() || !COUNTIES.length) { drop.className = 'search-dropdown'; return; }
+
+  const stateAbbr = detectState(val);
+  if (stateAbbr) {
+    const stateName = STATE_NAMES[stateAbbr];
+    const stateCounties = COUNTIES.filter(c => c.state === stateAbbr);
+    const top = stateCounties.slice(0, 7);
+    drop.innerHTML =
+      `<div class="sd-row" onclick="window.location='output/states/${stateAbbr}.html'" style="background:#f0f6ff;border-bottom:2px solid #dbeafe;">
+        <div class="sd-left">
+          <div class="sd-name" style="color:#1a7ff0;">📍 All counties in ${stateName}</div>
+          <div class="sd-meta">${stateCounties.length} counties scored — view full state report</div>
+        </div>
+        <div style="color:#1a7ff0;font-size:12px;font-weight:700;white-space:nowrap;">View all →</div>
+      </div>` +
+      top.map(c => `
+      <div class="sd-row" onclick="window.location='output/counties/${c.fips}.html'">
+        <div class="sd-left">
+          <div class="sd-name">${c.name}, ${c.state}</div>
+          <div class="sd-meta">Score ${c.score.toFixed(1)} · Rank #${c.rank}</div>
+        </div>
+        <div class="sd-right">
+          <span class="sd-score">${c.score.toFixed(0)}</span>
+          <span class="sd-label lbadge ${SIGNAL_CLASS[c.signal]||'lb-watch'}">${c.signal}</span>
+        </div>
+      </div>`).join('');
+    drop.className = 'search-dropdown open';
+    return;
+  }
+
   const q = val.toLowerCase();
-  const hits = COUNTIES.filter(c =>
-    c.name.toLowerCase().includes(q) || c.state.toLowerCase().includes(q)
-  ).slice(0, 6);
+  const hits = COUNTIES.filter(c => c.name.toLowerCase().includes(q)).slice(0, 6);
   if (!hits.length) {
-    drop.innerHTML = `<div style="padding:14px 18px;color:#9ca3af;font-size:13px;">No results for "${val.trim()}" — try a state abbreviation (e.g. TN, IN)</div>`;
+    drop.innerHTML = `<div style="padding:14px 18px;color:#9ca3af;font-size:13px;">No results for "${val.trim()}"</div>`;
     drop.className = 'search-dropdown open';
     return;
   }
