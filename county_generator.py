@@ -440,7 +440,7 @@ def build_hero(row, county_name: str, state: str, rucc_label: str) -> str:
     </div>
     <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
       <div class="score-hero">
-        <div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">Civica Score</div>
+        <div class="score-lbl" style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">Civica Score</div>
         <div class="sh-ring">
           <svg viewBox="0 0 110 110">
             <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="9"/>
@@ -462,12 +462,12 @@ def build_hero(row, county_name: str, state: str, rucc_label: str) -> str:
   </div>
 
   <div class="hero-pills">
-    <div class="hero-pill"><span class="hp-lbl">Monthly Cost (PITI)</span><span class="hp-val hp-white">{money(piti)}/mo</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Monthly Cost</span><span class="hp-val hp-white">{money(piti)}/mo</span></div>
     <div class="hero-pill"><span class="hp-lbl">Home Value</span><span class="hp-val hp-white">{money(row['median_home_value'])}</span></div>
-    <div class="hero-pill"><span class="hp-lbl">3yr Appreciation (FHFA)</span><span class="hp-val {hpi_col}">{hpi:+.1f}% / yr</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Breakeven Horizon</span><span class="hp-val {be_col}">{be:.1f} years</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Appreciation</span><span class="hp-val {hpi_col}">{hpi:+.1f}%/yr</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Breakeven</span><span class="hp-val {be_col}">{be:.1f} yrs</span></div>
     <div class="hero-pill"><span class="hp-lbl">Net Migration</span><span class="hp-val {mig_col}">{netmig:+,} HH</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Price-to-Rent Ratio</span><span class="hp-val {pr_col}">{pr:.1f}x</span></div>
+    <div class="hero-pill"><span class="hp-lbl">P/R Ratio</span><span class="hp-val {pr_col}">{pr:.1f}x</span></div>
   </div>
 </div>'''
 
