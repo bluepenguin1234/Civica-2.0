@@ -65,16 +65,23 @@ def parse_damage(v):
 # ── Data Loaders ───────────────────────────────────────────────────────────────
 
 def load_population():
-    """Census Population Estimates 2023 — base universe of counties."""
+    """Census Population Estimates 2025 — base universe of counties."""
     df = pd.read_csv(
-        f'{DATA}/census_population/co-est2023-alldata.csv',
+        f'{DATA}/census_population/co-est2025-alldata.csv',
         encoding='latin1'
     )
     df = df[df['SUMLEV'] == 50].copy()  # county level only
     df['fips'] = df.apply(lambda r: to_fips5(r['STATE'], r['COUNTY']), axis=1)
-    return df[['fips', 'POPESTIMATE2023', 'RNETMIG2023',
-               'RDOMESTICMIG2023', 'RINTERNATIONALMIG2023',
-               'NETMIG2023', 'DOMESTICMIG2023']].dropna(subset=['fips'])
+    # Build output explicitly from 2025 vintage columns to avoid duplicate-column
+    # conflicts (the file also contains POPESTIMATE2023 as a historical column).
+    out = pd.DataFrame({'fips': df['fips']})
+    out['POPESTIMATE2023']       = df['POPESTIMATE2025'].values
+    out['RNETMIG2023']           = df['RNETMIG2025'].values
+    out['RDOMESTICMIG2023']      = df['RDOMESTICMIG2025'].values
+    out['RINTERNATIONALMIG2023'] = df['RINTERNATIONALMIG2025'].values
+    out['NETMIG2023']            = df['NETMIG2025'].values
+    out['DOMESTICMIG2023']       = df['DOMESTICMIG2025'].values
+    return out.dropna(subset=['fips'])
 
 
 def load_bea():
@@ -181,12 +188,15 @@ def load_hpi():
 
 
 def load_qcew():
-    """BLS QCEW 2023: wages, employment size, sector quality score, HHI."""
-    print("    Streaming BLS QCEW (531 MB)...")
+    """BLS QCEW wages, employment size, sector quality score, HHI. Uses 2024 if available, falls back to 2023."""
+    qcew_2024 = f'{DATA}/bls_qcew/2024.annual.singlefile.csv'
+    qcew_2023 = f'{DATA}/bls_qcew/2023.annual.singlefile.csv'
+    qcew_path = qcew_2024 if os.path.exists(qcew_2024) else qcew_2023
+    print(f"    Streaming BLS QCEW ({os.path.basename(qcew_path)})...")
     totals, sectors = [], []
 
     for chunk in pd.read_csv(
-        f'{DATA}/bls_qcew/2023.annual.singlefile.csv',
+        qcew_path,
         chunksize=500_000,
         dtype={'area_fips': str, 'industry_code': str}
     ):
@@ -256,7 +266,7 @@ def load_qcew():
 def load_cbp():
     """Census CBP 2022: total establishments per county (amenity density proxy)."""
     print("    Reading Census CBP (106 MB)...")
-    df = pd.read_csv(f'{DATA}/census_cbp/cbp22co.txt', dtype=str, low_memory=False)
+    df = pd.read_csv(f'{DATA}/census_cbp/cbp23co.txt', dtype=str, low_memory=False)
     df['fips'] = df['fipstate'].str.zfill(2) + df['fipscty'].str.zfill(3)
     total = df[df['naics'] == '------'][['fips', 'est']].copy()
     total['establishments'] = pd.to_numeric(total['est'], errors='coerce')
@@ -270,7 +280,7 @@ def load_bps():
     #        6=1unit_bldg, 7=1unit_units, 8=1unit_val
     #        9=2unit_bldg, 10=2unit_units, ...  15=5+unit_bldg, 16=5+unit_units
     df = pd.read_csv(
-        f'{DATA}/census_bps/co2022a.txt',
+        f'{DATA}/census_bps/co2025a.txt',
         skiprows=3, header=None, dtype=str
     )
     df = df.dropna(subset=[1])  # drop blank rows
@@ -316,7 +326,7 @@ def load_irs():
 
 
 def load_nfip():
-    """FEMA NFIP: flood insurance claims paid, 2014-2023 (10-year window)."""
+    """FEMA NFIP: flood insurance claims paid, 2015-2024 (10-year window)."""
     df = pd.read_csv(
         f'{DATA}/fema_nfip/fema_nfip_claims.csv',
         dtype={'countyCode': str},
@@ -329,7 +339,7 @@ def load_nfip():
     )
     if 'yearOfLoss' in df.columns:
         df['yr'] = pd.to_numeric(df['yearOfLoss'], errors='coerce')
-        df = df[df['yr'].between(2014, 2023)]  # enforce documented 10-year window
+        df = df[df['yr'].between(2015, 2024)]  # enforce documented 10-year window
     return df.groupby('fips')['paid'].sum().reset_index().rename(columns={'paid': 'nfip_claims'})
 
 
@@ -341,9 +351,9 @@ def load_noaa_storm():
     for fn in sorted(os.listdir(storm_dir)):
         if not fn.endswith('.csv'):
             continue
-        # Only include files for years in the documented 5-year window (2019-2023)
+        # Only include files for years in the documented 5-year window (2020-2024)
         # NOAA filenames follow pattern: StormEvents_details-ftp_v1.0_d{YYYY}_*.csv
-        if not any(f'_d{y}_' in fn for y in range(2019, 2024)):
+        if not any(f'_d{y}_' in fn for y in range(2020, 2025)):
             continue
         df = pd.read_csv(
             f'{storm_dir}/{fn}',
