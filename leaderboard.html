@@ -86,11 +86,58 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
 footer { background:#111827; padding:40px 28px; text-align:center; margin-top:48px; }
 footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.85; max-width:720px; margin:0 auto; }
 
+@media (max-width:860px) {
+  .nav-links a:nth-child(2),
+  .nav-links a:nth-child(3) { display:none; }
+}
 @media (max-width:660px) {
-  .hero-h { font-size:34px; }
-  .insight-strip { grid-template-columns:1fr 1fr; }
-  .tab-strip { gap:6px; }
-  .tab-btn { font-size:12px; padding:7px 14px; }
+  /* Nav */
+  .nav { padding:0 16px; }
+
+  /* Hero */
+  .hero { padding:36px 16px 44px; }
+  .hero-h { font-size:26px; line-height:1.15; }
+  .hero-eyebrow { font-size:10px; margin-bottom:10px; }
+  .hero-sub { font-size:13px; margin-bottom:20px; line-height:1.6; }
+  .hero-stats { display:grid; grid-template-columns:1fr 1fr; gap:16px 20px; }
+  .hs-num { font-size:22px; }
+  .hs-lbl { font-size:11px; }
+
+  /* Page */
+  .page { padding:20px 12px; }
+
+  /* Insight strip — single column */
+  .insight-strip { grid-template-columns:1fr; gap:10px; margin-bottom:20px; }
+  .insight-card { padding:16px 18px; }
+  .ic-num { font-size:22px; }
+
+  /* Tab strip — horizontal scroll, no wrap */
+  .tab-strip { flex-wrap:nowrap; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch; scrollbar-width:none; gap:6px; }
+  .tab-strip::-webkit-scrollbar { display:none; }
+  .tab-btn { white-space:nowrap; flex-shrink:0; font-size:12px; padding:7px 14px; }
+
+  /* Section headings */
+  .section-h { font-size:18px; }
+  .section-sub { font-size:13px; }
+
+  /* Table — hide last 3 columns (Median Price, HPI 3yr, Avg Wage) */
+  .lb-table th:nth-child(n+5),
+  .lb-table td:nth-child(n+5) { display:none; }
+  .lb-table { font-size:12px; }
+  .lb-table th { padding:10px 8px; font-size:10px; }
+  .lb-table td { padding:10px 8px; }
+  .cname { font-size:13px; }
+  .cstate-lbl { font-size:10px; }
+  .sc-circ { width:28px; height:28px; font-size:10px; }
+  .sc-num { font-size:12px; }
+  .lbadge { font-size:9px; padding:2px 7px; }
+  .rk { font-size:13px; }
+
+  /* Load more / browse button */
+  .load-more { font-size:13px; }
+
+  /* Footer */
+  footer { padding:28px 16px; margin-top:32px; }
 }
 </style>
 </head>
