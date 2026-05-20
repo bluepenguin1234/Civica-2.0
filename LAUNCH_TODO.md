@@ -7,7 +7,9 @@
 
 | Done | Item |
 |---|---|
-| ✅ | Scoring engine — 2,820 counties scored, `county_scores.csv` complete |
+| ✅ | Scoring engine — 2,820 counties scored, `county_scores.csv` complete (mean=50.0, std=6.24, range 26.9–69.5) |
+| ✅ | FBI NIBRS 2024 integrated — violent crime per 100k in Dim4; 21,068 agencies, 49 states, 2,869 counties |
+| ✅ | All 14 datasets active (13 federal + Zillow) — no placeholders or imputed dimensions |
 | ✅ | County report template — `harvard_county_profile.html` |
 | ✅ | Methodology page — `harvard_model.html` |
 | ✅ | GitHub repo — Civica-2.0 initialized |
@@ -33,6 +35,7 @@
 - [ ] Generate `output/index.json` — array of all 2,820 counties with score, label, name, state, key metrics — this powers the front page search and filter
 - [ ] Add color coding: green/yellow/red for each pill based on national percentile
 - [ ] Write a summary "thesis" sentence per county driven by its top 2 signal strengths and top 1 risk
+- [ ] Surface crime signal on county page: add a "Safety" pill showing `violent_per100k` (from `county_scores.csv`) with national percentile context. Mark imputed counties with a small note ("Based on regional average — agency did not report to NIBRS").
 - [ ] Test 10 representative counties across score range before full run (check Palm Beach FL, Cook IL, Newton AR, Manhattan NY)
 - [ ] Run full generation — all 2,820 files
 
@@ -278,8 +281,9 @@
 
 ### 6.2 Data & Accuracy Disclosures
 - [ ] Add a "Data as of" date on every county page (scoring engine last run: date)
-- [ ] Add the known limitations note from CLAUDE.md: "FHFA covers ~2,900 of 3,143 counties. Missing counties receive median imputation."
+- [ ] Add the known limitations note from CLAUDE.md: "FHFA covers ~2,800 of 3,143 counties. Missing counties receive median imputation."
 - [ ] Note that QCEW has an 18-month lag — economic vitality scores reflect 2023 data
+- [ ] Note that NIBRS covers ~2,869 of 2,820 scored counties; rural counties without a participating agency receive their RUCC-tier median rate (not actual crime data)
 - [ ] Link to every raw data source cited in the report (builds trust, helps SEO, is the right thing to do)
 
 ---
