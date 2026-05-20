@@ -554,7 +554,7 @@ def build_thesis_panel(row, county_name: str) -> str:
 
   <div class="signal {sig_class}">
     <div class="icon">{sig_icon}</div>
-    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> {county_name} is a <strong>{verdict_short}</strong>. {verdict_body} Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, Zillow ZHVI.</div>
+    <div class="body" style="font-size:14px;"><strong>Civica Research Verdict:</strong> {county_name} is a <strong>{verdict_short}</strong>. {verdict_body} Data sources: FHFA HPI, BLS QCEW, BEA, FBI NIBRS, FEMA NFIP, Census, IRS SOI, HUD FMR, ACS 5-yr.</div>
   </div>
 
   </div></div></div>
@@ -674,14 +674,14 @@ def build_supply_panel(row, county_name: str) -> str:
     ratio    = row['inmover_income_ratio']
     inc_prem = (ratio - 1) * 100
     rnet     = row['RNETMIG2023']
-    inv      = int(row['inventory']) if not pd.isna(row['inventory']) else 0
+    hpi_now  = row['hpi_latest']
 
     supply_sig = 'sig-green' if permits > 0 and net_hh > 0 else 'sig-yellow'
     supply_icon = '🏗️' if net_hh > 0 else '⚠️'
     supply_body = (
         f'New construction ({permits:,} units permitted) is {"responding to" if permits > net_hh else "lagging"} demand. '
         f'Net household in-migration of {net_hh:+,} households (IRS SOI). '
-        f'Zillow active inventory: {inv:,} listings as of latest available month.'
+        f'FHFA HPI current momentum: {hpi_now:+.1f}% latest annual change.'
     )
 
     mig_sig = 'sig-purple' if ratio >= 1.0 else 'sig-yellow'
@@ -704,7 +704,7 @@ def build_supply_panel(row, county_name: str) -> str:
     <div class="g3" style="margin-bottom:20px;">
       <div class="sb"><div class="sb-val">{net_hh:+,}</div><div class="sb-lbl">Net households (IRS, 2022-23)</div><div class="sb-delta {'up' if net_hh > 0 else 'down'}">{'In-migration positive' if net_hh > 0 else 'Net out-migration'}</div></div>
       <div class="sb"><div class="sb-val">{permits:,}</div><div class="sb-lbl">Units permitted (Census BPS 2022)</div><div class="sb-delta flat">New supply pipeline</div></div>
-      <div class="sb"><div class="sb-val">{inv:,}</div><div class="sb-lbl">Active listings (Zillow, latest)</div><div class="sb-delta flat">Current for-sale inventory</div></div>
+      <div class="sb"><div class="sb-val">{hpi_now:+.1f}%</div><div class="sb-lbl">FHFA HPI (latest year)</div><div class="sb-delta {'up' if hpi_now > 3 else ('flat' if hpi_now >= 0 else 'down')}">Current momentum signal</div></div>
     </div>
     <div class="signal {supply_sig}">
       <div class="icon">{supply_icon}</div>
@@ -1060,7 +1060,7 @@ renderTray();
 
 FOOTER_HTML = '''<div class="footer">
   Data as of Q1 2026 (scoring engine last run May 2026). BLS QCEW reflects 2023 annual data (18-month publication lag). FHFA HPI through Q4 2025. FBI NIBRS 2024 National Master File.<br>
-  All data: IRS SOI · FHFA HPI · BLS QCEW · BEA · FBI NIBRS 2024 · FEMA NFIP · NOAA Storm Events · USFS Wildfire Risk · USDA RUCC · HUD FMR FY2026 · Census Population Estimates · Zillow ZHVI<br>
+  All data: IRS SOI · FHFA HPI · BLS QCEW · BEA · FBI NIBRS 2024 · FEMA NFIP · NOAA Storm Events · USFS Wildfire Risk · USDA RUCC · HUD FMR FY2026 · Census Population Estimates · ACS 5-yr (B25077)<br>
   Scenarios are illustrative projections, not guarantees. Breakeven assumes 11% total transaction cost and current appreciation rate. P/I uses BEA per capita income (not household income).<br><br>
   <strong>civi<em style="font-style:normal;color:#1a7ff0;">ca</em></strong> — research-grade county intelligence for homebuyers
 </div>'''
@@ -1301,7 +1301,7 @@ def build_state_page(state: str, counties: list, template_style: str) -> str:
   </div>
 
   <div class="footer">
-    Data: FHFA HPI · BLS QCEW · BEA · FBI NIBRS 2024 · FEMA NFIP · NOAA Storm Events · USFS Wildfire · USDA RUCC · HUD FMR · IRS SOI · Census · Zillow ZHVI<br>
+    Data: FHFA HPI · BLS QCEW · BEA · FBI NIBRS 2024 · FEMA NFIP · NOAA Storm Events · USFS Wildfire · USDA RUCC · HUD FMR · IRS SOI · Census · ACS 5-yr<br>
     Civica scores are for informational purposes only. Not financial, investment, or real estate advice. &copy; 2026 Civica.
   </div>
 </div>

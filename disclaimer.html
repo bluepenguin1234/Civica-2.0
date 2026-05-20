@@ -71,7 +71,7 @@ td { padding:11px 14px; border-bottom:1px solid #f3f4f6; }
     <tbody>
       <tr><td>Property tax hardcoded at 1.2% national median</td><td>Monthly PITI can be off by up to $340/mo at $400k home value in high/low-tax states</td><td>State-level effective rates (v1.3)</td></tr>
       <tr><td>FHFA coverage: ~2,800 of 3,143 counties</td><td>Missing counties receive median-score imputation; results are less precise</td><td>AVM data expansion</td></tr>
-      <tr><td>Inventory: raw listing count, not months of supply</td><td>Supply-demand signal is directional only; not directly comparable to industry benchmarks</td><td>Zillow sales-count file (v1.3)</td></tr>
+      <tr><td>Permit pipeline used as supply proxy (not permit-gap ratio)</td><td>High-permit counties score well even if permits exceed household formation; correct metric requires ACS projections</td><td>ACS household formation projections (v1.4)</td></tr>
       <tr><td>IRS AGI data: retirement destination bias</td><td>FL/AZ/NV/SC counties with large retiree flows may show inflated in-mover income quality</td><td>Age-segmented migration data</td></tr>
       <tr><td>BLS QCEW: 18-month data lag</td><td>Economic vitality scores reflect 2023 data; recent job losses or gains may not be captured</td><td>Quarterly updates</td></tr>
       <tr><td>FBI NIBRS: not all agencies report</td><td>Counties with low reporting rates receive RUCC-tier median — not actual crime data</td><td>Imputed counties are noted in the scoring engine</td></tr>
@@ -99,7 +99,7 @@ td { padding:11px 14px; border-bottom:1px solid #f3f4f6; }
   <p>These are Civica's shorthand for score tiers (BUY ≥ 58/100, HOLD 38–57, AVOID &lt; 38), not personalized investment recommendations. A county labeled AVOID may be an excellent choice for some buyers; a county labeled BUY may be wrong for others. The label reflects relative fundamentals, not an instruction to transact.</p>
 
   <h2>Source Data Licenses</h2>
-  <p>Federal government data (FHFA, BLS, BEA, FBI, FEMA, NOAA, Census, HUD, USDA, IRS) is in the public domain. Zillow ZHVI data is used pursuant to Zillow's data terms. All source data attribution is provided on each county report page.</p>
+  <p>All data sources (FHFA, BLS, BEA, FBI, FEMA, NOAA, Census Bureau, HUD, USDA, IRS) are US federal government data in the public domain. Source attribution is provided on each county report page.</p>
 </div>
 
 <footer class="footer">

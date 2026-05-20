@@ -222,7 +222,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
         <div class="dim-icon">🏗️</div>
         <div class="dim-body">
           <div class="dim-name">Market Dynamics <span class="dim-wt">20%</span></div>
-          <div class="dim-desc">What is the housing market doing? 3-year appreciation trend, current momentum, inventory tightness, and permit pipeline — is supply keeping up with demand?</div>
+          <div class="dim-desc">What is the housing market doing? 3-year appreciation trend, current momentum, and permit pipeline — two FHFA price signals at different time horizons plus the supply-side check.</div>
         </div>
         <div class="dim-pts"><div class="dim-pts-val">20</div><div class="dim-pts-lbl">max pts</div></div>
       </div>
@@ -347,8 +347,8 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
         <div class="metric-name">💰 Affordability &amp; Value — 25%</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--subtext);">
-        <div><strong style="color:var(--navy);">Price-to-rent ratio</strong> (30%) — Zillow ZHVI ÷ HUD Fair Market Rent × 12. National norm: 15–18x. The core valuation signal.</div>
-        <div><strong style="color:var(--navy);">Price-to-income ratio</strong> (30%) — Zillow ZHVI ÷ BEA per capita income. Uses per-capita income, so ratios appear higher than the commonly cited 4.2× norm (which uses household income).</div>
+        <div><strong style="color:var(--navy);">Price-to-rent ratio</strong> (30%) — ACS 5-yr median home value ÷ HUD Fair Market Rent × 12. National norm: 15–18x. The core valuation signal.</div>
+        <div><strong style="color:var(--navy);">Price-to-income ratio</strong> (30%) — ACS 5-yr median home value ÷ BEA per capita income. Uses per-capita income, so ratios appear higher than the commonly cited 4.2× norm (which uses household income).</div>
         <div><strong style="color:var(--navy);">Buy vs. rent breakeven</strong> (25%) — Down payment (20%) ÷ (monthly PITI − HUD 2BR FMR) × 12. Assumes 7% 30-yr fixed, 1.2% property tax, 0.5% insurance. Shorter is better.</div>
         <div><strong style="color:var(--navy);">Appreciation quality</strong> (15%) — FHFA 3-yr avg annual HPI change. Deviation from a 3–7% healthy range is penalized in both directions.</div>
       </div>
@@ -371,10 +371,9 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
         <div class="metric-name">🏗️ Market Dynamics — 20%</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--subtext);">
-        <div><strong style="color:var(--navy);">3-year appreciation trend</strong> (35%) — FHFA HPI 3-yr average annual change. Sustained appreciation signals genuine underlying demand.</div>
-        <div><strong style="color:var(--navy);">Current momentum</strong> (15%) — FHFA HPI latest annual change. Cross-validates the trend signal using a different time window.</div>
-        <div><strong style="color:var(--navy);">Inventory tightness</strong> (30%) — Zillow active listing count (percentile-inverted). Lower inventory relative to other counties = tighter market.</div>
-        <div><strong style="color:var(--navy);">Permit pipeline</strong> (20%) — Census BPS new units permitted. Measures whether supply is responding to demand.</div>
+        <div><strong style="color:var(--navy);">3-year appreciation trend</strong> (50%) — FHFA HPI 3-yr average annual change. Sustained appreciation signals genuine underlying demand. Dominant signal in this dimension.</div>
+        <div><strong style="color:var(--navy);">Current momentum</strong> (20%) — FHFA HPI latest annual change. Cross-validates the trend signal using a different time window; detects deceleration or acceleration in progress.</div>
+        <div><strong style="color:var(--navy);">Permit pipeline</strong> (30%) — Census BPS new units permitted. The supply-side counter-signal: measures whether new housing is responding to demand pressure.</div>
       </div>
     </div>
 
@@ -433,7 +432,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
         <div class="metric-name">Price-to-Rent Ratio</div>
         <span class="metric-tag">PROPRIETARY</span>
       </div>
-      <div class="metric-formula"><strong>Formula:</strong> Zillow ZHVI ÷ (HUD Fair Market Rent × 12)</div>
+      <div class="metric-formula"><strong>Formula:</strong> ACS 5-yr median home value ÷ (HUD Fair Market Rent × 12)</div>
       <div class="metric-why"><strong>Why it matters:</strong> The single most useful valuation check in real estate. Under 15× = buying is clearly cheaper than renting. 15–20× = fair value. Over 20× = you're paying a premium to own. Over 25× = the market is pricing in significant future appreciation that may not materialize.</div>
     </div>
 
@@ -496,7 +495,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
   </div>
   <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
-  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">14 datasets, all federal, all free. Every score in Civica is replicable from public data. Zillow ZHVI is the only non-federal source — used because no federal dataset provides county-level median home values at monthly granularity.</div>
+  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">14 datasets, all federal, all free. Every score in Civica is replicable from public data. As of v1.3, median home values are sourced from ACS 5-year (B25077) — making the model 100% federal.</div>
 
   <div style="overflow-x:auto;">
     <table class="src-table">
@@ -515,7 +514,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
         <tr><td><div class="src-name">Census County Business Patterns (CBP)</div><div class="src-sub">2022</div></td><td>Census</td><td>Private establishments per 1,000 residents — amenity density (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
         <tr><td><div class="src-name">USDA Rural-Urban Continuum Codes 2023</div><div class="src-sub">RUCC 1–9</div></td><td>USDA</td><td>Urban access score; crime rate peer-tier comparisons (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
         <tr><td><div class="src-name">HUD Fair Market Rents FY2026</div><div class="src-sub">2-bedroom FMR</div></td><td>HUD</td><td>Price-to-rent ratio; buy-vs-rent breakeven (Dim 1)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">Zillow ZHVI — County</div><div class="src-sub">Through Q1 2026</div></td><td>Zillow</td><td>Median home value; active inventory count (Dim 1 &amp; 3) — only non-federal source</td><td><span class="tag-prop">Private</span></td></tr>
+        <tr><td><div class="src-name">ACS 5-Year — B25077</div><div class="src-sub">2019–2023</div></td><td>Census Bureau</td><td>Median home value by county (Dim 1) — sole home-value source; no federal administrative equivalent exists</td><td><span class="tag-free">Free</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -538,7 +537,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
 
   <div class="faq-item">
     <div class="faq-q">Why are only 2,820 counties scored, not all 3,143?</div>
-    <div class="faq-a">The 324 excluded counties all have population under 5,000. Counties that small have no Zillow data, suppressed QCEW employment figures, and often no FHFA HPI history. Their scores would be entirely imputed medians — not real signal. If you search a county under 5,000 residents, Civica will tell you why it's excluded rather than show a misleading score.</div>
+    <div class="faq-a">The 324 excluded counties all have population under 5,000. Counties that small have suppressed QCEW employment figures and often no FHFA HPI history. Their scores would be nearly entirely imputed medians — not real signal. If you search a county under 5,000 residents, Civica will tell you why it's excluded rather than show a misleading score.</div>
   </div>
 
   <div class="faq-item">
