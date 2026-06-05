@@ -181,6 +181,8 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.85; max-wi
     <div class="insight-card"><div class="ic-num" id="topWage">—</div><div class="ic-lbl">Average annual wage in the top 100</div></div>
   </div>
 
+  <div id="weightBar" style="margin-bottom:22px;"></div>
+
   <div class="tab-strip">
     <button class="tab-btn active" onclick="setView('top100',this)">Top 100</button>
     <button class="tab-btn" onclick="setView('strongbuy',this)">Strong Buy Markets</button>
@@ -189,6 +191,7 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.85; max-wi
     <button class="tab-btn" onclick="setView('caution',this)">Use Caution</button>
   </div>
 
+  <div id="weightNote" style="display:none;font-size:13px;font-weight:600;color:#0d2d52;margin-bottom:10px;"></div>
   <div id="viewDesc" class="section-sub"></div>
 
   <table class="lb-table" id="lbTable">
@@ -217,6 +220,7 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.85; max-wi
   Civica scores are for informational purposes only and do not constitute financial, investment, or real estate advice. Past appreciation is not indicative of future returns. &copy; 2026 Civica.</p>
 </footer>
 
+<script src="weighting.js"></script>
 <script>
 let ALL = [];
 let view = 'top100';
@@ -235,13 +239,19 @@ const SCORE_BG = {
   'SPECULATIVE':'#ef4444',  'AVOID':'#dc2626',
 };
 
+// Views sort/filter on c._w (the active weighted score). With the default
+// preset c._w === c.score, so every view behaves exactly as before until the
+// visitor picks a different preset.
 const VIEW_CONFIG = {
-  top100:      { desc: 'Counties with the highest composite Civica scores — strongest fundamentals across all 6 dimensions.', fn: d => d },
-  undervalued: { desc: 'High Civica score (≥55) combined with a median home value below the national median (~$310k). These markets have strong fundamentals but haven\'t priced in yet.', fn: d => d.filter(c => c.score >= 55 && c.median_home_value < 310000).sort((a,b) => b.score - a.score) },
-  affordable:  { desc: 'Counties ranked by lowest price-to-rent ratio among those with a score above 40. Rent vs. buy math favors ownership.', fn: d => d.filter(c => c.score >= 40).sort((a,b) => a.pr_ratio - b.pr_ratio) },
-  strongbuy:   { desc: 'Counties labeled ACCELERATING or PEAKING: top-tier fundamentals with positive momentum. The highest-conviction entry points in the model right now.', fn: d => d.filter(c => c.signal === 'ACCELERATING' || c.signal === 'PEAKING').sort((a,b) => b.score - a.score) },
-  caution:     { desc: 'Counties labeled SPECULATIVE or AVOID: fundamentals are below average or actively deteriorating. If you are considering buying here, understand the risks first.', fn: d => d.filter(c => c.signal === 'SPECULATIVE' || c.signal === 'AVOID').sort((a,b) => a.score - b.score) },
+  top100:      { desc: 'Counties with the highest composite score under the active weighting — strongest across the dimensions you care about.', fn: d => d.slice().sort((a,b) => b._w - a._w) },
+  undervalued: { desc: 'A strong score (≥55 under the active weighting) combined with a median home value below the national median (~$310k). Good fundamentals that haven\'t priced in yet.', fn: d => d.filter(c => c._w >= 55 && c.median_home_value < 310000).sort((a,b) => b._w - a._w) },
+  affordable:  { desc: 'Counties ranked by lowest price-to-rent ratio among those scoring above 40 under the active weighting. Rent vs. buy math favors ownership.', fn: d => d.filter(c => c._w >= 40).sort((a,b) => a.pr_ratio - b.pr_ratio) },
+  strongbuy:   { desc: 'Counties labeled ACCELERATING or PEAKING by the Civica model, re-ranked by your weighting. The highest-conviction entry points in the model right now.', fn: d => d.filter(c => c.signal === 'ACCELERATING' || c.signal === 'PEAKING').sort((a,b) => b._w - a._w) },
+  caution:     { desc: 'Counties labeled SPECULATIVE or AVOID by the Civica model. Fundamentals are below average or deteriorating — understand the risks before buying here.', fn: d => d.filter(c => c.signal === 'SPECULATIVE' || c.signal === 'AVOID').sort((a,b) => a._w - b._w) },
 };
+
+Weighting.mountBar('weightBar', { title: 'Rank these counties by what matters to you' });
+Weighting.onChange(() => { lbVisible = 50; renderView(); });
 
 if (location.protocol === 'file:') {
   document.getElementById('lbBody').innerHTML =
@@ -298,6 +308,27 @@ function setView(v, btn) {
 }
 
 function renderView() {
+  const isDef = Weighting.isDefault();
+
+  // Weighted score + global weighted rank for every county.
+  ALL.forEach(c => { c._w = Weighting.weightedScore(c); });
+  if (isDef) {
+    ALL.forEach(c => { c._wrank = c.rank; });
+  } else {
+    ALL.slice().sort((a,b) => b._w - a._w).forEach((c, i) => { c._wrank = i + 1; });
+  }
+
+  // Weighting note above the table.
+  const wn = document.getElementById('weightNote');
+  if (isDef) {
+    wn.style.display = 'none';
+  } else {
+    const m = Weighting.activePresetMeta();
+    wn.style.display = 'block';
+    wn.innerHTML = 'Ranked by your weighting · ' + m.emoji + ' ' + m.label +
+      ' <span style="font-weight:500;color:#98989d;">— Civica\'s default shown in gray</span>';
+  }
+
   const cfg    = VIEW_CONFIG[view];
   const rows   = cfg.fn(ALL);
   document.getElementById('viewDesc').textContent = cfg.desc;
@@ -314,19 +345,27 @@ function renderView() {
   body.innerHTML = shown.map((c, i) => {
     const pos = i + 1;
     const rankCls = pos <= 3 ? 'rk top3' : pos <= 10 ? 'rk top10' : 'rk';
-    const sc_bg = SCORE_BG[c.signal] || '#9ca3af';
     const lbcls = SIGNAL_CLASS[c.signal] || 'lb-watch';
     const hpi_c = c.hpi_3yr_avg >= 3 ? 'var(--green)' : 'var(--red)';
+    const circBg = isDef ? (SCORE_BG[c.signal] || '#9ca3af') : Weighting.bandColor(c._w);
+    const scoreCell = isDef
+      ? `<div class="sc-circ" style="background:${circBg}">${Math.round(c.score)}</div>
+         <span class="sc-num">${c.score.toFixed(1)}</span>`
+      : `<div class="sc-circ" style="background:${circBg}">${Math.round(c._w)}</div>
+         <span class="sc-num">${c._w.toFixed(1)}</span>
+         <span style="font-size:10px;color:#9ca3af;margin-left:4px;white-space:nowrap;">Civica ${c.score.toFixed(0)}</span>`;
+    const subLine = isDef
+      ? `${c.state} · Rank #${c.rank} of 2,816`
+      : `${c.state} · Your rank #${c._wrank} · Civica #${c.rank}`;
     return `<tr onclick="window.location='output/counties/${c.fips}.html'" style="cursor:pointer;">
       <td><span class="${rankCls}">${pos}</span></td>
       <td>
         <div class="cname">${c.name}</div>
-        <div class="cstate-lbl">${c.state} · Rank #${c.rank} of 2,816</div>
+        <div class="cstate-lbl">${subLine}</div>
       </td>
       <td>
         <div style="display:flex;align-items:center;gap:8px;">
-          <div class="sc-circ" style="background:${sc_bg}">${Math.round(c.score)}</div>
-          <span class="sc-num">${c.score.toFixed(1)}</span>
+          ${scoreCell}
         </div>
       </td>
       <td><span class="lbadge ${lbcls}">${c.signal}</span></td>

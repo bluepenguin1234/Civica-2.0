@@ -184,6 +184,34 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 }
 .hero-link:hover { background: rgba(255,255,255,.18); }
 
+.hero-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 22px;
+}
+.hp-lead {
+  font-size: 13px;
+  color: rgba(255,255,255,.5);
+  margin-right: 2px;
+}
+.hp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.18);
+  color: #fff;
+  border-radius: 100px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .15s, border-color .15s;
+}
+.hp-chip:hover { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.35); }
+
 /* FLOATING SCORE CARD */
 .score-card {
   background: #fff;
@@ -485,6 +513,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           onfocus="handleSearch(this.value)"
           autocomplete="off">
         <div class="search-dropdown" id="searchDrop"></div>
+      </div>
+
+      <div class="hero-presets">
+        <span class="hp-lead">or rank by what matters to you:</span>
+        <a href="map.html?preset=affordability" class="hp-chip">🏠 Affordability</a>
+        <a href="map.html?preset=jobs" class="hp-chip">💼 Jobs</a>
+        <a href="map.html?preset=family" class="hp-chip">🛡️ Family &amp; Safety</a>
+        <a href="map.html?preset=climate" class="hp-chip">🌤️ Climate</a>
+        <a href="map.html?preset=investor" class="hp-chip">📈 Investor</a>
       </div>
 
       <a href="map.html" class="hero-link">Browse all counties →</a>
