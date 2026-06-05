@@ -63,6 +63,16 @@ updates `output/towns/_progress.json`, commits + pushes, and stops when all 51 a
 
 ---
 
+## Run it efficiently (from the Claude prompting guide)
+- Use **`xhigh` effort** in local Claude Code and **allowlist the loop commands** so it runs
+  hands-off (it's an autonomous, multi-context-window job — exactly what xhigh + auto is for).
+- **Tests first:** have it write `validate_town.py` + `init.sh` BEFORE generating pages
+  (TOWN_HANDOFF.md §13). The validator is the gate that replaces eyeballing each state.
+- **First window = framework** (validator, scoring, label calibration). **Loop windows =
+  generation.** Paste the "don't stop early / save to ledger" preamble from §13c.
+- Be **literal about scope** ("every town, every state in the ledger"); the loop is done
+  only when `_progress.json` lists all 51 state FIPS.
+
 ## Remember (the why)
 - **No home-value level anymore** — affordability = HUD rent vs IRS income + FHFA appreciation.
 - **~51% town-driven, ~49% county-inherited** — say so plainly; it's honest.

@@ -365,3 +365,56 @@ Done condition: `done` contains all 51 state FIPS.
 prefer reusing the working county loaders in `scoring_engine.py` over rewriting them, and
 flag any data-quality approximation in the UI rather than hiding it — that honesty is the
 core Civica brand promise (see CLAUDE.md).*
+
+---
+
+## 13. Build-execution guidance (read before coding)
+
+This build spans many context windows (one-time scoring + a 51-state generation loop).
+The following keeps it efficient and prevents drift across fresh context windows. Run
+Claude Code at **`xhigh` effort** and allowlist the repetitive loop commands so it runs
+autonomously with minimal approvals.
+
+### 13a. Tests-first — write `validate_town.py` BEFORE generating
+Create the validator as the FIRST coding step, and treat its checks as immovable (do not
+weaken a check to make a run pass). It asserts, against `town_scores.csv` and the output:
+- Town count is in the expected band (~15–19k incorporated places ≥ 1,000 pop).
+- Score distribution sane: mean ~50, std ~6–9, range within 0–100.
+- **Towns within the same county are NOT identical** — group by `primary_county_fips`,
+  assert score variance > 0 for multi-town counties (proves crime/income/growth vary them).
+- Town-resolved share ≈ 51% (recompute from the T-weights; assert 0.45–0.57).
+- `fips` is a 7-digit zero-padded string; no nulls in `civica_score`/`market_label`.
+- For generated HTML: **zero** occurrences of `Zillow`, `price-to-rent`, `{`+token braces,
+  or `stroke-dashoffset` left at template defaults; town name + 4 bars + rank line present.
+- All 4 labels fire with non-trivial counts after threshold calibration.
+
+Run `validate_town.py` after scoring and after each state's generation. A red check = stop
+and fix, don't proceed.
+
+### 13b. Setup script — `init.sh`
+Write a small `init.sh` that a fresh context window can run to get oriented without
+rediscovering commands: `python download_town_data.py` (if data missing) → `python
+town_scoring_engine.py` (if `town_scores.csv` missing) → `python validate_town.py`. Keep
+it idempotent. This prevents repeated setup work across context windows.
+
+### 13c. Loop preamble — paste this into the per-state loop prompt
+> *Your context window auto-compacts as it fills, so you can keep working indefinitely.
+> Do not stop early over token-budget concerns. After each state, save progress to
+> `output/towns/_progress.json` before continuing. Generate every town in the state and
+> work through every state in the ledger; the task is done only when `done` contains all
+> 51 state FIPS. If a context window is about to refresh, persist state to the ledger
+> first, then continue from it.*
+
+State scope **literally**: "every town in the state, every state in the ledger" — Opus 4.8
+follows instructions literally and will not infer unstated scope. Conversely, avoid
+ALL-CAPS "CRITICAL/MUST" phrasing in the build prompts; on current models it overtriggers.
+Prefer "do X" over "don't do Y" except in the validator's explicit reject-list.
+
+### 13d. Order of operations (first context window vs. loop)
+1. **First context window = framework only:** write `validate_town.py`, `init.sh`,
+   `town_scoring_engine.py`; run scoring once; recalibrate the 4 label thresholds from the
+   printed distribution; confirm `validate_town.py` is green. Do NOT start mass HTML
+   generation here.
+2. **Subsequent windows = the loop:** `town_generator.py --state XX`, validate, update
+   ledger, commit/push, repeat. Starting a fresh window beats compaction for the loop —
+   the ledger carries all needed state.
