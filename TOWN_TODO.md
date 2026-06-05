@@ -25,8 +25,11 @@ python download_town_data.py
 ## Step 2 — Have Claude Code write the scripts (local session)
 Open Claude Code locally and say:
 > *"Read TOWN_HANDOFF.md and write `town_scoring_engine.py`. Reuse the working county
-> loaders in `scoring_engine.py` verbatim; only add sub-est, IRS ZIP, the crosswalk,
-> and the NIBRS town rewrite. Resolve the open items in §12 against the real data files."*
+> loaders in `scoring_engine.py` verbatim; add sub-est, IRS ZIP, the crosswalk, and the
+> NIBRS town rewrite. **Drop Zillow entirely — do not call `load_zillow()`, and remove
+> every Zillow-derived field (median_home_value, inventory, pr_ratio, price_income,
+> breakeven_yrs, monthly_piti, etc.); affordability is rebuilt on rent-vs-income +
+> appreciation (§6).** Resolve the open items in §12 against the real data files."*
 
 Watch the 3 risky bits (all in §12):
 - **NIBRS agency-name field** must be located empirically in the BH record.
