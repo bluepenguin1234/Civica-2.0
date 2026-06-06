@@ -427,6 +427,20 @@ def write_progress(p):
     json.dump(p, open(PROGRESS, 'w', encoding='utf-8'), indent=2)
 
 
+def write_sitemap(index_map):
+    """Regenerate sitemap.xml from town URLs + the core static pages."""
+    static = ['', 'disclaimer.html', 'privacy.html', 'terms.html', 'harvard_model.html']
+    urls = [f'  <url><loc>{SITE_URL}/{p}</loc></url>' for p in static]
+    for fips in sorted(index_map):
+        urls.append(f'  <url><loc>{TOWN_URL_BASE}/{fips}.html</loc></url>')
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+           + '\n'.join(urls) + '\n</urlset>')
+    with open(os.path.join(BASE, 'sitemap.xml'), 'w', encoding='utf-8') as f:
+        f.write(xml)
+    return len(urls)
+
+
 # ── Main ─────────────────────────────────────────────────────────────────────────
 
 def generate_state(state_df, style, index_map):
@@ -480,6 +494,10 @@ def main():
 
     total = write_index(index_map)
     remaining = [s for s in all_states if s not in progress['done']]
+    # Regenerate the sitemap once everything is built (idempotent).
+    if not remaining:
+        n_urls = write_sitemap(index_map)
+        print(f'  sitemap.xml regenerated: {n_urls:,} URLs')
     print(f'\nDone. town_index.json: {total:,} towns. '
           f'States done: {len(progress["done"])}/{len(all_states)}. '
           f'Remaining: {len(remaining)}')

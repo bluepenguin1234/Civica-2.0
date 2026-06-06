@@ -1,6 +1,41 @@
 # Civica — Harvard Research Model
 *Project bible for Claude Code. Read this before touching anything.*
-*Last updated: May 2026*
+*Last updated: June 2026*
+
+---
+
+## ▶ CURRENT MODEL: Town-Level (v2.0) — BUILT
+
+Civica now ranks **US incorporated places ("towns")**, not counties. The town build is
+complete and validated.
+
+- **Engine:** `town_scoring_engine.py` → `town_scores.csv` (10,267 towns ≥ 1,000 pop).
+  Reuses the county loaders in `scoring_engine.py` verbatim; adds `load_subest`,
+  `load_irs_zip`, the ZCTA→place crosswalk, and a one-pass NIBRS town rewrite. **Zillow is
+  dropped entirely** — affordability is rent-vs-income + appreciation quality. Civica is
+  now **100% federal data**.
+- **4 dimensions / 100 pts:** Affordability 28 · Economy 28 · Safety & Place 26 · Growth 18.
+  **~51% town-resolved** (crime, income, growth, scale); **~49% county-inherited**
+  (wages, appreciation, climate, migration, permits).
+- **Pages:** `town_generator.py` → `output/towns/{place_fips}.html` (7-digit place FIPS),
+  `output/town_index.json` (front-page search, town+county+state to disambiguate
+  duplicates), `output/towns/_progress.json` (ledger). `python town_generator.py`
+  generates every town in one pass; `--state XX` does one state.
+- **Gate:** `validate_town.py` (run after scoring and generation — must be green).
+  `init.sh` = idempotent download → score → validate.
+- **Labels:** Strong Buy ≥ 62 · Buy ≥ 52 · Hold ≥ 44 · Caution < 44.
+- **Spec:** `TOWN_HANDOFF.md` (full design), `TOWN_TODO.md`, `START_HERE.md`.
+- **Honesty (keep visible):** town income is a ZIP→place approximation; crime→town mapping
+  is approximate (sheriffs → county pool; unmatched towns inherit county/RUCC rate, flagged
+  not penalized); ~49% is county-inherited; universe is incorporated places only (no CDPs).
+- **Front page (`index.html`):** search reads `output/town_index.json`; count pill and hero
+  reflect 10,267 towns. NOTE: deeper marketing copy (the 8-label "signal system" section,
+  "how it works" steps, and some feature blurbs) still references the old county model and
+  is a recommended follow-up copy pass. `map.html`, `compare.html`, `leaderboard.html`, and
+  `output/states/` remain county-based.
+
+The county model (`scoring_engine.py`, `county_generator.py`) and the notes below remain
+for reference.
 
 ---
 

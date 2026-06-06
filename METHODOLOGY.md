@@ -1,4 +1,51 @@
 # Civica Scoring Methodology
+
+> ## ▶ Version 2.0 — Town Model (current)
+>
+> Civica now ranks **US incorporated places ("towns")**, not counties. 10,267 towns
+> with ≥ 1,000 residents each receive a single **0–100 Civica Score** from **four**
+> dimensions, plus a plain-English verdict and an in-county rank. The engine is
+> `town_scoring_engine.py`; pages are built by `town_generator.py` into `output/towns/`.
+>
+> **Dimensions (point caps):** Affordability **28** · Economy **28** · Safety & Place **26**
+> · Growth **18** = 100.
+>
+> | Dim | Metrics (weight) | Layer |
+> |---|---|---|
+> | **Affordability** | Rent burden = 2BR FMR×12 ÷ town income (60%, **town**) · Appreciation quality \|FHFA 3yr − 5\| (40%, county) |
+> | **Economy** | Avg wage (35%) · Sector quality (25%) · Diversity/HHI (20%) — all county · Town income growth (20%, **town**) |
+> | **Safety & Place** | Violent /100k (30%, **town**) · Property /100k (20%, **town**) · Town scale (20%, **town**) · Amenity density (15%, county) · Physical risk (15%, county) |
+> | **Growth** | Town pop growth 5yr (35%, **town**) · Town-vs-county + 1yr momentum (25%, **town**) · Net migration (20%, county) · In-mover income (10%, county) · Permits (10%, county) |
+>
+> **~51% of every town's score is town-resolved** (crime, income, growth, scale); the
+> other **~49% is inherited from the town's parent county** (wages, appreciation, climate
+> risk, migration, permits) because those genuinely operate at a regional scale.
+>
+> **New town-resolved data (all federal):** Census **sub-est** (sub-county population →
+> town universe, growth, scale, place→county crosswalk via SUMLEV 162/157); IRS SOI
+> **ZIP-code AGI** (two years → town income level + growth, allocated to places by the
+> 2020 ZCTA→place relationship file weighted by **land-area overlap**); a rewritten
+> single-pass **NIBRS** reader (violent **and** property offenses, agencies mapped to
+> places by normalized name within state, preferring the agency's own county).
+>
+> **Labels:** Strong Buy ≥ 62 · Buy ≥ 52 · Hold ≥ 44 · Caution < 44 (≈ 12 / 30 / 31 / 27 %).
+>
+> ### Honesty caveats (these MUST stay visible in the product)
+> - **~49% county-inherited.** We do not claim town-level wages or home prices; those are regional.
+> - **Town income is a ZIP→place address-share approximation,** not a survey median.
+> - **Crime→town mapping is approximate.** County sheriffs cover unincorporated area and stay
+>   in the county pool; towns with no matched reporting agency inherit the county/RUCC-tier
+>   rate and are **flagged, never penalized** (`crime_imputed`).
+> - **No home-value level exists post-Zillow.** Affordability is rent-vs-income + appreciation.
+>   Dropping Zillow removed the only non-federal source — Civica is now **100% federal data**.
+> - **Universe = incorporated places ≥ 1,000 pop.** CDPs are excluded until decennial place
+>   data is added.
+>
+> The 6-dimension **county** methodology below remains valid for the county engine
+> (`scoring_engine.py`) and is retained for reference.
+
+---
+
 *Technical reference for the Harvard-style 6-dimension county scoring model.*  
 *Version 1.2 — May 2026 · Includes FBI NIBRS Dim4*
 

@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Civica — Research-Grade Housing Intelligence for Every US County</title>
+<title>Civica — Research-Grade Housing Intelligence for Every US Town</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
-<meta name="description" content="Civica scores all 2,816 US counties on affordability, economic vitality, market dynamics, quality of place, climate risk, and population growth. Free housing intelligence for homebuyers.">
-<meta property="og:title" content="Civica — Research-Grade County Housing Intelligence">
-<meta property="og:description" content="Scores, ranks, and investment thesis for every US county — built from federal government data and Zillow ZHVI. No agents. No ads. No conflicts.">
+<meta name="description" content="Civica scores 10,267 US towns on affordability, economy, safety & place, and growth — town-level crime, income, and growth on 100% federal data, each town ranked inside its county. Free housing intelligence for homebuyers.">
+<meta property="og:title" content="Civica — Research-Grade Town Housing Intelligence">
+<meta property="og:description" content="Scores, ranks, and a plain-English verdict for 10,267 US towns — built entirely from federal government data. No agents. No ads. No conflicts.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://civica.app/og_image.png">
 <meta property="og:image:width" content="1200">
@@ -446,7 +446,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <a href="map.html">County Map</a>
     <a href="leaderboard.html">Leaderboard</a>
     <a href="harvard_model.html">Methodology</a>
-    <a href="#" class="nav-cta" onclick="event.preventDefault();document.getElementById('searchInput').focus();document.querySelector('.hero').scrollIntoView({behavior:'smooth'});">Search Counties</a>
+    <a href="#" class="nav-cta" onclick="event.preventDefault();document.getElementById('searchInput').focus();document.querySelector('.hero').scrollIntoView({behavior:'smooth'});">Search Towns</a>
   </div>
   <button class="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -462,7 +462,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="hero-left">
       <div class="live-pill">
         <span class="live-dot"></span>
-        Now live · 2,816 counties scored across all 50 states
+        Now live · 10,267 towns scored across all 50 states + DC · 100% federal data
       </div>
 
       <h1 class="hero-h1">
@@ -470,7 +470,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       </h1>
 
       <p class="hero-sub">
-        Civica scores every US county on affordability, economic strength, market dynamics, quality of place, climate risk, and population growth — the intelligence layer missing from every home search.
+        Civica scores every US town on affordability, economy, safety &amp; place, and growth — town-level crime, income, and growth on 100% federal data, with each town ranked inside its county. The intelligence layer missing from every home search.
       </p>
 
       <div class="search-wrap">
@@ -480,14 +480,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           </svg>
         </div>
         <input class="search-input" id="searchInput" type="text"
-          placeholder='Try "Indiana" or "Hamilton County"...'
+          placeholder='Try "Tennessee" or "Nolensville"...'
           oninput="handleSearch(this.value)"
           onfocus="handleSearch(this.value)"
           autocomplete="off">
         <div class="search-dropdown" id="searchDrop"></div>
       </div>
 
-      <a href="map.html" class="hero-link">Browse all counties →</a>
+      <a href="map.html" class="hero-link">Browse the map →</a>
     </div>
 
     <!-- RIGHT: Floating Score Card -->
@@ -495,47 +495,47 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       <div class="score-card">
         <div class="sc-top">
           <div>
-            <div class="sc-county-name">Hamilton County</div>
-            <div class="sc-county-sub">Indiana · Pop. 364,522 · #2</div>
+            <div class="sc-county-name">Nolensville</div>
+            <div class="sc-county-sub">Williamson County, TN · Pop. 15,789 · #1</div>
           </div>
-          <!-- Mini ring: r=23, circ=144.5, offset=144.5*(1-0.724)=39.8 -->
+          <!-- Mini ring: r=23, circ=144.5, offset=144.5*(1-0.85)=21.7 -->
           <div class="mini-ring-wrap">
             <svg width="56" height="56" viewBox="0 0 56 56">
               <circle cx="28" cy="28" r="23" fill="none" stroke="#f1f5f9" stroke-width="5"/>
               <circle cx="28" cy="28" r="23" fill="none" stroke="#1a7ff0" stroke-width="5"
-                stroke-dasharray="144.5" stroke-dashoffset="39.8" stroke-linecap="round"/>
+                stroke-dasharray="144.5" stroke-dashoffset="21.7" stroke-linecap="round"/>
             </svg>
-            <div class="mini-ring-num">72</div>
+            <div class="mini-ring-num">85</div>
           </div>
         </div>
 
-        <div class="sc-badge">ACCELERATING</div>
+        <div class="sc-badge">STRONG BUY</div>
 
         <div class="sc-bars">
           <div class="sc-bar-row">
             <span class="sc-bar-lbl">Affordability</span>
-            <div class="sc-bar-track"><div class="sc-bar-fill" style="width:68%;background:#16a34a;"></div></div>
-            <span class="sc-bar-val">68</span>
+            <div class="sc-bar-track"><div class="sc-bar-fill" style="width:91%;background:#16a34a;"></div></div>
+            <span class="sc-bar-val">91</span>
           </div>
           <div class="sc-bar-row">
-            <span class="sc-bar-lbl">Economic Vitality</span>
-            <div class="sc-bar-track"><div class="sc-bar-fill" style="width:89%;background:#16a34a;"></div></div>
-            <span class="sc-bar-val">89</span>
+            <span class="sc-bar-lbl">Economy</span>
+            <div class="sc-bar-track"><div class="sc-bar-fill" style="width:90%;background:#16a34a;"></div></div>
+            <span class="sc-bar-val">90</span>
           </div>
           <div class="sc-bar-row">
-            <span class="sc-bar-lbl">Market Dynamics</span>
-            <div class="sc-bar-track"><div class="sc-bar-fill" style="width:82%;background:#1a7ff0;"></div></div>
-            <span class="sc-bar-val">82</span>
+            <span class="sc-bar-lbl">Safety &amp; Place</span>
+            <div class="sc-bar-track"><div class="sc-bar-fill" style="width:73%;background:#1a7ff0;"></div></div>
+            <span class="sc-bar-val">73</span>
           </div>
           <div class="sc-bar-row">
-            <span class="sc-bar-lbl">Quality of Place</span>
-            <div class="sc-bar-track"><div class="sc-bar-fill" style="width:76%;background:#1a7ff0;"></div></div>
-            <span class="sc-bar-val">76</span>
+            <span class="sc-bar-lbl">Growth</span>
+            <div class="sc-bar-track"><div class="sc-bar-fill" style="width:84%;background:#1a7ff0;"></div></div>
+            <span class="sc-bar-val">84</span>
           </div>
         </div>
 
-        <button class="sc-view-btn" onclick="window.location='output/counties/18057.html'">View Full Report →</button>
-        <div class="sc-tag">#1 of 2,816 counties</div>
+        <button class="sc-view-btn" onclick="window.location='output/towns/4753460.html'">View Full Report →</button>
+        <div class="sc-tag">#1 of 10,267 towns</div>
       </div>
     </div>
 
@@ -840,10 +840,7 @@ function closeMobileNav() {
 let COUNTIES = [];
 
 const SIGNAL_CLASS = {
-  'ACCELERATING':'lb-sbuy', 'PEAKING':'lb-sbuy',
-  'ESTABLISHED':'lb-buy', 'EMERGING':'lb-buy',
-  'FRONTIER':'lb-watch', 'TURNING':'lb-caut',
-  'SPECULATIVE':'lb-avoid', 'AVOID':'lb-avoid',
+  'Strong Buy':'lb-sbuy', 'Buy':'lb-buy', 'Hold':'lb-watch', 'Caution':'lb-caut',
 };
 const STATE_NAMES = {
   'AL':'Alabama','AK':'Alaska','AZ':'Arizona','AR':'Arkansas','CA':'California',
@@ -874,7 +871,7 @@ if (location.protocol === 'file:') {
     'or run: <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">python -m http.server 8080</code><br>' +
     'then open <a href="http://localhost:8080/" style="color:#1a7ff0;">http://localhost:8080/</a></div>';
 } else {
-  fetch('output/index.json')
+  fetch('output/town_index.json')
     .then(r => r.json())
     .then(data => {
       COUNTIES = data;
@@ -882,7 +879,7 @@ if (location.protocol === 'file:') {
     })
     .catch(() => {
       document.getElementById('mapLoading').innerHTML =
-        '<span style="color:#dc2626;font-weight:600;">⚠️ Could not load <code>output/index.json</code>. Run <code>python county_generator.py</code> to generate it.</span>';
+        '<span style="color:#dc2626;font-weight:600;">⚠️ Could not load <code>output/town_index.json</code>. Run <code>python town_generator.py</code> to generate it.</span>';
     });
 }
 
@@ -921,52 +918,44 @@ function handleSearch(val) {
   const drop = document.getElementById('searchDrop');
   if (!val.trim() || !COUNTIES.length) { drop.className = 'search-dropdown'; return; }
 
-  const stateAbbr = detectState(val);
-  if (stateAbbr) {
-    const stateName = STATE_NAMES[stateAbbr];
-    const stateCounties = COUNTIES.filter(c => c.state === stateAbbr);
-    const top = stateCounties.slice(0, 6);
-    drop.innerHTML =
-      `<div class="sd-row" onclick="window.location='output/states/${stateAbbr}.html'" style="background:#f0f6ff;border-bottom:2px solid #dbeafe;">
-        <div class="sd-left">
-          <div class="sd-name" style="color:#1a7ff0;">📍 All counties in ${stateName}</div>
-          <div class="sd-meta">${stateCounties.length} counties scored — view full state report</div>
-        </div>
-        <div style="color:#1a7ff0;font-size:12px;font-weight:700;white-space:nowrap;">View all →</div>
-      </div>` +
-      top.map(c => `
-      <div class="sd-row" onclick="window.location='output/counties/${c.fips}.html'">
+  // Town row renderer — disambiguates duplicate names with county + state.
+  const townRow = c => `
+      <div class="sd-row" onclick="window.location='output/towns/${c.fips}.html'">
         <div class="sd-left">
           <div class="sd-name">${c.name}, ${c.state}</div>
-          <div class="sd-meta">Score ${c.score.toFixed(1)} · Rank #${c.rank}</div>
+          <div class="sd-meta">${c.county} · Score ${c.score.toFixed(1)} · #${c.rank_in_county} in county</div>
         </div>
         <div class="sd-right">
           <span class="sd-score">${c.score.toFixed(0)}</span>
-          <span class="sd-label lbadge ${SIGNAL_CLASS[c.signal]||'lb-watch'}">${c.signal}</span>
+          <span class="sd-label lbadge ${SIGNAL_CLASS[c.label]||'lb-watch'}">${c.label}</span>
         </div>
-      </div>`).join('');
+      </div>`;
+
+  const stateAbbr = detectState(val);
+  if (stateAbbr) {
+    const stateName = STATE_NAMES[stateAbbr];
+    const stateTowns = COUNTIES.filter(c => c.state === stateAbbr);
+    const top = stateTowns.slice(0, 8);
+    drop.innerHTML =
+      `<div class="sd-row" style="background:#f0f6ff;border-bottom:2px solid #dbeafe;cursor:default;">
+        <div class="sd-left">
+          <div class="sd-name" style="color:#1a7ff0;">📍 Top towns in ${stateName}</div>
+          <div class="sd-meta">${stateTowns.length} towns scored — ranked by Civica Score</div>
+        </div>
+      </div>` +
+      top.map(townRow).join('');
     drop.className = 'search-dropdown open';
     return;
   }
 
   const q = val.toLowerCase();
-  const hits = COUNTIES.filter(c => c.name.toLowerCase().includes(q)).slice(0, 6);
+  const hits = COUNTIES.filter(c => c.name.toLowerCase().includes(q)).slice(0, 8);
   if (!hits.length) {
     drop.innerHTML = `<div style="padding:14px 18px;color:#9ca3af;font-size:13px;">No results for "${val.trim()}"</div>`;
     drop.className = 'search-dropdown open';
     return;
   }
-  drop.innerHTML = hits.map(c => `
-    <div class="sd-row" onclick="window.location='output/counties/${c.fips}.html'">
-      <div class="sd-left">
-        <div class="sd-name">${c.name}, ${c.state}</div>
-        <div class="sd-meta">Score ${c.score.toFixed(1)} · Rank #${c.rank}</div>
-      </div>
-      <div class="sd-right">
-        <span class="sd-score">${c.score.toFixed(0)}</span>
-        <span class="sd-label lbadge ${SIGNAL_CLASS[c.signal]||'lb-watch'}">${c.signal}</span>
-      </div>
-    </div>`).join('');
+  drop.innerHTML = hits.map(townRow).join('');
   drop.className = 'search-dropdown open';
 }
 
