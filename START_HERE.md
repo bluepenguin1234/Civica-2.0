@@ -32,9 +32,13 @@ you go. Only stop at the decision points listed in §D below; for everything els
    `validate_town.py` (must be green); recalibrate the 4 labels from the printed distribution.
 4. **Template + generator:** build `town_profile.html` (one score ring, 4 dims, the
    "ranks #N of M in county" line, no Zillow UI) and `town_generator.py --state XX`.
-5. **The loop (many context windows):** for every state in `output/towns/_progress.json`,
-   generate its towns, run `validate_town.py`, update the ledger, commit + push. Done only
-   when the ledger's `done` list contains all 51 state FIPS.
+5. **Generate all town pages:** run `town_generator.py` to generate **every town in every
+   state in one pass** (it's a fast Python loop — no per-state prompting needed). Write each
+   state's result to `output/towns/`, update `output/towns/_progress.json` as you go, and
+   commit in batches (e.g. every few states) so commits stay reasonable. Run
+   `validate_town.py` over the output. If the session is ever interrupted, resume from the
+   ledger — generate only states not yet in `done`. Done only when `done` contains all 51
+   state FIPS.
 6. **Finish:** wire `index.html` search to `output/town_index.json`, update the count pill,
    regenerate `sitemap.xml`, and update CLAUDE.md/METHODOLOGY.md to the town model.
 
