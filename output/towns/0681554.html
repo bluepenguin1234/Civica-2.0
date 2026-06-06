@@ -17,6 +17,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Dataset","name":"Vacaville city, CA Housing Market Analysis","description":"Vacaville city, CA scores 38/100 on Civica's 4-dimension town housing model. Signal: Caution. Ranks #4 of 7 towns in Solano County. Town-level crime, income, and growth on 100% federal data.","url":"https://civica.app/output/towns/0681554.html"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://civica.app/"},{"@type":"ListItem","position":2,"name":"Solano County","item":"https://civica.app/output/towns/0681554.html"},{"@type":"ListItem","position":3,"name":"Vacaville city","item":"https://civica.app/output/towns/0681554.html"}]}</script>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -356,6 +357,44 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .howto-body { font-size:13px; line-height:1.6; color:#475569; padding:0 0 18px; }
 .schools-soon { opacity:.7; }
 .tcap { font-size:11px; color:#94a3b8; margin-top:6px; }
+/* glance stat tiles */
+.glance { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.gtile { background:#fff; border:1px solid #eef1f5; border-radius:14px; padding:14px 15px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+.gt-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.gt-icon { font-size:17px; }
+.gt-tag { font-size:10px; font-weight:800; letter-spacing:.02em; padding:3px 8px; border-radius:100px; }
+.gt-val { font-size:23px; font-weight:900; color:#0d2d52; line-height:1; }
+.gt-lbl { font-size:11px; color:#6e6e73; margin:5px 0 9px; }
+.gt-bar { height:6px; background:#eef2f7; border-radius:100px; overflow:hidden; }
+.gt-fill { height:100%; border-radius:100px; }
+/* dimension percentile rows */
+.dimrow { display:flex; align-items:center; gap:12px; margin-bottom:13px; }
+.dimrow .dn { width:130px; flex-shrink:0; font-size:13px; font-weight:700; color:#0d2d52; }
+.dimrow .dt { flex:1; position:relative; height:14px; background:#eef2f7; border-radius:100px; }
+.dimrow .df { position:absolute; left:0; top:0; bottom:0; border-radius:100px; }
+.dimrow .dmed { position:absolute; left:50%; top:-3px; bottom:-3px; width:2px; background:#cbd5e1; }
+.dimrow .dv { width:118px; flex-shrink:0; text-align:right; font-size:12px; font-weight:700; color:#0d2d52; }
+.dimrow .dv small { color:#94a3b8; font-weight:600; }
+.radar-wrap { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+.radar-wrap svg { flex-shrink:0; }
+.radar-side { flex:1; min-width:240px; }
+/* position / distribution bars */
+.posbar { margin-bottom:16px; }
+.posbar .pl { display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px; }
+.posbar .pl b { color:#0d2d52; }
+.postrack { position:relative; height:12px; border-radius:100px; background:linear-gradient(90deg,#f97316,#f59e0b,#1a7ff0,#16a34a); }
+.posmark { position:absolute; top:-4px; width:6px; height:20px; border-radius:3px; background:#0d2d52; box-shadow:0 0 0 2px #fff; transform:translateX(-3px); }
+.posends { display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; margin-top:5px; }
+/* location map */
+#locmap { height:240px; border-radius:12px; overflow:hidden; z-index:0; }
+/* peers */
+.peer { display:flex; align-items:center; gap:12px; padding:9px 10px; border-radius:10px; text-decoration:none; }
+.peer:hover { background:#f6f8fb; }
+.peer.me { background:#eef6ff; border:1px solid #cfe3ff; }
+.peer-rk { width:26px; font-size:12px; font-weight:800; color:#c7c7cc; text-align:center; flex-shrink:0; }
+.peer-nm { flex:1; font-size:13px; font-weight:600; color:#0d2d52; }
+.peer-sc { width:30px; height:30px; border-radius:50%; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
+@media (max-width:640px) { .glance { grid-template-columns:repeat(2,1fr); } }
 </style>
 </head>
 <body>
@@ -395,7 +434,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <div class="sh-num">38</div>
           <div class="sh-denom">/100</div>
         </div>
-        <div class="sh-grade">Top 89% Nationally</div>
+        <div class="sh-grade">Top 89% · #9,173 of 10,267</div>
       </div>
       <div class="verdict-badge" style="padding-top:4px;">
         <div class="vb-label">Civica Signal</div>
@@ -420,32 +459,95 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="body" style="font-size:14px;"><strong>Civica Verdict:</strong> Vacaville city warrants <strong>Caution</strong>. Affordability (12/100) and other fundamentals trail national peers; even Growth (49/100) is only middling.</div>
   </div>
   <div class="card">
-    <div class="card-title"><span class="ct-icon">📊</span> Four-Dimension Breakdown</div>
-    <div class="bar-chart">
-      <div class="bar-row">
-        <div class="bar-lbl">🏠 Affordability</div>
-        <div class="bar-track"><div class="bar-fill" style="width:12%;background:#1a7ff0;"></div></div>
-        <div class="bar-val">12/100</div>
+    <div class="card-title"><span class="ct-icon">⚡</span> At a Glance <span class="tcap" style="display:inline;font-weight:600;">— bar = national percentile</span></div>
+    <div class="glance">
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">🎯</span><span class="gt-tag" style="color:#ea580c;background:#ffedd5;">BOTTOM 11%</span></div>
+        <div class="gt-val">38</div>
+        <div class="gt-lbl">Civica Score (0–100)</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:11%;background:#ea580c;"></div></div>
       </div>
-      <div class="bar-row">
-        <div class="bar-lbl">💼 Economy</div>
-        <div class="bar-track"><div class="bar-fill" style="width:46%;background:#16a34a;"></div></div>
-        <div class="bar-val">46/100</div>
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">💵</span><span class="gt-tag" style="color:#16a34a;background:#dcfce7;">TOP 20%</span></div>
+        <div class="gt-val">$95,080</div>
+        <div class="gt-lbl">Town income / return</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:80%;background:#16a34a;"></div></div>
       </div>
-      <div class="bar-row">
-        <div class="bar-lbl">🛡️ Safety & Place</div>
-        <div class="bar-track"><div class="bar-fill" style="width:47%;background:#8b5cf6;"></div></div>
-        <div class="bar-val">47/100</div>
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">🏠</span><span class="gt-tag" style="color:#ea580c;background:#ffedd5;">BOTTOM 18%</span></div>
+        <div class="gt-val">27%</div>
+        <div class="gt-lbl">Rent burden</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:18%;background:#ea580c;"></div></div>
       </div>
-      <div class="bar-row">
-        <div class="bar-lbl">📈 Growth</div>
-        <div class="bar-track"><div class="bar-fill" style="width:49%;background:#f59e0b;"></div></div>
-        <div class="bar-val">49/100</div>
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">🛡️</span><span class="gt-tag" style="color:#d97706;background:#fef3c7;">BELOW AVG</span></div>
+        <div class="gt-val">300</div>
+        <div class="gt-lbl">Violent crime / 100k</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:34%;background:#d97706;"></div></div>
+      </div>
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">📈</span><span class="gt-tag" style="color:#1a7ff0;background:#dbeafe;">ABOVE AVG</span></div>
+        <div class="gt-val">+1.7%</div>
+        <div class="gt-lbl">Population growth, 5yr</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:59%;background:#1a7ff0;"></div></div>
+      </div>
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">🏦</span><span class="gt-tag" style="color:#ea580c;background:#ffedd5;">BOTTOM 4%</span></div>
+        <div class="gt-val">+0.2%</div>
+        <div class="gt-lbl">Appreciation /yr (FHFA)</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:4%;background:#ea580c;"></div></div>
       </div>
     </div>
-    <div class="tcap">Each dimension is a national percentile blend (0–100). Affordability 28 pts ·
-      Economy 28 · Safety &amp; Place 26 · Growth 18. Town-resolved metrics (crime, income, growth,
-      scale) account for ~51% of the score; the rest is inherited from Solano County.</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">📊</span> Four-Dimension Breakdown</div>
+    <div class="radar-wrap">
+      <svg width="200" height="200" viewBox="0 0 200 200"><polygon points="100,80 120,100 100,120 80,100" fill="none" stroke="#e5eaf1" stroke-width="1"/><polygon points="100,61 139,100 100,139 61,100" fill="none" stroke="#e5eaf1" stroke-width="1"/><polygon points="100,42 158,100 100,158 42,100" fill="none" stroke="#e5eaf1" stroke-width="1"/><polygon points="100,22 178,100 100,178 22,100" fill="none" stroke="#e5eaf1" stroke-width="1"/><line x1="100.0" y1="100.0" x2="100.0" y2="22.0" stroke="#e5eaf1"/><line x1="100.0" y1="100.0" x2="178.0" y2="100.0" stroke="#e5eaf1"/><line x1="100.0" y1="100.0" x2="100.0" y2="178.0" stroke="#e5eaf1"/><line x1="100.0" y1="100.0" x2="22.0" y2="100.0" stroke="#e5eaf1"/><polygon points="100.0,90.3 136.2,100.0 100.0,136.9 61.4,100.0" fill="rgba(26,127,240,.20)" stroke="#1a7ff0" stroke-width="2"/><circle cx="100.0" cy="90.3" r="3" fill="#0d2d52"/><circle cx="136.2" cy="100.0" r="3" fill="#0d2d52"/><circle cx="100.0" cy="136.9" r="3" fill="#0d2d52"/><circle cx="61.4" cy="100.0" r="3" fill="#0d2d52"/><text x="100.0" y="16.0" text-anchor="middle" font-size="9" fill="#6e6e73" font-weight="700">Afford.</text><text x="182.0" y="103.0" text-anchor="start" font-size="9" fill="#6e6e73" font-weight="700">Econ.</text><text x="100.0" y="191.0" text-anchor="middle" font-size="9" fill="#6e6e73" font-weight="700">Safety</text><text x="18.0" y="103.0" text-anchor="end" font-size="9" fill="#6e6e73" font-weight="700">Growth</text></svg>
+      <div class="radar-side">
+      <div class="dimrow">
+        <div class="dn">🏠 Affordability</div>
+        <div class="dt"><div class="dmed"></div><div class="df" style="width:12%;background:#1a7ff0;"></div></div>
+        <div class="dv">12<small>/100</small> · <span style="color:#ea580c;">BOTTOM 4%</span></div>
+      </div>
+      <div class="dimrow">
+        <div class="dn">💼 Economy</div>
+        <div class="dt"><div class="dmed"></div><div class="df" style="width:46%;background:#16a34a;"></div></div>
+        <div class="dv">46<small>/100</small> · <span style="color:#d97706;">BELOW AVG</span></div>
+      </div>
+      <div class="dimrow">
+        <div class="dn">🛡️ Safety & Place</div>
+        <div class="dt"><div class="dmed"></div><div class="df" style="width:47%;background:#8b5cf6;"></div></div>
+        <div class="dv">47<small>/100</small> · <span style="color:#d97706;">BELOW AVG</span></div>
+      </div>
+      <div class="dimrow">
+        <div class="dn">📈 Growth</div>
+        <div class="dt"><div class="dmed"></div><div class="df" style="width:49%;background:#f59e0b;"></div></div>
+        <div class="dv">49<small>/100</small> · <span style="color:#1a7ff0;">ABOVE AVG</span></div>
+      </div>
+      </div>
+    </div>
+    <div class="tcap">Dimension caps: Affordability 28 · Economy 28 · Safety &amp; Place 26 · Growth 18 pts.
+      The dashed line marks the national median. Town-resolved metrics (crime, income, growth, scale)
+      drive ~51% of the score; the rest is inherited from Solano County.</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">🧭</span> How Vacaville city Compares</div>
+    <div class="posbar">
+      <div class="pl"><span>Among all US towns</span><span><b>#9,173</b> of 10,267 · top 89%</span></div>
+      <div class="postrack"><div class="posmark" style="left:11%;"></div></div>
+      <div class="posends"><span>Caution</span><span>National median</span><span>Strong Buy</span></div>
+    </div>
+    <div class="posbar" style="margin-bottom:0;">
+      <div class="pl"><span>Within Solano County</span><span><b>#4</b> of 7 — ahead of 3 of 6 peer towns</span></div>
+      <div class="postrack"><div class="posmark" style="left:50%;"></div></div>
+      <div class="posends"><span>Lowest in county</span><span></span><span>Highest in county</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">📍</span> Where It Is</div>
+    <div id="locmap" data-lat="38.3586" data-lon="-121.9686" data-col="#f97316"></div>
+    <div class="tcap">Vacaville city, CA · 103,850 residents.
+      Scroll to zoom; drag to pan.</div>
   </div>
   <div class="card">
     <div class="card-title"><span class="ct-icon">📋</span> The Numbers</div>
@@ -460,6 +562,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       <div class="sb"><div class="sb-val">+3.0%</div><div class="sb-lbl">Town income growth (IRS ZIP)</div></div>
       <div class="sb"><div class="sb-val">-1.0</div><div class="sb-lbl">County net migration / 1k (Census)</div></div>
     </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">🏘️</span> Towns in the Same County</div>
+    <a class="peer" href="0619402.html"><span class="peer-rk">#1</span><span class="peer-nm">Dixon city</span><span class="peer-sc" style="background:#f97316;">42</span></a><a class="peer" href="0605290.html"><span class="peer-rk">#2</span><span class="peer-nm">Benicia city</span><span class="peer-sc" style="background:#f97316;">40</span></a><a class="peer" href="0660984.html"><span class="peer-rk">#3</span><span class="peer-nm">Rio Vista city</span><span class="peer-sc" style="background:#f97316;">39</span></a><a class="peer me" href="0681554.html"><span class="peer-rk">#4</span><span class="peer-nm">Vacaville city</span><span class="peer-sc" style="background:#f97316;">38</span></a><a class="peer" href="0623182.html"><span class="peer-rk">#5</span><span class="peer-nm">Fairfield city</span><span class="peer-sc" style="background:#f97316;">36</span></a><a class="peer" href="0675630.html"><span class="peer-rk">#6</span><span class="peer-nm">Suisun City city</span><span class="peer-sc" style="background:#f97316;">34</span></a><a class="peer" href="0681666.html"><span class="peer-rk">#7</span><span class="peer-nm">Vallejo city</span><span class="peer-sc" style="background:#f97316;">30</span></a>
+    <div class="tcap">Ranked by town-resolved fundamentals within the county. Vacaville city is highlighted.</div>
   </div>
   <details class="howto">
     <summary>How we scored this</summary>
@@ -495,5 +602,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
   <strong>civi<em style="font-style:normal;color:#1a7ff0;">ca</em></strong> — research-grade town intelligence for homebuyers
 </div>
 </div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  var el=document.getElementById('locmap');
+  if(!el||typeof L==='undefined')return;
+  var lat=parseFloat(el.dataset.lat),lon=parseFloat(el.dataset.lon),col=el.dataset.col;
+  var m=L.map('locmap',{zoomControl:true,scrollWheelZoom:false,attributionControl:false}).setView([lat,lon],11);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:17}).addTo(m);
+  L.circleMarker([lat,lon],{radius:9,color:'#fff',weight:2,fillColor:col,fillOpacity:.9}).addTo(m);
+})();
+</script>
 </body>
 </html>

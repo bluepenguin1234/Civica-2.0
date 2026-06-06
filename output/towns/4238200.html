@@ -17,6 +17,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Dataset","name":"Jim Thorpe borough, PA Housing Market Analysis","description":"Jim Thorpe borough, PA scores 37/100 on Civica's 4-dimension town housing model. Signal: Caution. Ranks #2 of 7 towns in Carbon County. Town-level crime, income, and growth on 100% federal data.","url":"https://civica.app/output/towns/4238200.html"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://civica.app/"},{"@type":"ListItem","position":2,"name":"Carbon County","item":"https://civica.app/output/towns/4238200.html"},{"@type":"ListItem","position":3,"name":"Jim Thorpe borough","item":"https://civica.app/output/towns/4238200.html"}]}</script>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -356,6 +357,44 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 .howto-body { font-size:13px; line-height:1.6; color:#475569; padding:0 0 18px; }
 .schools-soon { opacity:.7; }
 .tcap { font-size:11px; color:#94a3b8; margin-top:6px; }
+/* glance stat tiles */
+.glance { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.gtile { background:#fff; border:1px solid #eef1f5; border-radius:14px; padding:14px 15px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+.gt-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.gt-icon { font-size:17px; }
+.gt-tag { font-size:10px; font-weight:800; letter-spacing:.02em; padding:3px 8px; border-radius:100px; }
+.gt-val { font-size:23px; font-weight:900; color:#0d2d52; line-height:1; }
+.gt-lbl { font-size:11px; color:#6e6e73; margin:5px 0 9px; }
+.gt-bar { height:6px; background:#eef2f7; border-radius:100px; overflow:hidden; }
+.gt-fill { height:100%; border-radius:100px; }
+/* dimension percentile rows */
+.dimrow { display:flex; align-items:center; gap:12px; margin-bottom:13px; }
+.dimrow .dn { width:130px; flex-shrink:0; font-size:13px; font-weight:700; color:#0d2d52; }
+.dimrow .dt { flex:1; position:relative; height:14px; background:#eef2f7; border-radius:100px; }
+.dimrow .df { position:absolute; left:0; top:0; bottom:0; border-radius:100px; }
+.dimrow .dmed { position:absolute; left:50%; top:-3px; bottom:-3px; width:2px; background:#cbd5e1; }
+.dimrow .dv { width:118px; flex-shrink:0; text-align:right; font-size:12px; font-weight:700; color:#0d2d52; }
+.dimrow .dv small { color:#94a3b8; font-weight:600; }
+.radar-wrap { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+.radar-wrap svg { flex-shrink:0; }
+.radar-side { flex:1; min-width:240px; }
+/* position / distribution bars */
+.posbar { margin-bottom:16px; }
+.posbar .pl { display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px; }
+.posbar .pl b { color:#0d2d52; }
+.postrack { position:relative; height:12px; border-radius:100px; background:linear-gradient(90deg,#f97316,#f59e0b,#1a7ff0,#16a34a); }
+.posmark { position:absolute; top:-4px; width:6px; height:20px; border-radius:3px; background:#0d2d52; box-shadow:0 0 0 2px #fff; transform:translateX(-3px); }
+.posends { display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; margin-top:5px; }
+/* location map */
+#locmap { height:240px; border-radius:12px; overflow:hidden; z-index:0; }
+/* peers */
+.peer { display:flex; align-items:center; gap:12px; padding:9px 10px; border-radius:10px; text-decoration:none; }
+.peer:hover { background:#f6f8fb; }
+.peer.me { background:#eef6ff; border:1px solid #cfe3ff; }
+.peer-rk { width:26px; font-size:12px; font-weight:800; color:#c7c7cc; text-align:center; flex-shrink:0; }
+.peer-nm { flex:1; font-size:13px; font-weight:600; color:#0d2d52; }
+.peer-sc { width:30px; height:30px; border-radius:50%; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
+@media (max-width:640px) { .glance { grid-template-columns:repeat(2,1fr); } }
 </style>
 </head>
 <body>
@@ -395,7 +434,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
           <div class="sh-num">37</div>
           <div class="sh-denom">/100</div>
         </div>
-        <div class="sh-grade">Top 90% Nationally</div>
+        <div class="sh-grade">Top 90% · #9,281 of 10,267</div>
       </div>
       <div class="verdict-badge" style="padding-top:4px;">
         <div class="vb-label">Civica Signal</div>
@@ -420,32 +459,95 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <div class="body" style="font-size:14px;"><strong>Civica Verdict:</strong> Jim Thorpe borough warrants <strong>Caution</strong>. Affordability (14/100) and other fundamentals trail national peers; even Safety & Place (71/100) is only middling.</div>
   </div>
   <div class="card">
-    <div class="card-title"><span class="ct-icon">📊</span> Four-Dimension Breakdown</div>
-    <div class="bar-chart">
-      <div class="bar-row">
-        <div class="bar-lbl">🏠 Affordability</div>
-        <div class="bar-track"><div class="bar-fill" style="width:14%;background:#1a7ff0;"></div></div>
-        <div class="bar-val">14/100</div>
+    <div class="card-title"><span class="ct-icon">⚡</span> At a Glance <span class="tcap" style="display:inline;font-weight:600;">— bar = national percentile</span></div>
+    <div class="glance">
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">🎯</span><span class="gt-tag" style="color:#ea580c;background:#ffedd5;">BOTTOM 10%</span></div>
+        <div class="gt-val">37</div>
+        <div class="gt-lbl">Civica Score (0–100)</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:10%;background:#ea580c;"></div></div>
       </div>
-      <div class="bar-row">
-        <div class="bar-lbl">💼 Economy</div>
-        <div class="bar-track"><div class="bar-fill" style="width:21%;background:#16a34a;"></div></div>
-        <div class="bar-val">21/100</div>
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">💵</span><span class="gt-tag" style="color:#d97706;background:#fef3c7;">BELOW AVG</span></div>
+        <div class="gt-val">$68,577</div>
+        <div class="gt-lbl">Town income / return</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:46%;background:#d97706;"></div></div>
       </div>
-      <div class="bar-row">
-        <div class="bar-lbl">🛡️ Safety & Place</div>
-        <div class="bar-track"><div class="bar-fill" style="width:71%;background:#8b5cf6;"></div></div>
-        <div class="bar-val">71/100</div>
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">🏠</span><span class="gt-tag" style="color:#ea580c;background:#ffedd5;">BOTTOM 16%</span></div>
+        <div class="gt-val">29%</div>
+        <div class="gt-lbl">Rent burden</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:16%;background:#ea580c;"></div></div>
       </div>
-      <div class="bar-row">
-        <div class="bar-lbl">📈 Growth</div>
-        <div class="bar-track"><div class="bar-fill" style="width:50%;background:#f59e0b;"></div></div>
-        <div class="bar-val">50/100</div>
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">🛡️</span><span class="gt-tag" style="color:#16a34a;background:#dcfce7;">TOP 10%</span></div>
+        <div class="gt-val">0</div>
+        <div class="gt-lbl">Violent crime / 100k</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:90%;background:#16a34a;"></div></div>
+      </div>
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">📈</span><span class="gt-tag" style="color:#d97706;background:#fef3c7;">BELOW AVG</span></div>
+        <div class="gt-val">+0.6%</div>
+        <div class="gt-lbl">Population growth, 5yr</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:49%;background:#d97706;"></div></div>
+      </div>
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">🏦</span><span class="gt-tag" style="color:#ea580c;background:#ffedd5;">BOTTOM 11%</span></div>
+        <div class="gt-val">+8.8%</div>
+        <div class="gt-lbl">Appreciation /yr (FHFA)</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:11%;background:#ea580c;"></div></div>
       </div>
     </div>
-    <div class="tcap">Each dimension is a national percentile blend (0–100). Affordability 28 pts ·
-      Economy 28 · Safety &amp; Place 26 · Growth 18. Town-resolved metrics (crime, income, growth,
-      scale) account for ~51% of the score; the rest is inherited from Carbon County.</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">📊</span> Four-Dimension Breakdown</div>
+    <div class="radar-wrap">
+      <svg width="200" height="200" viewBox="0 0 200 200"><polygon points="100,80 120,100 100,120 80,100" fill="none" stroke="#e5eaf1" stroke-width="1"/><polygon points="100,61 139,100 100,139 61,100" fill="none" stroke="#e5eaf1" stroke-width="1"/><polygon points="100,42 158,100 100,158 42,100" fill="none" stroke="#e5eaf1" stroke-width="1"/><polygon points="100,22 178,100 100,178 22,100" fill="none" stroke="#e5eaf1" stroke-width="1"/><line x1="100.0" y1="100.0" x2="100.0" y2="22.0" stroke="#e5eaf1"/><line x1="100.0" y1="100.0" x2="178.0" y2="100.0" stroke="#e5eaf1"/><line x1="100.0" y1="100.0" x2="100.0" y2="178.0" stroke="#e5eaf1"/><line x1="100.0" y1="100.0" x2="22.0" y2="100.0" stroke="#e5eaf1"/><polygon points="100.0,89.4 116.6,100.0 100.0,155.0 60.7,100.0" fill="rgba(26,127,240,.20)" stroke="#1a7ff0" stroke-width="2"/><circle cx="100.0" cy="89.4" r="3" fill="#0d2d52"/><circle cx="116.6" cy="100.0" r="3" fill="#0d2d52"/><circle cx="100.0" cy="155.0" r="3" fill="#0d2d52"/><circle cx="60.7" cy="100.0" r="3" fill="#0d2d52"/><text x="100.0" y="16.0" text-anchor="middle" font-size="9" fill="#6e6e73" font-weight="700">Afford.</text><text x="182.0" y="103.0" text-anchor="start" font-size="9" fill="#6e6e73" font-weight="700">Econ.</text><text x="100.0" y="191.0" text-anchor="middle" font-size="9" fill="#6e6e73" font-weight="700">Safety</text><text x="18.0" y="103.0" text-anchor="end" font-size="9" fill="#6e6e73" font-weight="700">Growth</text></svg>
+      <div class="radar-side">
+      <div class="dimrow">
+        <div class="dn">🏠 Affordability</div>
+        <div class="dt"><div class="dmed"></div><div class="df" style="width:14%;background:#1a7ff0;"></div></div>
+        <div class="dv">14<small>/100</small> · <span style="color:#ea580c;">BOTTOM 4%</span></div>
+      </div>
+      <div class="dimrow">
+        <div class="dn">💼 Economy</div>
+        <div class="dt"><div class="dmed"></div><div class="df" style="width:21%;background:#16a34a;"></div></div>
+        <div class="dv">21<small>/100</small> · <span style="color:#ea580c;">BOTTOM 4%</span></div>
+      </div>
+      <div class="dimrow">
+        <div class="dn">🛡️ Safety & Place</div>
+        <div class="dt"><div class="dmed"></div><div class="df" style="width:71%;background:#8b5cf6;"></div></div>
+        <div class="dv">71<small>/100</small> · <span style="color:#16a34a;">TOP 8%</span></div>
+      </div>
+      <div class="dimrow">
+        <div class="dn">📈 Growth</div>
+        <div class="dt"><div class="dmed"></div><div class="df" style="width:50%;background:#f59e0b;"></div></div>
+        <div class="dv">50<small>/100</small> · <span style="color:#1a7ff0;">ABOVE AVG</span></div>
+      </div>
+      </div>
+    </div>
+    <div class="tcap">Dimension caps: Affordability 28 · Economy 28 · Safety &amp; Place 26 · Growth 18 pts.
+      The dashed line marks the national median. Town-resolved metrics (crime, income, growth, scale)
+      drive ~51% of the score; the rest is inherited from Carbon County.</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">🧭</span> How Jim Thorpe borough Compares</div>
+    <div class="posbar">
+      <div class="pl"><span>Among all US towns</span><span><b>#9,281</b> of 10,267 · top 90%</span></div>
+      <div class="postrack"><div class="posmark" style="left:10%;"></div></div>
+      <div class="posends"><span>Caution</span><span>National median</span><span>Strong Buy</span></div>
+    </div>
+    <div class="posbar" style="margin-bottom:0;">
+      <div class="pl"><span>Within Carbon County</span><span><b>#2</b> of 7 — ahead of 5 of 6 peer towns</span></div>
+      <div class="postrack"><div class="posmark" style="left:83%;"></div></div>
+      <div class="posends"><span>Lowest in county</span><span></span><span>Highest in county</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">📍</span> Where It Is</div>
+    <div id="locmap" data-lat="40.8572" data-lon="-75.7763" data-col="#f97316"></div>
+    <div class="tcap">Jim Thorpe borough, PA · 4,531 residents.
+      Scroll to zoom; drag to pan.</div>
   </div>
   <div class="card">
     <div class="card-title"><span class="ct-icon">📋</span> The Numbers</div>
@@ -460,6 +562,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
       <div class="sb"><div class="sb-val">+0.5%</div><div class="sb-lbl">Town income growth (IRS ZIP)</div></div>
       <div class="sb"><div class="sb-val">+7.3</div><div class="sb-lbl">County net migration / 1k (Census)</div></div>
     </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">🏘️</span> Towns in the Same County</div>
+    <a class="peer" href="4281856.html"><span class="peer-rk">#1</span><span class="peer-nm">Weatherly borough</span><span class="peer-sc" style="background:#f97316;">37</span></a><a class="peer me" href="4238200.html"><span class="peer-rk">#2</span><span class="peer-nm">Jim Thorpe borough</span><span class="peer-sc" style="background:#f97316;">37</span></a><a class="peer" href="4257696.html"><span class="peer-rk">#3</span><span class="peer-nm">Palmerton borough</span><span class="peer-sc" style="background:#f97316;">37</span></a><a class="peer" href="4241464.html"><span class="peer-rk">#4</span><span class="peer-nm">Lansford borough</span><span class="peer-sc" style="background:#f97316;">37</span></a><a class="peer" href="4275248.html"><span class="peer-rk">#5</span><span class="peer-nm">Summit Hill borough</span><span class="peer-sc" style="background:#f97316;">36</span></a><a class="peer" href="4253088.html"><span class="peer-rk">#6</span><span class="peer-nm">Nesquehoning borough</span><span class="peer-sc" style="background:#f97316;">35</span></a><a class="peer" href="4242472.html"><span class="peer-rk">#7</span><span class="peer-nm">Lehighton borough</span><span class="peer-sc" style="background:#f97316;">34</span></a>
+    <div class="tcap">Ranked by town-resolved fundamentals within the county. Jim Thorpe borough is highlighted.</div>
   </div>
   <details class="howto">
     <summary>How we scored this</summary>
@@ -495,5 +602,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
   <strong>civi<em style="font-style:normal;color:#1a7ff0;">ca</em></strong> — research-grade town intelligence for homebuyers
 </div>
 </div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  var el=document.getElementById('locmap');
+  if(!el||typeof L==='undefined')return;
+  var lat=parseFloat(el.dataset.lat),lon=parseFloat(el.dataset.lon),col=el.dataset.col;
+  var m=L.map('locmap',{zoomControl:true,scrollWheelZoom:false,attributionControl:false}).setView([lat,lon],11);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:17}).addTo(m);
+  L.circleMarker([lat,lon],{radius:9,color:'#fff',weight:2,fillColor:col,fillOpacity:.9}).addTo(m);
+})();
+</script>
 </body>
 </html>

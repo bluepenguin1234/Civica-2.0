@@ -164,6 +164,7 @@ def build_head(row, place, state, county, score, label, fips, style):
 <script type="application/ld+json">{ld}</script>
 <script type="application/ld+json">{crumb}</script>
 {ga}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 {style}
 <style>
 .dc-chip {{ display:inline-flex; flex-wrap:wrap; gap:6px; align-items:center; font-size:11px; color:rgba(255,255,255,.6); background:rgba(0,0,0,.2); border:1px solid rgba(255,255,255,.12); border-radius:100px; padding:6px 14px; margin-top:14px; }}
@@ -179,6 +180,44 @@ def build_head(row, place, state, county, score, label, fips, style):
 .howto-body {{ font-size:13px; line-height:1.6; color:#475569; padding:0 0 18px; }}
 .schools-soon {{ opacity:.7; }}
 .tcap {{ font-size:11px; color:#94a3b8; margin-top:6px; }}
+/* glance stat tiles */
+.glance {{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }}
+.gtile {{ background:#fff; border:1px solid #eef1f5; border-radius:14px; padding:14px 15px; box-shadow:0 1px 3px rgba(0,0,0,.04); }}
+.gt-top {{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }}
+.gt-icon {{ font-size:17px; }}
+.gt-tag {{ font-size:10px; font-weight:800; letter-spacing:.02em; padding:3px 8px; border-radius:100px; }}
+.gt-val {{ font-size:23px; font-weight:900; color:#0d2d52; line-height:1; }}
+.gt-lbl {{ font-size:11px; color:#6e6e73; margin:5px 0 9px; }}
+.gt-bar {{ height:6px; background:#eef2f7; border-radius:100px; overflow:hidden; }}
+.gt-fill {{ height:100%; border-radius:100px; }}
+/* dimension percentile rows */
+.dimrow {{ display:flex; align-items:center; gap:12px; margin-bottom:13px; }}
+.dimrow .dn {{ width:130px; flex-shrink:0; font-size:13px; font-weight:700; color:#0d2d52; }}
+.dimrow .dt {{ flex:1; position:relative; height:14px; background:#eef2f7; border-radius:100px; }}
+.dimrow .df {{ position:absolute; left:0; top:0; bottom:0; border-radius:100px; }}
+.dimrow .dmed {{ position:absolute; left:50%; top:-3px; bottom:-3px; width:2px; background:#cbd5e1; }}
+.dimrow .dv {{ width:118px; flex-shrink:0; text-align:right; font-size:12px; font-weight:700; color:#0d2d52; }}
+.dimrow .dv small {{ color:#94a3b8; font-weight:600; }}
+.radar-wrap {{ display:flex; gap:20px; align-items:center; flex-wrap:wrap; }}
+.radar-wrap svg {{ flex-shrink:0; }}
+.radar-side {{ flex:1; min-width:240px; }}
+/* position / distribution bars */
+.posbar {{ margin-bottom:16px; }}
+.posbar .pl {{ display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px; }}
+.posbar .pl b {{ color:#0d2d52; }}
+.postrack {{ position:relative; height:12px; border-radius:100px; background:linear-gradient(90deg,#f97316,#f59e0b,#1a7ff0,#16a34a); }}
+.posmark {{ position:absolute; top:-4px; width:6px; height:20px; border-radius:3px; background:#0d2d52; box-shadow:0 0 0 2px #fff; transform:translateX(-3px); }}
+.posends {{ display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; margin-top:5px; }}
+/* location map */
+#locmap {{ height:240px; border-radius:12px; overflow:hidden; z-index:0; }}
+/* peers */
+.peer {{ display:flex; align-items:center; gap:12px; padding:9px 10px; border-radius:10px; text-decoration:none; }}
+.peer:hover {{ background:#f6f8fb; }}
+.peer.me {{ background:#eef6ff; border:1px solid #cfe3ff; }}
+.peer-rk {{ width:26px; font-size:12px; font-weight:800; color:#c7c7cc; text-align:center; flex-shrink:0; }}
+.peer-nm {{ flex:1; font-size:13px; font-weight:600; color:#0d2d52; }}
+.peer-sc {{ width:30px; height:30px; border-radius:50%; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }}
+@media (max-width:640px) {{ .glance {{ grid-template-columns:repeat(2,1fr); }} }}
 </style>
 </head>'''
 
@@ -243,7 +282,7 @@ def build_hero(row, place, state, county):
           <div class="sh-num">{score:.0f}</div>
           <div class="sh-denom">/100</div>
         </div>
-        <div class="sh-grade">Top {top_pct}% Nationally</div>
+        <div class="sh-grade">Top {top_pct}% · #{int(row['national_rank']):,} of {int(row['_n_national']):,}</div>
       </div>
       <div class="verdict-badge" style="padding-top:4px;">
         <div class="vb-label">Civica Signal</div>
@@ -264,24 +303,109 @@ def build_hero(row, place, state, county):
 </div>'''
 
 
+DIM_PALETTE = ['#1a7ff0', '#16a34a', '#8b5cf6', '#f59e0b']
+
+
+def pctl_tag(p):
+    """Return (label, color) describing a national percentile 0-100."""
+    if p >= 75:
+        return (f'TOP {max(1, round(100 - p))}%', '#16a34a')
+    if p >= 50:
+        return ('ABOVE AVG', '#1a7ff0')
+    if p >= 25:
+        return ('BELOW AVG', '#d97706')
+    return (f'BOTTOM {max(1, round(p))}%', '#ea580c')
+
+
+def tag_bg(color):
+    return {'#16a34a': '#dcfce7', '#1a7ff0': '#dbeafe',
+            '#d97706': '#fef3c7', '#ea580c': '#ffedd5'}.get(color, '#eef2f7')
+
+
+def build_radar(vals):
+    """4-axis radar (Affordability top, Economy right, Safety bottom, Growth left)."""
+    cx = cy = 100.0
+    R = 78.0
+    aff, eco, saf, gro = [max(0.0, min(100.0, v)) for v in vals]
+    def pt(frac_up, frac_right):
+        return (cx + R * frac_right, cy - R * frac_up)
+    p_aff = (cx, cy - R * aff / 100)
+    p_eco = (cx + R * eco / 100, cy)
+    p_saf = (cx, cy + R * saf / 100)
+    p_gro = (cx - R * gro / 100, cy)
+    poly = ' '.join(f'{x:.1f},{y:.1f}' for x, y in [p_aff, p_eco, p_saf, p_gro])
+    rings = ''
+    for frac in (0.25, 0.5, 0.75, 1.0):
+        r = R * frac
+        rp = f'{cx:.0f},{cy-r:.0f} {cx+r:.0f},{cy:.0f} {cx:.0f},{cy+r:.0f} {cx-r:.0f},{cy:.0f}'
+        rings += f'<polygon points="{rp}" fill="none" stroke="#e5eaf1" stroke-width="1"/>'
+    axes = (f'<line x1="{cx}" y1="{cy}" x2="{cx}" y2="{cy-R}" stroke="#e5eaf1"/>'
+            f'<line x1="{cx}" y1="{cy}" x2="{cx+R}" y2="{cy}" stroke="#e5eaf1"/>'
+            f'<line x1="{cx}" y1="{cy}" x2="{cx}" y2="{cy+R}" stroke="#e5eaf1"/>'
+            f'<line x1="{cx}" y1="{cy}" x2="{cx-R}" y2="{cy}" stroke="#e5eaf1"/>')
+    labels = (f'<text x="{cx}" y="{cy-R-6}" text-anchor="middle" font-size="9" fill="#6e6e73" font-weight="700">Afford.</text>'
+              f'<text x="{cx+R+4}" y="{cy+3}" text-anchor="start" font-size="9" fill="#6e6e73" font-weight="700">Econ.</text>'
+              f'<text x="{cx}" y="{cy+R+13}" text-anchor="middle" font-size="9" fill="#6e6e73" font-weight="700">Safety</text>'
+              f'<text x="{cx-R-4}" y="{cy+3}" text-anchor="end" font-size="9" fill="#6e6e73" font-weight="700">Growth</text>')
+    dots = ''.join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="#0d2d52"/>'
+                   for x, y in [p_aff, p_eco, p_saf, p_gro])
+    return (f'<svg width="200" height="200" viewBox="0 0 200 200">{rings}{axes}'
+            f'<polygon points="{poly}" fill="rgba(26,127,240,.20)" stroke="#1a7ff0" stroke-width="2"/>'
+            f'{dots}{labels}</svg>')
+
+
+def build_glance(row):
+    rb = row['rent_burden'] * 100
+    g5 = row['town_growth_5yr'] * 100
+    tiles = [
+        ('🎯', f"{row['civica_score']:.0f}", 'Civica Score (0–100)', row['pctl_score']),
+        ('💵', money(row['town_income']), 'Town income / return', row['pctl_income']),
+        ('🏠', f'{rb:.0f}%', 'Rent burden', row['pctl_rentburden']),
+        ('🛡️', f"{row['violent_per100k']:.0f}", 'Violent crime / 100k', row['pctl_crime']),
+        ('📈', f'{g5:+.1f}%', 'Population growth, 5yr', row['pctl_growth']),
+        ('🏦', f"{row['hpi_3yr_avg']:+.1f}%", 'Appreciation /yr (FHFA)', row['pctl_appr']),
+    ]
+    cells = ''
+    for icon, val, lbl, p in tiles:
+        tag, col = pctl_tag(p)
+        cells += f'''
+      <div class="gtile">
+        <div class="gt-top"><span class="gt-icon">{icon}</span><span class="gt-tag" style="color:{col};background:{tag_bg(col)};">{tag}</span></div>
+        <div class="gt-val">{val}</div>
+        <div class="gt-lbl">{lbl}</div>
+        <div class="gt-bar"><div class="gt-fill" style="width:{max(3,p):.0f}%;background:{col};"></div></div>
+      </div>'''
+    return f'''<div class="card">
+    <div class="card-title"><span class="ct-icon">⚡</span> At a Glance <span class="tcap" style="display:inline;font-weight:600;">— bar = national percentile</span></div>
+    <div class="glance">{cells}
+    </div>
+  </div>'''
+
+
 def build_dimension_card(row):
-    bars = ''
-    palette = ['#1a7ff0', '#16a34a', '#8b5cf6', '#f59e0b']
-    for (col, name, icon), color in zip(DIM_NAMES, palette):
+    radar = build_radar([row[c] / DIM_MAX[c] * 100 for c, _, _ in DIM_NAMES])
+    rows = ''
+    pctl_keys = ['pctl_dim1', 'pctl_dim2', 'pctl_dim3', 'pctl_dim4']
+    for (col, name, icon), color, pk in zip(DIM_NAMES, DIM_PALETTE, pctl_keys):
         val = row[col] / DIM_MAX[col] * 100
-        bars += f'''
-      <div class="bar-row">
-        <div class="bar-lbl">{icon} {name}</div>
-        <div class="bar-track"><div class="bar-fill" style="width:{val:.0f}%;background:{color};"></div></div>
-        <div class="bar-val">{val:.0f}/100</div>
+        p = row[pk]
+        tag, tcol = pctl_tag(p)
+        rows += f'''
+      <div class="dimrow">
+        <div class="dn">{icon} {name}</div>
+        <div class="dt"><div class="dmed"></div><div class="df" style="width:{val:.0f}%;background:{color};"></div></div>
+        <div class="dv">{val:.0f}<small>/100</small> · <span style="color:{tcol};">{tag}</span></div>
       </div>'''
     return f'''<div class="card">
     <div class="card-title"><span class="ct-icon">📊</span> Four-Dimension Breakdown</div>
-    <div class="bar-chart">{bars}
+    <div class="radar-wrap">
+      {radar}
+      <div class="radar-side">{rows}
+      </div>
     </div>
-    <div class="tcap">Each dimension is a national percentile blend (0–100). Affordability 28 pts ·
-      Economy 28 · Safety &amp; Place 26 · Growth 18. Town-resolved metrics (crime, income, growth,
-      scale) account for ~51% of the score; the rest is inherited from {row['county_name']}.</div>
+    <div class="tcap">Dimension caps: Affordability 28 · Economy 28 · Safety &amp; Place 26 · Growth 18 pts.
+      The dashed line marks the national median. Town-resolved metrics (crime, income, growth, scale)
+      drive ~51% of the score; the rest is inherited from {row['county_name']}.</div>
   </div>'''
 
 
@@ -331,6 +455,65 @@ def build_fundamentals_card(row):
   </div>'''
 
 
+def build_position_card(row):
+    n = int(row['_n_national'])
+    nrank = int(row['national_rank'])
+    p_nat = row['pctl_score']
+    top_nat = max(1, round(100 - p_nat))
+    rk, tot = int(row['rank_in_county']), int(row['towns_in_county'])
+    p_cty = 100.0 if tot <= 1 else (tot - rk) / (tot - 1) * 100
+    cty_line = ('the only scored town in its county' if tot <= 1
+                else f'ahead of {tot - rk} of {tot - 1} peer town' + ('s' if (tot - 1) != 1 else ''))
+    return f'''<div class="card">
+    <div class="card-title"><span class="ct-icon">🧭</span> How {str(row['place_name'])} Compares</div>
+    <div class="posbar">
+      <div class="pl"><span>Among all US towns</span><span><b>#{nrank:,}</b> of {n:,} · top {top_nat}%</span></div>
+      <div class="postrack"><div class="posmark" style="left:{p_nat:.0f}%;"></div></div>
+      <div class="posends"><span>Caution</span><span>National median</span><span>Strong Buy</span></div>
+    </div>
+    <div class="posbar" style="margin-bottom:0;">
+      <div class="pl"><span>Within {str(row['county_name'])}</span><span><b>#{rk}</b> of {tot} — {cty_line}</span></div>
+      <div class="postrack"><div class="posmark" style="left:{p_cty:.0f}%;"></div></div>
+      <div class="posends"><span>Lowest in county</span><span></span><span>Highest in county</span></div>
+    </div>
+  </div>'''
+
+
+def build_location_card(row, lat, lon):
+    if lat is None or lon is None:
+        return ''
+    col = {'Strong Buy': '#16a34a', 'Buy': '#1a7ff0',
+           'Hold': '#f59e0b', 'Caution': '#f97316'}.get(row['market_label'], '#1a7ff0')
+    return f'''<div class="card">
+    <div class="card-title"><span class="ct-icon">📍</span> Where It Is</div>
+    <div id="locmap" data-lat="{lat}" data-lon="{lon}" data-col="{col}"></div>
+    <div class="tcap">{str(row['place_name'])}, {str(row['state_abbr'])} · {row['POPESTIMATE2025']:,} residents.
+      Scroll to zoom; drag to pan.</div>
+  </div>'''
+
+
+def build_peers_card(sib, fips, place):
+    if sib is None or len(sib) <= 1:
+        return ''
+    sib = sib.sort_values('rank_in_county').head(8)
+    rows = ''
+    for _, r in sib.iterrows():
+        f = str(r['fips']).zfill(7)
+        me = ' me' if f == fips else ''
+        col = {'Strong Buy': '#16a34a', 'Buy': '#1a7ff0',
+               'Hold': '#f59e0b', 'Caution': '#f97316'}.get(r['market_label'], '#9ca3af')
+        href = f'{f}.html'
+        rows += (f'<a class="peer{me}" href="{href}">'
+                 f'<span class="peer-rk">#{int(r["rank_in_county"])}</span>'
+                 f'<span class="peer-nm">{r["place_name"]}</span>'
+                 f'<span class="peer-sc" style="background:{col};">{r["civica_score"]:.0f}</span></a>')
+    return f'''<div class="card">
+    <div class="card-title"><span class="ct-icon">🏘️</span> Towns in the Same County</div>
+    {rows}
+    <div class="tcap">Ranked by town-resolved fundamentals within the county. {place} is highlighted.</div>
+  </div>'''
+
+
 def build_schools_card():
     # Schools (coming soon) — clean slot for a future data layer (TOWN_HANDOFF.md §1).
     return '''<div class="card schools-soon">
@@ -373,25 +556,44 @@ FOOTER = '''<div class="footer">
 </div>'''
 
 
-def generate_page(row, style):
+LOC_SCRIPT = '''<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  var el=document.getElementById('locmap');
+  if(!el||typeof L==='undefined')return;
+  var lat=parseFloat(el.dataset.lat),lon=parseFloat(el.dataset.lon),col=el.dataset.col;
+  var m=L.map('locmap',{zoomControl:true,scrollWheelZoom:false,attributionControl:false}).setView([lat,lon],11);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:17}).addTo(m);
+  L.circleMarker([lat,lon],{radius:9,color:'#fff',weight:2,fillColor:col,fillOpacity:.9}).addTo(m);
+})();
+</script>'''
+
+
+def generate_page(row, style, geo, siblings):
     place = str(row['place_name'])
     state = str(row['state_abbr'])
     county = str(row['county_name'])
     fips = str(row['fips']).zfill(7)
     score = row['civica_score']
     label = row['market_label']
+    lat, lon = geo.get(fips, (None, None))
     return f'''{build_head(row, place, state, county, score, label, fips, style)}
 <body>
 {build_nav()}
 {build_hero(row, place, state, county)}
 <div class="page">
   {build_verdict_card(row, place)}
+  {build_glance(row)}
   {build_dimension_card(row)}
+  {build_position_card(row)}
+  {build_location_card(row, lat, lon)}
   {build_fundamentals_card(row)}
+  {build_peers_card(siblings, fips, place)}
   {build_howto(row)}
   {build_schools_card()}
   {FOOTER}
 </div>
+{LOC_SCRIPT}
 </body>
 </html>'''
 
@@ -549,11 +751,13 @@ def write_sitemap(index_map):
 
 # ── Main ─────────────────────────────────────────────────────────────────────────
 
-def generate_state(state_df, style, index_map):
+def generate_state(state_df, style, index_map, geo, sib_cols):
     """Generate every town page for one state; update index_map in place. Returns count."""
+    sib_by_county = {cf: g[sib_cols] for cf, g in state_df.groupby('primary_county_fips')}
     for _, row in state_df.iterrows():
         fips = str(row['fips']).zfill(7)
-        html = generate_page(row, style)
+        siblings = sib_by_county.get(row['primary_county_fips'])
+        html = generate_page(row, style, geo, siblings)
         with open(os.path.join(OUT_DIR, f'{fips}.html'), 'w', encoding='utf-8') as f:
             f.write(html)
         index_map[fips] = {
@@ -589,6 +793,26 @@ def main():
     df['fips'] = df['fips'].str.zfill(7)
     df['_n_national'] = len(df)
 
+    # National percentiles (0-100) for context bars; lower-is-better metrics inverted.
+    df['pctl_score'] = df['civica_score'].rank(pct=True) * 100
+    for i in (1, 2, 3, 4):
+        df[f'pctl_dim{i}'] = df[f'dim{i}'].rank(pct=True) * 100
+    df['pctl_income'] = df['town_income'].rank(pct=True) * 100
+    df['pctl_wage'] = df['avg_annual_wage'].rank(pct=True) * 100
+    df['pctl_growth'] = df['town_growth_5yr'].rank(pct=True) * 100
+    df['pctl_rentburden'] = (1 - df['rent_burden'].rank(pct=True)) * 100
+    df['pctl_crime'] = (1 - df['violent_per100k'].rank(pct=True)) * 100
+    df['pctl_appr'] = (1 - (df['hpi_3yr_avg'] - 5).abs().rank(pct=True)) * 100
+
+    # Town coordinates for the per-page location map (if built).
+    geo = {}
+    geo_path = os.path.join(BASE, 'output', 'towns_geo.json')
+    if os.path.exists(geo_path):
+        for t in json.load(open(geo_path, encoding='utf-8')):
+            geo[t['f']] = (t['lat'], t['lon'])
+
+    sib_cols = ['fips', 'place_name', 'civica_score', 'market_label', 'rank_in_county']
+
     with open(TEMPLATE, encoding='utf-8') as f:
         style = extract_style(f.read())
 
@@ -603,7 +827,7 @@ def main():
         if sdf.empty:
             print(f'  {st}: no towns, skipping')
             continue
-        n = generate_state(sdf, style, index_map)
+        n = generate_state(sdf, style, index_map, geo, sib_cols)
         with open(os.path.join(STATE_DIR, f'{st}.html'), 'w', encoding='utf-8') as f:
             f.write(build_state_page(st, sdf))
         if st not in progress['done']:

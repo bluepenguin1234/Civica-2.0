@@ -122,10 +122,13 @@ def validate_html(df):
         if 'zillow' in low or 'price-to-rent' in low or 'price/rent' in low:
             bad_zillow += 1
         # leftover unreplaced tokens like {score} {place_name}
-        if re.search(r'\{[a-zA-Z_][a-zA-Z0-9_]*\}', html):
+        # (exclude Leaflet tile-URL tokens {s}{z}{x}{y}{r}, which are legitimate)
+        leftover = [m for m in re.findall(r'\{[a-zA-Z_][a-zA-Z0-9_]*\}', html)
+                    if m not in ('{s}', '{z}', '{x}', '{y}', '{r}')]
+        if leftover:
             bad_token += 1
-        # 4 dimension bars present (markup uses class="bar-fill"; excludes the CSS rule)
-        if html.count('class="bar-fill"') != 4:
+        # 4 dimension rows present (markup uses class="dimrow"; excludes the CSS rule)
+        if html.count('class="dimrow"') != 4:
             bad_bars += 1
         # rank-in-county line present
         if 'Ranks #' not in html and 'ranks #' not in low:

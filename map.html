@@ -5,232 +5,81 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Town Map — Civica Research</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
-<meta name="description" content="Interactive map of Civica town scores across the US. Each county is colored by its best-scoring town; click to open that town's full housing research report.">
+<meta name="description" content="Interactive, zoomable map of all 10,267 Civica-scored US towns. Every town is a colored dot — click to open its full housing research report.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --blue:#0d2d52; --blue-lt:#1a7ff0; --navy:#091f3a; --bg:#f5f5f7; --border:rgba(0,0,0,.08); --muted:#98989d; --text:#1d1d1f; --subtext:#6e6e73; }
+body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif; background:#fff; color:var(--text); }
+.nav { background:rgba(255,255,255,.9); backdrop-filter:saturate(180%) blur(20px); -webkit-backdrop-filter:saturate(180%) blur(20px); height:56px; padding:0 28px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:600; border-bottom:1px solid var(--border); }
+.logo { display:flex; align-items:center; gap:9px; text-decoration:none; }
+.logo-text { font-size:18px; font-weight:800; color:#0d2d52; } .logo-text em { font-style:normal; color:#1a7ff0; }
+.nav-links { display:flex; align-items:center; gap:22px; }
+.nav-links a { font-size:13px; color:var(--subtext); text-decoration:none; font-weight:500; }
+.nav-links a:hover, .nav-links a.active { color:#0d2d52; font-weight:700; }
 
-:root {
-  --blue:    #0d2d52;
-  --blue-lt: #1a7ff0;
-  --navy:    #091f3a;
-  --green:   #16a34a;
-  --yellow:  #d97706;
-  --red:     #dc2626;
-  --bg:      #f5f5f7;
-  --border:  rgba(0,0,0,.08);
-  --muted:   #98989d;
-  --text:    #1d1d1f;
-  --subtext: #6e6e73;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-  --shadow:    0 4px 16px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
-  --shadow-lg: 0 12px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
-  --r:    16px;
-  --r-sm: 10px;
-  --r-xs:  6px;
-}
+.maphero { background:linear-gradient(160deg,#060f1e,#091f3a 45%,#0d2d52); padding:30px 28px 24px; text-align:center; }
+.maphero .eyebrow { font-size:11px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:rgba(255,255,255,.42); margin-bottom:10px; }
+.maphero h1 { font-size:34px; font-weight:900; color:#fff; margin-bottom:8px; letter-spacing:-.4px; }
+.maphero p { font-size:14px; color:rgba(255,255,255,.6); max-width:540px; margin:0 auto; }
 
-body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif; background: #fff; color: var(--text); }
+.map-shell { position:relative; }
+#map { width:100%; height:74vh; min-height:460px; background:#eaeef3; z-index:1; }
 
-/* ── NAV ─────────────────────────────────────────── */
-.nav {
-  background: rgba(255,255,255,.88);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  height: 56px;
-  padding: 0 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 300;
-  border-bottom: 1px solid var(--border);
-}
-.logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
-.logo-text { font-size: 18px; font-weight: 800; color: #0d2d52; letter-spacing: -.3px; }
-.logo-text em { font-style: normal; color: #1a7ff0; }
-.nav-links { display: flex; align-items: center; gap: 24px; }
-.nav-links a { font-size: 13px; color: var(--subtext); text-decoration: none; font-weight: 500; }
-.nav-links a:hover { color: #0d2d52; }
-.nav-links a.active { color: #0d2d52; font-weight: 700; }
-.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; flex-direction: column; gap: 5px; }
-.hamburger span { display: block; width: 22px; height: 2px; background: #0d2d52; border-radius: 2px; }
+/* Search overlay */
+.map-search { position:absolute; top:16px; left:16px; z-index:500; width:300px; max-width:calc(100% - 86px); }
+.map-search input { width:100%; height:46px; border-radius:12px; border:none; padding:0 16px 0 42px; font-size:14px; box-shadow:0 6px 24px rgba(0,0,0,.18); outline:none; font-family:inherit; }
+.map-search .si { position:absolute; left:15px; top:14px; pointer-events:none; }
+.map-drop { margin-top:8px; background:#fff; border-radius:12px; box-shadow:0 12px 36px rgba(0,0,0,.22); overflow:hidden; display:none; max-height:320px; overflow-y:auto; }
+.map-drop.open { display:block; }
+.md-row { padding:10px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px; cursor:pointer; border-bottom:1px solid #f3f4f6; }
+.md-row:last-child { border-bottom:none; } .md-row:hover { background:#f6f8fb; }
+.md-name { font-size:13px; font-weight:700; color:var(--navy); }
+.md-meta { font-size:11px; color:var(--muted); }
+.md-score { font-size:13px; font-weight:800; color:#fff; border-radius:8px; padding:3px 8px; flex-shrink:0; }
 
-/* ── HERO ─────────────────────────────────────────── */
-.hero {
-  background: linear-gradient(160deg, #060f1e 0%, #091f3a 45%, #0d2d52 100%);
-  padding: 52px 28px 48px;
-  text-align: center;
-}
-.hero-eyebrow {
-  font-size: 11px; font-weight: 700; letter-spacing: .13em;
-  text-transform: uppercase; color: rgba(255,255,255,.4);
-  margin-bottom: 14px;
-}
-.hero-h1 {
-  font-size: 48px;
-  font-weight: 900;
-  line-height: 1.05;
-  color: #fff;
-  margin-bottom: 14px;
-  letter-spacing: -.5px;
-}
-.hero-sub {
-  font-size: 16px;
-  color: rgba(255,255,255,.6);
-  line-height: 1.65;
-  max-width: 520px;
-  margin: 0 auto;
-}
+/* Legend / filter */
+.legend { position:absolute; bottom:22px; right:16px; z-index:500; background:rgba(255,255,255,.96); border-radius:14px; box-shadow:0 8px 28px rgba(0,0,0,.16); padding:12px 14px; font-size:12px; }
+.legend-title { font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+.lg-item { display:flex; align-items:center; gap:8px; padding:4px 0; cursor:pointer; user-select:none; }
+.lg-item.off { opacity:.34; }
+.lg-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+.lg-count { margin-left:auto; color:var(--muted); font-size:11px; font-weight:600; }
+.lg-hint { font-size:10px; color:var(--muted); margin-top:7px; }
 
-/* ── MAP SECTION ──────────────────────────────────── */
-.map-section {
-  background: #fff;
-  padding: 40px 28px 60px;
-}
-.map-inner { max-width: 1060px; margin: 0 auto; }
+.statbar { display:flex; gap:0; background:#0d2d52; flex-wrap:wrap; }
+.statbar .st { flex:1; min-width:120px; padding:14px 18px; border-right:1px solid rgba(255,255,255,.08); }
+.statbar .st:last-child { border-right:none; }
+.st-v { font-size:20px; font-weight:900; color:#fff; }
+.st-l { font-size:11px; color:rgba(255,255,255,.5); margin-top:2px; }
 
-#countyMap { width: 100%; height: auto; display: none; }
-#countyMap path { transition: opacity .1s; }
-#countyMap path:hover { opacity: .75; }
+.leaflet-popup-content-wrapper { border-radius:14px; }
+.leaflet-popup-content { margin:14px 16px; }
+.pop-name { font-size:15px; font-weight:800; color:var(--navy); }
+.pop-meta { font-size:12px; color:var(--muted); margin:2px 0 8px; }
+.pop-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.pop-score { width:38px; height:38px; border-radius:50%; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; }
+.pop-badge { font-size:11px; font-weight:800; padding:3px 10px; border-radius:100px; color:#fff; }
+.pop-link { display:block; text-align:center; background:#1a7ff0; color:#fff; border-radius:9px; padding:8px; font-size:13px; font-weight:700; text-decoration:none; }
+.pop-link:hover { background:#1568cc; }
 
-.map-legend {
-  display: flex; flex-wrap: wrap; gap: 12px;
-  margin-top: 18px; justify-content: center;
-}
-.map-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--subtext); }
-.map-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; border: 1px solid rgba(0,0,0,.08); }
+footer { background:#111827; padding:30px 28px; text-align:center; }
+footer p { font-size:11px; color:rgba(255,255,255,.28); line-height:1.8; max-width:760px; margin:0 auto; }
+footer a { color:rgba(255,255,255,.45); text-decoration:none; }
 
-/* ── SEARCH BAR ───────────────────────────────────── */
-.search-section {
-  max-width: 640px;
-  margin: 36px auto 0;
-}
-.search-label {
-  font-size: 12px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .08em; color: var(--muted);
-  text-align: center; margin-bottom: 12px;
-}
-.search-wrap { position: relative; }
-.search-input {
-  width: 100%;
-  height: 54px;
-  border-radius: 100px;
-  border: 1.5px solid var(--border);
-  padding: 0 22px 0 52px;
-  font-size: 15px;
-  color: var(--text);
-  box-shadow: var(--shadow-sm);
-  outline: none;
-  transition: box-shadow .2s, border-color .2s;
-  font-family: inherit;
-  background: #fff;
-}
-.search-input:focus {
-  border-color: #1a7ff0;
-  box-shadow: var(--shadow), 0 0 0 3px rgba(26,127,240,.15);
-}
-.search-icon-wrap {
-  position: absolute;
-  left: 19px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-.search-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0; right: 0;
-  background: #fff;
-  border-radius: var(--r);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border);
-  overflow: hidden;
-  display: none;
-  z-index: 200;
-}
-.search-dropdown.open { display: block; }
-.sd-row {
-  padding: 12px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  border-bottom: 1px solid #f3f4f6;
-  transition: background .1s;
-}
-.sd-row:last-child { border-bottom: none; }
-.sd-row:hover { background: #f8fafc; }
-.sd-left { display: flex; flex-direction: column; gap: 2px; }
-.sd-name { font-size: 14px; font-weight: 600; color: var(--blue); }
-.sd-meta { font-size: 11px; color: var(--muted); }
-.sd-right { display: flex; align-items: center; gap: 8px; }
-.sd-score { font-size: 14px; font-weight: 800; color: var(--blue); }
-.sd-label { font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
-
-.lbadge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 100px; white-space: nowrap; }
-.lb-sbuy  { background: #dcfce7; color: #15803d; }
-.lb-buy   { background: #dbeafe; color: #1d4ed8; }
-.lb-watch { background: #fef3c7; color: #92400e; }
-.lb-caut  { background: #ffedd5; color: #9a3412; }
-.lb-avoid { background: #fee2e2; color: #b91c1c; }
-
-/* ── FOOTER ──────────────────────────────────────── */
-.footer { background: #111827; padding: 48px 28px 40px; }
-.footer-inner { max-width: 960px; margin: 0 auto; text-align: center; }
-.footer-logo { display: flex; align-items: center; gap: 8px; justify-content: center; margin-bottom: 20px; text-decoration: none; }
-.footer-logo-text { font-size: 16px; font-weight: 800; color: #fff; }
-.footer-logo-text em { font-style: normal; color: #5ba3f5; }
-.footer-nav { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
-.footer-nav a { font-size: 13px; color: rgba(255,255,255,.4); text-decoration: none; }
-.footer-nav a:hover { color: rgba(255,255,255,.7); }
-.footer-sources { font-size: 11px; color: rgba(255,255,255,.22); line-height: 1.85; max-width: 720px; margin: 0 auto 16px; }
-.footer-copy { font-size: 11px; color: rgba(255,255,255,.18); }
-
-/* ── MOBILE NAV OVERLAY ──────────────────────────── */
-.mobile-nav {
-  display: none;
-  position: fixed; inset: 0; background: #fff; z-index: 400;
-  flex-direction: column; padding: 20px 28px;
-}
-.mobile-nav.open { display: flex; }
-.mobile-nav-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
-.mobile-nav-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #6b7280; }
-.mobile-nav a { font-size: 20px; font-weight: 700; color: #0d2d52; text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--border); }
-.mobile-nav a:last-child { border-bottom: none; }
-.mobile-nav a:hover { color: #1a7ff0; }
-
-/* ── RESPONSIVE ─────────────────────────────────── */
-@media (max-width: 860px) {
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  .hero-h1 { font-size: 36px; }
-}
-@media (max-width: 640px) {
-  .hero { padding: 32px 16px 32px; }
-  .hero-h1 { font-size: 28px; letter-spacing: -.2px; }
-  .hero-sub { font-size: 14px; }
-  .map-section { padding: 20px 12px 40px; }
-  .search-section { margin: 24px auto 0; }
-  .search-input { font-size: 14px; height: 48px; }
-  .map-legend { gap: 8px; margin-top: 12px; }
-  .map-legend-item { font-size: 11px; }
-  .footer { padding: 36px 16px 32px; }
-  .footer-nav { gap: 16px; }
+@media (max-width:760px) {
+  .nav { padding:0 14px; } .nav-links { gap:14px; } .nav-links a { font-size:12px; }
+  .maphero h1 { font-size:24px; } #map { height:66vh; }
+  .map-search { width:auto; left:12px; right:64px; top:12px; }
+  .legend { bottom:14px; right:10px; padding:10px 12px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ══════════ NAV ══════════ -->
 <nav class="nav">
   <a class="logo" href="index.html">
-    <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
-      <rect width="30" height="30" rx="7" fill="#0d2d52"/>
-      <rect x="6" y="16" width="4" height="9" rx="1.5" fill="white" opacity="0.65"/>
-      <rect x="13" y="8" width="4" height="17" rx="1.5" fill="white"/>
-      <rect x="20" y="12" width="4" height="13" rx="1.5" fill="white" opacity="0.8"/>
-    </svg>
+    <svg width="28" height="28" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="7" fill="#0d2d52"/><rect x="6" y="16" width="4" height="9" rx="1.5" fill="white" opacity="0.65"/><rect x="13" y="8" width="4" height="17" rx="1.5" fill="white"/><rect x="20" y="12" width="4" height="13" rx="1.5" fill="white" opacity="0.8"/></svg>
     <span class="logo-text">civi<em>ca</em></span>
   </a>
   <div class="nav-links">
@@ -240,294 +89,143 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
     <a href="compare.html">Compare</a>
     <a href="harvard_model.html">Methodology</a>
   </div>
-  <button class="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
 </nav>
 
-
-<!-- ══════════ HERO ══════════ -->
-<section class="hero">
-  <div class="hero-eyebrow">Town Map</div>
-  <h1 class="hero-h1">10,267 towns, scored</h1>
-  <p class="hero-sub">Each county is colored by its best-scoring town's Civica signal. Click a county to open that top town's report, or search any town below.</p>
+<section class="maphero">
+  <div class="eyebrow">Interactive Town Map</div>
+  <h1>10,267 towns, one map</h1>
+  <p>Every Civica-scored town, colored by verdict. Scroll to zoom, drag to pan, click any dot for the full report.</p>
 </section>
 
-
-<!-- ══════════ MAP + SEARCH ══════════ -->
-<section class="map-section">
-  <div class="map-inner">
-
-    <!-- Map -->
-    <div id="mapLoading" style="text-align:center;padding:64px 0;color:#9ca3af;font-size:14px;">
-      <div style="font-size:28px;margin-bottom:12px;">🗺️</div>
-      Loading map…
-    </div>
-    <svg id="countyMap"></svg>
-
-    <!-- Legend -->
-    <div class="map-legend" id="mapLegend" style="display:none;">
-      <div class="map-legend-item"><span class="map-dot" style="background:#16a34a;"></span>Strong Buy</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#1a7ff0;"></span>Buy</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#f59e0b;"></span>Hold</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#f97316;"></span>Caution</div>
-      <div class="map-legend-item"><span class="map-dot" style="background:#e5e7eb;"></span>No scored towns</div>
-      <div class="map-legend-item" style="color:#98989d;">Color = best town in county</div>
-    </div>
-
-    <!-- Search bar below map -->
-    <div class="search-section">
-      <div class="search-label">Search by town or state</div>
-      <div class="search-wrap">
-        <div class="search-icon-wrap">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.2" stroke-linecap="round">
-            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-          </svg>
-        </div>
-        <input class="search-input" id="searchInput" type="text"
-          placeholder="Try &quot;Tennessee&quot; or &quot;Nolensville&quot;..."
-          oninput="handleSearch(this.value)"
-          onfocus="handleSearch(this.value)"
-          autocomplete="off">
-        <div class="search-dropdown" id="searchDrop"></div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ══════════ FOOTER ══════════ -->
-<footer class="footer">
-  <div class="footer-inner">
-    <a class="footer-logo" href="index.html">
-      <svg width="24" height="24" viewBox="0 0 30 30" fill="none">
-        <rect width="30" height="30" rx="7" fill="rgba(255,255,255,.15)"/>
-        <rect x="6" y="16" width="4" height="9" rx="1.5" fill="white" opacity="0.65"/>
-        <rect x="13" y="8" width="4" height="17" rx="1.5" fill="white"/>
-        <rect x="20" y="12" width="4" height="13" rx="1.5" fill="white" opacity="0.8"/>
-      </svg>
-      <span class="footer-logo-text">civi<em>ca</em></span>
-    </a>
-    <div class="footer-nav">
-      <a href="harvard_model.html">Methodology</a>
-      <a href="map.html">Map</a>
-      <a href="leaderboard.html">Leaderboard</a>
-      <a href="compare.html">Compare</a>
-    </div>
-    <div class="footer-sources">
-      100% federal data: FBI NIBRS 2024 · IRS SOI (ZIP AGI + migration) · Census Population Estimates (sub-county) · Census CBP · Census BPS · BLS QCEW · BEA CAINC1 · FHFA HPI · FEMA NFIP · NOAA Storm Events · USFS Wildfire Risk · USDA RUCC 2023 · HUD FMR FY2026
-    </div>
-    <div class="footer-copy">
-      Scores are for informational purposes only. Not financial, investment, or real estate advice. &copy; 2026 Civica.
-    </div>
-  </div>
-</footer>
-
-
-<!-- Mobile nav overlay -->
-<div class="mobile-nav" id="mobileNav">
-  <div class="mobile-nav-top">
-    <a class="logo" href="index.html">
-      <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
-        <rect width="30" height="30" rx="7" fill="#0d2d52"/>
-        <rect x="6" y="16" width="4" height="9" rx="1.5" fill="white" opacity="0.65"/>
-        <rect x="13" y="8" width="4" height="17" rx="1.5" fill="white"/>
-        <rect x="20" y="12" width="4" height="13" rx="1.5" fill="white" opacity="0.8"/>
-      </svg>
-      <span class="logo-text">civi<em>ca</em></span>
-    </a>
-    <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
-  </div>
-  <a href="index.html">Home</a>
-  <a href="map.html">Map</a>
-  <a href="leaderboard.html">Leaderboard</a>
-  <a href="harvard_model.html">Methodology</a>
-  <a href="compare.html">Compare</a>
+<div class="statbar" id="statbar">
+  <div class="st"><div class="st-v" id="stTotal">10,267</div><div class="st-l">Towns mapped</div></div>
+  <div class="st"><div class="st-v" id="stSbuy">—</div><div class="st-l">Strong Buy</div></div>
+  <div class="st"><div class="st-v" id="stBuy">—</div><div class="st-l">Buy</div></div>
+  <div class="st"><div class="st-v" id="stStates">51</div><div class="st-l">States + DC</div></div>
+  <div class="st"><div class="st-v">100%</div><div class="st-l">Federal data</div></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/topojson@3/dist/topojson.min.js"></script>
+<div class="map-shell">
+  <div id="map"></div>
 
+  <div class="map-search">
+    <div style="position:relative;">
+      <svg class="si" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input id="searchInput" type="text" placeholder="Search a town…" oninput="onSearch(this.value)" autocomplete="off">
+    </div>
+    <div class="map-drop" id="searchDrop"></div>
+  </div>
+
+  <div class="legend" id="legend">
+    <div class="legend-title">Verdict — click to filter</div>
+    <div class="lg-item" data-label="Strong Buy"><span class="lg-dot" style="background:#16a34a;"></span>Strong Buy<span class="lg-count" id="cnt-sb">—</span></div>
+    <div class="lg-item" data-label="Buy"><span class="lg-dot" style="background:#1a7ff0;"></span>Buy<span class="lg-count" id="cnt-b">—</span></div>
+    <div class="lg-item" data-label="Hold"><span class="lg-dot" style="background:#f59e0b;"></span>Hold<span class="lg-count" id="cnt-h">—</span></div>
+    <div class="lg-item" data-label="Caution"><span class="lg-dot" style="background:#f97316;"></span>Caution<span class="lg-count" id="cnt-c">—</span></div>
+    <div class="lg-hint">Dot size grows with town population</div>
+  </div>
+</div>
+
+<footer>
+  <p>100% federal data: FBI NIBRS 2024 · IRS SOI · Census (sub-est, gazetteer, CBP, BPS) · BLS QCEW · BEA · FHFA HPI · FEMA NFIP · NOAA · USFS · USDA RUCC · HUD FMR · Basemap © <a href="https://carto.com/">CARTO</a>, © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a><br>
+  Civica scores are informational only — not financial, investment, or real estate advice. &copy; 2026 Civica.</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-document.querySelector('.hamburger').addEventListener('click', () => {
-  document.getElementById('mobileNav').classList.add('open');
-  document.body.style.overflow = 'hidden';
+const COLOR = { 'Strong Buy':'#16a34a', 'Buy':'#1a7ff0', 'Hold':'#f59e0b', 'Caution':'#f97316' };
+let TOWNS = [], markers = [], byFips = {};
+const active = new Set(['Strong Buy','Buy','Hold','Caution']);
+
+const map = L.map('map', { preferCanvas:true, zoomControl:true, worldCopyJump:true })
+  .setView([39.5, -97.5], 4.4);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution:'© OpenStreetMap, © CARTO', subdomains:'abcd', maxZoom:18
+}).addTo(map);
+const canvas = L.canvas({ padding:0.5 });
+
+function radiusFor(z) { return z <= 4 ? 2.4 : z <= 6 ? 3.4 : z <= 8 ? 4.6 : 6; }
+
+function popupHtml(t) {
+  const col = COLOR[t.l] || '#9ca3af';
+  return `<div class="pop-name">${t.n}</div>
+    <div class="pop-meta">${t.c}, ${t.s}</div>
+    <div class="pop-row">
+      <div class="pop-score" style="background:${col}">${Math.round(t.sc)}</div>
+      <span class="pop-badge" style="background:${col}">${t.l}</span>
+    </div>
+    <a class="pop-link" href="output/towns/${t.f}.html">View full report →</a>`;
+}
+
+function draw() {
+  const r = radiusFor(map.getZoom());
+  markers.forEach(m => {
+    const on = active.has(m._t.l);
+    m.setStyle({ radius:r, opacity: on?1:0, fillOpacity: on?0.82:0 });
+  });
+}
+
+fetch('output/towns_geo.json').then(r => r.json()).then(data => {
+  TOWNS = data;
+  const counts = { 'Strong Buy':0,'Buy':0,'Hold':0,'Caution':0 };
+  // sort so higher-score dots draw on top
+  data.slice().sort((a,b)=>a.sc-b.sc).forEach(t => {
+    counts[t.l] = (counts[t.l]||0) + 1;
+    const m = L.circleMarker([t.lat, t.lon], {
+      renderer:canvas, radius:3, color:'#fff', weight:0.4,
+      fillColor: COLOR[t.l] || '#9ca3af', fillOpacity:0.82
+    }).bindPopup(popupHtml(t), { closeButton:true });
+    m._t = t; m.addTo(map); markers.push(m); byFips[t.f] = m;
+  });
+  document.getElementById('stTotal').textContent = data.length.toLocaleString();
+  document.getElementById('stSbuy').textContent = counts['Strong Buy'].toLocaleString();
+  document.getElementById('stBuy').textContent = counts['Buy'].toLocaleString();
+  document.getElementById('cnt-sb').textContent = counts['Strong Buy'].toLocaleString();
+  document.getElementById('cnt-b').textContent = counts['Buy'].toLocaleString();
+  document.getElementById('cnt-h').textContent = counts['Hold'].toLocaleString();
+  document.getElementById('cnt-c').textContent = counts['Caution'].toLocaleString();
+  draw();
 });
-function closeMobileNav() {
-  document.getElementById('mobileNav').classList.remove('open');
-  document.body.style.overflow = '';
-}
 
-let TOWNS = [];
-let COUNTY_AGG = new Map();   // county_fips -> { best town record, count }
+map.on('zoomend', draw);
 
-const LABEL_CLASS = { 'Strong Buy':'lb-sbuy', 'Buy':'lb-buy', 'Hold':'lb-watch', 'Caution':'lb-caut' };
-const MAP_COLOR   = { 'Strong Buy':'#16a34a', 'Buy':'#1a7ff0', 'Hold':'#f59e0b', 'Caution':'#f97316' };
+// Legend filters
+document.querySelectorAll('.lg-item').forEach(el => {
+  el.addEventListener('click', () => {
+    const lab = el.dataset.label;
+    if (active.has(lab)) { active.delete(lab); el.classList.add('off'); }
+    else { active.add(lab); el.classList.remove('off'); }
+    draw();
+  });
+});
 
-function buildCountyAgg(towns) {
-  const agg = new Map();
-  for (const t of towns) {
-    const cf = String(t.county_fips).padStart(5, '0');
-    const cur = agg.get(cf);
-    if (!cur) { agg.set(cf, { best: t, count: 1 }); }
-    else { cur.count++; if (t.score > cur.best.score) cur.best = t; }
-  }
-  return agg;
-}
-
-if (location.protocol === 'file:') {
-  document.getElementById('mapLoading').innerHTML =
-    '<div style="color:#dc2626;font-weight:700;font-size:15px;margin-bottom:10px;">⚠️ Town data requires a local server to load</div>' +
-    '<div style="color:#6b7280;font-size:13px;line-height:1.7;">Run: <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;">python -m http.server 8080</code><br>' +
-    'then open <a href="http://localhost:8080/map.html" style="color:#1a7ff0;">http://localhost:8080/map.html</a></div>';
-} else {
-  fetch('output/town_index.json')
-    .then(r => r.json())
-    .then(data => {
-      TOWNS = data;
-      COUNTY_AGG = buildCountyAgg(TOWNS);
-      initMap();
-    })
-    .catch(() => {
-      document.getElementById('mapLoading').innerHTML =
-        '<span style="color:#dc2626;font-weight:600;">⚠️ Could not load town data.</span>';
-    });
-}
-
-let mapRendered = false;
-function initMap() {
-  if (mapRendered || typeof d3 === 'undefined' || typeof topojson === 'undefined') return;
-  mapRendered = true;
-  const svg = d3.select('#countyMap');
-  const w = 960, h = 600;
-  svg.attr('viewBox', `0 0 ${w} ${h}`);
-  const proj = d3.geoAlbersUsa().scale(1280).translate([w / 2, h / 2]);
-  const path = d3.geoPath().projection(proj);
-  const tip = document.createElement('div');
-  tip.id = 'mapTip';
-  tip.style.cssText = 'display:none;position:fixed;background:#1a3a5c;color:#fff;border-radius:10px;padding:12px 16px;font-size:13px;pointer-events:none;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,.3);max-width:240px;line-height:1.5;';
-  document.body.appendChild(tip);
-  d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json')
-    .then(us => {
-      document.getElementById('mapLoading').style.display = 'none';
-      svg.style('display', 'block');
-      document.getElementById('mapLegend').style.display = 'flex';
-      svg.append('g')
-        .selectAll('path')
-        .data(topojson.feature(us, us.objects.counties).features)
-        .join('path')
-        .attr('d', path)
-        .attr('fill', d => {
-          const a = COUNTY_AGG.get(String(d.id).padStart(5, '0'));
-          return a ? (MAP_COLOR[a.best.label] || '#e5e7eb') : '#e5e7eb';
-        })
-        .attr('stroke', '#fff')
-        .attr('stroke-width', 0.3)
-        .style('cursor', d => COUNTY_AGG.has(String(d.id).padStart(5, '0')) ? 'pointer' : 'default')
-        .on('mousemove', (event, d) => {
-          const a = COUNTY_AGG.get(String(d.id).padStart(5, '0'));
-          if (!a) { tip.style.display = 'none'; return; }
-          const c = a.best;
-          tip.style.display = 'block';
-          tip.style.left = (event.clientX + 14) + 'px';
-          tip.style.top  = (event.clientY - 40) + 'px';
-          const sigColor = MAP_COLOR[c.label] || '#9ca3af';
-          tip.innerHTML =
-            '<div style="font-weight:700;font-size:13px;margin-bottom:4px;">' + c.county + ', ' + c.state + '</div>' +
-            '<div style="font-size:11px;color:rgba(255,255,255,.55);margin-bottom:6px;">' + a.count + ' town' + (a.count>1?'s':'') + ' scored · top town:</div>' +
-            '<div style="font-weight:700;font-size:13px;margin-bottom:4px;">' + c.name + '</div>' +
-            '<div style="display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:100px;background:' + sigColor + ';color:#fff;margin-bottom:8px;">' + (c.label || '') + '</div>' +
-            '<div style="font-size:12px;"><b style="color:#4ade80;">' + c.score.toFixed(1) + '</b> Civica Score · #' + c.rank + ' nationally</div>';
-        })
-        .on('mouseleave', () => { tip.style.display = 'none'; })
-        .on('click', (event, d) => {
-          const a = COUNTY_AGG.get(String(d.id).padStart(5, '0'));
-          if (a) window.location = 'output/towns/' + a.best.fips + '.html';
-        });
-      svg.append('path')
-        .datum(topojson.mesh(us, us.objects.states, (a, b) => a !== b))
-        .attr('fill', 'none')
-        .attr('stroke', '#fff')
-        .attr('stroke-width', 0.8)
-        .attr('d', path);
-    })
-    .catch(() => {
-      document.getElementById('mapLoading').innerHTML =
-        '<span style="color:#dc2626;">⚠️ Map tiles could not load. Check your internet connection.</span>';
-    });
-}
-
-const STATE_NAMES = {
-  'AL':'Alabama','AK':'Alaska','AZ':'Arizona','AR':'Arkansas','CA':'California',
-  'CO':'Colorado','CT':'Connecticut','DE':'Delaware','DC':'District of Columbia',
-  'FL':'Florida','GA':'Georgia','HI':'Hawaii','ID':'Idaho','IL':'Illinois',
-  'IN':'Indiana','IA':'Iowa','KS':'Kansas','KY':'Kentucky','LA':'Louisiana',
-  'ME':'Maine','MD':'Maryland','MA':'Massachusetts','MI':'Michigan','MN':'Minnesota',
-  'MS':'Mississippi','MO':'Missouri','MT':'Montana','NE':'Nebraska','NV':'Nevada',
-  'NH':'New Hampshire','NJ':'New Jersey','NM':'New Mexico','NY':'New York',
-  'NC':'North Carolina','ND':'North Dakota','OH':'Ohio','OK':'Oklahoma',
-  'OR':'Oregon','PA':'Pennsylvania','RI':'Rhode Island','SC':'South Carolina',
-  'SD':'South Dakota','TN':'Tennessee','TX':'Texas','UT':'Utah','VT':'Vermont',
-  'VA':'Virginia','WA':'Washington','WV':'West Virginia','WI':'Wisconsin','WY':'Wyoming'
-};
-
-function detectState(q) {
-  const upper = q.trim().toUpperCase();
-  if (STATE_NAMES[upper]) return upper;
-  const lower = q.trim().toLowerCase();
-  return Object.keys(STATE_NAMES).find(k => STATE_NAMES[k].toLowerCase().startsWith(lower)) || null;
-}
-
-function handleSearch(val) {
+// Search → fly to town + open popup
+function onSearch(val) {
   const drop = document.getElementById('searchDrop');
-  if (!val.trim() || !TOWNS.length) { drop.className = 'search-dropdown'; return; }
-
-  const townRow = c => `
-      <div class="sd-row" onclick="window.location='output/towns/${c.fips}.html'">
-        <div class="sd-left">
-          <div class="sd-name">${c.name}, ${c.state}</div>
-          <div class="sd-meta">${c.county} · Score ${c.score.toFixed(1)} · #${c.rank_in_county} in county</div>
-        </div>
-        <div class="sd-right">
-          <span class="sd-score">${c.score.toFixed(0)}</span>
-          <span class="sd-label lbadge ${LABEL_CLASS[c.label]||'lb-watch'}">${c.label}</span>
-        </div>
-      </div>`;
-
-  const stateAbbr = detectState(val);
-  if (stateAbbr) {
-    const stateName = STATE_NAMES[stateAbbr];
-    const stateTowns = TOWNS.filter(c => c.state === stateAbbr);
-    drop.innerHTML =
-      `<div class="sd-row" onclick="window.location='output/states/${stateAbbr}.html'" style="background:#f0f6ff;border-bottom:2px solid #dbeafe;">
-        <div class="sd-left">
-          <div class="sd-name" style="color:#1a7ff0;">📍 All towns in ${stateName}</div>
-          <div class="sd-meta">${stateTowns.length} towns scored — view full state report</div>
-        </div>
-        <div style="color:#1a7ff0;font-size:12px;font-weight:700;white-space:nowrap;">View all →</div>
-      </div>` +
-      stateTowns.slice(0, 7).map(townRow).join('');
-    drop.className = 'search-dropdown open';
-    return;
-  }
-
-  const q = val.toLowerCase();
-  const hits = TOWNS.filter(c => c.name.toLowerCase().includes(q)).slice(0, 7);
-  if (!hits.length) {
-    drop.innerHTML = `<div style="padding:14px 18px;color:#9ca3af;font-size:13px;">No results for "${val.trim()}"</div>`;
-    drop.className = 'search-dropdown open';
-    return;
-  }
-  drop.innerHTML = hits.map(townRow).join('');
-  drop.className = 'search-dropdown open';
+  const q = val.trim().toLowerCase();
+  if (!q || !TOWNS.length) { drop.className = 'map-drop'; return; }
+  const hits = TOWNS.filter(t => t.n.toLowerCase().includes(q)).slice(0, 8);
+  if (!hits.length) { drop.innerHTML = '<div class="md-row"><div class="md-name" style="color:#9ca3af;font-weight:500;">No towns found</div></div>'; drop.className = 'map-drop open'; return; }
+  drop.innerHTML = hits.map(t => {
+    const col = COLOR[t.l] || '#9ca3af';
+    return `<div class="md-row" onclick="goTown('${t.f}')">
+      <div><div class="md-name">${t.n}, ${t.s}</div><div class="md-meta">${t.c}</div></div>
+      <div class="md-score" style="background:${col}">${Math.round(t.sc)}</div>
+    </div>`;
+  }).join('');
+  drop.className = 'map-drop open';
 }
-
+function goTown(f) {
+  const t = TOWNS.find(x => x.f === f); if (!t) return;
+  document.getElementById('searchDrop').className = 'map-drop';
+  document.getElementById('searchInput').value = t.n;
+  map.flyTo([t.lat, t.lon], 11, { duration:0.8 });
+  const m = byFips[f];
+  if (m) setTimeout(() => m.openPopup(), 850);
+}
 document.addEventListener('click', e => {
-  if (!e.target.closest('.search-wrap'))
-    document.getElementById('searchDrop').className = 'search-dropdown';
+  if (!e.target.closest('.map-search')) document.getElementById('searchDrop').className = 'map-drop';
 });
 </script>
-
 </body>
 </html>
