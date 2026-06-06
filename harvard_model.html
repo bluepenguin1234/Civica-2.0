@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How Civica Works — Methodology</title>
-<meta name="description" content="How Civica scores 2,816 US counties for homebuyers. Six dimensions, 13 federal datasets plus Zillow ZHVI, zero advertiser influence.">
+<meta name="description" content="How Civica scores 10,267 US towns for homebuyers. Four dimensions, 100% federal data, ~51% town-resolved, zero advertiser influence.">
 <meta property="og:title" content="Civica Methodology — How the Score Works">
 <meta property="og:image" content="https://civica.app/og_image.png">
 <link rel="canonical" href="https://civica.app/harvard_model.html">
@@ -175,13 +175,13 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
 
 <div class="hero">
   <div class="hero-eyebrow">How Civica Works</div>
-  <h1>Every score is built from government and public data — no opinions, no estimates, no advertising.</h1>
-  <div class="hero-sub">Six dimensions. Thirteen federal datasets plus Zillow ZHVI. Zero survey data. Every number traces back to a verifiable public source.</div>
+  <h1>Every town score is built from federal government data — no opinions, no estimates, no advertising.</h1>
+  <div class="hero-sub">Four dimensions. 100% federal data. Zero survey data. Each town ranked inside its county, and roughly half of every score resolved at the town level itself.</div>
   <div class="hero-pills">
-    <div class="hero-pill"><span class="hp-lbl">Dimensions</span><span class="hp-val">6</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Data Sources</span><span class="hp-val">14</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Counties Scored</span><span class="hp-val">2,816</span></div>
-    <div class="hero-pill"><span class="hp-lbl">Survey Data</span><span class="hp-val">None</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Dimensions</span><span class="hp-val">4</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Data Sources</span><span class="hp-val">100% Federal</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Towns Scored</span><span class="hp-val">10,267</span></div>
+    <div class="hero-pill"><span class="hp-lbl">Town-Resolved</span><span class="hp-val">~51%</span></div>
     <div class="hero-pill"><span class="hp-lbl">Advertiser Influence</span><span class="hp-val">None</span></div>
   </div>
 </div>
@@ -199,74 +199,59 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
 
   <div class="card">
     <div class="card-title">📊 What the Score Measures</div>
-    <div class="card-intro">The Civica Score is a single number (0–100) that answers one question: <strong>is this county a sound place to buy a home right now?</strong> It's built from six weighted dimensions — each scored independently against all 2,816 counties in the dataset.</div>
+    <div class="card-intro">The Civica Score is a single number (0–100) that answers one question: <strong>is this town a sound place to buy a home right now?</strong> It's built from four weighted dimensions — each scored independently against all 10,267 towns in the dataset. About <strong>51% of every score is resolved at the town level</strong> (crime, income, growth, scale); the other ~49% is inherited from the town's parent county (wages, appreciation, climate, migration, permits), because those genuinely operate at a regional scale.</div>
 
     <div style="display:flex;flex-direction:column;gap:10px;">
       <div class="dim-row">
-        <div class="dim-icon">💰</div>
+        <div class="dim-icon">🏠</div>
         <div class="dim-body">
-          <div class="dim-name">Affordability &amp; Value <span class="dim-wt">25%</span></div>
-          <div class="dim-desc">Are prices defensible relative to local rents and incomes? Price-to-rent ratio, price-to-income, buy-vs-rent breakeven, and 3-year appreciation quality.</div>
+          <div class="dim-name">Affordability <span class="dim-wt">28%</span></div>
+          <div class="dim-desc">Can local incomes carry local rents? Rent burden — the HUD 2-bedroom Fair Market Rent against ZIP-allocated town income (<strong>town-level</strong>) — plus FHFA appreciation quality. No home-value level; no breakeven guesswork.</div>
         </div>
-        <div class="dim-pts"><div class="dim-pts-val">25</div><div class="dim-pts-lbl">max pts</div></div>
+        <div class="dim-pts"><div class="dim-pts-val">28</div><div class="dim-pts-lbl">max pts</div></div>
+      </div>
+      <div class="dim-row">
+        <div class="dim-icon">💼</div>
+        <div class="dim-body">
+          <div class="dim-name">Economy <span class="dim-wt">28%</span></div>
+          <div class="dim-desc">Is the local economy strong and growing? BLS wage levels, sector quality, employment diversity (HHI), and the town's own IRS-derived income growth (<strong>town-level</strong>).</div>
+        </div>
+        <div class="dim-pts"><div class="dim-pts-val">28</div><div class="dim-pts-lbl">max pts</div></div>
+      </div>
+      <div class="dim-row">
+        <div class="dim-icon">🛡️</div>
+        <div class="dim-body">
+          <div class="dim-name">Safety &amp; Place <span class="dim-wt">26%</span></div>
+          <div class="dim-desc">Is it a safe, well-served place to live? Town-level violent and property crime (FBI NIBRS), town scale, amenity density (Census CBP), and a flood / storm / wildfire risk composite. Three of five metrics are <strong>town-level</strong>.</div>
+        </div>
+        <div class="dim-pts"><div class="dim-pts-val">26</div><div class="dim-pts-lbl">max pts</div></div>
       </div>
       <div class="dim-row">
         <div class="dim-icon">📈</div>
         <div class="dim-body">
-          <div class="dim-name">Economic Vitality <span class="dim-wt">22%</span></div>
-          <div class="dim-desc">Is the local economy growing? Wage levels, sector quality, employment diversity, and per-capita income growth — the leading indicators of future price appreciation.</div>
+          <div class="dim-name">Growth <span class="dim-wt">18%</span></div>
+          <div class="dim-desc">Is the town gaining ground? Its own 5-year population growth and momentum versus its county (<strong>town-level</strong>), plus county net migration, in-mover income quality, and the permit pipeline.</div>
         </div>
-        <div class="dim-pts"><div class="dim-pts-val">22</div><div class="dim-pts-lbl">max pts</div></div>
-      </div>
-      <div class="dim-row">
-        <div class="dim-icon">🏗️</div>
-        <div class="dim-body">
-          <div class="dim-name">Market Dynamics <span class="dim-wt">20%</span></div>
-          <div class="dim-desc">What is the housing market doing? 3-year appreciation trend, current momentum, inventory tightness, and permit pipeline — is supply keeping up with demand?</div>
-        </div>
-        <div class="dim-pts"><div class="dim-pts-val">20</div><div class="dim-pts-lbl">max pts</div></div>
-      </div>
-      <div class="dim-row">
-        <div class="dim-icon">🏡</div>
-        <div class="dim-body">
-          <div class="dim-name">Quality of Place <span class="dim-wt">15%</span></div>
-          <div class="dim-desc">Is it a good place to live? Crime rate (FBI NIBRS), urban access (USDA RUCC continuum), and amenity density — the factors that drive household retention.</div>
-        </div>
-        <div class="dim-pts"><div class="dim-pts-val">15</div><div class="dim-pts-lbl">max pts</div></div>
-      </div>
-      <div class="dim-row">
-        <div class="dim-icon">🌊</div>
-        <div class="dim-body">
-          <div class="dim-name">Physical Risk <span class="dim-wt">12%</span></div>
-          <div class="dim-desc">What are the climate and natural hazard costs? Flood loss per capita (FEMA NFIP), storm damage per capita (NOAA), and wildfire exposure (USFS) — the same data FEMA uses to build its National Risk Index.</div>
-        </div>
-        <div class="dim-pts"><div class="dim-pts-val">12</div><div class="dim-pts-lbl">max pts</div></div>
-      </div>
-      <div class="dim-row">
-        <div class="dim-icon">🧭</div>
-        <div class="dim-body">
-          <div class="dim-name">Population Momentum <span class="dim-wt">6%</span></div>
-          <div class="dim-desc">Are the right people moving in? Net migration rate and the income quality of in-movers vs. out-movers (IRS SOI). Weighted lowest because migration can be cyclical.</div>
-        </div>
-        <div class="dim-pts"><div class="dim-pts-val">6</div><div class="dim-pts-lbl">max pts</div></div>
+        <div class="dim-pts"><div class="dim-pts-val">18</div><div class="dim-pts-lbl">max pts</div></div>
       </div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-title">🔢 How Scores Are Calculated</div>
-    <div class="card-intro">Every metric is converted to a national percentile (0–100) so counties of all sizes are comparable. Higher is always better — metrics where lower is better (like crime rate or flood loss) are inverted before scoring. The six dimension scores are then weighted and summed into the Civica Score.</div>
+    <div class="card-intro">Every metric is converted to a national percentile (0–100) across the full town universe, so towns of all sizes are comparable. Higher is always better — metrics where lower is better (crime, rent burden, flood loss) are inverted before scoring. The four dimension scores are then weighted and summed into the Civica Score.</div>
     <div style="background:#fff;border-radius:10px;padding:16px;font-size:13px;color:var(--subtext);line-height:1.8;border:1px solid var(--border);">
-      <strong style="color:var(--navy);">Score range:</strong> 21.4 – 72.9 &nbsp;&nbsp;
+      <strong style="color:var(--navy);">Score range:</strong> 17.1 – 84.9 &nbsp;&nbsp;
       <strong style="color:var(--navy);">National mean:</strong> 50.0 &nbsp;&nbsp;
-      <strong style="color:var(--navy);">Std deviation:</strong> 7.5 &nbsp;&nbsp;
-      <strong style="color:var(--navy);">Counties excluded:</strong> 324 (pop &lt; 5,000 — insufficient data)
+      <strong style="color:var(--navy);">Std deviation:</strong> 9.9 &nbsp;&nbsp;
+      <strong style="color:var(--navy);">Town-resolved share:</strong> ~51% &nbsp;&nbsp;
+      <strong style="color:var(--navy);">Universe:</strong> incorporated places with ≥ 1,000 residents (CDPs excluded)
     </div>
   </div>
 
   <div class="card" style="background:linear-gradient(135deg,#1a3a5c 0%,#0f2340 100%);color:#fff;">
     <div style="font-size:14px;font-weight:800;margin-bottom:10px;">Why Civica over Zillow or Redfin?</div>
-    <p style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;">Zillow tells you what's for sale. Redfin tells you what just sold. Neither tells you whether the county is a sound financial decision. Civica scores the market itself — affordability, economic strength, risk — using data those platforms don't publish. And because Civica earns nothing from agents, listings, or advertising, the scores can't be bought.</p>
+    <p style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;">Zillow tells you what's for sale. Redfin tells you what just sold. Neither tells you whether the town is a sound financial decision. Civica scores the place itself — affordability, economy, safety, growth — using federal data those platforms don't publish, down to the town. And because Civica earns nothing from agents, listings, or advertising, the scores can't be bought.</p>
   </div>
 
   </div></div></div>
@@ -281,70 +266,42 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
   </div>
   <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
-  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">Every county gets exactly one label based on its total Civica Score. Labels are score thresholds — no secondary direction adjustment. The result is one plain-English read of where the county sits in the national distribution right now.</div>
+  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">Every town gets exactly one verdict based on its total Civica Score. Verdicts are score thresholds — no secondary direction adjustment. The result is one plain-English read of where the town sits in the national distribution right now.</div>
 
-  <div class="label-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));">
-
-    <div class="label-card" style="border-color:#bbf7d0;background:#f0fdf4;">
-      <span class="label-badge" style="background:#15803d;color:#fff;">ACCELERATING</span>
-      <div class="label-name">All signals positive</div>
-      <div class="label-desc">Window still open, but monitor affordability trajectory.</div>
-      <div class="label-score">Score ≥ 68 &nbsp;·&nbsp; 2 counties (0.1%)</div>
-    </div>
+  <div class="label-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));">
 
     <div class="label-card" style="border-color:#bbf7d0;background:#f0fdf4;">
-      <span class="label-badge" style="background:#16a34a;color:#fff;">PEAKING</span>
-      <div class="label-name">Strong momentum</div>
-      <div class="label-desc">Fundamentals show ceiling pressure. Best for shorter hold horizons.</div>
-      <div class="label-score">Score ≥ 62 &nbsp;·&nbsp; 57 counties (2.0%)</div>
+      <span class="label-badge" style="background:#15803d;color:#fff;">STRONG BUY</span>
+      <div class="label-name">Fundamentals lead the nation</div>
+      <div class="label-desc">Town-resolved metrics lead both the county and most of the country.</div>
+      <div class="label-score">Score ≥ 62 &nbsp;·&nbsp; 1,210 towns (11.8%)</div>
     </div>
 
     <div class="label-card" style="border-color:#bfdbfe;background:#eff6ff;">
-      <span class="label-badge" style="background:#1d4ed8;color:#fff;">ESTABLISHED</span>
-      <div class="label-name">Solid, balanced market</div>
-      <div class="label-desc">Buy for stability and lifestyle, not appreciation upside.</div>
-      <div class="label-score">Score ≥ 55 &nbsp;·&nbsp; 563 counties (20.0%)</div>
-    </div>
-
-    <div class="label-card" style="border-color:#bfdbfe;background:#eff6ff;">
-      <span class="label-badge" style="background:#1a7ff0;color:#fff;">EMERGING</span>
-      <div class="label-name">Improving fundamentals</div>
-      <div class="label-desc">Early-mover upside with real risk. Due diligence required.</div>
-      <div class="label-score">Score ≥ 46 &nbsp;·&nbsp; 1,463 counties (51.9%)</div>
+      <span class="label-badge" style="background:#1a7ff0;color:#fff;">BUY</span>
+      <div class="label-name">Solid, with room to run</div>
+      <div class="label-desc">Strong fundamentals; one softer dimension worth a look.</div>
+      <div class="label-score">Score ≥ 52 &nbsp;·&nbsp; 3,045 towns (29.7%)</div>
     </div>
 
     <div class="label-card" style="border-color:#fde68a;background:#fffbeb;">
-      <span class="label-badge" style="background:#b45309;color:#fff;">FRONTIER</span>
-      <div class="label-name">Thin market</div>
-      <div class="label-desc">Fundamentals mixed — requires additional local due diligence.</div>
-      <div class="label-score">Score ≥ 38 &nbsp;·&nbsp; 634 counties (22.5%)</div>
+      <span class="label-badge" style="background:#f59e0b;color:#fff;">HOLD</span>
+      <div class="label-name">Balanced, middle of the pack</div>
+      <div class="label-desc">A reasonable, average market — buy for fit, not for outperformance.</div>
+      <div class="label-score">Score ≥ 44 &nbsp;·&nbsp; 3,212 towns (31.3%)</div>
     </div>
 
     <div class="label-card" style="border-color:#fed7aa;background:#fff7ed;">
-      <span class="label-badge" style="background:#ea580c;color:#fff;">TURNING</span>
-      <div class="label-name">Softening demand</div>
-      <div class="label-desc">Monitor for continued weakness before committing capital.</div>
-      <div class="label-score">Score ≥ 30 &nbsp;·&nbsp; 97 counties (3.4%)</div>
-    </div>
-
-    <div class="label-card" style="border-color:#fecaca;background:#fef2f2;">
-      <span class="label-badge" style="background:#dc2626;color:#fff;">SPECULATIVE</span>
-      <div class="label-name">Poor fundamentals</div>
-      <div class="label-desc">Prices appear disconnected from underlying economics.</div>
-      <div class="label-score">Score ≥ 26 &nbsp;·&nbsp; 4 counties (0.1%)</div>
-    </div>
-
-    <div class="label-card" style="border-color:#fecaca;background:#fef2f2;">
-      <span class="label-badge" style="background:#991b1b;color:#fff;">AVOID</span>
-      <div class="label-name">No dimension working</div>
-      <div class="label-desc">Empirical score floor is 26.9 in v1.2 — 0 counties currently in this band.</div>
-      <div class="label-score">Score &lt; 26 &nbsp;·&nbsp; 2 counties (0.1%)</div>
+      <span class="label-badge" style="background:#f97316;color:#fff;">CAUTION</span>
+      <div class="label-name">Trails national peers</div>
+      <div class="label-desc">Multiple fundamentals lag — understand the trade-offs before buying.</div>
+      <div class="label-score">Score &lt; 44 &nbsp;·&nbsp; 2,800 towns (27.3%)</div>
     </div>
 
   </div>
 
   <div style="padding:14px 16px;background:#f8fafc;border-radius:10px;font-size:12px;color:var(--subtext);line-height:1.7;border:1px solid var(--border);">
-    <strong style="color:var(--text);">Label calibration:</strong> Thresholds are set so each label covers a meaningful fraction of the county distribution. ACCELERATING and PEAKING are intentionally rare (top ~5.6%); ESTABLISHED and EMERGING cover the core of the distribution. Labels are based on composite score only — no secondary market-direction overlay. v1.2 distribution: ACCELERATING (14) · PEAKING (143) · ESTABLISHED (558) · EMERGING (1,236) · FRONTIER (703) · TURNING (152) · SPECULATIVE (12) · AVOID (2).
+    <strong style="color:var(--text);">Verdict calibration:</strong> Percentile normalization fixes the distribution at mean ≈ 50 / std ≈ 10 every run, so fixed thresholds (62 / 52 / 44) are stable. They produce a balanced four-bucket split — Strong Buy ≈ 12%, Buy ≈ 30%, Hold ≈ 31%, Caution ≈ 27% — with every bucket firing meaningfully. Verdicts are based on composite score only; no secondary market-direction overlay.
   </div>
 
   </div></div></div>
@@ -354,80 +311,60 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
 <!-- ══════════ 6 DIMENSIONS ══════════ -->
 <div class="acc-section" id="acc-dimensions">
   <div class="acc-header" onclick="toggleAcc(this)">
-    <div class="acc-title"><span class="acc-icon">📐</span> 6 Dimensions</div>
+    <div class="acc-title"><span class="acc-icon">📐</span> 4 Dimensions</div>
     <span class="acc-chevron">▾</span>
   </div>
   <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
-  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">Each metric inside a dimension is scored as a national percentile, so a county is always compared to all 2,816 others — not to an absolute benchmark. Below is what's actually in the model and where the data comes from.</div>
+  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">Each metric inside a dimension is scored as a national percentile, so a town is always compared to all 10,267 others — not to an absolute benchmark. <strong>(T)</strong> marks town-resolved metrics; <strong>(C)</strong> marks metrics inherited from the parent county. Below is exactly what's in the model and where the data comes from.</div>
 
   <div style="display:flex;flex-direction:column;gap:14px;">
 
     <div class="metric-block">
       <div class="metric-header">
-        <div class="metric-name">💰 Affordability &amp; Value — 25%</div>
+        <div class="metric-name">🏠 Affordability — 28%</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--subtext);">
-        <div><strong style="color:var(--navy);">Price-to-rent ratio</strong> (30%) — Zillow ZHVI ÷ HUD Fair Market Rent × 12. National norm: 15–18x. The core valuation signal.</div>
-        <div><strong style="color:var(--navy);">Price-to-income ratio</strong> (30%) — Zillow ZHVI ÷ BEA per capita income. Uses per-capita income, so ratios appear higher than the commonly cited 4.2× norm (which uses household income).</div>
-        <div><strong style="color:var(--navy);">Buy vs. rent breakeven</strong> (25%) — Down payment (20%) ÷ (monthly PITI − HUD 2BR FMR) × 12. Assumes 7% 30-yr fixed, 1.2% property tax, 0.5% insurance. Shorter is better.</div>
-        <div><strong style="color:var(--navy);">Appreciation quality</strong> (15%) — FHFA 3-yr avg annual HPI change. Deviation from a 3–7% healthy range is penalized in both directions.</div>
+        <div><strong style="color:var(--navy);">Rent burden</strong> (60%, <strong>T</strong>) — HUD 2BR Fair Market Rent × 12 ÷ ZIP-allocated town income. Lower is better. The core town affordability signal — does income cover rent?</div>
+        <div><strong style="color:var(--navy);">Appreciation quality</strong> (40%, C) — FHFA 3-yr avg annual HPI change. Deviation from a healthy 3–7% range is penalized in both directions. There is no home-value level in the model post-Zillow.</div>
       </div>
     </div>
 
     <div class="metric-block">
       <div class="metric-header">
-        <div class="metric-name">📈 Economic Vitality — 22%</div>
+        <div class="metric-name">💼 Economy — 28%</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--subtext);">
-        <div><strong style="color:var(--navy);">Wage level</strong> (35%) — BLS QCEW average annual wage. Higher wages = stronger labor market and more purchasing power.</div>
-        <div><strong style="color:var(--navy);">Sector quality</strong> (25%) — BLS QCEW employment weighted by NAICS sector. Professional and finance sectors score higher; retail and legacy manufacturing score lower.</div>
-        <div><strong style="color:var(--navy);">Economic diversity (HHI)</strong> (25%) — Herfindahl-Hirschman Index across NAICS employment. A county dominated by one sector is fragile; lower HHI = more diversified.</div>
-        <div><strong style="color:var(--navy);">Per-capita income growth</strong> (15%) — BEA CAINC1 4-year growth. Rising real incomes drive sustainable housing demand.</div>
+        <div><strong style="color:var(--navy);">Wage level</strong> (35%, C) — BLS QCEW average annual wage. Higher wages = stronger labor market.</div>
+        <div><strong style="color:var(--navy);">Sector quality</strong> (25%, C) — BLS QCEW employment weighted by NAICS sector. Professional and finance score higher; retail and legacy manufacturing lower.</div>
+        <div><strong style="color:var(--navy);">Economic diversity (HHI)</strong> (20%, C) — Herfindahl-Hirschman Index across NAICS employment. Lower HHI = more diversified = more resilient.</div>
+        <div><strong style="color:var(--navy);">Town income growth</strong> (20%, <strong>T</strong>) — change in IRS SOI ZIP-allocated town income across two filing years.</div>
       </div>
     </div>
 
     <div class="metric-block">
       <div class="metric-header">
-        <div class="metric-name">🏗️ Market Dynamics — 20%</div>
+        <div class="metric-name">🛡️ Safety &amp; Place — 26%</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--subtext);">
-        <div><strong style="color:var(--navy);">3-year appreciation trend</strong> (35%) — FHFA HPI 3-yr average annual change. Sustained appreciation signals genuine underlying demand.</div>
-        <div><strong style="color:var(--navy);">Current momentum</strong> (15%) — FHFA HPI latest annual change. Cross-validates the trend signal using a different time window.</div>
-        <div><strong style="color:var(--navy);">Inventory tightness</strong> (30%) — Zillow active listing count (percentile-inverted). Lower inventory relative to other counties = tighter market.</div>
-        <div><strong style="color:var(--navy);">Permit pipeline</strong> (20%) — Census BPS new units permitted. Measures whether supply is responding to demand.</div>
+        <div><strong style="color:var(--navy);">Violent crime / 100k</strong> (30%, <strong>T</strong>) — FBI NIBRS 2024, agencies mapped to places. Towns with no matched agency inherit the county/RUCC-tier rate — flagged, not penalized.</div>
+        <div><strong style="color:var(--navy);">Property crime / 100k</strong> (20%, <strong>T</strong>) — FBI NIBRS burglary, larceny, motor-vehicle theft, arson.</div>
+        <div><strong style="color:var(--navy);">Town scale</strong> (20%, <strong>T</strong>) — national percentile of town population (urban-character proxy).</div>
+        <div><strong style="color:var(--navy);">Amenity density</strong> (15%, C) — Census CBP private establishments per 1,000 residents.</div>
+        <div><strong style="color:var(--navy);">Physical risk</strong> (15%, C) — FEMA NFIP flood (40%) + NOAA storm (35%) + USFS wildfire (25%), inverted so lower risk scores higher.</div>
       </div>
     </div>
 
     <div class="metric-block">
       <div class="metric-header">
-        <div class="metric-name">🏡 Quality of Place — 15%</div>
+        <div class="metric-name">📈 Growth — 18%</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--subtext);">
-        <div><strong style="color:var(--navy);">Violent crime rate</strong> (35%) — FBI NIBRS 2024 violent offenses per 100k. Counties without NIBRS coverage receive their RUCC-tier median — rural non-reporters are not penalized for not reporting.</div>
-        <div><strong style="color:var(--navy);">Urban access</strong> (40%) — USDA Rural-Urban Continuum Code 2023. Scores the RUCC 1–9 continuum so metro counties score higher than remote rural.</div>
-        <div><strong style="color:var(--navy);">Amenity density</strong> (25%) — Census CBP private establishments per 1,000 residents. More services per capita = stronger local commercial base.</div>
-      </div>
-    </div>
-
-    <div class="metric-block">
-      <div class="metric-header">
-        <div class="metric-name">🌊 Physical Risk — 12%</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--subtext);">
-        <div><strong style="color:var(--navy);">Flood loss proxy</strong> (40%) — FEMA NFIP paid claims ÷ Census population (10-year average). Captures actual insured flood losses per capita.</div>
-        <div><strong style="color:var(--navy);">Storm damage proxy</strong> (35%) — NOAA Storm Events property damage ÷ population (5-year average). Covers all storm types beyond flood.</div>
-        <div><strong style="color:var(--navy);">Wildfire exposure</strong> (25%) — USFS Wildfire Risk to Communities county-level exposure index.</div>
-      </div>
-    </div>
-
-    <div class="metric-block">
-      <div class="metric-header">
-        <div class="metric-name">🧭 Population Momentum — 6%</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--subtext);">
-        <div><strong style="color:var(--navy);">Net migration rate</strong> (60%) — Census Population Estimates RNETMIG2023: net migration per 1,000 residents.</div>
-        <div><strong style="color:var(--navy);">In-mover income quality</strong> (40%) — IRS SOI in-mover average AGI ÷ out-mover average AGI (2022–2023 migration flows). A ratio &gt;1.0 means higher-income people are arriving than leaving.</div>
+        <div><strong style="color:var(--navy);">Town population growth, 5-yr</strong> (35%, <strong>T</strong>) — Census sub-county estimates, 2020→2025.</div>
+        <div><strong style="color:var(--navy);">Town vs. county + momentum</strong> (25%, <strong>T</strong>) — 5-yr growth relative to the county plus recent 1-yr momentum — the town's pure growth "alpha."</div>
+        <div><strong style="color:var(--navy);">Net migration rate</strong> (20%, C) — Census Population Estimates: county net migration per 1,000 residents.</div>
+        <div><strong style="color:var(--navy);">In-mover income quality</strong> (10%, C) — IRS SOI in-mover AGI ÷ out-mover AGI.</div>
+        <div><strong style="color:var(--navy);">Permit pipeline</strong> (10%, C) — Census BPS new units permitted.</div>
       </div>
     </div>
 
@@ -445,26 +382,26 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
   </div>
   <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
-  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">These metrics are derived by combining two or more federal sources. None of them appear on Zillow, Redfin, or any consumer real estate platform. They're the numbers that actually answer whether a market is worth buying into.</div>
+  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">These metrics are derived by combining two or more federal sources, allocated to the town level. None of them appear on Zillow, Redfin, or any consumer real estate platform. They're the numbers that actually answer whether a town is worth buying into.</div>
 
   <div style="display:flex;flex-direction:column;gap:14px;">
 
     <div class="metric-block">
       <div class="metric-header">
-        <div class="metric-name">Price-to-Rent Ratio</div>
+        <div class="metric-name">Town Income (ZIP-allocated)</div>
         <span class="metric-tag">DERIVED METRIC</span>
       </div>
-      <div class="metric-formula"><strong>Formula:</strong> Zillow ZHVI ÷ (HUD Fair Market Rent × 12)</div>
-      <div class="metric-why"><strong>Why it matters:</strong> The single most useful valuation check in real estate. Under 15× = buying is clearly cheaper than renting. 15–20× = fair value. Over 20× = you're paying a premium to own. Over 25× = the market is pricing in significant future appreciation that may not materialize.</div>
+      <div class="metric-formula"><strong>Formula:</strong> IRS SOI ZIP-code total AGI ÷ returns, allocated to each place via the 2020 Census ZCTA→place relationship file, weighted by land-area overlap.</div>
+      <div class="metric-why"><strong>Why it matters:</strong> No federal source publishes a survey-grade town median income. This address-share approximation varies town-to-town for real — it's how Civica resolves income below the county line. It is labeled as an approximation everywhere it appears, and falls back to county per-capita income for the ~1% of towns with no ZIP allocation.</div>
     </div>
 
     <div class="metric-block">
       <div class="metric-header">
-        <div class="metric-name">Buy vs. Rent Breakeven</div>
+        <div class="metric-name">Rent Burden</div>
         <span class="metric-tag">DERIVED METRIC</span>
       </div>
-      <div class="metric-formula"><strong>Formula:</strong> Down payment (20%) ÷ (monthly PITI − HUD 2BR FMR) × 12. Assumes 7% 30-yr fixed, 1.2% property tax, 0.5% insurance. Capped at 30 years.</div>
-      <div class="metric-why"><strong>Why it matters:</strong> The most practical number for a buyer deciding whether to buy now or keep renting. Under 3 years = strong case for buying. 3–6 years = reasonable. Over 6 years = renting is likely the better financial choice at current prices.</div>
+      <div class="metric-formula"><strong>Formula:</strong> HUD 2-bedroom Fair Market Rent × 12 ÷ ZIP-allocated town income. Lower is better.</div>
+      <div class="metric-why"><strong>Why it matters:</strong> With Zillow gone, this replaces price-to-rent and breakeven as the core affordability signal. Under 25% = local incomes comfortably carry local rents. 25–35% = stretched. Over 35% = affordability is a real constraint, regardless of list prices.</div>
     </div>
 
     <div class="metric-block">
@@ -517,32 +454,34 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
   </div>
   <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
-  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;">14 datasets — 13 federal plus Zillow ZHVI. Every score in Civica is replicable from public data. Zillow ZHVI is the only non-federal source — used because no federal dataset provides county-level median home values at monthly granularity. All appreciation signals use FHFA HPI, not Zillow.</div>
+  <div class="card-intro" style="font-size:14px;color:var(--subtext);line-height:1.7;"><strong>100% federal.</strong> Dropping Zillow removed the only non-federal source — every number in Civica is now replicable from free federal government data. Three town-resolved inputs (Census sub-est, IRS ZIP-code AGI, and the ZCTA→place crosswalk) were added to push the model below the county line.</div>
 
   <div style="overflow-x:auto;">
     <table class="src-table">
       <thead><tr><th>Dataset</th><th>Agency</th><th>Used For</th><th></th></tr></thead>
       <tbody>
-        <tr><td><div class="src-name">IRS SOI County Migration</div><div class="src-sub">2022–2023 migration flows</div></td><td>IRS</td><td>Net migration rate; in-mover income quality ratio (Dim 6)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">FHFA House Price Index — County</div><div class="src-sub">Annual, through Q4 2025</div></td><td>FHFA</td><td>3-yr appreciation trend; current momentum; appreciation quality (Dim 1 &amp; 3)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">BLS Quarterly Census of Employment &amp; Wages</div><div class="src-sub">2023 Annual</div></td><td>BLS</td><td>Wage level; sector quality score; employment HHI (Dim 2)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">BEA Local Area Personal Income (CAINC1)</div><div class="src-sub">1969–2024</div></td><td>BEA</td><td>Per-capita income; 4-yr income growth; price-to-income ratio (Dim 1 &amp; 2)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">FBI NIBRS 2024 National Master File</div><div class="src-sub">21,068 agencies, 49 states</div></td><td>FBI</td><td>Violent offenses per 100k; non-reporting counties imputed at RUCC-tier median (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">FEMA NFIP Paid Claims</div><div class="src-sub">10-year window</div></td><td>FEMA</td><td>Insured flood loss per capita (Dim 5)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">NOAA Storm Events Database</div><div class="src-sub">2020–2024, 5-year window</div></td><td>NOAA</td><td>Storm property damage per capita across all hazard types (Dim 5)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">USFS Wildfire Risk to Communities</div><div class="src-sub">2024 release</div></td><td>USFS</td><td>County-level wildfire exposure index (Dim 5)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">Census Population Estimates</div><div class="src-sub">2025 vintage</div></td><td>Census</td><td>Base county universe; population denominators; migration rates (all dimensions)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">Census Building Permits Survey (BPS)</div><div class="src-sub">2025 annual</div></td><td>Census</td><td>New housing units permitted — supply pipeline signal (Dim 3)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">Census County Business Patterns (CBP)</div><div class="src-sub">2023</div></td><td>Census</td><td>Private establishments per 1,000 residents — amenity density (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">USDA Rural-Urban Continuum Codes 2023</div><div class="src-sub">RUCC 1–9</div></td><td>USDA</td><td>Urban access score; crime rate peer-tier comparisons (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">HUD Fair Market Rents FY2026</div><div class="src-sub">2-bedroom FMR</div></td><td>HUD</td><td>Price-to-rent ratio; buy-vs-rent breakeven (Dim 1)</td><td><span class="tag-admin">Federal</span></td></tr>
-        <tr><td><div class="src-name">Zillow ZHVI — County</div><div class="src-sub">Through Q1 2026</div></td><td>Zillow</td><td>Median home value; active inventory count (Dim 1 &amp; 3) — only non-federal source</td><td><span class="tag-prop">Private</span></td></tr>
+        <tr><td><div class="src-name">FBI NIBRS 2024 National Master File</div><div class="src-sub">~21,900 agencies, 49 states</div></td><td>FBI</td><td>Town violent &amp; property crime per 100k; agencies mapped to places by name (Dim 3 · <strong>town</strong>)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">IRS SOI ZIP-code AGI</div><div class="src-sub">2021 + 2022 filing years</div></td><td>IRS</td><td>Town income level + income growth, ZIP-allocated to places (Dim 1 &amp; 2 · <strong>town</strong>)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">Census Sub-County Population Estimates</div><div class="src-sub">sub-est, 2020–2025 vintage</div></td><td>Census</td><td>Town universe; growth 5-yr/1-yr; town scale; place→county crosswalk (Dim 3 &amp; 4 · <strong>town</strong>)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">Census ZCTA→Place Relationship</div><div class="src-sub">2020, land-area overlap</div></td><td>Census</td><td>Allocates IRS ZIP income to incorporated places (Dim 1 &amp; 2)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">HUD Fair Market Rents FY2026</div><div class="src-sub">2-bedroom FMR</div></td><td>HUD</td><td>Rent burden numerator (Dim 1)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">FHFA House Price Index — County</div><div class="src-sub">Annual, through Q4 2025</div></td><td>FHFA</td><td>Appreciation quality (Dim 1)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">BLS Quarterly Census of Employment &amp; Wages</div><div class="src-sub">2023 Annual</div></td><td>BLS</td><td>Wage level; sector quality; employment HHI (Dim 2)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">BEA Local Area Personal Income (CAINC1)</div><div class="src-sub">1969–2024</div></td><td>BEA</td><td>County income fallback where ZIP allocation is missing (Dim 2)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">Census County Business Patterns (CBP)</div><div class="src-sub">2023</div></td><td>Census</td><td>Establishments per 1,000 residents — amenity density (Dim 3)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">FEMA NFIP Paid Claims</div><div class="src-sub">10-year window</div></td><td>FEMA</td><td>Insured flood loss per capita (Dim 3)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">NOAA Storm Events Database</div><div class="src-sub">2020–2024, 5-year window</div></td><td>NOAA</td><td>Storm property damage per capita (Dim 3)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">USFS Wildfire Risk to Communities</div><div class="src-sub">2024 release</div></td><td>USFS</td><td>Wildfire exposure index (Dim 3)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">USDA Rural-Urban Continuum Codes 2023</div><div class="src-sub">RUCC 1–9</div></td><td>USDA</td><td>Crime-rate peer-tier fallback for non-reporting towns (Dim 3)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">Census Building Permits Survey (BPS)</div><div class="src-sub">2025 annual</div></td><td>Census</td><td>New units permitted — supply pipeline (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">IRS SOI County Migration</div><div class="src-sub">2022–2023 flows</div></td><td>IRS</td><td>In-mover income quality ratio (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
+        <tr><td><div class="src-name">Census Population Estimates — County</div><div class="src-sub">2025 vintage</div></td><td>Census</td><td>County denominators; net migration rate (Dim 4)</td><td><span class="tag-admin">Federal</span></td></tr>
       </tbody>
     </table>
   </div>
 
   <div style="font-size:12px;color:var(--subtext);line-height:1.7;padding:12px 14px;background:#f8fafc;border-radius:10px;border:1px solid var(--border);">
-    <strong style="color:var(--text);">What's not used and why:</strong> EIA electricity/gas maps to utility service territories, not county FIPS (spatial join required). Census STC is state-level only — no county FIPS. FEMA NRI could not be downloaded during data collection. NCES school data requires survey methodology. In each case, a federal administrative substitute was used instead.
+    <strong style="color:var(--text);">Honest approximations:</strong> Town income is a ZIP→place address-share estimate, not a survey median. Crime is mapped from reporting agencies to places by name; county sheriffs cover unincorporated area and stay in the county pool, and towns with no matched agency inherit the county/RUCC-tier rate (flagged, never penalized). ~49% of each score is county-inherited because wages, appreciation, climate, and migration genuinely operate at a regional scale. The universe is incorporated places ≥ 1,000 residents; CDPs are excluded until decennial place data is added.
   </div>
 
   </div></div></div>
@@ -558,28 +497,28 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
   <div class="acc-body"><div class="acc-inner"><div class="acc-content">
 
   <div class="faq-item">
-    <div class="faq-q">Why are only 2,816 counties scored, not all 3,143?</div>
-    <div class="faq-a">The 324 excluded counties all have population under 5,000. Counties that small have no Zillow data, suppressed QCEW employment figures, and often no FHFA HPI history. Their scores would be entirely imputed medians — not real signal. If you search a county under 5,000 residents, Civica will tell you why it's excluded rather than show a misleading score.</div>
+    <div class="faq-q">What counts as a "town," and why 10,267 of them?</div>
+    <div class="faq-a">A town is a US Census <strong>incorporated place</strong> with at least 1,000 residents — 10,267 of them nationwide. The 1,000-person floor parallels the old county model's 5,000 floor: below it, town income, crime, and growth get too sparse to score honestly. Census Designated Places (CDPs) are excluded for now because the sub-county estimates program doesn't cover them with an annual growth signal.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">Why does my county's price-to-income ratio look higher than what I've seen elsewhere?</div>
-    <div class="faq-a">Civica uses BEA per-capita personal income (~$67k national average) rather than median household income (~$80k). The commonly cited "4.2× historical norm" uses household income. Using per-capita income, the historical norm is roughly 2.5–3.0×. All counties use the same base, so the scoring is internally consistent — but the displayed P/I ratios will appear 1.5–1.8× higher than industry standard benchmarks.</div>
+    <div class="faq-q">Why is ~49% of the score inherited from the county?</div>
+    <div class="faq-a">Some things genuinely operate at a regional scale — average wages, home-price appreciation, climate risk, migration, and permits are county-or-metro phenomena, not town phenomena. Faking them per-town would be dishonest. So Civica resolves what it credibly can at the town level (crime, income, growth, scale ≈ 51%) and clearly labels the rest as county-inherited. Every town report shows the split.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">Why does Population Momentum only get 6% of the score?</div>
-    <div class="faq-a">Migration is the sharpest signal when it's strong — but it's also the most volatile. The 2020–2022 remote work surge to Sun Belt counties was real, and some of it has already reversed. Weighting migration too heavily would cause the model to over-score counties whose demand surge was driven by a transient factor. Economic Vitality and Market Dynamics carry more weight because they reflect structural conditions that are harder to reverse quickly.</div>
+    <div class="faq-q">How accurate is town-level income and crime?</div>
+    <div class="faq-a">Both are real federal data, approximately <em>placed</em>. Town income is IRS ZIP-code AGI allocated to places by land-area overlap — it varies town-to-town for real, but it's an address-share estimate, not a survey median. Crime is FBI NIBRS mapped from each reporting agency's name to a place; county sheriffs (who cover unincorporated area) stay in the county pool, and towns with no matched agency inherit the county/RUCC-tier rate and are flagged — never penalized for not reporting.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">Why is the AVOID label at zero counties?</div>
-    <div class="faq-a">Two counties score below the AVOID threshold of 26 in v1.2: Montgomery County AR (21.4) and Morgan County KY (24.5). Both are genuinely weak on multiple dimensions — low wages, poor affordability, and high physical risk. The wider score range in v1.2 (21.4–72.9, std 7.5) reflects using UCR Part 1 violent crime only (removing simple assault and intimidation), which creates greater spread between high-crime and low-crime counties.</div>
+    <div class="faq-q">Why is there no home price or "price-to-rent" anymore?</div>
+    <div class="faq-a">Dropping Zillow — the only non-federal source — removed the monthly home-value level the county model used. Rather than fake it, affordability is rebuilt on what federal data does support at the town level: rent burden (HUD 2BR rent vs. town income) plus FHFA appreciation quality. The upshot is that Civica is now 100% federal data.</div>
   </div>
 
   <div class="faq-item">
     <div class="faq-q">How often are scores updated?</div>
-    <div class="faq-a">Scores are recalculated quarterly as new FHFA, BLS, and IRS data releases. Current scores reflect Q1 2026 data. BLS QCEW reflects 2023 annual data (18-month publication lag). FHFA HPI is through Q4 2025. FBI NIBRS is the 2024 National Master File.</div>
+    <div class="faq-a">Scores are recalculated as new federal data releases — Census sub-county estimates and IRS ZIP AGI annually, FHFA/BLS/HUD on their own cadences. Current scores reflect FBI NIBRS 2024, IRS SOI 2021–2022, Census sub-est 2020–2025, and HUD FMR FY2026.</div>
   </div>
 
   <div class="faq-item">
@@ -592,13 +531,13 @@ body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica 
 
 
 <div class="cta-strip">
-  <a class="cta cta-p" href="index.html">Search Counties →</a>
+  <a class="cta cta-p" href="index.html">Search Towns →</a>
   <a class="cta cta-s" href="leaderboard.html">View Leaderboard</a>
 </div>
 
 <div class="footer">
-  Civica Research Model · Data as of Q1 2026 · 13 federal datasets + Zillow ZHVI · 0 advertiser relationships<br>
-  <strong>civi<em style="font-style:normal;color:#1a7ff0;">ca</em></strong> — research-grade county intelligence for homebuyers
+  Civica Research Model · 100% federal data · ~51% town-resolved · 0 advertiser relationships<br>
+  <strong>civi<em style="font-style:normal;color:#1a7ff0;">ca</em></strong> — research-grade town intelligence for homebuyers
 </div>
 
 </div><!-- /page -->

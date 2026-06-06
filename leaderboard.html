@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Top 100 Counties to Buy a Home in 2026 — Civica Research</title>
-<meta name="description" content="The top 100 US counties to buy a home in 2026, ranked by Civica's 6-dimension housing intelligence model. Covers affordability, economic vitality, market dynamics, climate risk, and population momentum.">
-<meta property="og:title" content="Top 100 Counties to Buy a Home in 2026 — Civica">
-<meta property="og:description" content="The definitive ranking of the best US housing markets. Built on federal data only — no ads, no agents, no conflicts.">
+<title>Top 100 Towns to Buy a Home in 2026 — Civica Research</title>
+<meta name="description" content="The top 100 US towns to buy a home in 2026, ranked by Civica's 4-dimension town housing model. Town-level crime, income, and growth on 100% federal data, each town ranked inside its county.">
+<meta property="og:title" content="Top 100 Towns to Buy a Home in 2026 — Civica">
+<meta property="og:description" content="The definitive ranking of the best US towns to buy a home. Built on 100% federal data — no ads, no agents, no conflicts.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://civica.app/og_image.png">
 <meta property="og:image:width" content="1200">
@@ -154,7 +154,8 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.85; max-wi
     <span class="logo-text">civi<em>ca</em></span>
   </a>
   <div class="nav-links">
-    <a href="index.html">← All Counties</a>
+    <a href="index.html">← All Towns</a>
+    <a href="map.html">Map</a>
     <a href="compare.html">Compare</a>
     <a href="harvard_model.html">Methodology</a>
   </div>
@@ -163,12 +164,12 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.85; max-wi
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-eyebrow">Civica National Rankings · 2026</div>
-    <h1 class="hero-h">The Best US Counties<br>to Buy a Home</h1>
-    <p class="hero-sub">Ranked by Civica's 6-dimension composite score — 2,816 counties analyzed using only federal government data. No ads. No agents. No conflicts of interest.</p>
+    <h1 class="hero-h">The Best US Towns<br>to Buy a Home</h1>
+    <p class="hero-sub">Ranked by Civica's 4-dimension composite score — 10,267 towns analyzed using only federal government data. No ads. No agents. No conflicts of interest.</p>
     <div class="hero-stats">
-      <div class="hs"><div class="hs-num" id="totalCount">2,816</div><div class="hs-lbl">Counties Scored</div></div>
-      <div class="hs"><div class="hs-num" id="buyCount">—</div><div class="hs-lbl">BUY Markets (score ≥58)</div></div>
-      <div class="hs"><div class="hs-num" id="accelCount">—</div><div class="hs-lbl">ACCELERATING Markets</div></div>
+      <div class="hs"><div class="hs-num" id="totalCount">10,267</div><div class="hs-lbl">Towns Scored</div></div>
+      <div class="hs"><div class="hs-num" id="buyCount">—</div><div class="hs-lbl">Buy + Strong Buy</div></div>
+      <div class="hs"><div class="hs-num" id="accelCount">—</div><div class="hs-lbl">Strong Buy Towns</div></div>
       <div class="hs"><div class="hs-num" id="medianScore">—</div><div class="hs-lbl">Median Score</div></div>
     </div>
   </div>
@@ -176,16 +177,16 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.85; max-wi
 
 <div class="page">
   <div class="insight-strip" id="insightStrip" style="display:none;">
-    <div class="insight-card"><div class="ic-num" id="topState">—</div><div class="ic-lbl">State with most BUY-rated counties</div></div>
-    <div class="insight-card"><div class="ic-num" id="topMedian">—</div><div class="ic-lbl">Median home value in the top 100</div></div>
-    <div class="insight-card"><div class="ic-num" id="topWage">—</div><div class="ic-lbl">Average annual wage in the top 100</div></div>
+    <div class="insight-card"><div class="ic-num" id="topState">—</div><div class="ic-lbl">State with most Strong-Buy towns (top 100)</div></div>
+    <div class="insight-card"><div class="ic-num" id="topMedian">—</div><div class="ic-lbl">Median town income in the top 100</div></div>
+    <div class="insight-card"><div class="ic-num" id="topWage">—</div><div class="ic-lbl">Avg 5yr population growth in the top 100</div></div>
   </div>
 
   <div class="tab-strip">
     <button class="tab-btn active" onclick="setView('top100',this)">Top 100</button>
-    <button class="tab-btn" onclick="setView('strongbuy',this)">Strong Buy Markets</button>
-    <button class="tab-btn" onclick="setView('undervalued',this)">Undervalued Hidden Gems</button>
+    <button class="tab-btn" onclick="setView('strongbuy',this)">Strong Buy Towns</button>
     <button class="tab-btn" onclick="setView('affordable',this)">Most Affordable</button>
+    <button class="tab-btn" onclick="setView('safest',this)">Safest Towns</button>
     <button class="tab-btn" onclick="setView('caution',this)">Use Caution</button>
   </div>
 
@@ -195,12 +196,12 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.85; max-wi
     <thead>
       <tr>
         <th style="width:42px;">#</th>
-        <th>County</th>
+        <th>Town</th>
         <th>Score</th>
         <th>Label</th>
-        <th class="r">Median Price</th>
-        <th class="r">HPI 3yr</th>
-        <th class="r">Avg Wage</th>
+        <th class="r">Town Income</th>
+        <th class="r">Growth 5yr</th>
+        <th class="r">Violent/100k</th>
       </tr>
     </thead>
     <tbody id="lbBody"><tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted);">Loading…</td></tr></tbody>
@@ -208,12 +209,12 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.85; max-wi
   <button class="load-more" id="lbLoadMore" style="display:none;" onclick="loadMoreLb()">Show more →</button>
 
   <div style="margin-top:32px;text-align:center;">
-    <a href="index.html" style="display:inline-block;padding:13px 32px;background:var(--blue);color:#fff;border-radius:12px;font-weight:700;text-decoration:none;font-size:15px;">Browse All 2,816 Counties →</a>
+    <a href="index.html" style="display:inline-block;padding:13px 32px;background:var(--blue);color:#fff;border-radius:12px;font-weight:700;text-decoration:none;font-size:15px;">Browse All 10,267 Towns →</a>
   </div>
 </div>
 
 <footer>
-  <p>Methodology: <a href="harvard_model.html" style="color:rgba(255,255,255,.4);">harvard_model.html</a> · Data: FHFA HPI · BLS QCEW · BEA · FBI NIBRS 2024 · FEMA NFIP · NOAA · USFS · USDA RUCC · HUD FMR · IRS SOI · Census · Zillow ZHVI<br>
+  <p>Methodology: <a href="harvard_model.html" style="color:rgba(255,255,255,.4);">harvard_model.html</a> · 100% federal data: FBI NIBRS 2024 · IRS SOI · Census (sub-est, CBP, BPS) · BLS QCEW · BEA · FHFA HPI · FEMA NFIP · NOAA · USFS · USDA RUCC · HUD FMR<br>
   Civica scores are for informational purposes only and do not constitute financial, investment, or real estate advice. Past appreciation is not indicative of future returns. &copy; 2026 Civica.</p>
 </footer>
 
@@ -222,35 +223,25 @@ let ALL = [];
 let view = 'top100';
 let lbVisible = 50;
 
-const SIGNAL_CLASS = {
-  'ACCELERATING':'lb-sbuy', 'PEAKING':'lb-sbuy',
-  'ESTABLISHED':'lb-buy',   'EMERGING':'lb-buy',
-  'FRONTIER':'lb-watch',    'TURNING':'lb-caut',
-  'SPECULATIVE':'lb-avoid', 'AVOID':'lb-avoid',
-};
-const SCORE_BG = {
-  'ACCELERATING':'#16a34a', 'PEAKING':'#22c55e',
-  'ESTABLISHED':'#1a7ff0',  'EMERGING':'#8b5cf6',
-  'FRONTIER':'#f59e0b',     'TURNING':'#f97316',
-  'SPECULATIVE':'#ef4444',  'AVOID':'#dc2626',
-};
+const LABEL_CLASS = { 'Strong Buy':'lb-sbuy', 'Buy':'lb-buy', 'Hold':'lb-watch', 'Caution':'lb-caut' };
+const SCORE_BG    = { 'Strong Buy':'#16a34a', 'Buy':'#1a7ff0', 'Hold':'#f59e0b', 'Caution':'#f97316' };
 
 const VIEW_CONFIG = {
-  top100:      { desc: 'Counties with the highest composite Civica scores — strongest fundamentals across all 6 dimensions.', fn: d => d },
-  undervalued: { desc: 'High Civica score (≥55) combined with a median home value below the national median (~$310k). These markets have strong fundamentals but haven\'t priced in yet.', fn: d => d.filter(c => c.score >= 55 && c.median_home_value < 310000).sort((a,b) => b.score - a.score) },
-  affordable:  { desc: 'Counties ranked by lowest price-to-rent ratio among those with a score above 40. Rent vs. buy math favors ownership.', fn: d => d.filter(c => c.score >= 40).sort((a,b) => a.pr_ratio - b.pr_ratio) },
-  strongbuy:   { desc: 'Counties labeled ACCELERATING or PEAKING: top-tier fundamentals with positive momentum. The highest-conviction entry points in the model right now.', fn: d => d.filter(c => c.signal === 'ACCELERATING' || c.signal === 'PEAKING').sort((a,b) => b.score - a.score) },
-  caution:     { desc: 'Counties labeled SPECULATIVE or AVOID: fundamentals are below average or actively deteriorating. If you are considering buying here, understand the risks first.', fn: d => d.filter(c => c.signal === 'SPECULATIVE' || c.signal === 'AVOID').sort((a,b) => a.score - b.score) },
+  top100:     { desc: 'Towns with the highest composite Civica scores — strongest fundamentals across all 4 dimensions.', fn: d => d },
+  strongbuy:  { desc: 'Towns labeled Strong Buy: top-tier fundamentals (score ≥ 62). The highest-conviction towns in the model.', fn: d => d.filter(c => c.label === 'Strong Buy').sort((a,b) => b.score - a.score) },
+  affordable: { desc: 'Towns ranked by lowest rent burden (2BR FMR ÷ town income) among those scoring ≥ 50. Where incomes go furthest against local rents.', fn: d => d.filter(c => c.score >= 50).sort((a,b) => a.rent_burden - b.rent_burden) },
+  safest:     { desc: 'Towns ranked by lowest violent crime rate (per 100k) among those scoring ≥ 50, with a directly-reporting agency.', fn: d => d.filter(c => c.score >= 50).sort((a,b) => a.violent_per100k - b.violent_per100k) },
+  caution:    { desc: 'Towns labeled Caution: fundamentals are below national peers (score < 44). If you are considering buying here, understand the trade-offs first.', fn: d => d.filter(c => c.label === 'Caution').sort((a,b) => a.score - b.score) },
 };
 
 if (location.protocol === 'file:') {
   document.getElementById('lbBody').innerHTML =
     '<tr><td colspan="7" style="text-align:center;padding:40px;color:#dc2626;font-weight:600;">' +
     '⚠️ Open via a local server to load data.<br>' +
-    '<span style="font-weight:400;color:#6b7280;font-size:12px;margin-top:8px;display:block;">Double-click <strong>launch.bat</strong> in the project folder, or run: <code>python -m http.server 8080</code> then open <a href="http://localhost:8080/leaderboard.html" style="color:#1a7ff0;">localhost:8080/leaderboard.html</a></span>' +
+    '<span style="font-weight:400;color:#6b7280;font-size:12px;margin-top:8px;display:block;">Run: <code>python -m http.server 8080</code> then open <a href="http://localhost:8080/leaderboard.html" style="color:#1a7ff0;">localhost:8080/leaderboard.html</a></span>' +
     '</td></tr>';
 } else {
-fetch('output/index.json')
+fetch('output/town_index.json')
   .then(r => r.json())
   .then(data => {
     ALL = data;
@@ -260,33 +251,33 @@ fetch('output/index.json')
   .catch(() => {
     document.getElementById('lbBody').innerHTML =
       '<tr><td colspan="7" style="text-align:center;padding:40px;color:#dc2626;font-weight:600;">' +
-      '⚠️ Could not load county data.<br>' +
-      '<span style="font-weight:400;color:#6b7280;font-size:12px;margin-top:8px;display:block;">Make sure <code>output/index.json</code> exists. Run <code>python county_generator.py</code> if it is missing.</span>' +
+      '⚠️ Could not load town data.<br>' +
+      '<span style="font-weight:400;color:#6b7280;font-size:12px;margin-top:8px;display:block;">Make sure <code>output/town_index.json</code> exists. Run <code>python town_generator.py</code> if it is missing.</span>' +
       '</td></tr>';
   });
 }
 
 function updateStats() {
-  const buyCount   = ALL.filter(c => c.score >= 58).length;
-  const accelCount = ALL.filter(c => c.signal === 'ACCELERATING').length;
+  const buyCount   = ALL.filter(c => c.label === 'Buy' || c.label === 'Strong Buy').length;
+  const sbuyCount  = ALL.filter(c => c.label === 'Strong Buy').length;
   const scores = ALL.map(c => c.score).sort((a,b) => a-b);
   const median = scores[Math.floor(scores.length/2)].toFixed(1);
 
   document.getElementById('buyCount').textContent   = buyCount.toLocaleString();
-  document.getElementById('accelCount').textContent = accelCount.toLocaleString();
+  document.getElementById('accelCount').textContent = sbuyCount.toLocaleString();
   document.getElementById('medianScore').textContent = median;
 
-  // Insights
+  // Insights from the top 100
   const top100 = ALL.slice(0, 100);
   const stateCount = {};
   top100.forEach(c => { stateCount[c.state] = (stateCount[c.state]||0) + 1; });
   const topState = Object.entries(stateCount).sort((a,b) => b[1]-a[1])[0];
-  const medHome = Math.round(top100.reduce((s,c) => s+c.median_home_value,0)/top100.length/1000);
-  const medWage = Math.round(top100.reduce((s,c) => s+c.avg_annual_wage,0)/top100.length/1000);
+  const medInc  = Math.round(top100.reduce((s,c) => s+c.town_income,0)/top100.length/1000);
+  const avgGrow = (top100.reduce((s,c) => s+c.town_growth_5yr,0)/top100.length*100).toFixed(1);
 
-  document.getElementById('topState').textContent   = `${topState[0]} (${topState[1]} counties)`;
-  document.getElementById('topMedian').textContent  = `$${medHome}k median`;
-  document.getElementById('topWage').textContent    = `$${medWage}k/yr avg`;
+  document.getElementById('topState').textContent   = `${topState[0]} (${topState[1]} towns)`;
+  document.getElementById('topMedian').textContent  = `$${medInc}k median`;
+  document.getElementById('topWage').textContent    = `+${avgGrow}% avg`;
   document.getElementById('insightStrip').style.display = 'grid';
 }
 
@@ -306,7 +297,7 @@ function renderView() {
   const body  = document.getElementById('lbBody');
 
   if (!shown.length) {
-    body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted);">No counties match this filter.</td></tr>';
+    body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted);">No towns match this filter.</td></tr>';
     document.getElementById('lbLoadMore').style.display = 'none';
     return;
   }
@@ -314,14 +305,15 @@ function renderView() {
   body.innerHTML = shown.map((c, i) => {
     const pos = i + 1;
     const rankCls = pos <= 3 ? 'rk top3' : pos <= 10 ? 'rk top10' : 'rk';
-    const sc_bg = SCORE_BG[c.signal] || '#9ca3af';
-    const lbcls = SIGNAL_CLASS[c.signal] || 'lb-watch';
-    const hpi_c = c.hpi_3yr_avg >= 3 ? 'var(--green)' : 'var(--red)';
-    return `<tr onclick="window.location='output/counties/${c.fips}.html'" style="cursor:pointer;">
+    const sc_bg = SCORE_BG[c.label] || '#9ca3af';
+    const lbcls = LABEL_CLASS[c.label] || 'lb-watch';
+    const g = c.town_growth_5yr * 100;
+    const g_c = g >= 0 ? 'var(--green)' : 'var(--red)';
+    return `<tr onclick="window.location='output/towns/${c.fips}.html'" style="cursor:pointer;">
       <td><span class="${rankCls}">${pos}</span></td>
       <td>
         <div class="cname">${c.name}</div>
-        <div class="cstate-lbl">${c.state} · Rank #${c.rank} of 2,816</div>
+        <div class="cstate-lbl">${c.county}, ${c.state} · #${c.rank_in_county} in county</div>
       </td>
       <td>
         <div style="display:flex;align-items:center;gap:8px;">
@@ -329,10 +321,10 @@ function renderView() {
           <span class="sc-num">${c.score.toFixed(1)}</span>
         </div>
       </td>
-      <td><span class="lbadge ${lbcls}">${c.signal}</span></td>
-      <td style="text-align:right;font-weight:600;">$${Math.round(c.median_home_value/1000)}k</td>
-      <td style="text-align:right;font-weight:600;color:${hpi_c};">${c.hpi_3yr_avg>=0?'+':''}${c.hpi_3yr_avg.toFixed(1)}%</td>
-      <td style="text-align:right;">$${Math.round(c.avg_annual_wage/1000)}k</td>
+      <td><span class="lbadge ${lbcls}">${c.label}</span></td>
+      <td style="text-align:right;font-weight:600;">$${Math.round(c.town_income/1000)}k</td>
+      <td style="text-align:right;font-weight:600;color:${g_c};">${g>=0?'+':''}${g.toFixed(1)}%</td>
+      <td style="text-align:right;">${Math.round(c.violent_per100k)}</td>
     </tr>`;
   }).join('');
 

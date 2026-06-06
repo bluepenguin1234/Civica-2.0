@@ -1,10 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://civica.app/</loc></url>
+  <url><loc>https://civica.app/map.html</loc></url>
+  <url><loc>https://civica.app/leaderboard.html</loc></url>
+  <url><loc>https://civica.app/compare.html</loc></url>
+  <url><loc>https://civica.app/harvard_model.html</loc></url>
   <url><loc>https://civica.app/disclaimer.html</loc></url>
   <url><loc>https://civica.app/privacy.html</loc></url>
   <url><loc>https://civica.app/terms.html</loc></url>
-  <url><loc>https://civica.app/harvard_model.html</loc></url>
+  <url><loc>https://civica.app/output/states/AK.html</loc></url>
+  <url><loc>https://civica.app/output/states/AL.html</loc></url>
+  <url><loc>https://civica.app/output/states/AR.html</loc></url>
+  <url><loc>https://civica.app/output/states/AZ.html</loc></url>
+  <url><loc>https://civica.app/output/states/CA.html</loc></url>
+  <url><loc>https://civica.app/output/states/CO.html</loc></url>
+  <url><loc>https://civica.app/output/states/CT.html</loc></url>
+  <url><loc>https://civica.app/output/states/DC.html</loc></url>
+  <url><loc>https://civica.app/output/states/DE.html</loc></url>
+  <url><loc>https://civica.app/output/states/FL.html</loc></url>
+  <url><loc>https://civica.app/output/states/GA.html</loc></url>
+  <url><loc>https://civica.app/output/states/HI.html</loc></url>
+  <url><loc>https://civica.app/output/states/IA.html</loc></url>
+  <url><loc>https://civica.app/output/states/ID.html</loc></url>
+  <url><loc>https://civica.app/output/states/IL.html</loc></url>
+  <url><loc>https://civica.app/output/states/IN.html</loc></url>
+  <url><loc>https://civica.app/output/states/KS.html</loc></url>
+  <url><loc>https://civica.app/output/states/KY.html</loc></url>
+  <url><loc>https://civica.app/output/states/LA.html</loc></url>
+  <url><loc>https://civica.app/output/states/MA.html</loc></url>
+  <url><loc>https://civica.app/output/states/MD.html</loc></url>
+  <url><loc>https://civica.app/output/states/ME.html</loc></url>
+  <url><loc>https://civica.app/output/states/MI.html</loc></url>
+  <url><loc>https://civica.app/output/states/MN.html</loc></url>
+  <url><loc>https://civica.app/output/states/MO.html</loc></url>
+  <url><loc>https://civica.app/output/states/MS.html</loc></url>
+  <url><loc>https://civica.app/output/states/MT.html</loc></url>
+  <url><loc>https://civica.app/output/states/NC.html</loc></url>
+  <url><loc>https://civica.app/output/states/ND.html</loc></url>
+  <url><loc>https://civica.app/output/states/NE.html</loc></url>
+  <url><loc>https://civica.app/output/states/NH.html</loc></url>
+  <url><loc>https://civica.app/output/states/NJ.html</loc></url>
+  <url><loc>https://civica.app/output/states/NM.html</loc></url>
+  <url><loc>https://civica.app/output/states/NV.html</loc></url>
+  <url><loc>https://civica.app/output/states/NY.html</loc></url>
+  <url><loc>https://civica.app/output/states/OH.html</loc></url>
+  <url><loc>https://civica.app/output/states/OK.html</loc></url>
+  <url><loc>https://civica.app/output/states/OR.html</loc></url>
+  <url><loc>https://civica.app/output/states/PA.html</loc></url>
+  <url><loc>https://civica.app/output/states/RI.html</loc></url>
+  <url><loc>https://civica.app/output/states/SC.html</loc></url>
+  <url><loc>https://civica.app/output/states/SD.html</loc></url>
+  <url><loc>https://civica.app/output/states/TN.html</loc></url>
+  <url><loc>https://civica.app/output/states/TX.html</loc></url>
+  <url><loc>https://civica.app/output/states/UT.html</loc></url>
+  <url><loc>https://civica.app/output/states/VA.html</loc></url>
+  <url><loc>https://civica.app/output/states/VT.html</loc></url>
+  <url><loc>https://civica.app/output/states/WA.html</loc></url>
+  <url><loc>https://civica.app/output/states/WI.html</loc></url>
+  <url><loc>https://civica.app/output/states/WV.html</loc></url>
+  <url><loc>https://civica.app/output/states/WY.html</loc></url>
   <url><loc>https://civica.app/output/towns/0100124.html</loc></url>
   <url><loc>https://civica.app/output/towns/0100460.html</loc></url>
   <url><loc>https://civica.app/output/towns/0100820.html</loc></url>

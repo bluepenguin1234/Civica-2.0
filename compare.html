@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compare Counties — Civica Research</title>
-<meta name="description" content="Compare US counties side-by-side on Civica's 6-dimension housing model: affordability, economic vitality, market dynamics, quality of place, risk, and population momentum.">
-<meta property="og:title" content="Compare US Counties — Civica Research">
-<meta property="og:description" content="Compare any two or three US counties side-by-side on affordability, economic vitality, market dynamics, quality of place, climate risk, and population momentum.">
+<title>Compare Towns — Civica Research</title>
+<meta name="description" content="Compare US towns side-by-side on Civica's 4-dimension town model: affordability, economy, safety & place, and growth. Town-level crime, income, and growth on 100% federal data.">
+<meta property="og:title" content="Compare US Towns — Civica Research">
+<meta property="og:description" content="Compare any two or three US towns side-by-side on affordability, economy, safety & place, and growth.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://civica.app/og_image.png">
 <meta property="og:image:width" content="1200">
@@ -172,24 +172,24 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.8; max-wid
     <span class="logo-text">civi<em>ca</em></span>
   </a>
   <div class="nav-right">
-    <span class="nav-tag">County Comparison</span>
+    <span class="nav-tag">Town Comparison</span>
     <a class="nav-back" href="leaderboard.html">Leaderboard</a>
-    <a class="nav-back" href="index.html">← Back to map</a>
+    <a class="nav-back" href="map.html">← Back to map</a>
   </div>
 </nav>
 
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-eyebrow">Side-by-Side Analysis</div>
-    <div class="hero-h">Compare Counties</div>
-    <div class="hero-sub">Add up to 3 counties to compare scores, valuation, and fundamentals.</div>
+    <div class="hero-h">Compare Towns</div>
+    <div class="hero-sub">Add up to 3 towns to compare scores, fundamentals, and the four dimensions.</div>
     <div class="cmp-search-wrap">
       <div class="cmp-search-icon">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.2" stroke-linecap="round">
           <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
         </svg>
       </div>
-      <input class="cmp-search" id="cmpSearch" type="text" placeholder="Search county to add…"
+      <input class="cmp-search" id="cmpSearch" type="text" placeholder="Search a town to add…"
         oninput="handleCmpSearch(this.value)" onfocus="handleCmpSearch(this.value)" autocomplete="off">
       <div class="cmp-drop" id="cmpDrop"></div>
     </div>
@@ -198,8 +198,8 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.8; max-wid
 
 <div class="page">
   <div id="emptyState" class="empty-state" style="display:none;">
-    <div class="empty-h">No counties selected</div>
-    <div class="empty-sub">Search for counties above, or navigate to any county report and click <strong>+ Compare</strong>.</div>
+    <div class="empty-h">No towns selected</div>
+    <div class="empty-sub">Search for towns above, or open any town report and click <strong>+ Compare</strong>.</div>
   </div>
 
   <div class="county-cards" id="countyCards" style="display:none;"></div>
@@ -221,14 +221,14 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.8; max-wid
     </div>
 
     <div class="comp-section">
-      <div class="comp-section-h">🎯 6-Dimension Score Breakdown</div>
+      <div class="comp-section-h">🎯 4-Dimension Score Breakdown</div>
       <div class="dim-grid" id="dimGrid"></div>
     </div>
   </div>
 </div>
 
 <footer>
-  <p>Data: FHFA HPI · BLS QCEW · BEA · FBI NIBRS 2024 · FEMA NFIP · NOAA Storm Events · USFS Wildfire Risk · USDA RUCC · HUD FMR · IRS SOI · Census · Zillow ZHVI<br>
+  <p>100% federal data: FBI NIBRS 2024 · IRS SOI · Census (sub-est, CBP, BPS) · BLS QCEW · BEA · FHFA HPI · FEMA NFIP · NOAA · USFS · USDA RUCC · HUD FMR<br>
   Civica scores are for informational purposes only and do not constitute financial, investment, or real estate advice. &copy; 2026 Civica.</p>
 </footer>
 
@@ -236,18 +236,16 @@ footer p { font-size:11px; color:rgba(255,255,255,.25); line-height:1.8; max-wid
 let COUNTIES_ALL = [];
 let selected = []; // array of county objects
 
-const DIM_NAMES  = ['Affordability','Economic Vitality','Market Dynamics','Quality of Place','Physical Risk','Pop. Momentum'];
-const DIM_KEYS   = ['dim1','dim2','dim3','dim4','dim5','dim6'];
-const DIM_MAX    = [25, 22, 20, 15, 12, 6];
-const DIM_COLORS = ['#1a7ff0','#16a34a','#d97706','#7c3aed','#dc2626','#0891b2'];
+const DIM_NAMES  = ['Affordability','Economy','Safety & Place','Growth'];
+const DIM_KEYS   = ['dim1','dim2','dim3','dim4'];
+const DIM_MAX    = [28, 28, 26, 18];
+const DIM_COLORS = ['#1a7ff0','#16a34a','#8b5cf6','#f59e0b'];
 
 const SIGNAL_CLASS = {
-  'STRONG BUY':'lb-sbuy', 'BUY':'lb-buy', 'WATCH':'lb-watch',
-  'CAUTION':'lb-caut', 'AVOID':'lb-avoid',
+  'Strong Buy':'lb-sbuy', 'Buy':'lb-buy', 'Hold':'lb-watch', 'Caution':'lb-caut',
 };
 const SIGNAL_BG = {
-  'STRONG BUY':'#16a34a', 'BUY':'#1a7ff0', 'WATCH':'#f59e0b',
-  'CAUTION':'#f97316', 'AVOID':'#dc2626',
+  'Strong Buy':'#16a34a', 'Buy':'#1a7ff0', 'Hold':'#f59e0b', 'Caution':'#f97316',
 };
 const CMP_KEY = 'civica_compare';
 
@@ -257,7 +255,7 @@ function money(v) { return v >= 1000 ? '$' + (v/1000).toFixed(0) + 'k' : '$' + M
 function moneyFull(v) { return '$' + Math.round(v).toLocaleString(); }
 
 // Load data + init from URL
-fetch('output/index.json')
+fetch('output/town_index.json')
   .then(r => r.json())
   .then(data => {
     COUNTIES_ALL = data;
@@ -280,7 +278,7 @@ fetch('output/index.json')
   .catch(() => {
     document.getElementById('emptyState').style.display = 'block';
     document.getElementById('emptyState').querySelector('.empty-sub').textContent =
-      'Could not load county data. Open via a local server or the deployed URL.';
+      'Could not load town data. Open via a local server or the deployed URL.';
   });
 
 function saveAndRender() {
@@ -339,15 +337,14 @@ function render() {
 
   // County header cards
   cards.innerHTML = selected.map(c => {
-    const lbcls  = SIGNAL_CLASS[c.signal] || 'lb-watch';
-    const sigBg  = SIGNAL_BG[c.signal] || '#9ca3af';
+    const lbcls  = SIGNAL_CLASS[c.label] || 'lb-watch';
+    const sigBg  = SIGNAL_BG[c.label] || '#9ca3af';
     const offset = ringOffset(c.score);
-    const piti = computePiti(c.median_home_value);
     return `
     <div class="county-card">
       <button class="cc-remove" onclick="removeCounty('${c.fips}')" title="Remove">✕</button>
       <div class="cc-name">${c.name}</div>
-      <div class="cc-state">${c.state} · Rank #${c.rank}</div>
+      <div class="cc-state">${c.county}, ${c.state} · #${c.rank_in_county} in county</div>
       <div class="cc-score-row">
         <div class="cc-ring">
           <svg width="70" height="70" viewBox="0 0 110 110">
@@ -358,17 +355,17 @@ function render() {
           <div class="cc-ring-num">${Math.round(c.score)}</div>
         </div>
         <div>
-          <span class="cc-label-badge ${lbcls}">${c.signal}</span>
-          <div class="cc-verdict"><span style="display:inline-block;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:800;background:${sigBg};color:#fff;">${c.signal}</span></div>
+          <span class="cc-label-badge ${lbcls}">${c.label}</span>
+          <div class="cc-verdict"><span style="display:inline-block;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:800;background:${sigBg};color:#fff;">${c.label}</span></div>
         </div>
       </div>
       <div class="cc-pills">
-        <div class="cc-pill"><div class="cc-pill-lbl">Median Home</div><div class="cc-pill-val">${moneyFull(c.median_home_value)}</div></div>
-        <div class="cc-pill"><div class="cc-pill-lbl">PITI / mo</div><div class="cc-pill-val">${moneyFull(piti)}</div></div>
+        <div class="cc-pill"><div class="cc-pill-lbl">Town Income</div><div class="cc-pill-val">${moneyFull(c.town_income)}</div></div>
+        <div class="cc-pill"><div class="cc-pill-lbl">Rent Burden</div><div class="cc-pill-val">${Math.round(c.rent_burden*100)}%</div></div>
         <div class="cc-pill"><div class="cc-pill-lbl">HPI 3yr avg</div><div class="cc-pill-val">${c.hpi_3yr_avg>=0?'+':''}${c.hpi_3yr_avg.toFixed(1)}%/yr</div></div>
-        <div class="cc-pill"><div class="cc-pill-lbl">Avg Wage</div><div class="cc-pill-val">${money(c.avg_annual_wage)}/yr</div></div>
+        <div class="cc-pill"><div class="cc-pill-lbl">Growth 5yr</div><div class="cc-pill-val">${c.town_growth_5yr>=0?'+':''}${(c.town_growth_5yr*100).toFixed(1)}%</div></div>
       </div>
-      <a class="view-link" href="output/counties/${c.fips}.html">View Full Report →</a>
+      <a class="view-link" href="output/towns/${c.fips}.html">View Full Report →</a>
     </div>`;
   }).join('');
 
@@ -390,16 +387,16 @@ function computePiti(home) {
 
 function renderMetrics() {
   const rows = [
-    ['Civica Score',    c => c.score.toFixed(1),              true,  false],
-    ['Signal',         c => c.signal,                         false, false],
-    ['Median Home',    c => moneyFull(c.median_home_value),   false, false],
-    ['Monthly PITI',   c => moneyFull(computePiti(c.median_home_value)), false, false],
-    ['P/R Ratio',      c => c.pr_ratio.toFixed(1) + 'x',     false, true],
-    ['Breakeven (yrs)',c => c.breakeven_yrs.toFixed(1),       false, true],
-    ['HPI 3yr avg',    c => (c.hpi_3yr_avg>=0?'+':'') + c.hpi_3yr_avg.toFixed(1) + '%', true, false],
-    ['Avg Annual Wage',c => moneyFull(c.avg_annual_wage),     true,  false],
-    ['Violent Crime/100k', c => c.violent_per100k.toFixed(0),false, true],
-    ['National Rank',  c => '#' + c.rank,                    false, true],
+    ['Civica Score',       c => c.score.toFixed(1),                                              true,  false],
+    ['Signal',             c => c.label,                                                         false, false],
+    ['Town Income',        c => moneyFull(c.town_income),                                        true,  false],
+    ['Rent Burden',        c => Math.round(c.rent_burden*100) + '%',                             false, true],
+    ['HPI 3yr avg',        c => (c.hpi_3yr_avg>=0?'+':'') + c.hpi_3yr_avg.toFixed(1) + '%',      true,  false],
+    ['Avg Annual Wage',    c => moneyFull(c.avg_annual_wage),                                    true,  false],
+    ['Pop Growth 5yr',     c => (c.town_growth_5yr>=0?'+':'') + (c.town_growth_5yr*100).toFixed(1) + '%', true, false],
+    ['Violent Crime/100k', c => c.violent_per100k.toFixed(0),                                    false, true],
+    ['Rank in County',     c => '#' + c.rank_in_county + ' of ' + c.towns_in_county,             false, false],
+    ['National Rank',      c => '#' + c.rank,                                                    false, true],
   ];
 
   const hdrs = '<tr>' + ['Metric', ...selected.map(c => c.name + ', ' + c.state)].map((h,i) =>
@@ -463,7 +460,7 @@ function handleCmpSearch(val) {
     <div class="cd-row" onclick="addCounty('${c.fips}')">
       <div>
         <div class="cd-name">${c.name}, ${c.state}</div>
-        <div class="cd-meta">Score ${c.score} · ${c.signal} · Rank #${c.rank}</div>
+        <div class="cd-meta">${c.county} · Score ${c.score} · ${c.label}</div>
       </div>
       <div class="cd-score">${c.score}</div>
     </div>`).join('');

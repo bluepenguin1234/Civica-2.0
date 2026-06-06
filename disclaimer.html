@@ -53,11 +53,11 @@ td { padding:11px 14px; border-bottom:1px solid #f3f4f6; }
   </div>
 
   <h2>What Civica Scores Measure</h2>
-  <p>Civica scores are composite indices derived from 14 federal and commercial data sources, normalized relative to all 2,820 scored US counties. A high score means a county ranks well on six dimensions — affordability, economic vitality, market dynamics, quality of place, physical risk, and population momentum — relative to all other scored counties. It does not mean the county is a good investment for your specific situation, timeline, or risk tolerance.</p>
+  <p>Civica scores are composite indices derived entirely from federal government data, normalized relative to all 10,267 scored US towns (incorporated places with at least 1,000 residents). A high score means a town ranks well on four dimensions — affordability, economy, safety &amp; place, and growth — relative to all other scored towns. About 51% of each score is resolved at the town level (crime, income, growth, scale) and the remainder is inherited from the town's parent county. A high score does not mean the town is a good investment for your specific situation, timeline, or risk tolerance.</p>
 
   <h2>What Civica Scores Do Not Measure</h2>
   <ul>
-    <li>Specific neighborhoods, zip codes, or individual properties within a county.</li>
+    <li>Specific neighborhoods, ZIP codes, or individual properties within a town.</li>
     <li>School quality (not included in current model — see <a href="harvard_model.html">methodology</a>).</li>
     <li>Future economic shocks, employer exits, natural disasters, or policy changes.</li>
     <li>Your personal financial situation, debt-to-income ratio, or credit standing.</li>
@@ -69,14 +69,14 @@ td { padding:11px 14px; border-bottom:1px solid #f3f4f6; }
   <table>
     <thead><tr><th>Limitation</th><th>Impact</th><th>Candidate Fix</th></tr></thead>
     <tbody>
-      <tr><td>Property tax hardcoded at 1.2% national median</td><td>Monthly PITI can be off by up to $340/mo at $400k home value in high/low-tax states</td><td>State-level effective rates (v1.3)</td></tr>
-      <tr><td>FHFA coverage: ~2,800 of 3,143 counties</td><td>Missing counties receive median-score imputation; results are less precise</td><td>AVM data expansion</td></tr>
-      <tr><td>Inventory: raw listing count, not months of supply</td><td>Supply-demand signal is directional only; not directly comparable to industry benchmarks</td><td>Zillow sales-count file (v1.3)</td></tr>
-      <tr><td>IRS AGI data: retirement destination bias</td><td>FL/AZ/NV/SC counties with large retiree flows may show inflated in-mover income quality</td><td>Age-segmented migration data</td></tr>
-      <tr><td>BLS QCEW: 18-month data lag</td><td>Economic vitality scores reflect 2023 data; recent job losses or gains may not be captured</td><td>Quarterly updates</td></tr>
-      <tr><td>FBI NIBRS: not all agencies report</td><td>Counties with low reporting rates receive RUCC-tier median — not actual crime data</td><td>Imputed counties are noted in the scoring engine</td></tr>
+      <tr><td>Town income is a ZIP→place approximation</td><td>IRS ZIP AGI allocated by land-area overlap; not a survey-grade town median income</td><td>Census place-level income survey integration (future)</td></tr>
+      <tr><td>~49% of each score is county-inherited</td><td>Wages, appreciation, climate, migration, and permits are scored at the county level, not the town level</td><td>Inherent to regional data; disclosed on every report</td></tr>
+      <tr><td>Crime mapped from agency name to place</td><td>County sheriffs stay in the county pool; towns with no matched agency inherit the county/RUCC-tier rate (flagged)</td><td>Agency-to-place geocoding (future)</td></tr>
+      <tr><td>No home-value level post-Zillow</td><td>Affordability is rent-vs-income + appreciation; there is no median home price in the model</td><td>Federal place-level value source if one becomes available</td></tr>
+      <tr><td>BLS QCEW: 18-month data lag</td><td>Economy scores reflect 2023 county data; recent job losses or gains may not be captured</td><td>Quarterly updates</td></tr>
+      <tr><td>FBI NIBRS: not all agencies report</td><td>Towns with low reporting receive the county/RUCC-tier median — not actual town crime data</td><td>Imputed towns are flagged in the scoring engine</td></tr>
+      <tr><td>Universe is incorporated places only</td><td>Census Designated Places (CDPs) are not scored — no annual sub-county growth signal exists for them</td><td>Decennial place population integration (future)</td></tr>
       <tr><td>Permits as demand proxy, not permit-gap ratio</td><td>High-permit counties score well even if permits exceed household formation</td><td>ACS household formation projections (future)</td></tr>
-      <tr><td>P/I ratio uses BEA per capita income</td><td>National per-capita norm (~2.5–3.0x) differs from commonly cited 4.2x household income norm</td><td>Methodology explicitly discloses basis</td></tr>
     </tbody>
   </table>
 
@@ -92,14 +92,14 @@ td { padding:11px 14px; border-bottom:1px solid #f3f4f6; }
     <li><strong>Census population:</strong> July 2023 estimate</li>
   </ul>
 
-  <h2>5-Year Scenarios</h2>
-  <p>Bull, base, and bear case price scenarios shown on county report pages are illustrative projections based on historical FHFA appreciation ranges and assigned scenario probabilities (30% bull / 50% base / 20% bear). These probabilities are editorial judgments, not statistical forecasts. Actual outcomes may differ materially. Do not treat scenario values as price predictions.</p>
+  <h2>Town vs. County Coverage</h2>
+  <p>Roughly 51% of each town's score is resolved at the town level (crime, income, growth, population scale). The remaining ~49% is inherited from the town's parent county (wages, appreciation, climate risk, migration, permits) because those metrics genuinely operate at a regional scale. Civica discloses this split on every town report and does not claim town-level precision for county-inherited metrics. Town income is a ZIP→place approximation, and town crime is mapped from reporting agencies to places — both are labeled as approximations.</p>
 
-  <h2>BUY / HOLD / AVOID Labels</h2>
-  <p>These are Civica's shorthand for score tiers (BUY ≥ 58/100, HOLD 38–57, AVOID &lt; 38), not personalized investment recommendations. A county labeled AVOID may be an excellent choice for some buyers; a county labeled BUY may be wrong for others. The label reflects relative fundamentals, not an instruction to transact.</p>
+  <h2>Strong Buy / Buy / Hold / Caution Labels</h2>
+  <p>These are Civica's shorthand for score tiers (Strong Buy ≥ 62/100, Buy ≥ 52, Hold ≥ 44, Caution &lt; 44), not personalized investment recommendations. A town labeled Caution may be an excellent choice for some buyers; a town labeled Strong Buy may be wrong for others. The label reflects relative fundamentals, not an instruction to transact.</p>
 
   <h2>Source Data Licenses</h2>
-  <p>Federal government data (FHFA, BLS, BEA, FBI, FEMA, NOAA, Census, HUD, USDA, IRS) is in the public domain. Zillow ZHVI data is used pursuant to Zillow's data terms. All source data attribution is provided on each county report page.</p>
+  <p>All Civica data comes from US federal government sources (FBI, IRS, Census, BLS, BEA, FHFA, FEMA, NOAA, USFS, USDA, HUD), which are in the public domain. There are no commercial or proprietary data sources in the model. All source data attribution is provided on each town report page.</p>
 </div>
 
 <footer class="footer">

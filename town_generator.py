@@ -27,10 +27,12 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE = os.path.join(BASE, 'harvard_county_profile.html')
 SCORES = os.path.join(BASE, 'town_scores.csv')
 OUT_DIR = os.path.join(BASE, 'output', 'towns')
+STATE_DIR = os.path.join(BASE, 'output', 'states')
 OUT_INDEX = os.path.join(BASE, 'output', 'town_index.json')
 PROGRESS = os.path.join(OUT_DIR, '_progress.json')
 SITE_URL = 'https://civica.app'
 TOWN_URL_BASE = f'{SITE_URL}/output/towns'
+STATE_URL_BASE = f'{SITE_URL}/output/states'
 GA4_ID = ''
 
 DIM_MAX = {'dim1': 28, 'dim2': 28, 'dim3': 26, 'dim4': 18}
@@ -394,6 +396,106 @@ def generate_page(row, style):
 </html>'''
 
 
+LABEL_LB = {'Strong Buy': 'lb-sbuy', 'Buy': 'lb-buy', 'Hold': 'lb-watch', 'Caution': 'lb-caut'}
+
+
+def build_state_page(state, towns):
+    """Ranked list of every scored town in one state (output/states/{XX}.html)."""
+    name = STATE_NAMES.get(state, state)
+    towns = towns.sort_values('civica_score', ascending=False).reset_index(drop=True)
+    n = len(towns)
+    scores = towns['civica_score'].tolist()
+    median = scores[len(scores) // 2]
+    top = towns.iloc[0]
+    rows = ''
+    for i, r in towns.iterrows():
+        fips = str(r['fips']).zfill(7)
+        sc = r['civica_score']
+        sc_bg = '#16a34a' if sc >= 62 else ('#1a7ff0' if sc >= 52 else ('#f59e0b' if sc >= 44 else '#f97316'))
+        g = r['town_growth_5yr'] * 100
+        gcol = '#16a34a' if g >= 0 else '#dc2626'
+        rows += f'''<tr onclick="window.location='../towns/{fips}.html'" style="cursor:pointer;">
+          <td><span style="font-size:13px;font-weight:700;color:#c7c7cc;">{i+1}</span></td>
+          <td><div style="font-size:14px;font-weight:700;color:#0d2d52;">{r['place_name']}</div>
+              <div style="font-size:11px;color:#98989d;">{r['county_name']} · #{int(r['rank_in_county'])} in county</div></td>
+          <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:{sc_bg};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">{sc:.0f}</div>
+              <span style="font-size:14px;font-weight:800;color:#0d2d52;">{sc:.1f}</span></div></td>
+          <td><span class="lbadge {LABEL_LB.get(r['market_label'], 'lb-watch')}">{r['market_label']}</span></td>
+          <td style="text-align:right;font-weight:600;">{money(r['town_income'])}</td>
+          <td style="text-align:right;font-weight:600;color:{gcol};">{g:+.1f}%</td>
+          <td class="col-crime" style="text-align:right;font-weight:600;">{r['violent_per100k']:.0f}</td>
+        </tr>'''
+    desc = (f'All {n} scored towns in {name}, ranked by Civica Score. Best towns to buy a '
+            f'home in {name} — town-level crime, income, and growth on 100% federal data.')
+    return f'''<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Best Towns to Buy a Home in {name} — Civica Research</title>
+<meta name="description" content="{desc}">
+<meta property="og:title" content="Best Towns in {name} — Civica"><meta property="og:description" content="{desc}">
+<meta property="og:image" content="{SITE_URL}/og_image.png">
+<link rel="canonical" href="{STATE_URL_BASE}/{state}.html">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><rect width='30' height='30' rx='7' fill='%230d2d52'/><rect x='6' y='16' width='4' height='9' rx='1.5' fill='white' opacity='.65'/><rect x='13' y='8' width='4' height='17' rx='1.5' fill='white'/><rect x='20' y='12' width='4' height='13' rx='1.5' fill='white' opacity='.8'/></svg>">
+<style>
+*{{box-sizing:border-box;margin:0;padding:0;}}
+body{{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif;background:#f5f5f7;color:#1d1d1f;}}
+.nav{{background:rgba(255,255,255,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.08);height:56px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;}}
+.logo{{display:flex;align-items:center;gap:9px;text-decoration:none;}}
+.logo-text{{font-size:18px;font-weight:800;color:#0d2d52;}}.logo-text em{{font-style:normal;color:#1a7ff0;}}
+.nav a.back{{font-size:13px;color:#6e6e73;text-decoration:none;font-weight:500;}}
+.hero{{background:linear-gradient(160deg,#060f1e,#091f3a 45%,#0d2d52);padding:44px 20px 52px;}}
+.hero-in{{max-width:960px;margin:0 auto;}}
+.hero h1{{font-size:36px;font-weight:900;color:#fff;margin:8px 0 16px;}}
+.eyebrow{{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);}}
+.stat-row{{display:flex;gap:24px;flex-wrap:wrap;}}
+.stat-v{{font-size:26px;font-weight:900;color:#fff;}}.stat-l{{font-size:11px;color:rgba(255,255,255,.5);}}
+.page{{max-width:960px;margin:0 auto;padding:24px 16px 48px;}}
+.card{{background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,.08);padding:18px;}}
+.card-title{{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#98989d;margin-bottom:14px;}}
+table{{width:100%;border-collapse:collapse;font-size:13px;}}
+th{{text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#98989d;padding:0 12px 12px;border-bottom:2px solid rgba(0,0,0,.08);white-space:nowrap;}}
+th.r{{text-align:right;}}
+td{{padding:11px 12px;border-bottom:1px solid rgba(0,0,0,.06);}}
+tbody tr:hover td{{background:#f5f5f7;}}
+.lbadge{{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;white-space:nowrap;}}
+.lb-sbuy{{background:#dcfce7;color:#15803d;}}.lb-buy{{background:#dbeafe;color:#1d4ed8;}}
+.lb-watch{{background:#fef3c7;color:#92400e;}}.lb-caut{{background:#ffedd5;color:#9a3412;}}
+.footer{{font-size:11px;color:#98989d;text-align:center;padding:24px 16px;line-height:1.7;}}
+@media(max-width:640px){{.hero h1{{font-size:26px;}}th.col-crime,td.col-crime{{display:none;}}}}
+</style></head><body>
+<nav class="nav">
+  <a class="logo" href="../../index.html">
+    <svg width="28" height="28" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="7" fill="#0d2d52"/><rect x="6" y="16" width="4" height="9" rx="1.5" fill="white" opacity="0.65"/><rect x="13" y="8" width="4" height="17" rx="1.5" fill="white"/><rect x="20" y="12" width="4" height="13" rx="1.5" fill="white" opacity="0.8"/></svg>
+    <span class="logo-text">civi<em>ca</em></span>
+  </a>
+  <a class="back" href="../../index.html">← All Towns</a>
+</nav>
+<div class="hero"><div class="hero-in">
+  <div class="eyebrow">State Town Report · 2026</div>
+  <h1>{name}</h1>
+  <div class="stat-row">
+    <div><div class="stat-v">{n}</div><div class="stat-l">Towns Scored</div></div>
+    <div><div class="stat-v" style="color:#1a7ff0;">{median:.1f}</div><div class="stat-l">Median Score</div></div>
+    <div><div class="stat-v" style="color:#4ade80;">{top['civica_score']:.1f}</div><div class="stat-l">Top Town Score</div></div>
+    <div><div class="stat-v" style="font-size:16px;">{top['place_name']}</div><div class="stat-l">Top Ranked Town</div></div>
+  </div>
+</div></div>
+<div class="page"><div class="card">
+  <div class="card-title">📊 All {name} Towns — Ranked by Civica Score</div>
+  <div style="overflow-x:auto;"><table>
+    <thead><tr><th style="width:36px;">#</th><th>Town</th><th>Score</th><th>Label</th>
+      <th class="r">Town Income</th><th class="r">Growth 5yr</th><th class="r col-crime">Violent/100k</th></tr></thead>
+    <tbody>{rows}</tbody>
+  </table></div>
+</div>
+<div style="margin-top:12px;text-align:center;">
+  <a href="../../leaderboard.html" style="display:inline-block;padding:12px 28px;background:#1a7ff0;color:#fff;border-radius:10px;font-weight:700;text-decoration:none;font-size:14px;">National Town Leaderboard →</a>
+</div>
+<div class="footer">100% federal data · Civica scores are informational only, not financial or real estate advice. &copy; 2026 Civica.</div>
+</div></body></html>'''
+
+
 # ── Index + progress ledger ──────────────────────────────────────────────────────
 
 def load_index():
@@ -429,8 +531,12 @@ def write_progress(p):
 
 def write_sitemap(index_map):
     """Regenerate sitemap.xml from town URLs + the core static pages."""
-    static = ['', 'disclaimer.html', 'privacy.html', 'terms.html', 'harvard_model.html']
+    static = ['', 'map.html', 'leaderboard.html', 'compare.html', 'harvard_model.html',
+              'disclaimer.html', 'privacy.html', 'terms.html']
     urls = [f'  <url><loc>{SITE_URL}/{p}</loc></url>' for p in static]
+    states = sorted({rec['state'] for rec in index_map.values()})
+    for st in states:
+        urls.append(f'  <url><loc>{STATE_URL_BASE}/{st}.html</loc></url>')
     for fips in sorted(index_map):
         urls.append(f'  <url><loc>{TOWN_URL_BASE}/{fips}.html</loc></url>')
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -452,11 +558,22 @@ def generate_state(state_df, style, index_map):
             f.write(html)
         index_map[fips] = {
             'fips': fips, 'name': str(row['place_name']), 'state': str(row['state_abbr']),
-            'county': str(row['county_name']), 'score': round(float(row['civica_score']), 2),
+            'county': str(row['county_name']),
+            'county_fips': str(row['primary_county_fips']).zfill(5),
+            'score': round(float(row['civica_score']), 2),
             'label': str(row['market_label']),
+            'rank': int(row['national_rank']),
+            'rank_in_county': int(row['rank_in_county']),
+            'towns_in_county': int(row['towns_in_county']),
+            'pop': int(row['POPESTIMATE2025']),
             'dim1': round(float(row['dim1']), 2), 'dim2': round(float(row['dim2']), 2),
             'dim3': round(float(row['dim3']), 2), 'dim4': round(float(row['dim4']), 2),
-            'rank_in_county': int(row['rank_in_county']),
+            'town_income': round(float(row['town_income']), 0),
+            'rent_burden': round(float(row['rent_burden']), 4),
+            'hpi_3yr_avg': round(float(row['hpi_3yr_avg']), 2),
+            'avg_annual_wage': round(float(row['avg_annual_wage']), 0),
+            'violent_per100k': round(float(row['violent_per100k']), 1),
+            'town_growth_5yr': round(float(row['town_growth_5yr']), 4),
         }
     return len(state_df)
 
@@ -467,6 +584,7 @@ def main():
     args = ap.parse_args()
 
     os.makedirs(OUT_DIR, exist_ok=True)
+    os.makedirs(STATE_DIR, exist_ok=True)
     df = pd.read_csv(SCORES, dtype={'fips': str, 'primary_county_fips': str})
     df['fips'] = df['fips'].str.zfill(7)
     df['_n_national'] = len(df)
@@ -486,11 +604,13 @@ def main():
             print(f'  {st}: no towns, skipping')
             continue
         n = generate_state(sdf, style, index_map)
+        with open(os.path.join(STATE_DIR, f'{st}.html'), 'w', encoding='utf-8') as f:
+            f.write(build_state_page(st, sdf))
         if st not in progress['done']:
             progress['done'].append(st)
         write_progress(progress)
         write_index(index_map)
-        print(f'  {st} ({STATE_NAMES.get(st, st)}): {n} towns -> output/towns/')
+        print(f'  {st} ({STATE_NAMES.get(st, st)}): {n} towns -> output/towns/ + state page')
 
     total = write_index(index_map)
     remaining = [s for s in all_states if s not in progress['done']]
